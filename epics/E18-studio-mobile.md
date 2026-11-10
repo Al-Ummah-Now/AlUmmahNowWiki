@@ -49,7 +49,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- D2/D3 update: [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open, head `e689549`)
+- D2/D3 update: [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 

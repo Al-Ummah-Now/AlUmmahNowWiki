@@ -222,7 +222,6 @@ Chat is also the only source for some details on documented epics: the Sprint A 
 Each epic page lists its own conflicts. The cross-cutting ones:
 
 - **Decision IDs collide.** `docs/embeds/PLAN.md` numbers its decisions D1–D12, the same IDs as the native-apps decisions D1–D11. This wiki prefixes the embeds ones as `EMB-D*`.
-- **D2 status.** `docs/native-apps/EPICS.md` on `main` still says D2 is *pending Cloudflare confirmation*. It was decided on 2026-11-10, and [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686), which records the decision, is still open. This wiki records D2 as decided.
 - **Team roles story number.** Epic 29 and the Epics 5–8 audit call team roles "native 19.6". `EPICS.md` numbers them 19.8, and 19.6 is the analytics deep dive.
 - **Duplicate "Epic 7" headings.** `docs/archive/epics-original.md` has three "Epic 7" headings, and two of them hold the Epic 6 and Epic 8 stories.
 - **Look-alike IDs.** `[Phase N.M]` issues (#45–#71) and `[Phase 2] Task 2.N` issues (#126–#140) look like epic.story IDs but are not.

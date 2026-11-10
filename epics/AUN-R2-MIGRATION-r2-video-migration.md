@@ -35,7 +35,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - Issue [AlUmmahNow#687](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687)
-- Decision PR [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open, head `e689549`)
+- Decision PR [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 
 ## Open questions
 
