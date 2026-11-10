@@ -58,3 +58,18 @@ Latest release: `v0.2.0`. 3 open issues, all `queue`: server sync support ([#13]
 One open PR: `LoginPrompt` for browser sign-in ([#22](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/22)).
 
 Recently merged: release v0.2.0 ([#21](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/21)), sync engine ([#19](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/19)), telemetry ([#18](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/18)).
+
+## Epics for this repo
+
+8 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 9: Platform foundations for native clients (backend)](../epics/E09-native-platform-foundations.md) | in progress |
+| [Epic 11: Shared core in Rust (`aun-core`) + per-platform app layers](../epics/E11-aun-core.md) | in progress |
+| [Epic 13: Native players](../epics/E13-native-players.md) | in progress |
+| [Epic 14: Offline & Listen mode (incl. CarPlay / Android Auto)](../epics/E14-offline-listen.md) | planned |
+| [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
+| [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
+| [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |

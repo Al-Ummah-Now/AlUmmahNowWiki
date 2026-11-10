@@ -53,3 +53,15 @@ No individual owners are named.
 No open issues. One open PR: SECURITY.md and pinned actions ([#29](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/29)).
 
 Apart from a maintenance change in November 2026, the last merges were in October 2025, such as Linux support ([#27](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/27)).
+
+## Epics for this repo
+
+5 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Visual Importer roadmap: 6 sprints / milestones](../epics/TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | deferred |
+| [Tools: FileScan consolidation, testing plan, encoding and Bunny research roadmaps](../epics/TOOLS-PLANS-tools-consolidation-testing-research.md) | planned |
+| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | planned |
+| [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |

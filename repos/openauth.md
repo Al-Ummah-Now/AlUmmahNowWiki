@@ -57,3 +57,19 @@ No individual owners are named. GitHub Issues are disabled on this fork, so trac
 One open PR, [#2](https://github.com/Al-Ummah-Now/openauth/pull/2) (Version Packages). Latest fork version bump on `master` is 1.0.29. AlUmmahNowAuth's `apps/auth` pins 1.0.28.
 
 Recently merged: `auth_time` on access tokens ([#20](https://github.com/Al-Ummah-Now/openauth/pull/20)), device grant ([#19](https://github.com/Al-Ummah-Now/openauth/pull/19)), native clients ([#18](https://github.com/Al-Ummah-Now/openauth/pull/18)).
+
+## Epics for this repo
+
+9 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 9: Platform foundations for native clients (backend)](../epics/E09-native-platform-foundations.md) | in progress |
+| [Legacy roadmap 1.3: SSO authentication service](../epics/LR-1.3-legacy-sso.md) | shipped |
+| [Identity platform: SSO provider, Lanes 1–7](../epics/AUTH-IDP-identity-platform.md) | shipped |
+| [OpenAuth fork: enterprise features](../epics/AUTH-ENTERPRISE-openauth-enterprise-features.md) | shipped |
+| [OpenAuth enterprise admin APIs](../epics/OA-ADMIN-APIS-openauth-admin-apis.md) | in progress |
+| [OpenAuth theme unification for the multi-tenant issuer](../epics/OA-THEME-openauth-theme-unification.md) | in progress |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
+| [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
+| [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |

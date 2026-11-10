@@ -58,3 +58,27 @@ No individual owners are named. Security reports go through private vulnerabilit
 6 open issues, all `queue`, and no open PRs. The queue covers later viewer and Studio stories ([#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9), [#10](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/10)), real-device checks ([#8](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/8)), swapping in the Rust core ([#7](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/7)), sign-in and real uploads ([#6](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/6)) and the release pipeline ([#5](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/5)).
 
 Recently merged: Studio upload and encode queues ([#12](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/12)), tvOS and macOS viewers ([#11](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/11)), iOS and iPadOS viewer ([#4](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/4)).
+
+## Epics for this repo
+
+17 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 10: Fanous design system](../epics/E10-fanous-design-system.md) | in progress |
+| [Epic 11: Shared core in Rust (`aun-core`) + per-platform app layers](../epics/E11-aun-core.md) | in progress |
+| [Epic 12: Viewer mobile apps (iOS / iPadOS / Android)](../epics/E12-viewer-mobile.md) | in progress |
+| [Epic 13: Native players](../epics/E13-native-players.md) | in progress |
+| [Epic 14: Offline & Listen mode (incl. CarPlay / Android Auto)](../epics/E14-offline-listen.md) | planned |
+| [Epic 15: TV apps](../epics/E15-tv-apps.md) | in progress |
+| [Epic 16: Desktop viewer (Windows, macOS, Linux)](../epics/E16-desktop-viewer.md) | in progress |
+| [Epic 17: Live in apps (watch, chat, premieres, reminders)](../epics/E17-live-in-apps.md) | planned |
+| [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
+| [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Epic 20: Ummah Kids profiles & parental controls](../epics/E20-ummah-kids.md) | planned |
+| [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
+| [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
+| [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
+| [Epic 24: Creator support & premium](../epics/E24-creator-support-premium.md) | deferred |
+| [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
