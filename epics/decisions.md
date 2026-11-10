@@ -769,6 +769,26 @@ Facebook and X first; post the native video, not links; per-rule choice of whole
 
 **Sources:** Chat: thread `c733146c-fb89-4bd7-98a1-449910c7598f`, 2026-11-10 04:17 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3Ac733146c-fb89-4bd7-98a1-449910c7598f`)
 
+### O31: Transcode on Cloudflare Containers
+
+**Status:** decided · **Date:** 2026-11-10
+
+Our own transcoding (FFmpeg) for the R2 pipeline runs on Cloudflare Containers, billed per second while a job runs, rather than on a VPS. Keeping everything in one Cloudflare account is preferred.
+
+**Blocks / affects:** [D2](D2-video-delivery.md), [R2 video migration](AUN-R2-MIGRATION-r2-video-migration.md)
+
+**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); chat thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10
+
+### O32: Run Bunny and R2 side by side before switching
+
+**Status:** decided · **Date:** 2026-11-10
+
+Keep Bunny and the new R2 + CDN delivery running at the same time to compare speed and cost on real traffic. New uploads go to both; an admin-managed switch picks which one serves each play (percentage, per video, forced per user), with Bunny as the fallback. The player reports startup time, rebuffering, bitrate and errors per provider, and an admin dashboard compares speed and cost per minute watched. Trial on QA, then a slice of production for 2–4 weeks; then decide whether to migrate and retire Bunny.
+
+**Blocks / affects:** [D2](D2-video-delivery.md), [R2 video migration](AUN-R2-MIGRATION-r2-video-migration.md)
+
+**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); chat thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10
+
 ### LIC: Repo licence for Core and the app repos
 
 **Status:** open · **Date:** 2026-11-08
