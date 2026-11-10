@@ -99,7 +99,7 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 **Blocks / affects:** Was blocking 9.6 (R2 adapter), Epic 14 (downloads), D3 and through it Epics 17, 18.7 and 19.7, D11, and E4 (embed delivery cost). All unblocked now; the migration itself is AlUmmahNow#687.
 
-**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open, head `e689549`); Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 16:55 UTC, position 15208 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`); Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 16:55 UTC, position 15208 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
 
 ### D3: Live provider
 
@@ -109,7 +109,7 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 **Blocks / affects:** Epic 17, 18.7, 19.7, 29.17 chat, 28.12, live-streaming Phase 2
 
-**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open, head `e689549`)
+**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 
 ### D4: Monetisation
 

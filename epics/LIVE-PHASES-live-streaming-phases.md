@@ -36,7 +36,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - Issues #126–#140 (`[Phase 2] Task 2.N`, label `live-streaming`), all open
-- Update on D3: [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open, head `e689549`)
+- Update on D3: [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 

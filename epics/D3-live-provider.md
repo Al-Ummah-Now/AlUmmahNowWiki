@@ -7,7 +7,7 @@
 | **Status** | **Pending.** Unblocked on 2026-11-10; waiting on the owner |
 | **Recommendation** | Self-hosted RTMP/SRT ingest, packaged to HLS in the same R2 bucket as VOD |
 | **Depends on** | [D2](D2-video-delivery.md), decided 2026-11-10 |
-| **Source** | [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (open), [`docs/native-apps/EPICS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md) §9 |
+| **Source** | [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10), [`docs/native-apps/EPICS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md) §9 |
 
 ## Options
 
