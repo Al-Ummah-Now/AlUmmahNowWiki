@@ -64,3 +64,21 @@ No individual owners are named. Security reports go through private vulnerabilit
 Queue: AI writing assist ([#17](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/17)), retire the unused `bknd` Worker name ([#11](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/11)), image variants ([#10](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/10)), draft preview ([#9](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/9)), revisions ([#8](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/8)), scheduled publishing ([#7](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/7)).
 
 Recently merged: CMS v1 ([#12](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/12)), tag-based release ([#16](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/16)).
+
+## Epics for this repo
+
+11 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 25: Sharing & embeddable player](../epics/E25-sharing-embeds.md) | in progress |
+| [Legacy roadmap 2.2: main portal CMS backend](../epics/LR-2.2-legacy-cms-backend.md) | shipped |
+| [www (Astro) + CMS (bknd) v1](../epics/CMS-WWW-V1-cms-www-v1.md) | shipped |
+| [CMS: our own admin screens on top of bknd](../epics/CMS-ADMIN-UI-cms-admin-ui.md) | shipped |
+| [CMS and www: post-v1 queue](../epics/CMS-QUEUE-cms-www-queue.md) | in progress |
+| [CMS AI writing assist](../epics/CMS-AI-ASSIST-cms-ai-writing-assist.md) | shipped |
+| [CMS page builder (blocks) and card posts](../epics/CMS-PAGE-BLOCKS-cms-page-blocks.md) | in progress |
+| [www home timeline (CMS-managed feed)](../epics/CMS-HOME-TIMELINE-www-home-timeline.md) | shipped |
+| [Release pipeline, tagged releases and skew protection](../epics/AUN-RELEASE-release-pipeline-skew.md) | shipped |
+| [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
+| [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |

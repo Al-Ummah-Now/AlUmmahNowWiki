@@ -63,3 +63,25 @@ No individual owners are named. Security reports go through private vulnerabilit
 One open issue, on `queue`: sign-in through Custom Tabs ([#5](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/5)). No open PRs.
 
 Recently merged: viewer home and watch page ([#4](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/4)), core bridge and Fanous theme ([#3](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/3)), scaffold ([#2](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/2)).
+
+## Epics for this repo
+
+15 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 10: Fanous design system](../epics/E10-fanous-design-system.md) | in progress |
+| [Epic 11: Shared core in Rust (`aun-core`) + per-platform app layers](../epics/E11-aun-core.md) | in progress |
+| [Epic 12: Viewer mobile apps (iOS / iPadOS / Android)](../epics/E12-viewer-mobile.md) | in progress |
+| [Epic 13: Native players](../epics/E13-native-players.md) | in progress |
+| [Epic 14: Offline & Listen mode (incl. CarPlay / Android Auto)](../epics/E14-offline-listen.md) | planned |
+| [Epic 15: TV apps](../epics/E15-tv-apps.md) | in progress |
+| [Epic 17: Live in apps (watch, chat, premieres, reminders)](../epics/E17-live-in-apps.md) | planned |
+| [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
+| [Epic 20: Ummah Kids profiles & parental controls](../epics/E20-ummah-kids.md) | planned |
+| [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
+| [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
+| [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
+| [Epic 24: Creator support & premium](../epics/E24-creator-support-premium.md) | deferred |
+| [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |

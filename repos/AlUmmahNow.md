@@ -93,3 +93,68 @@ Active work includes the site-wide theme ([#492](https://github.com/Al-Ummah-Now
 Examples from the queue: per-PR preview deploys for web E2E ([#486](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/486)), Firefox and WebKit release smoke ([#471](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/471)), short pages from `GET /api/videos` ([#451](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/451)).
 
 Recently merged: playback resume fix ([#470](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/470)), QA E2E cleanup ([#467](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/467)), playlist thumbnails ([#466](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/466)).
+
+## Epics for this repo
+
+58 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 1: Critical accessibility & security compliance](../epics/E01-accessibility-security.md) | shipped |
+| [Epic 2: Advanced video player analytics (Phase 3)](../epics/E02-player-analytics.md) | in progress |
+| [Epic 3: Internationalization enhancement (Phase 2)](../epics/E03-i18n-enhancement.md) | shipped |
+| [Epic 4: Phase 5 testing & migration infrastructure](../epics/E04-testing-migration.md) | in progress |
+| [Epic 5: Content creator tools enhancement](../epics/E05-creator-tools.md) | in progress |
+| [Epic 6: Community & moderation platform](../epics/E06-community-moderation.md) | in progress |
+| [Epic 7: Content discovery enhancement](../epics/E07-content-discovery.md) | in progress |
+| [Epic 8: Video content features (chapters, navigation)](../epics/E08-video-content-features.md) | in progress |
+| [Epic 9: Platform foundations for native clients (backend)](../epics/E09-native-platform-foundations.md) | in progress |
+| [Epic 10: Fanous design system](../epics/E10-fanous-design-system.md) | in progress |
+| [Epic 17: Live in apps (watch, chat, premieres, reminders)](../epics/E17-live-in-apps.md) | planned |
+| [Epic 20: Ummah Kids profiles & parental controls](../epics/E20-ummah-kids.md) | planned |
+| [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
+| [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
+| [Epic 24: Creator support & premium](../epics/E24-creator-support-premium.md) | deferred |
+| [Epic 25: Sharing & embeddable player](../epics/E25-sharing-embeds.md) | in progress |
+| [Epic 26: Embedded discussions ("Ummah Comments")](../epics/E26-ummah-comments.md) | in progress |
+| [Epic 27: Plans & entitlements framework](../epics/E27-plans-entitlements.md) | in progress |
+| [Epic 28: AI-assisted moderation & flagging (Cloudflare Workers AI)](../epics/E28-ai-moderation.md) | in progress |
+| [Epic 29: Core web experience completion (P0)](../epics/E29-core-web-experience.md) | in progress |
+| [Legacy roadmap 1.1: video portal UI completion](../epics/LR-1.1-legacy-video-portal-ui.md) | shipped |
+| [Legacy roadmap 1.2: API backend](../epics/LR-1.2-legacy-api-backend.md) | shipped |
+| [Legacy roadmap 2.1: events processor](../epics/LR-2.1-legacy-events-processor.md) | shipped |
+| [Legacy roadmap 3.1: Academy platform (LMS)](../epics/LR-3.1-legacy-academy.md) | deferred |
+| [Legacy roadmap 4.1: AI chat integration](../epics/LR-4.1-legacy-ai-chat.md) | deferred |
+| [Legacy roadmap 4.2: real-time messaging](../epics/LR-4.2-legacy-messaging.md) | deferred |
+| [Legacy roadmap 4.3: web archive](../epics/LR-4.3-legacy-web-archive.md) | deferred |
+| [api-videos roadmap Phase 1: enhanced core features](../epics/AR-1-api-roadmap-phase-1.md) | shipped |
+| [api-videos roadmap Phase 2: advanced platform features](../epics/AR-2-api-roadmap-phase-2.md) | in progress |
+| [api-videos roadmap Phase 3: enterprise & scale](../epics/AR-3-api-roadmap-phase-3.md) | deferred |
+| [Video player enhancement plan, Phases 1–5 (`[Phase N.M]` issues)](../epics/VP-PHASES-video-player-enhancement-phases.md) | shipped |
+| [Live streaming plan, Phases 1–3 (`[Phase 2] Task 2.N` issues)](../epics/LIVE-PHASES-live-streaming-phases.md) | in progress |
+| [Production video player (themed, token-driven)](../epics/AUN-VIDEO-PLAYER-production-video-player.md) | in progress |
+| [Channel sections (Home tab)](../epics/AUN-CHANNEL-SECTIONS-channel-sections.md) | shipped |
+| [Social media management for channels](../epics/AUN-SOCIAL-social-media-management.md) | planned |
+| [Web Creator Studio](../epics/AUN-CREATOR-STUDIO-web-creator-studio.md) | planned |
+| [Per-channel roles](../epics/AUN-CHANNEL-ROLES-channel-roles.md) | in progress |
+| [Channel claim, transfer and self-service account move](../epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md) | planned |
+| [Account hub ("Al Ummah Now Account")](../epics/AUTH-ACCOUNT-HUB-account-hub.md) | in progress |
+| [CMS AI writing assist](../epics/CMS-AI-ASSIST-cms-ai-writing-assist.md) | shipped |
+| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | planned |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
+| [Release pipeline, tagged releases and skew protection](../epics/AUN-RELEASE-release-pipeline-skew.md) | shipped |
+| [Cost monitoring dashboard and alerts](../epics/AUN-COST-cost-monitoring.md) | planned |
+| [Scalability audit and index-backed lists](../epics/AUN-SCALABILITY-scalability-audit.md) | in progress |
+| [Videos admin: platform content management](../epics/CHAT-ADMIN-CONTENT-admin-content-management.md) | shipped |
+| [Contact us page and admin inbox](../epics/CHAT-CONTACT-contact-us.md) | shipped |
+| [Error reporting and the admin Errors page](../epics/CHAT-ERRORS-error-reporting.md) | shipped |
+| [Creator tiers: invite-only uploads and channel creation](../epics/CHAT-CREATOR-TIERS-creator-tiers.md) | shipped |
+| [Uploads survive deploys; upload rate limits](../epics/CHAT-UPLOADS-upload-resilience.md) | shipped |
+| [Shorts format rule and backfill](../epics/CHAT-SHORTS-shorts-rule.md) | shipped |
+| [Playlists: add during upload, bulk add, ordering](../epics/CHAT-PLAYLISTS-playlist-improvements.md) | shipped |
+| [AI category suggestions; Explore hides empty categories](../epics/CHAT-AI-CATEGORIES-ai-categories.md) | shipped |
+| [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
+| [Settings pages redesign (channel-style header, in-place editing)](../epics/CHAT-SETTINGS-REDESIGN-settings-redesign.md) | rejected |
+| [Progressive web app for mobile/desktop](../epics/CHAT-PWA-pwa.md) | rejected |
+| [Org wiki and org profile](../epics/CHAT-WIKI-org-wiki.md) | in progress |
+| [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |

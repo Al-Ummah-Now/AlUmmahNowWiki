@@ -60,3 +60,22 @@ No individual owners are named. Security reports go through private vulnerabilit
 Queue: newsletter or contact form ([#6](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/6)), retire the old `workers.dev` deployment ([#5](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/5)), Continue Watching row ([#4](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/4)), embedded discussions ([#3](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/3)).
 
 Recently merged: `www` v1 ([#7](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/7)), tag-based release ([#11](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/11)).
+
+## Epics for this repo
+
+12 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 25: Sharing & embeddable player](../epics/E25-sharing-embeds.md) | in progress |
+| [Epic 26: Embedded discussions ("Ummah Comments")](../epics/E26-ummah-comments.md) | in progress |
+| [Legacy roadmap 2.3: main portal frontend](../epics/LR-2.3-legacy-portal-frontend.md) | shipped |
+| [www (Astro) + CMS (bknd) v1](../epics/CMS-WWW-V1-cms-www-v1.md) | shipped |
+| [CMS and www: post-v1 queue](../epics/CMS-QUEUE-cms-www-queue.md) | in progress |
+| [CMS page builder (blocks) and card posts](../epics/CMS-PAGE-BLOCKS-cms-page-blocks.md) | in progress |
+| [www home timeline (CMS-managed feed)](../epics/CMS-HOME-TIMELINE-www-home-timeline.md) | shipped |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
+| [Release pipeline, tagged releases and skew protection](../epics/AUN-RELEASE-release-pipeline-skew.md) | shipped |
+| [Contact us page and admin inbox](../epics/CHAT-CONTACT-contact-us.md) | shipped |
+| [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
+| [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |

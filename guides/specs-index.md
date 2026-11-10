@@ -2,6 +2,8 @@
 
 # Specs index
 
+For the epics these specs belong to, and their status across every repo, see [Epics](../epics/README.md) and the [decision log](../epics/decisions.md).
+
 All specs and plans in [`AlUmmahNow/docs/specs`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/docs/specs), checked on 2026-11-09.
 
 Status meanings:

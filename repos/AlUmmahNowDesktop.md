@@ -53,3 +53,19 @@ No individual owners are named. Security reports go through private vulnerabilit
 8 open issues, all `queue`, and no open PRs. Examples: sign-in improvements ([#21](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/21)), replacing temporary bridges ([#17](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/17)), hardware encoder checks ([#16](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/16)), running on a real Tizen TV ([#13](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/13)).
 
 Recently merged: release pipeline ([#20](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/20)), real TUS uploads and sign-in in Studio ([#19](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/19)), Rust core wired into the viewers ([#18](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/18)).
+
+## Epics for this repo
+
+9 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+
+| Epic | Status |
+|---|---|
+| [Epic 10: Fanous design system](../epics/E10-fanous-design-system.md) | in progress |
+| [Epic 11: Shared core in Rust (`aun-core`) + per-platform app layers](../epics/E11-aun-core.md) | in progress |
+| [Epic 13: Native players](../epics/E13-native-players.md) | in progress |
+| [Epic 15: TV apps](../epics/E15-tv-apps.md) | in progress |
+| [Epic 16: Desktop viewer (Windows, macOS, Linux)](../epics/E16-desktop-viewer.md) | in progress |
+| [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
+| [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
+| [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |

@@ -34,6 +34,13 @@ Facts here were read from each repo's default branch on 2026-11-09. "Current sta
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
 | [Specs index](guides/specs-index.md) | Every spec in the monorepo, with status |
+
+**Epics and decisions**
+
+| Page | Covers |
+|---|---|
+| [Epics](epics/README.md) | Every epic in every repo, shipped to rejected, with sources |
+| [Decision log](epics/decisions.md) | Owner decisions (D1–D11 and others), with status and what each blocks |
 | [Glossary](guides/glossary.md) | Terms used across the project |
 
 ## System map
