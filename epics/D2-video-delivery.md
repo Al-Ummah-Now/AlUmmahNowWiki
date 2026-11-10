@@ -45,4 +45,5 @@ Cloudflare Support confirmed in writing that the setup is allowed. HLS stored in
 
 - 2026-11-07/08: listed as an open decision in `EPICS.md`. The options were Bunny (today) and R2 + Cloudflare CDN. The recommendation was "pending Cloudflare confirmation and cost cap (≤ $500/mo)".
 - 2026-11-10: decided after Cloudflare Support's written confirmation ([#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686)).
+- 2026-11-10: owner chose Cloudflare Containers for transcoding ([O31](decisions.md#o31-transcode-on-cloudflare-containers)) and a side-by-side trial with Bunny before switching ([O32](decisions.md#o32-run-bunny-and-r2-side-by-side-before-switching)).
 
