@@ -22,12 +22,12 @@ Status meanings:
 | [EPIC-29-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EPIC-29-PLAN.md) | Epic 29 plan and audit | None | Audit dated 2026-11-08 |
 | [EMBEDS-COMMENTS-TIERS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EMBEDS-COMMENTS-TIERS.md) | Epics 25–27: embeds, comments, plans | Draft v1 for review | |
 | [EPIC-27-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EPIC-27-PLAN.md) | Epic 27 plan | None | Payments deferred by owner decision |
+| [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/TRANSCRIPTION-TRANSLATION.md) | [AUN-CAPTIONS](../epics/AUN-CAPTIONS-transcription-translation.md): transcription, translation, inline titles, zero-mistake Quran | Draft v1 for review | v1 merged in #816; v2 (Quran design, QF Content Sync, DeepL, prices) in [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819) |
 
 ## Draft (open PR)
 
 | Document | Topic | PR |
 |---|---|---|
-| [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/614c4e302fa1d11110f5d59a6494c2b213f99d21/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/614c4e302fa1d11110f5d59a6494c2b213f99d21/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md) | Transcription, translation, inline title translation, Quran-aware ([AUN-CAPTIONS](../epics/AUN-CAPTIONS-transcription-translation.md)) | [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816) |
 | [CREATOR-STUDIO.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/5ed0e6c85517757e03db9ba7cbc91f71144e1aac/docs/specs/CREATOR-STUDIO.md) · [plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/5ed0e6c85517757e03db9ba7cbc91f71144e1aac/docs/specs/CREATOR-STUDIO-PLAN.md) | Web Creator Studio | [#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476) |
 | [VIDEO-PLAYER.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/7d1d3d923d8c581159f93e56e7d95329c06890c4/docs/specs/VIDEO-PLAYER.md) · [plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/7d1d3d923d8c581159f93e56e7d95329c06890c4/docs/specs/VIDEO-PLAYER-PLAN.md) | Production video player | [#472](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/472) |
 | [CHANNEL-ROLES.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/91b5e794734f6c6c31fbb882a7d494507f534bad/docs/specs/CHANNEL-ROLES.md) · [plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/91b5e794734f6c6c31fbb882a7d494507f534bad/docs/specs/CHANNEL-ROLES-PLAN.md) | Per-channel roles | [#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462) |
