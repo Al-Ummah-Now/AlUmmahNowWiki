@@ -23,10 +23,10 @@
 | | Choice | Cost |
 |---|---|---|
 | Speech-to-text | Workers AI Whisper large-v3-turbo, with VAD **off** (VAD deleted speech in tests) | $0.034 per video-hour |
-| High-accuracy STT (higher tiers) | DeepL Voice on the owner's API Pro account. Measured best on Arabic (Al-Mulk 2.1% WER vs 6.2%), but real-time streaming only. ElevenLabs Scribe is still unmeasured | $1.85/h (Scribe $0.20/h) |
-| Premium translation (higher tiers) | DeepL API Pro with a glossary: fast, and the glossary fixes names. It still made meaning slips the default didn't | $27.50 per 1M chars ≈ $1.00/h of speech |
+| High-accuracy STT (optional) | DeepL Voice, **off by default**; admins enable it per environment or language on the existing API Pro plan (decision 2/13). Measured best on Arabic (Al-Mulk 2.1% WER vs 6.2%), but real-time streaming only. ElevenLabs Scribe is still unmeasured | $1.85/h (Scribe $0.20/h) |
+| Premium translation (optional, off by default) | DeepL API Pro with a glossary: fast, and the glossary fixes names. It still made meaning slips the default didn't | $27.50 per 1M chars ≈ $1.00/h of speech |
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
-| Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a fair-use cap. | about $0.00002 per title |
+| Inline title translation | Gemma 4 26B, falling back to DeepSeek. Availability set by the site-wide subscription plan (pending, decision 3/13); admin grants until then. | about $0.00002 per title |
 | Not used | Bunny transcription ($6/h per language, no better), m2m100 (unusable), Cloudflare Stream captions (no Arabic) | |
 | Quran: source | **quran.com (Quran Foundation API) only**. Captions store references; the player fetches text and translation live (edge cache ≤ 6 days); QF down → reference plus a quran.com link | free |
 | Quran: identify | Now: QF search + Content fetch + our verification (22/55 auto, 0 wrong, 0/20 false). Later: a local index from Content Sync once QF grants it; an index built from regular API responses isn't allowed | free |
@@ -73,7 +73,7 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 **DeepL plan:** Growth ($32.50/month) only beats Pro ($5.49/month plus usage) above about 1M characters a month. Pro has no volume cap.
 
-**Cap:** tier minutes and a $100 captions budget stop keep usage inside the $500 cap.
+**Cap:** caption allowances and pack prices will be set by the site-wide subscription plan (pending, decision 3/13); until then, captions are by admin grant only. A $100 captions budget stop keeps usage inside the $500 cap.
 
 ## Stories (phases)
 
