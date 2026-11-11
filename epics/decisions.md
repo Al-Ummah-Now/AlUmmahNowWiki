@@ -177,6 +177,11 @@ GTK 4 + libadwaita via Gir.Core 0.8.1, not Avalonia: the Desktop CI spike found 
 
 Recommendation: hybrid (on-device desktop and short mobile clips; server-side Workers AI for long uploads and web).
 
+Evidence (2026-11-11, [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md)):
+- **Server:** Workers AI Whisper turbo costs $0.00051 per minute. Raw WER was 6% on Quran recitation and 13% on English.
+- **Desktop:** Core's whisper.cpp turbo q5_0 on an M3 Ultra ran at 40× real time on GPU and 3× on CPU. Raw Quran WER was worse (33%), 7.6% after the Quran layer.
+- **Spec proposal:** server by default, plus a free on-device option in the desktop Studio. Phones are not measured yet.
+
 **Blocks / affects:** 18.9, 19.4, 30.4, 28.7
 
 **Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md)
