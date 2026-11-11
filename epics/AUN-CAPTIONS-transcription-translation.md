@@ -26,11 +26,11 @@
 | High-accuracy STT (optional) | DeepL Voice, **off by default**; admins enable it per environment or language on the existing API Pro plan (decision 2/13). Measured best on Arabic (Al-Mulk 2.1% WER vs 6.2%), but real-time streaming only. ElevenLabs Scribe is still unmeasured | $1.85/h (Scribe $0.20/h) |
 | Premium translation (optional, off by default) | DeepL API Pro with a glossary: fast, and the glossary fixes names. It still made meaning slips the default didn't | $27.50 per 1M chars ≈ $1.00/h of speech |
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
-| Inline title translation | Gemma 4 26B, falling back to DeepSeek. Availability set by the site-wide subscription plan (pending, decision 3/13); admin grants until then. | about $0.00002 per title |
+| Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a daily fair-use limit (O5); the $20/month budget is the backstop. | about $0.00002 per title |
 | Not used | Bunny transcription ($6/h per language, no better), m2m100 (unusable), Cloudflare Stream captions (no Arabic) | |
 | Quran: source | **quran.com (Quran Foundation API) only**. Captions store references; the player fetches text and translation live (edge cache ≤ 6 days); QF down → reference plus a quran.com link | free |
 | Quran: identify | Now: QF search + Content fetch + our verification (22/55 auto, 0 wrong, 0/20 false). Later: a local index from Content Sync once QF grants it; an index built from regular API responses isn't allowed | free |
-| Quran translations | QF `translations` by id, fetched live (English: Saheeh International) | free, with attribution |
+| Quran translations | QF `translations` by id, fetched live. Each channel picks its edition per language (platform default Saheeh International, changeable by admins); edition name shown (O7) | free, with attribution |
 
 ## Zero-mistake Quran: measured on 20 clips (2026-11-11)
 
@@ -73,7 +73,9 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 **DeepL plan:** Growth ($32.50/month) only beats Pro ($5.49/month plus usage) above about 1M characters a month. Pro has no volume cap.
 
-**Cap:** caption allowances and pack prices will be set by the site-wide subscription plan (pending, decision 3/13); until then, captions are by admin grant only. A $100 captions budget stop keeps usage inside the $500 cap.
+**Cap:** caption allowances and pack prices will be set by the site-wide subscription plan (pending, decision 3/13); until then, captions are by admin grant only. Budgets (O4): captions $100/month and inline translation $20/month, with daily slices and `waiting_budget` plus an admin alert. **Tests never burn the budget:** automated suites use mocked providers, and QA and stage have their own $5 budgets.
+
+**Also decided 2026-11-11:** viewer-side auto-translated titles, labelled, with per-channel opt-out (O6); Arabic subtitles keep the spoken honorific by default, with ﷺ per channel (O10).
 
 ## Stories (phases)
 
