@@ -23,7 +23,7 @@
 | | Choice | Cost |
 |---|---|---|
 | Speech-to-text | Workers AI Whisper large-v3-turbo, with VAD **off** (VAD deleted speech in tests) | $0.034 per video-hour |
-| High-accuracy STT (optional) | DeepL Voice, **off by default**; admins enable it per environment or language on the existing API Pro plan (decision 2/13). Measured best on Arabic (Al-Mulk 2.1% WER vs 6.2%), but real-time streaming only. ElevenLabs Scribe is still unmeasured | $1.85/h (Scribe $0.20/h) |
+| High-accuracy STT (optional, off by default) | **ElevenLabs Scribe v3 preferred.** Measured best on Quran (WER 1.1–1.4%; Ar-Rahman mujawwad 25/25 ayat vs Workers AI 16/25, DeepL 7/25); 2–5 s per clip. It needs an ElevenLabs plan for production (Creator $22/month ≈ 110 h; Pro $99 ≈ 495 h). DeepL Voice stays an alternative on API Pro. Never in tests or QA | $0.20/h (Scribe), $1.85/h (DeepL) |
 | Premium translation (optional, off by default) | DeepL API Pro with a glossary: fast, and the glossary fixes names. It still made meaning slips the default didn't | $27.50 per 1M chars ≈ $1.00/h of speech |
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
 | Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a daily fair-use limit (O5); the $20/month budget is the backstop. | about $0.00002 per title |
@@ -94,4 +94,4 @@ Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) 
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
 - [D10](decisions.md#d10-transcription-location): Transcription location (open; measurements added 2026-11-11)
-- The open owner decisions O1–O15 (including O12: QF Developer Console app; O13: send the drafted QF permission email; O14: mandatory Quran confirmation) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
+- The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: QF permission email sent 2026-11-11, awaiting reply**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
