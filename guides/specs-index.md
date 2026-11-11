@@ -22,7 +22,7 @@ Status meanings:
 | [EPIC-29-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EPIC-29-PLAN.md) | Epic 29 plan and audit | None | Audit dated 2026-11-08 |
 | [EMBEDS-COMMENTS-TIERS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EMBEDS-COMMENTS-TIERS.md) | Epics 25–27: embeds, comments, plans | Draft v1 for review | |
 | [EPIC-27-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EPIC-27-PLAN.md) | Epic 27 plan | None | Payments deferred by owner decision |
-| [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/TRANSCRIPTION-TRANSLATION.md) | [AUN-CAPTIONS](../epics/AUN-CAPTIONS-transcription-translation.md): transcription, translation, inline titles, zero-mistake Quran | Draft v1 for review | v1 merged in #816; v2 (Quran design, QF Content Sync, DeepL, prices) in [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819) |
+| [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/TRANSCRIPTION-TRANSLATION.md) | [AUN-CAPTIONS](../epics/AUN-CAPTIONS-transcription-translation.md): transcription, translation, inline titles, zero-mistake Quran | Draft v1 for review | v1 merged in #816; v2 (zero-mistake Quran, identify-vs-store, DeepL, prices) in [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819) |
 
 ## Draft (open PR)
 
