@@ -9,7 +9,7 @@
 | **Status** | **planned** |
 | **Last updated** | 2026-11-11 (v2) |
 
-> v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison.
+> v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
 
 ## Goal
 
@@ -28,9 +28,9 @@
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
 | Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a fair-use cap. | about $0.00002 per title |
 | Not used | Bunny transcription ($6/h per language, no better), m2m100 (unusable), Cloudflare Stream captions (no Arabic) | |
-| Quran: identify | **Local fuzzy search** decides. The QF Search API is only a suggestion inside review: measured 80% right top result, but 20% wrong, and it answered 20/20 non-Quran snippets with no confidence score | free |
-| Quran: store | Captions keep **references** plus text from a storage-cleared source: **Tanzil XML** (Arabic) and **QuranEnc** (translations) until QF confirms in writing; then optionally QF Content Sync, kept in step with every sync. QF timing data is never stored in captions | free; a permission email to QF is drafted (O13) |
-| Quran translations | QuranEnc by default (English: Saheeh International); QF `translations:<id>` once QF confirms storage | free, with attribution and version |
+| Quran: source | **quran.com (Quran Foundation API) only**. Captions store references; the player fetches text and translation live (edge cache ≤ 6 days); QF down → reference plus a quran.com link | free |
+| Quran: identify | Now: QF search + Content fetch + our verification (22/55 auto, 0 wrong, 0/20 false). Later: a local index from Content Sync once QF grants it; an index built from regular API responses isn't allowed | free |
+| Quran translations | QF `translations` by id, fetched live (English: Saheeh International) | free, with attribution |
 
 ## Zero-mistake Quran: measured on 20 clips (2026-11-11)
 
@@ -43,7 +43,19 @@ The clips cover 10 reciters, murattal and mujawwad, partial ayat cut at word bou
 | False Quran candidates in lectures | 6, all sent to review, **none shown** |
 | Ayah-start timing | median **33 ms**, p90 278 ms, after snapping to recitation pauses |
 
-Every Quran span still needs creator confirmation before it is published (O14).
+The creator confirms Quran spans before publishing (decided). "Confirm all suggested" covers high-confidence matches, and unsure matches publish as a reference plus a quran.com link.
+
+## Lectures: Workers AI vs DeepL (5.3 min, adjudicated reference)
+
+| Engine | WER |
+|---|---|
+| DeepL | 3.1% |
+| Workers AI | 3.4% |
+| local whisper.cpp | 6.9% |
+| Bunny | 32.4% |
+
+- Parity on lectures. DeepL is better on hadith and Quran wording; Workers AI hallucinated a subtitle credit at the end of one clip.
+- Workers AI stays the default; DeepL remains the paid high-accuracy option.
 
 ## Price comparison
 
