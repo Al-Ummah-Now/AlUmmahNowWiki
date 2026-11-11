@@ -9,7 +9,7 @@
 | **Status** | **planned**: a proposal waiting on the owner |
 | **Last updated** | 2026-11-11 |
 
-> Full proposal: [`docs/plans/SUBSCRIPTIONS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/13776a30f461e4d61c4ae452155e19ebe66141a9/docs/plans/SUBSCRIPTIONS.md) ([#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)).
+> Full proposal: [`docs/plans/SUBSCRIPTIONS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/3c0327b4735c8c82840b66af36411222baadfc5e/docs/plans/SUBSCRIPTIONS.md) (merged in [#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)).
 
 ## Why
 
