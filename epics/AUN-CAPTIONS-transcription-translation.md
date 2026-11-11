@@ -9,7 +9,7 @@
 | **Status** | **planned** |
 | **Last updated** | 2026-11-11 (v2) |
 
-> v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/5e677cdee1e595f1c0370e68c5196dbb09cb030c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/5e677cdee1e595f1c0370e68c5196dbb09cb030c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran Foundation Content Sync as the Quran source, DeepL measured, and the full price comparison.
+> v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison.
 
 ## Goal
 
@@ -28,8 +28,9 @@
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
 | Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a fair-use cap. | about $0.00002 per title |
 | Not used | Bunny transcription ($6/h per language, no better), m2m100 (unusable), Cloudflare Stream captions (no Arabic) | |
-| Quran text | **Quran Foundation Content Sync** (`quran_core:1`, `mushafs:4`): a local copy synced at least every 7 days, crediting QF. Tanzil **XML** is the fallback (the TXT export glues the basmala onto ayah 1) | free; needs a QF Developer Console app |
-| Quran translations | QF Content Sync `translations:<id>` for public editions, with QuranEnc as fallback; English default Saheeh International | free, with attribution and version |
+| Quran: identify | **Local fuzzy search** decides. The QF Search API is only a suggestion inside review: measured 80% right top result, but 20% wrong, and it answered 20/20 non-Quran snippets with no confidence score | free |
+| Quran: store | Captions keep **references** plus text from a storage-cleared source: **Tanzil XML** (Arabic) and **QuranEnc** (translations) until QF confirms in writing; then optionally QF Content Sync, kept in step with every sync. QF timing data is never stored in captions | free; a permission email to QF is drafted (O13) |
+| Quran translations | QuranEnc by default (English: Saheeh International); QF `translations:<id>` once QF confirms storage | free, with attribution and version |
 
 ## Zero-mistake Quran: measured on 20 clips (2026-11-11)
 
@@ -66,7 +67,7 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| P0 | Provider interfaces, QF Developer Console app + Content Sync job, zero-mistake Quran detector, glossary, translation cache, additive entitlement grants | planned |
+| P0 | Provider interfaces, Quran store from Tanzil/QuranEnc (QF sync once cleared), zero-mistake Quran detector, glossary, translation cache, additive entitlement grants | planned |
 | P1 | Inline title/description translation (upload, Studio, Set values), Quran-aware titles | planned; p95 ≤ 2 s |
 | P2 | On-demand transcription: jobs, queue, audio-extraction container, editor, publish, metering with refunds, budget stop | planned |
 | P3 | Transcript translation with official Quran translations; bulk actions; upload flag; admin grants | planned |
@@ -79,4 +80,4 @@ Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) 
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
 - [D10](decisions.md#d10-transcription-location): Transcription location (open; measurements added 2026-11-11)
-- The open owner decisions O1–O15 (including O12: register the QF Developer Console app; O13: questions for QF; O14: mandatory Quran confirmation) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
+- The open owner decisions O1–O15 (including O12: QF Developer Console app; O13: send the drafted QF permission email; O14: mandatory Quran confirmation) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
