@@ -22,6 +22,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [T1](decisions.md#t1-plans-are-admin-managed) | Plans are admin-managed | **decided** | 2026-11-07 | Epic 27, every tiered feature |
 | [T2](decisions.md#t2-billing-provider) | Billing provider | **decided** | 2026-11-07 | 27.7, Epic 24 |
 | [P1](decisions.md#p1-first-paid-providers) | First paid providers | **open** | 2026-11-07 | 27.7 |
+| [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions plan (decisions S1–S18) | **pending** | 2026-11-11 | Epic 27, Epic 24, every tiered feature, P1 |
 | [E1](decisions.md#e1-embed-host-domain) | Embed host domain | **deferred** | 2026-11-07 | 25.4 |
 | [E2](decisions.md#e2-default-thread-scope) | Default thread scope | **open** | 2026-11-07 | 26.4 |
 | [E3](decisions.md#e3-guest-commenting) | Guest commenting | **open** | 2026-11-07 | 26 |
