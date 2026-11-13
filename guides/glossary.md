@@ -25,7 +25,7 @@
 | **Leftover check** | A step at the end of an E2E job that fails when anything the run created is still stored. See [Testing and E2E](testing.md) |
 | **Local stack** | Every monorepo worker plus the released Auth bundle in one local Miniflare, with fakes for Bunny and email, booted per CI job for E2E. See [Testing and E2E](testing.md) |
 | **Lantern, Zujaj, Nahas, Fawanees** | The four [themes](theming.md) |
-| **«المرئيات»** | The Arabic plural used for "videos" across the platform |
+| **«مرئي / مرئيات»** | The only Arabic word for "video" in any UI (owner rule). See [Arabic wording for video](#arabic-wording-for-video) |
 | **Own data** | The rule that an E2E spec creates, through builders, everything it reads or changes, and deletes it afterwards |
 | **Placement** | Whether an E2E spec runs `local` (on the local stack) or `deployed` (QA or stage) |
 | **OpenAuth** | The OAuth provider library. The organisation maintains a [fork](../repos/openauth.md) |
@@ -49,3 +49,28 @@
 | **Workers** | Cloudflare's serverless platform, used for every server-side app |
 | **Wrangler** | Cloudflare's CLI and config format |
 | **www** | The public site, from [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
+
+## Arabic wording for video
+
+Every Arabic string in every app (web, admin, www, CMS, emails, player, Android, Apple, Desktop, Core) uses «مرئي» for "video". Never use «فيديو», «فيديوهات», «مقاطع الفيديو», or a bare «مقطع / مقاطع» that means a video.
+
+| Use | Arabic |
+|---|---|
+| a video / the video | «مرئي» / «المرئي» (for example «رفع مرئي»، «تعديل المرئي») |
+| videos / the videos | «مرئيات» / «المرئيات» (for example «مشغّل المرئيات»، «فهارس المرئيات») |
+| your videos | «مرئياتك» (one video: «مرئيك») |
+| indefinite object | with tanween: «اختر مرئيًا»، «انشر مرئيًا ليظهر هنا» |
+| 1 / 2 | «مرئي واحد» / «مرئيان» (after a preposition or in idafa: «مرئيين») |
+| 3–10 / 11–99 / 100+ and 0 | «٣ مرئيات» / «١١ مرئيًا» / «١٠٠ مرئي» / «لا توجد مرئيات» |
+| a count with no plural forms | «{count} من المرئيات» |
+
+Exceptions that stay as they are:
+
+- «مقطع قصير / المقاطع القصيرة» for Shorts.
+- «مقطع تعريفي» for a channel trailer.
+- «مقطع» for live-stream HLS segments.
+- The Apple video editor's timeline clips («مقطع / مقاطع مصدر»).
+- Quran and other religious quotations.
+- Brand names, code identifiers and URLs.
+
+The translation store (`translations/ar.json` in each environment's `global_settings` bucket) serves the repo text for every key that is not in its `overrides` list. A wording change in the repo therefore reaches each environment on its next release. Check `overrides` only when an admin has edited the key.
