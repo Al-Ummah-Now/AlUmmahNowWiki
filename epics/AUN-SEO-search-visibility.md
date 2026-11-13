@@ -394,7 +394,7 @@ Updated after the owner's decisions. Each phase ships as PRs merged on green and
 |---|---|---|
 | **0: stop the damage** ✅ in PR | Real 404/503 (#1), non-production noindex (#2), private hosts and utility pages noindex (#8), `?vid=` 301 (#6), `/ar` title (#7) | AlUmmahNow, Auth, CMS |
 | **1: decisions D-1, D-4, D-5** | x-default on every hreflang set (D-1); 410 after purge on API and pages (D-4); **Unlisted** visibility in API, Studio, upload, web and admin, plus a native issue (D-5) | AlUmmahNow, native issue |
-| **2: be understood** | Title template + D-6 descriptions; channel, playlist and home metadata; `VideoObject` (with `contentUrl` from D-11 when an R2 MP4 exists), `BroadcastEvent`, `BreadcrumbList`, `WebSite` + `SearchAction`; videos sitemap index (videos, Shorts, channels, playlists, live) + `Sitemap:` line; www sitemap fixes, `ItemList`, unsigned thumbnails; `publishedAt` on every upload; AI-crawler robots rules (D-8); release `seo.spec.ts` | AlUmmahNow, UI, CMS |
+| **2: be understood** | Title template + D-6 default description (from the copy PRs); channel, playlist and home metadata; `VideoObject` (with `contentUrl` from D-11 when an R2 MP4 exists), `BroadcastEvent`, `BreadcrumbList`, `WebSite` + `SearchAction`; videos sitemap index (videos, Shorts, channels, playlists, live) + `Sitemap:` line; www sitemap fixes, `ItemList`, unsigned thumbnails; `publishedAt` on every upload; AI-crawler robots rules (D-8); release `seo.spec.ts` | AlUmmahNow, UI, CMS |
 | **3: URLs and media** | `/shorts/{id}` + 301 (D-10); R2 MP4 rendition + public `contentUrl` (D-11); www slug history + 301 (D-7); landing page + referrer source in in-house analytics (D-9); IndexNow | AlUmmahNow, UI, CMS |
 | **4: fast and server-rendered** | Server-rendered watch, home, channel tabs and playlists (#4); LCP work, Font Awesome removal, RUM (#15); legal and help pages (#14); www trailing slash 308, borrowed-page noindex, 404 canonical (#16, #19) | AlUmmahNow, UI, CMS |
 | **5: grow** | Post permalinks + `SocialMediaPosting` (#12); scholar-site SEO with AUN-SCHOLAR-SITES; handle history; chapters as `Clip`; weekly production crawl | all |
@@ -426,9 +426,11 @@ Updated after the owner's decisions. Each phase ships as PRs merged on green and
 
 ### D-SEO-6: Default description and tagline
 
-**Decided** (to be aligned with the copy audit once it is approved):
-- en: "Watch, share and discuss videos, Shorts and posts from channels across the Muslim community."
-- ar: «شاهد وشارك وناقش المرئيات والمقاطع القصيرة والمنشورات من قنوات المجتمع المسلم.»
+**Decided:** tagline option 4 from the copy audit. The default description is its long line:
+- en: "Upload videos, go live and post to your channel, and see what the community is sharing, in Arabic and English."
+- ar: «ارفع المرئيات وابدأ البث المباشر وانشر في قناتك، وتابع ما يشاركه المجتمع، بالعربية والإنجليزية.»
+
+It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1168) for the videos site, [UI#79](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/79) for www). SEO work uses it wherever a page has no description of its own and never sets its own default text.
 
 ### D-SEO-7: Slug history redirects on www
 
