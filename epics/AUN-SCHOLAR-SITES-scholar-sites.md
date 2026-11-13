@@ -6,12 +6,21 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **in progress**: phase 1 **complete** (2026-11-13); phase 2 in review (PRs below); revision 8 decisions; open: SS12, SS14, SS16, SS18 (phase 1 follows the recommendations for SS14 and SS18) |
+| **Status** | **in progress**: phase 1 **complete** (2026-11-13); phase 2 (now with Studio self-service, SS16) in progress; revision 9: every decision answered |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
+>
+> **Answers (2026-11-13, revision 9): the last four, plus the hosting and domains setup.**
+> - **SS12:** yes. A renamed subdomain keeps a 301 for 12 months (as built).
+> - **SS14:** confirmed. GIF posts stay, and **Link** posts are added: a preview card with the image, title and site name, plus the creator's optional comment. Link must be complete in the Studio composer, on www, on the sites and in the native apps.
+> - **SS16 (changed):** staff setup from the admin **and** Studio self-service for channel owners both ship from day one: phase 3's self-service moves into phase 2. The first site is mustafa-elbadry.
+> - **SS18 (changed):** scholars write only in Studio, but the CMS **writer role stays for staff** who edit Al Ummah Now's own content. Only scholar accounts get "Write in Studio"; staff writers keep the full CMS editor.
+> - **One shared sites Worker** for every site, routed by host; no per-site Workers (confirms SS3).
+> - **Own domains:** a token with *SSL and Certificates → Edit* on `alummahnow.org` is stored in the Secrets Store (`sites-saas-token`, store `f8eddc99…`), bound to admin-api. Cloudflare for SaaS is being enabled on the zone by the owner (until then the custom hostnames API answers 1404, no quota): "Add your own domain" is built in the admin and Studio (create the custom hostname, show the CNAME/TXT to add, poll the certificate) and tested with mocks.
+> - The release token now has *Zone WAF Edit* on every alummahnow zone; whether it can make the one-time `alummahnow.org` wildcard DNS, routes and fallback origin is checked by the zone setup workflow.
 >
 > **Answers (2026-11-13, revision 8): SS9 and the domain plan.** Scholar sites live on **`alummahnow.org`**. Every white-label site gets `<slug>.alummahnow.org` (QA `<slug>.qa.alummahnow.org`, stage `<slug>.stage.alummahnow.org`). The same zone is the Cloudflare for SaaS zone for scholars' own domains, with the DNS target `sites.alummahnow.org`. The zone has been in our Cloudflare account since 2026-11-13. The main sites stay on `alummahnow.net`, `alummahnow.com` redirects to `.net`, and `alummahnow.app` is reserved for apps (§4).
 >
@@ -541,17 +550,14 @@ Migration numbers are assigned when building.
 | SS11 | One Al Ummah Now account everywhere; branded sign-in still names it | 2026-11-13 |
 | SS13 | A site may be single-language | 2026-11-13 |
 | SS15 | Covered by SS6: every scholar post gets a ref, so editors can feature it | 2026-11-13 |
+| SS12 | A renamed subdomain keeps a 301 for 12 months | 2026-11-13 |
+| SS14 | Keep GIF; add Link posts (preview card: image, title, site name + optional comment) in Studio, www, sites and native apps | 2026-11-13 |
+| SS16 | First site mustafa-elbadry. Staff setup from the admin **and** Studio self-service for channel owners, both from day one (phase 3 self-service moves into phase 2) | 2026-11-13 |
 | SS17 | Any active platform theme, automatically (choose-only, pinned) | 2026-11-13 |
+| SS18 | Scholars write only in Studio ("Write in Studio" for scholar accounts); the CMS writer role **stays** for staff editing Al Ummah Now's own content | 2026-11-13 |
 | – | Earlier: it is a tier; white-label; independent with posts canonical on the site; not every scholar gets it; own domains in scope; platform mark optional by tier; sites choose one of our themes, with no editing; branding is logo, name and favicon | 2026-11-13 |
 
-**Still open:**
-
-| # | Decision | Recommendation |
-|---|---|---|
-| SS12 | A renamed subdomain keeps a 301 for 12 months | Yes |
-| SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
-| SS16 | First site: mustafa-elbadry, set up by staff in phase 2, with Studio self-service in phase 3 | Yes |
-| SS18 | Scholars write only in Studio, and the CMS writer role becomes a link to Studio. This follows from SS6. Today's CMS writers lose the CMS editor, but their posts are migrated and keep their URLs | Yes |
+Every decision is answered (revision 9).
 
 ## Open questions, not decisions
 
