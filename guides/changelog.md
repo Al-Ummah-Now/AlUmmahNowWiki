@@ -4,6 +4,15 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-13: follow-ups
+
+- **Session cookies:** the videos web app's session cookies are no longer Secure on a plain-http localhost, which lifts the WebKit quarantine on the local stack ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)). Deployed hosts are unchanged.
+- **Encode cap:** the release suite's parallel encode job and 8-upload cap are still an open PR ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061)). [Testing and E2E](testing.md#encodes-and-load) describes both the current state and the pending change.
+- **Sources:** epic and decision pages now cite PRs and issues instead of chat threads.
+- **Repo docs:** stale docs were fixed in the repos themselves (monorepo CLAUDE.md, README and THEMES.md; the CMS architecture and roadmap; www's plan and README; openauth's release notes; Android's merge rule).
+- **Issues closed after checking the code:** Auth [#251](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/251) and [#252](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/252), CMS [#45](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/45) and [#69](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/69), and Apple [#5](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/5).
+- **Left open with what remains:** CMS [#46](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/46) (the 80% warning) and Desktop [#15](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/15) (store packaging and a Flathub source build).
+
 ## 2026-11-12: sweep of 2026-11-09 → 2026-11-12
 
 About 670 pull requests merged across the organisation in four days: 432 in the monorepo, 62 in Auth, 66 in the CMS, 40 in www, 21 in openauth, 14 in Tools and 26 across Core and the native apps. Monorepo releases ran from `v2026.11.09` to `v2026.11.12.9`.
@@ -84,7 +93,7 @@ Details: [Deletion, erasure and cleanup](data-lifecycle.md).
 - **Moderation requests, invites and the Scholar role** in Auth admin ([Auth#275](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/275), [Auth#299](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/299), [Auth#298](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/298)).
 - **Look and language:** sign-in pages are English unless `?lang=ar`, follow the site theme, and send one email design in one language ([Auth#261](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/261), [Auth#282](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/282), [Auth#319](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/319)).
 - **JWKS and discovery** are edge-cached, with the last good copy served when D1 stalls ([Auth#333](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/333)).
-- **Session cookies** are Secure everywhere except a plain-http localhost. This covers the Auth issuer's `__session` ([Auth#336](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/336), [openauth#41](https://github.com/Al-Ummah-Now/openauth/pull/41)) and admin-web. The videos web app's change is still open ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)).
+- **Session cookies** are Secure everywhere except a plain-http localhost. This covers the Auth issuer's `__session` ([Auth#336](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/336), [openauth#41](https://github.com/Al-Ummah-Now/openauth/pull/41)) admin-web and the videos web app ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094), merged 2026-11-13).
 
 Details: [Authentication and SSO](authentication.md), [Site roles and channel roles](roles.md).
 

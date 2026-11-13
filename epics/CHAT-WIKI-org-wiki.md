@@ -36,4 +36,4 @@ Platform-wide constraints that apply to every epic:
 
 ## Sources
 
-- Chat: thread `af5f8ac1-4bf1-46b4-8a83-998aa3ccb9ab`, 2026-11-09 19:21 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ab2e9b7ca-d930-4636-bb7f-68323b3fa1ff%3Adelegate-task%3Aaf5f8ac1-4bf1-46b4-8a83-998aa3ccb9ab`)
+- [AlUmmahNowWiki#1](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/1), [.github#1](https://github.com/Al-Ummah-Now/.github/pull/1), [AlUmmahNowWiki#2](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/2)

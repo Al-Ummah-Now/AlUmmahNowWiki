@@ -64,4 +64,4 @@ Platform-wide constraints that apply to every epic:
 
 - [AlUmmahNowAuth/docs/IDENTITY_PLATFORM_SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/5d563e10662615e910a1e00d98e029a7b1e6329e/docs/IDENTITY_PLATFORM_SPEC.md)
 - [openauth/packages/openauth/docs/IDENTITY_PLATFORM_SPEC.md](https://github.com/Al-Ummah-Now/openauth/blob/8529f59fe365137438a6a47147ad1748d2a762b2/packages/openauth/docs/IDENTITY_PLATFORM_SPEC.md)
-- Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 03:27 and 2026-11-10 03:36–03:40 UTC, position 8301 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+- [AlUmmahNowAuth#275](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/275), [AlUmmahNowAuth#254](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/254)

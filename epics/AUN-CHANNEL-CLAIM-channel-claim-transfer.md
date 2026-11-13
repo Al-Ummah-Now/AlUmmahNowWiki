@@ -41,4 +41,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [CHANNEL-CLAIM-AND-TRANSFER.md (PR #460)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460)
-- Chat: thread `88dac88f-5d24-4a1c-99f8-f9fedb3a4186`, 2026-11-09 02:57 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Aecc01bc5-fad0-4ead-b91b-d432567940f7%3Adelegate-task%3A88dac88f-5d24-4a1c-99f8-f9fedb3a4186`)
+- [AlUmmahNow#460](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460)

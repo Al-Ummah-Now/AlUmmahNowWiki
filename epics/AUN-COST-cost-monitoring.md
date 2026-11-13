@@ -53,4 +53,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [docs/cost-monitoring/README.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/cost-monitoring/README.md)
-- Chat: thread `ca9c255e-341c-4821-ada6-54d23f461cd6`, 2026-11-08 11:57 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3A444e2ab3-52df-463a-848e-1004dbc78f19%3Adelegate-task%3Aca9c255e-341c-4821-ada6-54d23f461cd6`)
+- [AlUmmahNow#266](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/266)

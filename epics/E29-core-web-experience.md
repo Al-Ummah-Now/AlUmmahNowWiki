@@ -21,7 +21,7 @@ Channels, posting, commenting, profiles, reactions, subscriptions, search and br
 - Sprint B (P1): 29.3, 29.4, 29.5, 29.11, 29.12, 29.13, 29.15, 29.17
 - Sprint C (P2): 29.14, 29.16, 29.18
 - Core viewing, commenting, subscribing, search and library are free for everyone; creator extras are tiered (Epic 27)
-- **Sprint A** (chat-only execution record): the owner said "yes start on e spint a" at 2026-11-07 04:35 UTC; three agents (search/explore, library/notifications, handles/About/comments) merged and were on QA by 06:24 UTC ([AlUmmahNow#170](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/170), [AlUmmahNow#163](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/163)). No message starts Sprints B or C by name. Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 04:35–06:24 UTC, position 2087 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+- **Sprint A** (chat-only execution record): the owner said "yes start on e spint a" at 2026-11-07 04:35 UTC; three agents (search/explore, library/notifications, handles/About/comments) merged and were on QA by 06:24 UTC ([AlUmmahNow#170](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/170), [AlUmmahNow#163](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/163)). No message starts Sprints B or C by name. Sources: [AlUmmahNow#168](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/168), [AlUmmahNow#169](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/169), [AlUmmahNow#170](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/170)
 
 ## Stories
 

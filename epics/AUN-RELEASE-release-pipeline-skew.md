@@ -42,4 +42,4 @@ Platform-wide constraints that apply to every epic:
 - [docs/release-pipeline/SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/release-pipeline/SPEC.md)
 - [docs/release-pipeline/PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/release-pipeline/PLAN.md)
 - [docs/release-pipeline/SKEW-PROTECTION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/release-pipeline/SKEW-PROTECTION.md)
-- Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 02:37–02:42 UTC, position 4833 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+- [AlUmmahNow#203](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/203), [AlUmmahNow#248](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/248), [AlUmmahNow#286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/286)
