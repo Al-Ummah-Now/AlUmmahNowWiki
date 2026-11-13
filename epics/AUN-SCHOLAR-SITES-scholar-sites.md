@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 8, waiting on the owner (open: SS12, SS14, SS16, SS18) |
+| **Status** | **in progress**: phase 1 in review (PRs below); revision 8 decisions; open: SS12, SS14, SS16, SS18 (phase 1 follows the recommendations for SS14 and SS18) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
@@ -561,7 +561,12 @@ Migration numbers are assigned when building.
 
 ## Status evidence
 
-- This page (draft PR on AlUmmahNowWiki). No code yet.
+- This page (draft PR on AlUmmahNowWiki).
+- **Phase 1 (community-fuelled scholar content), 2026-11-13, in review:**
+  - AlUmmahNow [#1203](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1203): `PostV2` in `packages/shared-types/src/post-schema.ts` (an engineering call: a file in shared-types, not a new `packages/post-schema` package, so no lockfile change; vendored byte for byte by the CMS and www with `sync:posts`/`check:posts`); Studio composer for articles, cards and links plus a post language; the reference outbox in the processor (`CMS_INTERNAL_URL`); `/internal/posts` and the conversion endpoints. Docs: `docs/features/scholar-posts.md`.
+  - AlUmmahNowCMS [#117](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/117): migration 0019 (`primary_channel_id`; `posts.ref_post_id`, `ref_channel_id`, `summary_json`), `/internal/refs`, refs in the public API (`ref`, `v2`, `community`), `FEED_FORMAT` 4, Featuring "Scholar posts" with Open in Studio, Write in Studio for writers, the conversion and its check. **A reference keeps its community post's `kind`** (instead of `kind = 'ref'`), so the Articles list and `/cards` keep filtering on kind; refs are the rows with `ref_post_id`. Docs: `docs/SCHOLARS.md` §7–§8.
+  - AlUmmahNowUI [#88](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/88): www renders every kind (post pages, lists, timeline) and "Join the discussion"; renderers move to `packages/render/src/posts/` after the workspace split (#87).
+  - Not yet: the conversion runs (QA, stage; production after the owner's go-ahead), the nightly reconcile (refs ↔ community index), staff "Add to page" from the Scholar posts picker beyond the existing curated-page picker, scheduled community posts going live (community posts have no scheduler; scheduled CMS posts are skipped by the conversion).
 
 ## Sources
 
