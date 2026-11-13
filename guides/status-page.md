@@ -10,7 +10,11 @@ It is its own Worker with its own D1 database. Showing the page never calls the 
 
 ## What it watches
 
-Website, videos site, videos API, sign-in, profile, CMS, admin, uploads, playback (R2 and Bunny), live streaming, notifications and realtime, search and email. A cron checks each one every 2 minutes in production (every 5 on QA and stage) with anonymous, read-only requests. The uploads check sends a TUS request without a token and expects 401, so no video is ever created. Email and Bunny follow their providers' status pages.
+**On the public page:** website, videos site, sign-in, profile, uploads, playback (R2 and Bunny), live streaming, notifications and realtime, and search.
+
+**Admin only:** the videos API, CMS, videos admin, admin API, accounts admin and email. They are checked and alerted on exactly like the public ones but shown only on the videos admin's **Status** page (owner, 2026-11-13: "You shouldn't show admin status unless this page is only for admins"). The public page, its JSON and feeds never list them or show check details or internal hostnames.
+
+A cron checks each one every 2 minutes in production (every 5 on QA and stage) with anonymous, read-only requests. The uploads check sends a TUS request without a token and expects 401, so no video is ever created. Email and Bunny follow their providers' status pages.
 
 - **States:** Operational, Degraded performance, Partial outage, Major outage, Under maintenance.
 - **No flapping:** a state changes only after two checks in a row agree, both when it breaks and when it recovers.
@@ -18,10 +22,11 @@ Website, videos site, videos API, sign-in, profile, CMS, admin, uploads, playbac
 
 ## Incidents and maintenance
 
-Admins and super admins post them on the videos admin **Status** page (Operations group), always in English and Arabic:
+Admins and super admins post them on the videos admin **Status** page (Operations group), always in English and Arabic. The same page lists every component, public and admin-only, with its last result and 90-day uptime:
 
 - **Incident:** title, message, affected components, impact, and status from Investigating to Resolved. Each update adds to its timeline. An open incident makes its components look at least as bad as its impact.
 - **Scheduled maintenance:** a time window and components. The page lists it ahead of time and shows "Under maintenance" while it runs; no outage alerts are sent for those components.
+- **Public or not:** an incident appears publicly only with its public components. One that affects only admin-only components (say, the CMS) stays on the admin Status page.
 - **Delete** hides it from the page and feeds. It can be restored for 30 days, then it is purged ([Deletion, erasure and cleanup](data-lifecycle.md)).
 
 People can follow incidents with the Atom and RSS feeds (`/feed.atom`, `/feed.rss`, `/ar/…`) or `/api/status.json`. Email and webhook subscriptions are not built yet ([#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)).

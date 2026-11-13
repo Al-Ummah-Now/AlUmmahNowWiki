@@ -6,7 +6,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-13: status page
 
-- **Public status page** at `status.alummahnow.net` (stage and QA have their own). Its own Worker and database, so it stays up when other services are down. It checks 13 components every 2 minutes, shows 90 days of uptime, and lists incidents and scheduled maintenance in English and Arabic, with feeds and a JSON endpoint. Admins post incidents from the new admin **Status** page; outages alert admins through the Errors page. Linked from the videos sidebar and the www footer ([#1194](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1194), [UI#85](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/85); subscriptions: [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md).
+- **Public status page** at `status.alummahnow.net` (stage and QA have their own). Its own Worker and database, so it stays up when other services are down. It checks 13 components every 2 minutes, shows 90 days of uptime, and lists incidents and scheduled maintenance in English and Arabic, with feeds and a JSON endpoint. Admins post incidents from the new admin **Status** page; outages alert admins through the Errors page. Only user-facing services are public; the CMS, admins, APIs and email are monitored but shown only on the admin Status page ([#1232](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1232)). Linked from the videos sidebar and the www footer ([#1194](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1194), [UI#85](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/85); subscriptions: [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md).
 
 ## 2026-11-13: follow-ups
 
