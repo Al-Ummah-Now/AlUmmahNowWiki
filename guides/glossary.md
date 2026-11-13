@@ -23,6 +23,7 @@
 | **Grandfathering** | Under Epic 27, limits block only new actions and never remove existing content |
 | **Issuer** | The auth service for an environment, such as `auth.alummahnow.net` |
 | **Leftover check** | A step at the end of an E2E job that fails when anything the run created is still stored. See [Testing and E2E](testing.md) |
+| **Identity / acting as** | Who you appear as in public on the videos site: yourself, or a channel you own or help run. Chosen in the account menu's "Acting as" section. See [Help and the identity tour](help-and-tour.md) |
 | **Local stack** | Every monorepo worker plus the released Auth bundle in one local Miniflare, with fakes for Bunny and email, booted per CI job for E2E. See [Testing and E2E](testing.md) |
 | **Lantern, Zujaj, Nahas, Fawanees** | The four [themes](theming.md) |
 | **«مرئي / مرئيات»** | The only Arabic word for "video" in any UI (owner rule). See [Arabic wording for video](#arabic-wording-for-video) |
