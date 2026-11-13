@@ -576,7 +576,7 @@ Every decision is answered (revision 9).
   - **Conversion (§6.6):** QA converted **1** post (an article with a community copy, upgraded in place, featured; check 1 ok, 0 different). Stage: **0** to convert. Production: **not applicable**: there are no scholars in production (owner, 2026-11-13), so no production conversion is needed. The conversion script (`AlUmmahNowCMS scripts/ops/convert-scholar-posts.ts`) stays for future use.
   - **Nightly reference check** (#1217, done): AlUmmahNow #1234 (channel digest) + AlUmmahNowCMS #118 (03:00 UTC, scholars' primary channels, one indexed query per channel, migration 0020, ≤ 50 repairs a night).
   - **End-to-end test** (#1219, done): AlUmmahNow #1236 `78-scholar-refs.spec.ts` on the local stack (Studio → outbox → CMS ref → www, en and ar). The stack runs the CMS and www from their released local-stack bundles (AlUmmahNowCMS #119, AlUmmahNowUI #92).
-  - **Add to page** (done): AlUmmahNowCMS #121, Featuring → Scholar posts → "Add to page": an in-page dialog per language with a live autocomplete of that language's curated list pages, through the list's own endpoint. Phase 1 has no open follow-ups. The owner has not yet explicitly confirmed SS14 or SS18 (phase 1 follows their recommendations).
+  - **Add to page** (done): AlUmmahNowCMS #121, Featuring → Scholar posts → "Add to page": an in-page dialog per language with a live autocomplete of that language's curated list pages, through the list's own endpoint. Phase 1 has no open follow-ups. SS14 and SS18 were answered in revision 9 (below).
 
 - **Phase 2 (sites Worker, grant, Studio Site MVP), 2026-11-13, in review:**
   - AlUmmahNowUI [#86](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/86) (merged): the workspace split, www moved to `apps/www`.
@@ -584,7 +584,30 @@ Every decision is answered (revision 9).
   - AlUmmahNow [#1204](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1204): `packages/shared-types/src/site.ts`; api-videos site store in the existing R2 buckets (`channel_sections` `site/{channelId}/settings.json` + 10-minute previews, `channel_tabs` `site-hosts/{host}.json` create-only), `/internal/sites`, `GET /api/sites/by-host/:host`, `/api/sites/channel/:id` (Studio); admin-api migration 0022 (two add-on plans; **a grant is one `entitlement_overrides` row per `site.*` key on the channel**, reason `addon:<tier>`, not a subscription, because a channel can hold only one live subscription) and `/api/sites` with audit; admin-web **Scholar sites** page; Studio → **Site** (theme, name, logo, favicon, languages, menu, About, preview).
   - AlUmmahNowAuth [#357](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/357) (merged): one public PKCE client "Al Ummah Now (sites)" per env (migration 0034) whose single exact `https://<host>/auth/callback` is accepted when `<host>` is a live site's primary host in the registry; `/logout` may return to a live site. A site's sign-out passes auth's "Sign out?" confirmation (logout-CSRF rule).
   - Engineering calls: themes offered are the four built-ins until UI#55; the logo/favicon upload reuses the community image upload (owner-only today, #1213).
-  - Not yet: owner DNS step, own domains (#1212), revoked-site lifecycle (#1214), platform-side canonicals and "Visit site" (#1215), first site mustafa-elbadry (#1216).
+  - Not yet: owner DNS step, revoked-site lifecycle (#1214), platform-side canonicals and "Visit site" (#1215), first site mustafa-elbadry (#1216).
+
+- **Revision 9 work, 2026-11-13:**
+  - **SS18 (staff writers keep the CMS):**
+    - AlUmmahNowCMS #122 (merged `a33d066`) and AlUmmahNowAuth #360 (merged `b7b0d53`). #117 had made every CMS "writer" a Write in Studio link, because auth only had a "Scholar" role.
+    - Auth now has a **Writer** role (migration 0035), which maps to the new bknd role `staff_writer`: the full CMS editor for Al Ummah Now's own posts (`author_sub IS NULL`, not refs), with no delete, no timeline switch and no other screens.
+    - The auth "Scholar" role keeps the bknd name `writer`, so a stale session never gains rights. It alone gets Write in Studio.
+  - **SS14 (Link posts):**
+    - AlUmmahNow #1267 (merged `28816d2`): `link.siteName`, post-schema revision 2. Studio gets "Get preview": `POST /api/community/media/link-preview` reads the Open Graph tags with SSRF guards and copies the image to our storage. The Community tab card shows the site name.
+    - AlUmmahNowCMS #123: `v2.link.site_name`, FEED_FORMAT 5.
+    - AlUmmahNowUI #94: the shared `PostLinkCard` on www and the sites; the sites also render GIF and cards posts.
+    - Native apps have no community surface yet: Android #21, Apple #32 and Desktop #40 cover a Community tab with every PostV2 kind, Link included.
+  - **Own domains (#1212):** AlUmmahNow #1272. See `docs/features/scholar-sites-domains.md`.
+    - admin-api calls Cloudflare for SaaS with `sites-saas-token` (bound as `SITES_SAAS_TOKEN`). The status checks come from an indexed D1 table (migration 0023): every 10 minutes for 72 hours, then daily.
+    - api-videos keeps the state and the create-only host index.
+    - Studio → Site → Domains and admin Scholar sites both work: add a domain, copy the CNAME/TXT records, see its status, check now, pick the main address, remove it in the in-app dialog.
+    - While SaaS is off (1404), both say "not available yet".
+  - **SS16 Studio self-service:** AlUmmahNow #1281, plus the sites rendering in AlUmmahNowUI. See `docs/features/scholar-sites-studio.md`.
+    - Site pages from blocks (text, image, video, button, quote, divider, latest posts, latest or playlist videos), per language. Draft/published, the last 10 versions restorable, preview, `site.pages.max`. Editors may write pages.
+    - The menu can link pages. Home can show a page above the sections.
+    - Search engines: title template, description, verification codes. Path redirects. A checklist.
+    - #1213: channel admins and editors may upload images.
+    - Engineering call: "Home" reuses the channel's sections plus one site page above them (the spec's `page` section). A `cta` is a block in that page, not a new channel-section type.
+  - **Release token check (Sites zone workflow, AlUmmahNowUI #93, run 43503680139):** it can read the zone and Worker routes and set Always Use HTTPS. It is **missing** Zone → DNS: Edit (and Read), which the wildcard and the record setup need, and Zone → SSL and Certificates: Edit, which the fallback origin needs, with Cloudflare for SaaS enabled. Worker routes are attached by every sites deploy.
 
 ## Sources
 
