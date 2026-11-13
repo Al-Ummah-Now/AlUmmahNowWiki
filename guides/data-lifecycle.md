@@ -31,6 +31,7 @@ A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-a
 - **Contact us** messages ([#626](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/626)).
 - **Creator invites**, **error identity**, **category suggestions** and **upload traces** ([#1077](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1077)). Error events are kept for trends, but the user id becomes an erased marker and identifying keys are removed.
 - The channel's **Bunny collections**, whenever a channel record is deleted ([#1086](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1086)), and the user's own collection.
+- **Channel subscriptions** an account made as itself (no channel), as well as those its channels made. The export marks each one `subscribedAs` member or channel ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
 - On the Auth side, purging an account also removes its **email → subject** record and its **invite rows** ([Auth#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [Auth#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
 
 The local E2E stack's leftover check is what finds gaps like these: an admin spec erases an account and the check lists anything still keyed by it.
