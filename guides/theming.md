@@ -2,7 +2,7 @@
 
 # Theming
 
-Al Ummah Now's design system is called **Fanous**. A theme is a full skin. It changes look and assets, but not layout, features or content structure. Light and dark mode are separate and stay per viewer (Light, Dark or System).
+Al Ummah Now's design system is called **Fanous**. A theme is a full skin. It changes look and assets, but not layout, features or content structure. Light and dark mode are separate and stay per viewer: a **Light / Dark** choice, with no "System" option (see [Light and dark](#light-and-dark)).
 
 There are two sources of theme data in the monorepo:
 
@@ -38,6 +38,35 @@ Each app reads the setting from the admin API's public site-theme endpoint at ru
 If the read fails, the app renders Fawanees. On www and the CMS, `?theme=<id>` previews a built-in theme on QA, stage and local; production ignores it.
 
 www and the CMS don't import the monorepo. Each vendors the compiled theme CSS with `npm run sync:fanous`, pinned to a monorepo commit in its `fanous.lock.json`, and `npm run check:fanous` fails on drift. After a theme change on the monorepo's `main`, both repos need a sync PR.
+
+## Light and dark
+
+Owner decision, 2026-11-13: the mode control is **Light / Dark only, never "System"**, in every app.
+
+- **First visit:** nothing is saved, so the page follows the device (`prefers-color-scheme`). The mode is set before the first paint, so there's no flash.
+- **From the first click on:** the viewer's last choice is remembered on that device, and the device setting no longer changes it.
+- **Older saved "system" values** are resolved once to the device's mode and saved as that. The CMS clears its old cookie, and the device decides until the next click.
+- **Accessible:** the control has a name, works from the keyboard, and keeps focus.
+
+| App | Control | Saved in |
+|---|---|---|
+| Videos | Light / Dark toggle in the drawer | `localStorage.theme` |
+| Videos admin | Light and Dark buttons in the navigation | `admin_theme` cookie |
+| www | "Dark mode" toggle in the header | `localStorage.aun_mode` |
+| CMS | "Switch to light/dark mode" in the header | `cms_mode` cookie |
+| Profile, sign-in, accounts admin | none: profile and sign-in follow the device; the accounts admin is always dark | — |
+
+Details per app: [`docs/design/THEMES.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/design/THEMES.md#light--dark).
+
+### Menus never leave the screen
+
+The owner found the www theme menu opening outside the screen on a phone. When a header wraps (landscape phones, tablets, Arabic), a menu anchored to its button's edge can run past the viewport. Now no menu, dropdown, list of suggestions or tooltip in any app renders outside the viewport:
+
+- Popups placed by a library with collision handling (Radix in the videos site) keep it.
+- Every other popup calls `fitToViewport` after it opens. It slides the popup sideways to keep an 8px margin, narrows it if it's wider than the screen, and limits its height to the room below (the popup scrolls inside). The shared copy is [`packages/fanous-tokens/nav/menu-fit.js`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/packages/fanous-tokens/nav/menu-fit.js). www, the CMS and Auth carry the same function.
+- Each app has an E2E that opens its menus at 320, 375 and 414 px wide and on a landscape phone (844×390), in English and Arabic, and checks that every popup stays inside the viewport. The rule is in [`docs/design/NAV.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/design/NAV.md#menus-never-leave-the-screen).
+
+PRs: [AlUmmahNow#1172](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1172), [UI#76](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/76), [CMS#106](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/106), [Auth#346](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/346).
 
 ## The lantern street (Fawanees)
 

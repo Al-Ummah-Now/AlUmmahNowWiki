@@ -24,7 +24,7 @@ Astro 5 with server rendering on Cloudflare Workers, Tailwind 4, English and Ara
 
 ## Theme
 
-www follows the site theme the admin sets in the videos admin (one of the four Fanous themes, Fawanees by default). Light, Dark and System stay per viewer. The Worker reads the theme from the videos admin API's public site-theme endpoint, caches it for about 30 seconds, and renders it on `<html data-theme>`. A change reaches every page within about a minute, with no deploy. If the read fails, the page renders Fawanees and isn't stored in the HTML cache.
+www follows the site theme the admin sets in the videos admin (one of the four Fanous themes, Fawanees by default). Light and Dark stay per viewer: a header toggle with no "System" option; the first visit follows the device. The Worker reads the theme from the videos admin API's public site-theme endpoint, caches it for about 30 seconds, and renders it on `<html data-theme>`. A change reaches every page within about a minute, with no deploy. If the read fails, the page renders Fawanees and isn't stored in the HTML cache.
 
 The theme CSS is vendored from the monorepo by `npm run sync:fanous`, pinned in [`fanous.lock.json`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/fanous.lock.json). Only the four built-in themes are vendored, so a theme package made in the theme builder renders as the default here ([#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)). Details: [`src/lib/site-theme.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/src/lib/site-theme.ts) and [Theming](../guides/theming.md).
 
@@ -89,7 +89,7 @@ Shipped since 2026-11-09:
 - News renamed Articles, old URLs 301 ([#31](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/31)). Card posts read whole inline ([#34](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/34)).
 - Scholar pages and bylines ([#38](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/38)). Header autocomplete search and a search page ([#35](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/35)).
 - Draft preview ([#24](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/24)), responsive AVIF/WebP images ([#26](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/26)), contact link ([#23](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/23)).
-- Theme: Light/Dark/System ([#25](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/25)), then the admin's site theme in all four Fanous themes ([#54](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/54), [#56](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/56)).
+- Theme: Light/Dark/System ([#25](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/25)), replaced by a Light/Dark toggle and menus kept inside the viewport ([#76](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/76)), then the admin's site theme in all four Fanous themes ([#54](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/54), [#56](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/56)).
 - Favicons are the owner's logo, cropped and downscaled. Production links exact-size PNGs and an ICO, with no SVG ([#40](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/40), [#49](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/49)).
 - Arabic plural for videos is «المرئيات» ([#58](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/58)).
 
