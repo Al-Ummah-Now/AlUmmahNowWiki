@@ -570,7 +570,7 @@ Migration numbers are assigned when building.
   - **Conversion (§6.6):** QA converted **1** post (an article with a community copy, upgraded in place, featured; check 1 ok, 0 different). Stage: **0** to convert. Production: **not applicable**: there are no scholars in production (owner, 2026-11-13), so no production conversion is needed. The conversion script (`AlUmmahNowCMS scripts/ops/convert-scholar-posts.ts`) stays for future use.
   - **Nightly reference check** (#1217, done): AlUmmahNow #1234 (channel digest) + AlUmmahNowCMS #118 (03:00 UTC, scholars' primary channels, one indexed query per channel, migration 0020, ≤ 50 repairs a night).
   - **End-to-end test** (#1219, done): AlUmmahNow #1236 `78-scholar-refs.spec.ts` on the local stack (Studio → outbox → CMS ref → www, en and ar). The stack runs the CMS and www from their released local-stack bundles (AlUmmahNowCMS #119, AlUmmahNowUI #92).
-  - Follow-up: staff "Add to page" from the Scholar posts picker beyond the existing curated-page picker. The owner has not yet explicitly confirmed SS14 or SS18 (phase 1 follows their recommendations).
+  - **Add to page** (done): AlUmmahNowCMS #121, Featuring → Scholar posts → "Add to page": an in-page dialog per language with a live autocomplete of that language's curated list pages, through the list's own endpoint. Phase 1 has no open follow-ups. The owner has not yet explicitly confirmed SS14 or SS18 (phase 1 follows their recommendations).
 
 - **Phase 2 (sites Worker, grant, Studio Site MVP), 2026-11-13, in review:**
   - AlUmmahNowUI [#86](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/86) (merged): the workspace split, www moved to `apps/www`.
