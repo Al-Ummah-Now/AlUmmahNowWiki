@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-13: status page
+
+- **Public status page** at `status.alummahnow.net` (stage and QA have their own). Its own Worker and database, so it stays up when other services are down. It checks 13 components every 2 minutes, shows 90 days of uptime, and lists incidents and scheduled maintenance in English and Arabic, with feeds and a JSON endpoint. Admins post incidents from the new admin **Status** page; outages alert admins through the Errors page. Linked from the videos sidebar and the www footer ([#1194](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1194), [UI#85](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/85); subscriptions: [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md).
+
 ## 2026-11-13: follow-ups
 
 - **Site visits page:** admins see how people reach the videos site under Overview → Site visits: visits in the last 7, 30 or 90 days, visits per day, sources (search engines, social networks, our own sites, other websites, direct), the pages visits started on and the top referring websites. Counted without cookies as daily totals only ([#1184](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1184), [#1202](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1202)). See [Site visits (admin)](../repos/AlUmmahNow.md#site-visits-admin).
