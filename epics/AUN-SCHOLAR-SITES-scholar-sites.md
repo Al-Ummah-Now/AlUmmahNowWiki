@@ -5,13 +5,15 @@
 | | |
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
-| **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (renders the sites), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site store, registry, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 4, waiting on the owner (16 open decisions: SS1–SS9, SS11–SS17) |
+| **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (renders the sites), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
+| **Status** | **planned**: revision 5, waiting on the owner (12 open decisions: SS3, SS5–SS9, SS11–SS16) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
+>
+> **Answers (2026-11-13, revision 5):** SS1 is an admin add-on with two tiers. SS2: the channel's owner and admins **are** the site's owner and admins; the site follows the channel, one per channel. SS17: a site can choose **any active platform theme**. SS4: reuse existing storage. Site posts **are** the channel's community posts, and new storage is added only for what doesn't exist yet (§6.2).
 >
 > **Theme (2026-11-13, revision 4, which replaces revision 3's theme builder):** white-label sites use the **same theme infrastructure** as the platform. Al Ummah Now provides the themes, and a site only **chooses** one of them, independently of the platform's active theme. There is no theme editing, no site-scoped theme builder and no theme package of the site's own. The choice is pinned per site and never falls back to the platform theme. Branding beyond the theme is the **logo, name and favicon** only.
 >
@@ -34,7 +36,7 @@ A white-label site is **the same website as www, toned down**. It runs on www's 
 The recommendation in short:
 
 - **www's Worker renders every white-label site** and picks the site by hostname. That gives "the same website" literally, with no second renderer to keep in step.
-- **Studio becomes the site's CMS.** A new **site store** (a D1 database owned by api-videos) holds pages, navigation and settings. Posts are in the community store and use one schema shared with the CMS (`PostV2`).
+- **Studio becomes the site's CMS, using existing storage.** Site posts **are** the channel's community posts (R2 JSON, existing APIs). The site's home **is** the channel's Home sections. Only pages, navigation, site settings and the host index are new, and they are JSON objects in the existing api-videos R2 buckets. There is **no new database and no new KV namespace** (§6.2).
 - **Own domains from day one**, through Cloudflare for SaaS custom hostnames ($0.10 per hostname per month after the first 100). Subdomains of `alummahnow.net` are free Workers Custom Domains.
 - **Independence:** text content is canonical on the site's host. Videos stay canonical on the videos site, except on a site with its own domain, where the site's watch page becomes canonical (§4.4).
 - **The tier is a plan add-on on the channel**, with keys for the platform mark, domains, theme and pages. Admins grant it; there is no payment.
@@ -174,9 +176,9 @@ Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي
 How a request works:
 
 1. `src/worker.ts` reads `Host`. `www` and the apex behave as today.
-2. Any other host → isolate cache (60 s) → KV `SITES` `host:<host>` → `{siteId, channelId, primaryHost, locales, themeRef, themeCssUrl, mark, navVersion, configVersion, status}`. An unknown host gets a bare 404 that is never cached.
+2. Any other host → isolate cache (60 s) → `GET {videos-api}/api/sites/by-host/:host` (Cache API 60 s, served from the R2 host index and the site's `settings.json`) → `{channelId, primaryHost, locales, themeRef, mark, nav, configVersion, status}`. The last good answer is also kept in www's existing `CONTENT_SNAPSHOT` KV, so a videos API outage still renders the site with its own theme. An unknown host gets a bare 404 that is never cached.
 3. A non-primary host 301s to the primary.
-4. Astro renders the same `[locale]` routes with a site context. The layout is `SiteLayout` (the site's own header, menu and footer). The data is scoped to the channel and the site store. Canonicals, `SITE_URL` and the theme come from the site.
+4. Astro renders the same `[locale]` routes with a site context. The layout is `SiteLayout` (the site's own header, menu and footer). The data is scoped to the channel and its site objects. Canonicals, `SITE_URL` and the theme come from the site.
 5. The edge cache key is URL (with host) + build + `configVersion` + theme version.
 
 ### 5.3 Theme and branding
@@ -184,15 +186,15 @@ How a request works:
 **Owner rules (revision 4):** sites use the same theme infrastructure as the platform. We provide the themes, and a site **chooses one, independently of the platform's active theme**. There is no theme editing, no site theme builder and no site-owned packages. Branding beyond the theme is the **logo, name and favicon** only.
 
 - **What a site can choose.** It can choose any theme in the platform's catalogue:
-  - the four built-in themes (Lantern, Zujaj, Nahas, Fawanees);
-  - later, packages that **platform admins** publish in the existing admin theme builder and mark *Offered to sites* (SS17).
+  - **every active theme in the platform's theme list, automatically** (SS17, answered): the four built-in themes (Lantern, Zujaj, Nahas, Fawanees) plus every package platform admins publish in the existing admin theme builder. There is no separate "offered to sites" flag.
+  - If admins retire a theme that a site uses, the site keeps its pinned version (the CSS objects are immutable), and Studio asks the owner to choose another. Nothing changes until they do.
 
   Themes are made and changed only by platform admins, through the existing theme pipeline: theme packages, the contrast gate, `check:tokens` and theme visibility runs.
 - **Independent of the platform.** The site's choice is stored on the site. The platform's `site.theme` setting (videos admin), the `GET /public/site-theme` read and the `?theme=` preview never apply on a site host. When admins change the platform's active theme, no site changes.
-- **Pinned to a version.** `sites.theme_ref` holds `<themeId>@<version>`, for example `fawanees@1.2.0`. It is never empty and never means "follow the platform". At grant, the site starts on the platform's current theme, copied in as a pinned ref, and the owner can choose another at any time.
+- **Pinned to a version.** The site's `themeRef` (in `settings.json`) holds `<themeId>@<version>`, for example `fawanees@1.2.0`. It is never empty and never means "follow the platform". At grant, the site starts on the platform's current theme, copied in as a pinned ref, and the owner can choose another at any time.
 - **Theme updates are offered, not applied.** When the platform ships a new version of a theme (for example Fawanees 1.2 → 1.3), a pinned site keeps its version. Studio shows "Update available" with a side-by-side preview, and the owner chooses. Only a contrast or security fix can be pushed by an admin to sites pinned to that version, and the push is audited and announced in Studio. www keeps each pinned version's compiled CSS as an immutable object keyed by version, for as long as a site uses it.
-- **Never falls back to the platform theme.** If a read fails, www renders the site's last-known theme ref from KV `SITES`. Platform pages fall back to Fawanees; a site never does.
-- **What www needs.** Built-in themes already ship on every www page (`html[data-theme]`), so phase 1 needs only the per-site ref and version-pinned CSS. Admin-published packages need www to render packages ([UI#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)), which matters only when SS17 offers them.
+- **Never falls back to the platform theme.** If a read fails, www renders the site's last-known config, theme ref included, from www's `CONTENT_SNAPSHOT` KV. Platform pages fall back to Fawanees; a site never does.
+- **What www needs.** Built-in themes already ship on every www page (`html[data-theme]`), so phase 1 needs only the per-site ref and version-pinned CSS. Admin-published packages need www to render packages ([UI#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)). Because SS17 offers every active theme, UI#55 is now a **phase 1** item. Until it ships, the theme list in Studio shows only the themes www can render.
 - **Header.** Every platform theme has a dark header (a builder rule), so sites have one too. The former question about light headers no longer arises.
 - **Branding = logo, name and favicon only.**
   - The **name** (en/ar) shows in the header, titles and feeds.
@@ -216,45 +218,40 @@ How a request works:
 - **Without the tier:** the CMS stays the scholar's home (scholar page, writer role, featuring), as today.
 - **With the tier:** the site and Studio become the home. The CMS keeps the scholar profile for the www directory entry, and the bio is edited in Studio and synced back (§6.4).
 
-### 6.2 The site store (new D1, owned by api-videos)
+### 6.2 Where everything is stored (reuse first)
 
-Studio talks to api-videos, so the site's data lives beside it.
+Owner rule (SS4): reuse existing storage. Site posts **are** the channel's community posts, and new storage is added only for what doesn't exist yet. The result is no new database and no new KV namespace: the new pieces are JSON objects in two R2 buckets api-videos already has.
 
-```sql
-create table sites (
-  id text primary key,                 -- site_<ulid>
-  channel_id text not null unique,
-  status text not null,                -- setup | live | suspended | revoked
-  primary_host text not null,
-  locales text not null,               -- '["ar","en"]', first = default
-  theme_ref text not null,             -- <platform themeId>@<ver>, chosen by the site; never 'platform'
-  branding_json text not null,         -- logo, favicon, name en/ar (nothing else; §5.3)
-  home_json text not null,             -- home layout blocks (§7.4)
-  seo_json text not null,              -- title template, description, verification tokens
-  config_version integer not null default 1,
-  created_at text not null, updated_at text not null, updated_by text,
-  deleted_at text                      -- 30-day soft delete
-);
-create table site_hosts (host text primary key, site_id text not null,
-  kind text not null,                  -- subdomain | custom | redirect
-  cf_id text, status text not null, primary_host integer not null default 0, expires_at text);
-create table site_pages (id text primary key, site_id text not null, slug text not null, locale text not null,
-  translation_key text, title text not null, kind text not null,     -- content | curated | filter
-  blocks_json text, list_filter_json text, status text not null, publish_at text,
-  seo_json text, created_at text not null, updated_at text not null, deleted_at text,
-  unique(site_id, slug, locale));
-create table site_page_entries (page_id text not null, position integer not null, ref text not null,
-  primary key(page_id, position));
-create table site_nav (site_id text not null, locale text not null, position integer not null,
-  label text not null, target text not null,          -- page:<id> | list:<kind> | url:<https://…>
-  parent integer, primary key(site_id, locale, position));
-create table site_redirects (site_id text not null, from_path text not null, to_path text not null,
-  primary key(site_id, from_path));
-create table site_revisions (id text primary key, site_id text not null, entity text not null,
-  entity_id text not null, body_json text not null, created_at text not null, created_by text not null);
-```
+| What | Where | New? | Why there |
+|---|---|---|---|
+| Site posts (every kind) | **Community posts**, R2 `community-posts`: `posts/{channelId}/{postId}.json` and the index, via the existing `/channels/:id/posts` API | No: it **is** the channel's Community tab | Same posts, same likes, votes and comments. `PostV2` adds fields to the same JSON (§6.3) |
+| Videos, Shorts, playlists, live | Existing videos, playlists and live stores and APIs | No | – |
+| Site home layout | **Channel Home sections**, R2 `channel_sections` (AUN-CHANNEL-SECTIONS: up to 12 sections, 13 types including Spotlight, Shorts, Live, playlists and Community posts) | No. Two section types are added: `page` (embed a site page) and `cta`. The videos channel page ignores them | Editing the site home and the channel Home tab is one job, not two |
+| About, name, logo | The channel record, R2 `channels` (`nameLocalized`, `descriptionLocalized`, `avatarUrl`, `links`, `contactEmail`) | No. The site name defaults to the channel name, and the logo to the avatar | The site follows the channel |
+| Who can edit | **Channel roles** on the channel record (owner, admin, editor, moderator) | No (SS2, answered) | The channel's owner and admins **are** the site's owner and admins |
+| Tier and its keys | admin-api D1 `subscriptions` / `entitlement_overrides` (subject = channel) | No: rows in existing tables | Plans already live there. The admin **Sites** list is a query over these rows |
+| Site settings: theme ref, favicon, logo override, locales, platform mark, navigation, SEO, redirects, status | R2 `channel_sections`: `site/{channelId}/settings.json` | **New object** | Small (a few KB), read as one object per render miss, edited rarely |
+| Pages (content and list pages) and their revisions | R2 `channel_sections`: `site/{channelId}/pages/index.json`, `…/pages/{pageId}.json`, `…/pages/{pageId}/rev/{ts}.json` (last 20 kept) | **New objects** | The same pattern as community posts: one JSON per item plus an index. At most `site.pages.max` per site, always read per site |
+| Host → site index (subdomains and own domains) | R2 `channel_tabs`: `site-hosts/{host}.json` → `{channelId, kind, cfId, status, primary}` | **New objects** | The same pattern as the handle index `channel-handles/{handle}`: a create-only conditional put stops one host being attached to two sites |
+| Site search | The existing search index (`SEARCH_DB`), with pages added as a new document kind | No new database | Search already lives there |
+| Edge copy for outages | www's existing `CONTENT_SNAPSHOT` KV (last good site config) | No | Gives "never fall back to the platform theme" without a new namespace |
+| Site page views | A Workers Analytics Engine dataset (write-only metrics; nothing to run) | New dataset | Cheapest per-event store. Video plays keep using the existing video analytics |
 
-The **grant** (the tier, its keys, who granted it) stays in admin-api with the other plans. admin-api tells api-videos to create, suspend or revoke the site through an internal call. Every publish writes the `host:<host>` and `channel:<id>` keys in KV `SITES`, and www reads only KV and the public APIs.
+**Why R2 JSON and not D1 or KV for the new pieces**
+
+- **Consistency:**
+  - R2 is strongly consistent: a page a scholar publishes is read back at once.
+  - KV is eventually consistent, taking up to about 60 s across locations, and its 1 write per second per key limit doesn't suit an editor. KV also can't enforce "this domain is attached once".
+  - D1 is consistent but would mean a new database. None of the existing ones fit: notifications, search and auth are other domains, and the Auth DB is sensitive to extra load.
+- **Lost updates:** `settings.json` and `pages/index.json` are written with an ETag condition (`onlyIf`). If two admins edit at once, the second save gets "Changed by someone else — reload", as in the CMS. Each page is its own object.
+- **Access pattern:** every read and write is "this channel's site". There are no cross-site joins. The one cross-site list (admin Sites) comes from the admin-api D1 rows that already exist.
+- **Cost:**
+  - Rates: R2 Class A $4.50 per million writes and Class B $0.36 per million reads, with storage negligible (KB per site).
+  - Studio edits are a few thousand writes a month across all sites. Reads happen only on a cache miss: about 1 settings read per host per isolate-minute, plus a page read per uncached page view.
+  - At target scale that is **under $1 a month**. A new D1 would cost about the same, but adds a database to migrate, back up and release.
+- **When to move to D1:** only if a future feature needs queries across sites or within a site over many items (for example thousands of pages per site, or filtering pages by field). Not in this spec.
+
+**Grant and lifecycle:** admin-api records the grant in its existing tables and calls api-videos `POST /internal/sites/:channelId` (create, suspend, restore, revoke). api-videos writes `settings.json` and the subdomain's host index object, and admin-api attaches the Cloudflare domain. Revoking moves the `site/{channelId}/` prefix into the 30-day trash, the same soft-delete rule as other content.
 
 ### 6.3 Posts: one schema (`PostV2`)
 
@@ -317,7 +314,7 @@ interface PostV2 {
 
 ### 7.1 Scope
 
-**Studio → Site** is shown only when `site.enabled`. Channel owners and channel admins edit; editors write posts and pages; moderators view.
+**Studio → Site** is shown only when `site.enabled`. Permissions come from **channel roles** (SS2, answered): the channel owner and channel admins are the site's owner and admins (settings, theme, domains, navigation); editors write posts and pages; moderators moderate comments. There is no separate site membership, and a channel transfer moves the site with it.
 
 | Area | What it does | Today's equivalent |
 |---|---|---|
@@ -325,7 +322,7 @@ interface PostV2 {
 | **Posts** | Create and edit every `PostV2` kind, with schedule, en/ar pair, share to Al Ummah Now, pin and comments switch | Community posts (6 kinds) plus CMS articles and cards |
 | **Pages** | Block pages (markdown, image, gallery, posts list, cards, videos, video, CTA, columns, quote, divider) and list pages (curated or filter), drafts, schedule, revisions, preview | CMS pages, blocks and page kinds |
 | **Navigation** | Main menu and footer links per language: pages, list pages, Videos/Shorts/Posts/About, external links. Drag to reorder, up to `site.navigation.max` | CMS nav |
-| **Home** | Ordered home blocks: hero (pinned video or post), live banner, latest videos, Shorts, timeline, playlists, a page's blocks, CTA | Channel sections and the www home |
+| **Home** | The channel's Home sections (the same editor and storage as the Home tab), plus the site-only `page` and `cta` sections | Channel sections (reused) |
 | **About** | Bio (en/ar), photo, links, contact, credentials | CMS scholar profile, channel About |
 | **Theme & brand** | Choose one of the platform's themes (independent of the platform's active theme), see and accept update offers, upload the logo and favicon, set the site name (en/ar), preview in both modes. No theme editing (§5.3) | The admin Site theme page (choose only) |
 | **Domains** | Subdomain, own domains, DNS steps, status, primary host | – |
@@ -347,9 +344,9 @@ Preview: an iframe of the real site with a signed, 10-minute, channel-bound prev
 - **AI assist** (slug, translate, summarise) uses the same Workers AI routes and budget guard as the CMS, metered per site (feature `site-assist`) and off in tests.
 - **Moderation:** site posts and pages are platform content. They go through the same reports, AI moderation (Epic 28) and admin actions as community posts.
 
-### 7.4 Home layout blocks
+### 7.4 Home layout = the channel's Home sections
 
-`hero`, `live`, `latestVideos`, `shorts`, `timeline` (posts of every kind, or filtered), `playlists`, `page` (embed a content page's blocks), `cta`, `channelSections` (reuse the channel's own section order).
+The site home renders the channel's existing Home sections (`channel_sections`, up to 12) in their order: spotlight, Shorts, live, playlists, community posts and the rest. Two section types are added that only the site renders: `page` (a site page's blocks) and `cta`. The videos channel page skips them.
 
 ## 8. Admin UX
 
@@ -367,7 +364,7 @@ Assumptions: 300 white-label sites, 150 with an own domain (2 hostnames each = 3
 | Item | Unit price | Monthly |
 |---|---|---|
 | Worker requests and CPU (www) | $0.30 / M requests after the included 10 M; $0.02 / M CPU-ms | ≈ $1–3 |
-| KV, D1 site store, CMS and videos reads | Cached 60 s; D1 reads only on a miss | < $2 |
+| R2 site objects, CMS and videos reads | Cached 60 s; R2 Class B only on a miss | < $2 |
 | Version-pinned theme CSS (R2 + CDN) | Class B reads, cached | < $0.50 |
 | Analytics Engine | Included, then $0.25 / M | ≈ $0.50 |
 | Platform subdomains (Workers Custom Domains) | No charge | $0 |
@@ -406,7 +403,7 @@ WCAG 2.1 AA is the floor:
 | Phase | Scope | Done when |
 |---|---|---|
 | **0. Decisions** | Owner answers SS1–SS16 | Recorded in the [decision log](decisions.md) |
-| **1. White-label site, set up by staff** | Tier keys and seeds; grant flow in admin; site store (D1) and KV `SITES`; www multi-tenant rendering (home, videos, Shorts, watch, posts, About, RSS, sitemap) from existing channel content and CMS posts; the site's chosen theme pinned per site (version-pinned CSS), logo, name and favicon, set up by staff for the first site; platform subdomain; **own-domain support (SaaS zone, custom hostnames, DNS flow in admin)**; canonical rules; CMS `primary_channel_id` | mustafa-elbadry's site live on its subdomain (and on its own domain if they have one), after QA and stage |
+| **1. White-label site, set up by staff** | Tier keys and seeds; grant flow in admin; site objects in the existing R2 buckets (settings, host index); **UI#55 (www renders admin theme packages)**; www multi-tenant rendering (home, videos, Shorts, watch, posts, About, RSS, sitemap) from existing channel content and CMS posts; the site's chosen theme pinned per site (version-pinned CSS), logo, name and favicon, set up by staff for the first site; platform subdomain; **own-domain support (SaaS zone, custom hostnames, DNS flow in admin)**; canonical rules; CMS `primary_channel_id` | mustafa-elbadry's site live on its subdomain (and on its own domain if they have one), after QA and stage |
 | **2. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home layout, Pages (blocks and list pages), Theme & brand (choose a theme, logo, name, favicon), Domains self-serve, SEO, preview, revisions | The scholar runs their site without staff help |
 | **2b. One post model** | `packages/post-schema` (posts and blocks); CMS kinds widened (`FEED_FORMAT` 4); `uid` backfill; Studio article and cards editors; share-to-platform and featuring; move-in tool for CMS posts | A site's poll or article can be featured on the www home, with one discussion |
 | **3. Engagement and identity** | Inline comments, likes and votes on sites; site sign-in; branded sign-in; site analytics | A viewer comments on a site post without leaving the site |
@@ -419,7 +416,7 @@ Every phase updates this page and the repo pages (wiki rule).
 | Repo | Migration | Phase |
 |---|---|---|
 | AlUmmahNow admin-api | Entitlement keys and the two add-on seeds | 1 |
-| AlUmmahNow api-videos | New D1 database `al-ummah-now-sites[-qa\|-stage]` with the §6.2 tables | 1 |
+| AlUmmahNow api-videos | **No new database.** New R2 key prefixes `site/{channelId}/…` (in `channel_sections`) and `site-hosts/` (in `channel_tabs`); two new section types | 1, 2 |
 | AlUmmahNowCMS | `primary_channel_id` (1); post kinds, `uid`, `origin`, reference rows (2b) | 1, 2b |
 | AlUmmahNow community store | R2 backfill adding `uid` and `schemaVersion: 2` | 2b |
 | AlUmmahNowAuth | Per-host redirect URIs on the sites client; branded sign-in per redirect | 1, 3 |
@@ -434,20 +431,17 @@ Migration numbers are assigned when building.
 | Own-domain sites used for phishing or impersonation | Admin-only grant, validated DNS, the legal/report footer always on, sign-in always names the account, no custom forms |
 | SaaS hostname costs grow | `site.customDomains.max` per tier, a cost-monitor line and an alert |
 | Duplicate content | One canonical per item, chosen by the brand host (§4.4); platform sitemaps leave site-canonical URLs out |
-| www is a single point of failure for every site | www's stale-cache and KV snapshot fallbacks also cover sites; release E2E covers one site per host kind |
+| www is a single point of failure for every site | www's stale-cache and `CONTENT_SNAPSHOT` fallbacks also cover sites, including each site's last good config; release E2E covers one site per host kind |
 | A theme update changes a site unexpectedly | Sites stay pinned; updates are offered with a preview; only audited contrast or security fixes are pushed |
 | A scholar leaves the tier | 90-day offline period with everything kept; posts stay on the channel |
 
 ## 12. Decisions for the owner
 
-The owner's 2026-11-13 direction answered these earlier questions: it is a **tier**, white-label, with **its own choice of theme and its own name and logo**, **independent** (canonical on its own host), **not every scholar** gets it, and **own domains** are in scope. The theme rules answered more. A site **chooses one of our themes, independently** of the platform's active theme, pinned per site, with no fallback to the platform theme. There is **no theme editing or site theme builder**, and branding is **logo, name and favicon only**. The former **SS10** (light headers) no longer arises, because every platform theme has a dark header, so it is removed and the other numbers are kept. What is left:
+The owner's 2026-11-13 direction answered these earlier questions: it is a **tier**, white-label, with **its own choice of theme and its own name and logo**, **independent** (canonical on its own host), **not every scholar** gets it, and **own domains** are in scope. The theme rules answered more. A site **chooses one of our themes, independently** of the platform's active theme, pinned per site, with no fallback to the platform theme. There is **no theme editing or site theme builder**, and branding is **logo, name and favicon only**. The former **SS10** (light headers) no longer arises, because every platform theme has a dark header, so it is removed. Revision 5 answered **SS1** (an admin add-on with two tiers), **SS2** (channel owner and admins are the site's owner and admins; the site follows the channel), **SS4** (Studio is the CMS on existing storage: posts are community posts, and only pages, navigation, settings and the host index are new R2 objects) and **SS17** (any active platform theme, automatically). The other numbers are kept. What is left:
 
 | # | Decision | Recommendation |
 |---|---|---|
-| SS1 | The tier is an **add-on on the channel**, granted by admins, separate from the user's creator plan. Seeds: "White-label" (subdomain, minimal mark) and "White-label + domain" (2 domains, no mark, branded sign-in) | Yes, with keys as in §3.2 |
-| SS2 | One site per channel, and the site stays with the channel on transfer | Yes |
 | SS3 | www's Worker renders the sites ("the same website, toned down") | Yes |
-| SS4 | **Studio is the site's CMS** (posts, pages, navigation, home, About, theme, domains, SEO), with a new site store in D1 owned by api-videos. The CMS stays for www and for scholars without the tier | Yes |
 | SS5 | One post schema (`PostV2`) and one block schema shared by the CMS and Studio; engagement always on the videos community post | Yes |
 | SS6 | When a scholar gets the tier, their existing CMS posts **move** to the site, and old www URLs 301 to the site (an exception to the no-redirect rule) | Yes, with the scholar's consent at grant |
 | SS7 | Videos: canonical on videos for subdomain sites; on the **site** for sites with their own domain | Yes (§4.4) |
@@ -459,7 +453,6 @@ The owner's 2026-11-13 direction answered these earlier questions: it is a **tie
 | SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
 | SS15 | For scholars **without** the tier, mirror their Studio community posts into the CMS so editors can feature them | Yes |
 | SS16 | First site: mustafa-elbadry, set up by staff in phase 1 (their chosen platform theme, logo, name and favicon, subdomain, own domain if they have one), with Studio self-service in phase 2 | Yes |
-| SS17 | Which platform themes are offered to sites: the four built-ins at launch, then admin-published packages marked *Offered to sites* once www renders packages (UI#55)? | Yes |
 
 ## Open questions, not decisions
 
