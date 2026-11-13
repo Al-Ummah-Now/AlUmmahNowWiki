@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **in progress**: phase 1 **complete** (2026-11-13); phase 2 (now with Studio self-service, SS16) in progress; revision 9: every decision answered |
+| **Status** | **in progress**: phase 1 **complete** (2026-11-13); phase 2: sites Worker live on production, own domains proven on QA, Studio self-service (SS16) merged; revision 10 |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
@@ -21,6 +21,14 @@
 > - **One shared sites Worker** for every site, routed by host; no per-site Workers (confirms SS3).
 > - **Own domains:** a token with *SSL and Certificates → Edit* on `alummahnow.org` is stored in the Secrets Store (`sites-saas-token`, store `f8eddc99…`), bound to admin-api. Cloudflare for SaaS is being enabled on the zone by the owner (until then the custom hostnames API answers 1404, no quota): "Add your own domain" is built in the admin and Studio (create the custom hostname, show the CNAME/TXT to add, poll the certificate) and tested with mocks.
 > - The release token now has *Zone WAF Edit* on every alummahnow zone; whether it can make the one-time `alummahnow.org` wildcard DNS, routes and fallback origin is checked by the zone setup workflow.
+>
+> **Hosting and own domains are live (2026-11-13, revision 10).**
+> - The release token is the org secret `CLOUDFLARE_API_TOKEN` with DNS and SSL edit on `alummahnow.org`. The Sites zone workflow made the proxied AAAA `100::` records (`*`, `@`, `www`, `sites`, `*.qa`, `sites.qa`, `*.stage`, `sites.stage`) and turned Always Use HTTPS on. The owner enabled Cloudflare for SaaS, and the fallback origin is `sites.alummahnow.org`.
+> - Production: `https://sites.alummahnow.org/healthz` answers, `alummahnow.org` 301s to www, and unknown subdomains get a 404. QA and stage subdomains (`<slug>.qa.alummahnow.org`) resolve but need the Advanced Certificate (about $10/month, waiting on the owner). Their deploy smoke skips until then.
+> - **Own domains, proven end to end on QA:** the Sites zone workflow mode *own-domain-smoke-qa* created a throwaway custom hostname, added the scholar's records in `alummahnow.com`, routed it to the QA Worker and fetched `/healthz` over HTTPS. Everything was removed afterwards. Validation took 77 s.
+> - **Routing (AlUmmahNowUI#97):** production `*/*` serves every own domain. QA and stage use test domains only, under `*.qa-sites.alummahnow.com` / `*.stage-sites.alummahnow.com`. All envs share one custom-hostname namespace on the zone, so QA/stage admin-api refuses other hosts (videos #1309).
+> - **What a scholar adds at their DNS provider** (Studio → Site → Domains shows the exact values): `CNAME <host> → sites.alummahnow.org`, `TXT _cf-custom-hostname.<host>` (ownership), and usually two `TXT _acme-challenge.<host>` (certificate). All of them can be added at once. A bare domain needs CNAME flattening/ALIAS at the provider, or they can use `www.` and redirect the apex.
+> - Studio self-service (SS16) merged: videos #1281 and AlUmmahNowUI #95.
 >
 > **Answers (2026-11-13, revision 8): SS9 and the domain plan.** Scholar sites live on **`alummahnow.org`**. Every white-label site gets `<slug>.alummahnow.org` (QA `<slug>.qa.alummahnow.org`, stage `<slug>.stage.alummahnow.org`). The same zone is the Cloudflare for SaaS zone for scholars' own domains, with the DNS target `sites.alummahnow.org`. The zone has been in our Cloudflare account since 2026-11-13. The main sites stay on `alummahnow.net`, `alummahnow.com` redirects to `.net`, and `alummahnow.app` is reserved for apps (§4).
 >
@@ -144,9 +152,9 @@ Because `.org` is a **separate registrable domain**, scholar sites are a differe
 ### 4.2 Own domains with Cloudflare for SaaS
 
 - **The zone is `alummahnow.org`**, dedicated to scholar sites, so the catch-all `*/*` route and the wildcard can't affect a platform host on `alummahnow.net`. Phase 2 setup on the zone:
-  1. Enable Cloudflare for SaaS.
-  2. Add the proxied fallback origin `sites.alummahnow.org`.
-  3. Add the wildcard DNS record and the routes.
+  1. Enable Cloudflare for SaaS. *(done 2026-11-13)*
+  2. Add the proxied fallback origin `sites.alummahnow.org`. *(done)*
+  3. Add the wildcard DNS record and the routes. *(DNS done. Routes: production `*/*`; QA/stage test-domain routes `*.qa-sites` / `*.stage-sites.alummahnow.com`)*
   4. Turn on HSTS for the apex and its subdomains. They are all ours, so `includeSubDomains` is safe.
 - **Flow in Studio → Site → Domains:**
   1. The owner types `example.com`.
