@@ -403,7 +403,7 @@ Done in [#1210](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1210) (server re
 
 Each server read is the viewer's own (the same server actions the page calls) and is bounded to 1.2 s: a slow API renders the page as before and the client loads it.
 
-**LCP measures:** the poster is a real high-priority image (was a CSS background); the first card of a leading list loads eagerly with high priority, the rest of the first row eagerly, later cards lazily; lists preconnect to their thumbnail CDN; Font Awesome (render-blocking, unused) and Bunny `player.js` (unused) removed. Fonts were already self-hosted with `swap`.
+**LCP measures:** the poster is a real high-priority image (was a CSS background); the first card of a leading list loads eagerly with high priority, the rest of the first row eagerly, later cards lazily; Font Awesome (render-blocking, unused) and Bunny `player.js` (unused) removed. Fonts were already self-hosted with `swap`.
 
 **LCP, mobile lab** (Playwright Chromium 412×823, 150 ms RTT, 1.6 Mbps, 4× CPU; local `next start` against the QA API; median of 5):
 
@@ -418,7 +418,13 @@ Each server read is the viewer's own (the same server actions the page calls) an
 
 Spec `79-server-rendered.spec.ts` (local stack) loads the four pages with JavaScript off, en and ar.
 
-Open: field RUM, cookieless (D-SEO-9) [#1207](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1207); a channel without Home sections has no video links on its canonical URL [#1206](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1206); Shorts CLS 0.17 [#1208](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1208); stable sized thumbnails for cards and a poster `srcset` [#1209](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1209). Legal/help pages (#14) and the www items (#16, #19) are not part of this.
+**Owner follow-ups (2026-11-13), done:**
+
+- **Channel Home tab without sections** ([#1206](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1206), in #1210): when no Home section has anything to show, the Home tab lists the channel's latest videos, then its Shorts and public playlists (YouTube style), server-rendered on the channel's main URL. Each list has its own 1.2 s budget; late ones load on the client.
+- **No signed media URLs in server-rendered HTML** ([#1209](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1209), in #1210): data passed to client components (HTML and RSC payload) carries only stable images: thumbnails of videos anyone may watch are `/thumb/{id}.jpg`, any other Bunny token or R2 `/priv/` link is dropped (a viewer's own private video is reloaded on the client after hydration). `/thumb` has width variants `?w=320|480|640|1280` (custom thumbnails resized by Bunny's Optimizer; Stream thumbnails come as stored, their token covers the query) used as `srcset`/`sizes` on cards, the home hero and the watch poster. The pages' HTML is `private, no-store`. The release thumbnail check also fetches the server-rendered HTML of home, a watch page, a channel and a playlist and fails on any signed URL or shared-cacheable HTML.
+- **Field RUM, cookieless** ([#1207](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1207), [#1221](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1221), D-SEO-9): 5% of page loads send one beacon with page kind, device class, locale and LCP/CLS/INP (no URL, ids, user agent, cookies or storage) to `/api/rum`, written to Workers Analytics Engine (`al_ummah_now_rum`, `_stage`, `_qa`). Read p75s with `scripts/ops/rum-report.ts` or the SQL in `docs/operations/rum.md` (AlUmmahNow repo).
+
+Still open: Shorts CLS 0.17 [#1208](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1208); consent banner as the LCP element on light pages [#1205](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1205). Legal/help pages (#14) and the www items (#16, #19) are not part of this.
 
 ## Phased plan
 
