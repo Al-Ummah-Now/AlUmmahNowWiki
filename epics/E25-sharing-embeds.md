@@ -34,6 +34,11 @@ Every video is shareable and embeddable with the Al Ummah Now player.
 | 25.8 | Embed analytics | Source/origin rollups shipped; API/Studio views → #258. |
 | 25.9 | Cost guardrails | Tied to D2 / E4. |
 
+## Embed layout and social cards (2026-11-12)
+
+- The embed player fills the host's frame and fits the video inside it at its own ratio, on the night colour. The control bar (one row) and the progress bar run across the frame's full width at its bottom, as YouTube does for vertical videos in a landscape player. "Watch on" sits in the frame's corner and shows its icon alone when it would cover the picture or the frame is under 480px wide. Cause and before/after: [AlUmmahNow#1121](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1121) (a Short in X's card had its controls wrapped onto 2–3 rows inside a ~160–250px box).
+- Social cards declare the video's own ratio: a Short is 413x720 in `og:video` and `twitter:player`, and 367x640 in oEmbed. X still draws its player card landscape, so on X a Short is pillarboxed in the card. A re-share may show X's cached card for up to about a week.
+
 ## Decisions and constraints
 
 - [E1](decisions.md#e1-embed-host-domain): Embed host domain (deferred)
