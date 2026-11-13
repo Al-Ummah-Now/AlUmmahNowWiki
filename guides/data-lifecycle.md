@@ -34,6 +34,17 @@ A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-a
 - **Channel subscriptions** an account made as itself (no channel), as well as those its channels made. The export marks each one `subscribedAs` member or channel ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
 - On the Auth side, purging an account also removes its **email → subject** record and its **invite rows** ([Auth#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [Auth#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
 
+### The event archive
+
+The processor keeps a copy of queue messages (`al-ummah-now-messages`) for statistics and abuse investigation. Every message is scrubbed before it's written ([#1180](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1180), issue [#1177](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1177)):
+
+- **User ids become pseudonyms** (`ps_…`). Each one is a keyed hash under a random secret kept for that person. The secrets table is itself keyed by a hash of the id, so it holds no raw id either.
+- **Free text, contact and device details are dropped**: report descriptions, comment and message text, search queries, names, emails, IP addresses and user agents. Referrers keep only their host, and links lose their query string.
+- **Erasure cuts the archive off.** The erase deletes the person's secret, and from then on nothing can tie their archived events back to them. Later messages about the account, and the erase messages themselves, are archived as `deleted-user`.
+- **Older entries were rewritten once.** Entries from before this change were rewritten with a key that existed only for that run and was then deleted.
+
+The archive itself still expires after 13 months. The local E2E leftover check stays strict on it: a test run's ids turning up there would mean the scrubbing broke. See the [GDPR notes, section 3](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md#3-event-archive-analytics-and-logs).
+
 The local E2E stack's leftover check is what finds gaps like these: an admin spec erases an account and the check lists anything still keyed by it.
 
 ## Account actions across services

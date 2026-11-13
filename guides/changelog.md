@@ -6,6 +6,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-13: follow-ups
 
+- **Event archive privacy:** the processor's archive of queue messages no longer holds raw user ids or free text. Ids become pseudonyms whose per-person secret is deleted when the account is erased, so an erased person's archived events can't be tied back to them. Older entries were rewritten once ([#1180](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1180), [#1177](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1177)). See [Deletion, erasure and cleanup](data-lifecycle.md#the-event-archive).
 - **Copy tone:** the videos site, www and Desktop Studio stop describing Al Ummah Now as a lecture library and use neutral content-sharing words in English and Arabic, following the new [Copy Tone Guide](copy-tone.md) ([#1168](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1168), [UI#77](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/77), [Desktop#37](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/37)). The videos site's default title and description are now per language. Every repo's CLAUDE.md carries the rule.
 - **Search engines (SEO defect fixes):** the first fixes from the SEO audit that need no owner decision ([Wiki#23](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/23), draft spec). See [Search engines](environments.md#search-engines-crawler-rules).
   - **Status codes:** a missing, private or deleted video or playlist is now a real 404 (it was a 200 "not found" marked indexable), and an API outage is a 503.
