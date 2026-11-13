@@ -4,7 +4,7 @@ Al Ummah Now (الأمة الآن) is an Islamic video and community platform, a
 
 This wiki explains how the [Al-Ummah-Now](https://github.com/Al-Ummah-Now) repositories fit together. It links to the source instead of copying it. If a page and the code disagree, the code wins, and a fix to the page is welcome.
 
-Facts here were read from each repo's default branch on 2026-11-09. "Current state" sections are snapshots from that date. Anything that couldn't be confirmed is marked **Unverified**.
+Facts here were first read from each repo's default branch on 2026-11-09 and brought up to date on 2026-11-12. "Current state" sections are snapshots from the date in their heading. What changed is in the [changelog](guides/changelog.md). Anything that couldn't be confirmed is marked **Unverified**.
 
 ## Index
 
@@ -29,11 +29,15 @@ Facts here were read from each repo's default branch on 2026-11-09. "Current sta
 |---|---|
 | [Environments and domains](guides/environments.md) | QA, stage and production hostnames |
 | [Release process](guides/release-process.md) | How each repo reaches production |
+| [Testing and E2E](guides/testing.md) | Local E2E stack, placement, own data, leftover checks, cleanup jobs |
+| [Video delivery](guides/video-delivery.md) | Bunny and R2 side by side, playback source, signed URLs, libraries and collections |
+| [Deletion, erasure and cleanup](guides/data-lifecycle.md) | Soft delete and the 30-day purge, account erasure, scheduled cleanup |
 | [Contributing](guides/contributing.md) | Branches, PRs, tests, migrations, spec → plan → implement |
 | [Authentication and SSO](guides/authentication.md) | How sign-in works across the apps |
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
 | [Specs index](guides/specs-index.md) | Every spec in the monorepo, with status |
+| [Changelog](guides/changelog.md) | What changed across the repos, by date and feature |
 
 **Epics and decisions**
 
@@ -73,6 +77,8 @@ flowchart TB
         processor["processor"]
         realtime["websocket-server<br/>realtime.*"]
         scheduler["scheduler"]
+        media["media<br/>transcoder, media.*"]
+        costmon["cost-monitor"]
     end
 
     subgraph cloudflare["Cloudflare data services"]
@@ -80,6 +86,7 @@ flowchart TB
         d1[("D1")]
         kv[("KV")]
         queues[["Queues"]]
+        containers["Containers<br/>FFmpeg"]
     end
 
     bunny["Bunny.net<br/>video and image delivery"]
@@ -123,6 +130,13 @@ flowchart TB
     processor --> realtime
     scheduler --> r2
     scheduler --> queues
+    queues --> media
+    media --> containers
+    media --> r2
+    browser -. "HLS" .-> media
+    browser -. "HLS" .-> bunny
+    adminweb -. "live updates" .-> realtime
+    costmon --> d1
 ```
 
 Everything server-side runs on Cloudflare Workers. Hostnames for each environment are in [Environments and domains](guides/environments.md).
@@ -130,7 +144,7 @@ Everything server-side runs on Cloudflare Workers. Hostnames for each environmen
 ## How the pieces work together
 
 - **Identity.** [AlUmmahNowAuth](repos/AlUmmahNowAuth.md) is the only sign-in service. Every app is one of its OAuth clients, and it knows nothing about the apps: apps depend on auth, never the reverse. See [Authentication and SSO](guides/authentication.md).
-- **Videos.** The [monorepo](repos/AlUmmahNow.md) holds the videos product. `api-videos` stores metadata in R2 and D1, talks to Bunny.net for streaming and images, and sends events to Cloudflare Queues. `processor` consumes those queues and `websocket-server` delivers live updates. `admin-web` and `admin-api` are the staff tools.
+- **Videos.** The [monorepo](repos/AlUmmahNow.md) holds the videos product. `api-videos` stores metadata in R2 and D1, talks to Bunny.net for streaming and images, and sends events to Cloudflare Queues. `processor` consumes those queues and `websocket-server` delivers live updates, including to the admin pages. `media` transcodes every upload into R2 on Cloudflare Containers, and the API picks Bunny or R2 for each play ([Video delivery](guides/video-delivery.md)). `admin-web` and `admin-api` are the staff tools; `cost-monitor` collects platform analytics for them.
 - **Public site.** [AlUmmahNowUI](repos/AlUmmahNowUI.md) serves `www`, with editorial content from [AlUmmahNowCMS](repos/AlUmmahNowCMS.md) and video data from `api-videos`.
 - **Native apps.** [Apple](repos/AlUmmahNowApple.md), [Android](repos/AlUmmahNowAndroid.md) and [Desktop](repos/AlUmmahNowDesktop.md) use native UI and players. Shared logic is moving into [AlUmmahNowCore](repos/AlUmmahNowCore.md).
 - **Content import.** [AlUmmahNowTools](repos/AlUmmahNowTools.md) is a .NET tool set for bulk uploads to Bunny.net and R2.

@@ -4,8 +4,9 @@
 
 | | |
 |---|---|
-| **Status** | **Pending.** Unblocked on 2026-11-10; waiting on the owner |
-| **Recommendation** | Self-hosted RTMP/SRT ingest, packaged to HLS in the same R2 bucket as VOD |
+| **Status** | **Decided**, 2026-11-11 |
+| **Decision** | **Both** providers ship to production together. New streams are assigned round-robin, and the choice is made on data |
+| **Earlier recommendation** | Self-hosted RTMP/SRT ingest, packaged to HLS in the same R2 bucket as VOD |
 | **Depends on** | [D2](D2-video-delivery.md), decided 2026-11-10 |
 | **Source** | [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10), [`docs/native-apps/EPICS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md) §9 |
 
@@ -16,7 +17,14 @@
 | Bunny Stream Live | In preview. The 2025 live-streaming plan (Phase 2) assumed it. |
 | Self-hosted RTMP/SRT → HLS in R2 | **Recommended.** Uses the R2 + CDN delivery decided in D2, so live and VOD share a bucket and a delivery path, and the replay becomes VOD without copying. |
 
-The earlier recommendation was "follows D2". Now that D2 is decided, the recommendation is the self-hosted option. Only the owner's decision is missing.
+The earlier recommendation was "follows D2", then the self-hosted option. On 2026-11-11 the owner decided to run both and compare them on real streams.
+
+## Implementation (merged 2026-11-12)
+
+- A provider-neutral live layer with a Bunny Live adapter and a self-hosted adapter ([#867](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/867)). Assignment modes: round-robin (default), weighted split, only Bunny, only self-hosted. A per-stream move beats a channel override, which beats the mode. A provider that is disabled, draining, at its concurrency cap, over its monthly budget or not configured hands the stream to the other.
+- An admin **Live streaming** page: provider routing, overrides, sessions and a side-by-side comparison ([#871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/871)).
+- **Studio Live** and **Go live** on the web, the live watch page, and QoE beacons tagged with the provider ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)). Encoders push RTMP or HTTPS HLS, whichever provider was assigned.
+- Bunny Live is in preview with Bunny; see the open issues in the monorepo for its state.
 
 ## Blocks
 

@@ -22,6 +22,7 @@ Kotlin, Jetpack Compose, Media3, Gradle convention plugins, JDK 21. ktlint, dete
 | [`core-bridge`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/tree/main/core-bridge) | Interfaces in front of the Rust core |
 | [`design`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/tree/main/design) | Fanous theme and components |
 | [`player`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/tree/main/player) | Media3 player |
+| [`feature-studio`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/tree/main/feature-studio) | Studio sign-in, accounts, channel picker, upload, manage and analytics |
 | `feature-*` | Home, watch, upload, editor, live and TV features |
 | [`build-logic`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/tree/main/build-logic) | Convention plugins |
 
@@ -42,9 +43,9 @@ Golden screenshots are recorded on Linux through the "Record screenshots" workfl
 |---|---|---|
 | [`ci.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/.github/workflows/ci.yml) | PRs and pushes | Build, static checks, tests |
 | [`record-screenshots.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/.github/workflows/record-screenshots.yml) | Manual | Re-records goldens |
-| [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/.github/workflows/release.yml) | `vYYYY.MM.DD[.N]` tag | Uploads to the Play internal track |
+| [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/.github/workflows/release.yml) | `vYYYY.MM.DD[.N]` tag on `main` | Studio APKs and AAB on a GitHub release; Play internal track when configured |
 
-Signing stays off until the owner supplies a Play Console account, an upload key and a service account. See [RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/docs/RELEASE.md).
+A release tag attaches the Studio production APK, QA APK and production AAB to a GitHub release. Until the owner supplies the Play upload key, they are signed with a CI pre-release key and the release is marked as a pre-release: testers can install it, but Play won't accept it. The Play internal upload (viewer, TV, Studio) is skipped with a warning until the upload key and Play access exist. See [RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/blob/main/docs/RELEASE.md).
 
 Each app has `qa` and `prod` flavours pointing at the matching API.
 
@@ -58,11 +59,18 @@ Each app has `qa` and `prod` flavours pointing at the matching API.
 
 No individual owners are named. Security reports go through private vulnerability reporting.
 
-## Current state (2026-11-09)
+## Current state (2026-11-12)
 
-One open issue, on `queue`: sign-in through Custom Tabs ([#5](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/5)). No open PRs.
+The Studio MVP shipped for phone and tablet on aun-core `0.3.0-rc.1`. The first pre-release, `v2026.11.11`, is on GitHub Releases.
 
-Recently merged: viewer home and watch page ([#4](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/4)), core bridge and Fanous theme ([#3](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/3)), scaffold ([#2](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/2)).
+Shipped since 2026-11-09:
+
+- Studio sign-in through aun-core in a Custom Tab, several accounts and a channel picker ([#7](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/7)).
+- Resumable single and batch upload with set-for-all values ([#8](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/8)).
+- Manage videos, live search, bulk edit, soft delete and analytics ([#9](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/9)).
+- Release pipeline: Studio APK and AAB on GitHub Releases, Play internal when configured ([#10](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/10)).
+
+One open PR: analytics chart value axis, date labels and readout ([#12](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/12)). Open issues (6) include the Studio QA flow test failing on `main` against QA ([#15](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/15)), pickers that open with content ([#13](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/13)), bilingual playlist names ([#11](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/11)), viewer playlist playback ([#14](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/14)), viewer live search ([#6](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/6)) and sign-in follow-ups such as silent re-authorize ([#5](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/5)).
 
 ## Epics for this repo
 

@@ -6,11 +6,11 @@
 |---|---|
 | **ID** | `CMS-PAGE-BLOCKS` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Status** | **shipped** |
+| **Last updated** | 2026-11-12 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
-> CMS side merged (CMS #48); www rendering is open (UI #29).
+> CMS side merged (CMS #48). www rendering merged as UI #34, which replaced UI #29: pages built from blocks, and card posts read whole in the Articles list and the home timeline. Post summaries carry a card post's first 10 slides (CMS #58).
 
 ## Goal
 
@@ -28,8 +28,9 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- CMS [AlUmmahNowCMS#48](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/48)
-- Open UI [AlUmmahNowUI#29](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/29)
+- CMS [AlUmmahNowCMS#48](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/48), [AlUmmahNowCMS#58](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/58)
+- UI [AlUmmahNowUI#34](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/34) (replaced the closed [AlUmmahNowUI#29](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/29))
+- Design: the "Card posts" section of [AlUmmahNowCMS/docs/PUBLIC_API.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/PUBLIC_API.md) and [`src/lib/blocks.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/src/lib/blocks.ts)
 
 ## Open questions
 

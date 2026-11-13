@@ -7,9 +7,9 @@
 | **ID** | `E10` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-12 |
 
-> 10.1 tokens done; 10.2 done except the font choice (D6); 10.3/10.4/10.7 components not started; 10.5/10.6 need a designer.
+> 10.1 tokens done, and since 2026-11-09 extended with four themes and theme packages (see [Themes](AUN-THEMES-themes.md)); 10.2 done except the font choice (D6); 10.3/10.4/10.7 components not started; 10.5 needs a designer; 10.6 web favicons now use the owner's art, while store art and native app icons still need a designer.
 
 ## Goal
 
@@ -23,12 +23,12 @@ One design language implemented natively per platform plus web.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 10.1 | Tokens as one JSON source generating SwiftUI, Compose, WinUI 3, GTK 4, Tizen NUI, web CSS | Done (`packages/fanous-tokens`). |
+| 10.1 | Tokens as one JSON source generating SwiftUI, Compose, WinUI 3, GTK 4, Tizen NUI, web CSS | Done (`packages/fanous-tokens`). Four themes in a registry (#455) and a CI gate on colours outside the tokens (#456). The web apps now compile theme packages (`packages/theme-packages`, #571); a test keeps them equal to the tokens. |
 | 10.2 | Typography licensing & pairing (D6), Eastern Arabic numerals | Done except the choice (D6). |
 | 10.3 | Component library | Not started (built per platform in Epics 12, 15, 16). |
 | 10.4 | 10-foot components | Tokens done, components not started. |
 | 10.5 | Iconography & illustration | Requirements doc; needs a designer. |
-| 10.6 | App icons, splash, store art | Spec + size matrix; needs a designer. |
+| 10.6 | App icons, splash, store art | Web favicons for every app are the owner's art, cropped and downscaled with no edits (#729), as exact-size PNGs with no SVG in production (#845). Generator: `packages/app-icons`. Splash and store art still need a designer. |
 | 10.7 | Component catalogues | Not started. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
@@ -59,6 +59,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#365](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/365) | issue | Fanous: owner decisions D6 fonts, D8 naming, light-theme accent | OPEN | 2026-11-08 |
 | AlUmmahNow | [#387](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/387) | issue | Fanous: remaining Epic 10 stories 10.3, 10.4 and 10.7 (components and catalogues) | OPEN | 2026-11-08 |
 | AlUmmahNowApple | [#7](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/7) | issue | Swap interim seams: aun-core XCFramework and generated Fanous tokens | OPEN | 2026-11-08 |
+
+Since that sweep (2026-11-12): the theme registry [AlUmmahNow#455](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/455), colour gate [AlUmmahNow#456](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/456), theme packages [AlUmmahNow#564](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/564), [AlUmmahNow#571](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/571), [AlUmmahNow#575](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/575), and app icons [AlUmmahNow#691](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/691), [AlUmmahNow#729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/729), [AlUmmahNow#845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/845) merged, with matching favicon PRs in [AlUmmahNowUI#49](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/49) and [AlUmmahNowCMS#86](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/86). Issues #364, #365 and #387 are still open.
 
 ## Open questions
 

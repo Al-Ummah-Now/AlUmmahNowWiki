@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `AUN-CREATOR-STUDIO` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-10 |
+| **Status** | **shipped** |
+| **Last updated** | 2026-11-12 |
 
-> Spec PR #476 open; Studio frame PR #482 open.
+> Spec merged ([#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476)); the Studio stack #478–#498 merged 2026-11-11 as [#498](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/498). Since then: bulk rename and edit ([#765](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/765), [#809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/809), [#812](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/812)), creator trash ([#764](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/764)), Studio Live ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)), and the Videos list from cache ([#794](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/794)). The native Studio apps are tracked in [Epic 18](E18-studio-mobile.md) and [Epic 19](E19-studio-desktop.md).
 
 ## Goal
 

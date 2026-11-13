@@ -7,9 +7,9 @@
 | **ID** | `AUTH-ACCOUNT-HUB` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
-> Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Other steps (A2–C3, T1) not started.
+> Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Step A2's sign-in hardening landed through the SSO audit (state and PKCE, sessions in D1 with one refresh at a time, logout CSRF guard). Other steps (A3–C3, T1) not started.
 
 ## Goal
 
@@ -24,7 +24,7 @@ Turn the profile app into a Google-account-style hub: home, devices, data, conne
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | A1 | `account.*` 301 redirect, client-name migration | Merged (#253) |
-| A2 | Sign-in hardening (state, PKCE, refresh, CSRF) |  |
+| A2 | Sign-in hardening (state, PKCE, refresh, CSRF) | Merged (#276, #283, #286, #287, #302). Issues #251 and #252 are still open |
 | A3 | Hub UI rebuild on theme tokens |  |
 | A4 | AlUmmahNow #444 wording |  |
 | B1 | `/account/profile`, stored locale default |  |
@@ -53,6 +53,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - Auth [AlUmmahNowAuth#250](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/250), [AlUmmahNowAuth#253](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/253)
+- A2: [AlUmmahNowAuth#276](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/276), [AlUmmahNowAuth#283](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/283), [AlUmmahNowAuth#286](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/286), [AlUmmahNowAuth#287](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/287), [AlUmmahNowAuth#302](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/302)
 
 ## Open questions
 

@@ -46,7 +46,7 @@ Workers AI signals on comments, posts and videos in shadow mode first; AI never 
 
 - [M1](decisions.md#m1-extension-classifier-model): Extension classifier model (open)
 - [M2](decisions.md#m2-auto-hide-scope): Auto-hide scope (open)
-- [M3](decisions.md#m3-religiousauthenticity-flags): `religious_authenticity` flags (open)
+- [M3](decisions.md#m3-religious_authenticity-flags): `religious_authenticity` flags (open)
 - [M4](decisions.md#m4-csam-coverage-for-r2-served-media): CSAM coverage for R2-served media (open)
 - [M5](decisions.md#m5-reviewer-staffing--slas): Reviewer staffing & SLAs (open)
 - [M6](decisions.md#m6-transparency-reporting): Transparency reporting (open)

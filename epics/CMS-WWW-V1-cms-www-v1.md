@@ -7,9 +7,9 @@
 | **ID** | `CMS-WWW-V1` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-12 |
 
-> CMS v1 (CMS #12) and www v1 W1–W10 (UI #7) merged 2026-11-08 with stage-then-promote releases.
+> CMS v1 (CMS #12) and www v1 W1–W10 (UI #7) merged 2026-11-08 with stage-then-promote releases. Later work is tracked in [CMS and www: post-v1 queue](CMS-QUEUE-cms-www-queue.md), [CMS admin UI](CMS-ADMIN-UI-cms-admin-ui.md), [page blocks](CMS-PAGE-BLOCKS-cms-page-blocks.md) and [home timeline](CMS-HOME-TIMELINE-www-home-timeline.md).
 
 ## Goal
 
@@ -62,7 +62,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Conflicts between sources
 
-- AlUmmahNowUI's copy of the shared plan still says to rotate `CMS_CLIENT_SECRET`; the CMS is a public PKCE client with no secret (CMS SPEC v1.1).
+- AlUmmahNowUI's copy of the shared plan ([`docs/PLAN.md`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/PLAN.md)) still says to rotate a CMS client secret; the CMS is a public PKCE client with no secret (CMS SPEC v1.1). Still true on 2026-11-12.
 - www picks `/en/` or `/ar/` from a cookie, then Accept-Language, then `en`. The English-default rule covers only sign-in and profile pages, so this is a different surface.
 
 ## Sources

@@ -6,7 +6,7 @@
 
 ## Purpose
 
-The organisation's fork of OpenAuth, a standards-based OAuth 2.0 provider library. [AlUmmahNowAuth](AlUmmahNowAuth.md) consumes it as `@al-ummah-now/openauth`. The fork adds features the auth service needs, described in [ENTERPRISE_FEATURES.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/ENTERPRISE_FEATURES.md). Recent additions include native app clients (RFC 8252), the device authorization grant (RFC 8628) and `auth_time` on access tokens.
+The organisation's fork of OpenAuth, a standards-based OAuth 2.0 provider library. [AlUmmahNowAuth](AlUmmahNowAuth.md) consumes it as `@al-ummah-now/openauth`. The fork adds features the auth service needs, described in [ENTERPRISE_FEATURES.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/ENTERPRISE_FEATURES.md). Recent additions include native app clients (RFC 8252), the device authorization grant (RFC 8628), `auth_time` on access tokens, PKCE required per client at the code exchange, and storage that keeps codes, refresh rotation, keys and counters atomic.
 
 ## Tech stack
 
@@ -35,10 +35,12 @@ bun test
 This is a library, so it has no environments. [`publish-github.yml`](https://github.com/Al-Ummah-Now/openauth/blob/master/.github/workflows/publish-github.yml) publishes after the test and format workflows:
 
 - A PR that changes the package gets a pre-release `X.Y.Z-pr.{PR}.{run}`.
-- A push to `master` gets a patch bump, changelog, tag and GitHub release.
+- A push to `master` gets the next patch version, a `vX.Y.Z` tag and a GitHub release.
 - A manual run can bump patch, minor or major.
 
-Details are in [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md).
+**The released version lives in git tags, not in `master`.** The workflow never pushes to `master` ([#27](https://github.com/Al-Ummah-Now/openauth/pull/27)), so `package.json` on `master` doesn't show the current version. Check the [tags](https://github.com/Al-Ummah-Now/openauth/tags) instead.
+
+Details are in [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md), but its steps for committing the version and changelog to `master` predate #27.
 
 ## Key docs
 
@@ -52,11 +54,16 @@ Details are in [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/mast
 
 No individual owners are named. GitHub Issues are disabled on this fork, so track fork work in [AlUmmahNowAuth issues](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues).
 
-## Current state (2026-11-09)
+## Current state (2026-11-12)
 
-One open PR, [#2](https://github.com/Al-Ummah-Now/openauth/pull/2) (Version Packages). Latest fork version bump on `master` is 1.0.29. AlUmmahNowAuth's `apps/auth` pins 1.0.28.
+Latest release is 1.0.47, and AlUmmahNowAuth pins it. One open PR, [#2](https://github.com/Al-Ummah-Now/openauth/pull/2) (Version Packages, from upstream's Changesets flow).
 
-Recently merged: `auth_time` on access tokens ([#20](https://github.com/Al-Ummah-Now/openauth/pull/20)), device grant ([#19](https://github.com/Al-Ummah-Now/openauth/pull/19)), native clients ([#18](https://github.com/Al-Ummah-Now/openauth/pull/18)).
+Merged since 2026-11-09:
+
+- Per-request theme and language, English by default ([#21](https://github.com/Al-Ummah-Now/openauth/pull/21), [#37](https://github.com/Al-Ummah-Now/openauth/pull/37)).
+- Audit fixes OA-1 to OA-9: single-use codes, refresh rotation in the atomic store, unique key ids, device grant handed out once, provider state, key and permission caches, exact rate-limit counters, tenant cache ([#24](https://github.com/Al-Ummah-Now/openauth/pull/24), [#29](https://github.com/Al-Ummah-Now/openauth/pull/29)–[#36](https://github.com/Al-Ummah-Now/openauth/pull/36)).
+- PKCE required per client at the code exchange ([#28](https://github.com/Al-Ummah-Now/openauth/pull/28)), a `checkCode` hook for code attempt limits ([#23](https://github.com/Al-Ummah-Now/openauth/pull/23)), refreshed tokens carry current roles ([#38](https://github.com/Al-Ummah-Now/openauth/pull/38)).
+- Releases from git tags ([#27](https://github.com/Al-Ummah-Now/openauth/pull/27)), logo alt text in the page's language ([#40](https://github.com/Al-Ummah-Now/openauth/pull/40)), `__session` not `Secure` on a localhost issuer ([#41](https://github.com/Al-Ummah-Now/openauth/pull/41)).
 
 ## Epics for this repo
 

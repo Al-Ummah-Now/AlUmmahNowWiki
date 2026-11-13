@@ -28,6 +28,9 @@ A GitHub squash commit is authored with the merging account's email, which would
 - Every change carries tests. The monorepo's [BEFORE_YOU_CODE.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/BEFORE_YOU_CODE.md) requires test-driven development.
 - Never add `continue-on-error` to get past a failing check. Fix the code, the test or the workflow.
 - User-facing work ships in English and Arabic, with RTL checked.
+- E2E specs make their own data, clean all of it up even on failure, and run on the local stack unless they need a real deployment. A flaky test is a defect: fix it, or quarantine it with `quarantined: #<issue> @<owner>`. See [Testing and E2E](testing.md).
+- Tests, CI and stage never spend money on paid AI providers. Use the mocked providers.
+- Destructive actions use the in-app confirmation dialog, never `window.confirm`, `alert`, `prompt` or `beforeunload`. Lookups use the shared autocomplete, never a raw id box.
 
 ## Data changes
 
