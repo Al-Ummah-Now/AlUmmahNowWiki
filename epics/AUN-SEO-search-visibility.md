@@ -508,9 +508,22 @@ It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUm
 
 **Hotlinking and abuse:**
 - Egress is free on R2, so the risk is request volume.
-- A Cloudflare rate-limit rule on `media.*/v/*.mp4` (per IP, e.g. 60/min).
-- CDN caching absorbs repeats.
-- The cost-monitor gets an R2 Class B line for the bucket.
+- CDN caching absorbs repeats (files up to 512 MB on the Free plan: the MP4 of a video longer than about an hour is read from R2 each time).
+- **Rate limit (AlUmmahNow#1182):** `/pub/*` is served by the R2 custom domain with no Worker in front, so the limit is a zone rate-limit rule, kept as code in `scripts/media-cdn/apply.ts` (step `ratelimit`, applied by every release): `http.request.uri.path wildcard "/pub/*/video.mp4"`, **10 requests per 10 s per IP, block** (the Free plan allows one rule, a 10 s period and timeout, block only; about 60 a minute). HLS segments and playlists are not matched. **Not live yet:** the release token has no Zone WAF scope (the step reports `NO ACCESS`). It needs a token with **Zone → Zone WAF: Edit** on `alummahnow.net`; the next release then applies it.
+- **Cost line:** the admin Operations page's R2 tab has `al-ummah-now-media[-env] video.mp4`, the media bucket's Class B reads of `%/video.mp4` (cost-monitor; a plain `%.mp4` would also count each HLS rung's `init_N.mp4`). They are taken out of the bucket's own row, so totals don't change.
+
+**As built (AlUmmahNow#1181, #1201, #1243):**
+- **URL:** `https://media[.<env>].alummahnow.net/pub/{id}/{rev}/video.mp4` (not `/v/…/480p.mp4` as first proposed). `Cache-Control: public, max-age=86400` like every other rendition object (a video that turns private is moved out of the public bucket, so the edge TTL is a day). Range requests answer 206.
+- Every transcode makes it, private and unlisted ones too (under `priv/`, never exposed); `contentUrl` is given only for public videos.
+- **Backfill (#1182, 2026-11-13):** renditions made before #1181 got it from a remux-only job (no encode, no new rev): `scripts/release/mp4-backfill.ts`, dry run first, candidates from `media_jobs` checked against each video record.
+
+  | Env | Ready R2 renditions | MP4 made | Public (contentUrl) | Skipped |
+  |---|---|---|---|---|
+  | QA | 12 | 10 (2 at 480p, 8 at 360p) | 2 | 2 soft-deleted; 71 `media_jobs` rows whose video is gone |
+  | Stage | 1 | 1 (360p source) | 1 | 9 rows whose video is gone |
+  | Production | 2 | pending: runs after the first release with #1243 reaches production (v2026.11.13.6 stopped at stage) | 2 | none |
+
+  Every public MP4 answered GET/HEAD 200, `video/mp4`, `public, max-age=86400`, `cf-cache-status` MISS then HIT, and 206 for a range; the watch page's `VideoObject.contentUrl` equals it (QA's second test video is still `processing` on Bunny, so its watch page has no JSON-LD by design).
 
 **Projected cost at the [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) scales:**
 
