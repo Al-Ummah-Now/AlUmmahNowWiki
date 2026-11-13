@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-SEO` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (videos web), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md). It also touches [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) and [openauth](../repos/openauth.md) (noindex only), and the scholar sites that are being specified separately |
-| **Status** | **planned**: draft for owner review. No code has changed |
+| **Status** | **in progress**: owner decisions D-SEO-1 to D-SEO-12 taken 2026-11-13; being implemented in phases |
 | **Last updated** | 2026-11-13 |
 
 Read from `origin/main` on 2026-11-13: AlUmmahNow [`de8c284`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/de8c284f8a1b84b7008c416a68e2f007de55ab5c), AlUmmahNowUI [`b521637`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/b5216371b3aa37a8308f1bc3b6491af4b8689a82), AlUmmahNowCMS [`d661daf`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/tree/d661daf7d266cb6804637cf616fa7b5fa680b21b). The live checks fetched production pages as Googlebot (smartphone) and as desktop Chrome, read-only. Lighthouse 12.6 ran locally in mobile mode, because the PageSpeed Insights API was over its daily quota.
@@ -236,13 +236,14 @@ Rules:
 
 | Content | Canonical | hreflang | Other URLs that show it | What they do |
 |---|---|---|---|---|
-| Video, Short | `videos.…/{L}/video/{id}`, where `{L}` follows [D-SEO-1](#d-seo-1-watch-page-language-urls) | D-SEO-1 | `/{l}/video?vid=`, `/video/{id}`, `?list=`, `?t=`, `?utm_*` | `?vid=` → **301** to canonical. Query params keep the page but the canonical drops them. Unknown locale → 308 |
+| Video | `videos.…/{l}/video/{id}`: **each language self-canonical** ([D-SEO-1](#d-seo-1-watch-page-language-urls)) | en, ar, x-default=en | `/{l}/video?vid=`, `/video/{id}`, `?list=`, `?t=`, `?utm_*` | `?vid=` → **301** to canonical. Query params keep the page but the canonical drops them. Unknown locale → 308 |
+| Short | `videos.…/{l}/shorts/{id}` ([D-SEO-10](#d-seo-10-shorts-urls)) | en, ar, x-default=en | `/{l}/video/{id}` of a Short | **301** → `/shorts/{id}` |
 | Live | `videos.…/{l}/live/{id}` | en, ar, x-default=en | – | After the stream ends, if it becomes a video: 301 → the watch URL |
 | Channel | `videos.…/{l}/@{handle}` | en, ar, x-default=en | `/channels/{id}`, `/c/{handle}` | **301** → `@handle` (today only the canonical is set). An old handle (after a rename) → 301 if handle history exists |
 | Playlist | `videos.…/{l}/playlist/{id}` | en, ar, x-default | – | – |
 | Post (new) | `videos.…/{l}/post/{id}` | en, ar | `?tab=community` | link |
 | Article (staff) | `www/{l}/articles/{slug}/` | Linked translations only, plus x-default | Other-language URL (borrowed) | noindex + canonical (today) |
-| Article (scholar) | [D-SEO-2](#d-seo-2-canonical-home-for-scholar-content) | as above | www article, scholar site article, community post | See [scholar sites](#scholar-sites) |
+| Article (scholar) | www without the tier; the white-label site's host with it ([D-SEO-2](#d-seo-2-and-d-seo-3-scholar-content)) | as above | www article, site article, community post | See [scholar sites](#scholar-sites) |
 | CMS page | `www/{l}/{slug}/` | Linked translations + x-default | Borrowed language | **Make it noindex**, as articles already are |
 | Embeds | none (noindex) | – | – | – |
 
@@ -252,20 +253,21 @@ Rules:
 
 ### Scholar sites
 
-Coordination rules for the separate scholar-sites spec (`<slug>.alummahnow.net`), assuming [D-SEO-2](#d-seo-2-canonical-home-for-scholar-content) option A:
+Decided by the owner (D-SEO-2/3) and specified in [AUN-SCHOLAR-SITES §4.4](AUN-SCHOLAR-SITES-scholar-sites.md) ([Wiki#22](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/22)). **The canonical follows the brand host.** This page adopts those rules:
 
-| Thing | Canonical home | Scholar site | www | Videos channel |
-|---|---|---|---|---|
-| Scholar profile | `https://{slug}.alummahnow.net/{l}/` | Self-canonical, `ProfilePage` + `Person` `@id …/#person`, `sameAs` → channel(s) and socials | `/{l}/scholars/{slug}/` → **301** to the scholar site ([D-SEO-3](#d-seo-3-www-scholar-pages-after-scholar-sites-ship)); the directory stays and links out | "Scholar site" link (server-rendered); channel JSON-LD `sameAs` + `author` → `#person` |
-| Scholar article | Scholar site `/{l}/articles/{slug}/` | Self-canonical, `Article`, author `#person` | If featured: shown on home and the Articles list as a card **linking to the scholar site**. Any www article URL → 301 to the scholar site | Community post links to the scholar site URL |
-| Scholar video | `videos.…/{L}/video/{id}` (always) | Facade or embed + `ItemList`; **no `VideoObject`** in lists. A video "page" on the scholar site, if built, has `canonical` → the watch URL | As today: facade, link to watch | Owner |
-| Sitemap | – | `https://{slug}.alummahnow.net/sitemap.xml`: profile + articles, hreflang; **no videos** | Drops scholar profiles and scholar articles; keeps `/scholars/` | Video sitemap lists the scholar's videos |
-| robots.txt | – | Per host: `Allow: /`, `Sitemap:` its own; non-production `Disallow: /` | – | – |
-| Unknown or retired slug | – | Wildcard host for an unknown slug → **404** (never a 200 shell). A retired scholar → 410, or 301 to www `/scholars/` | – | – |
-| Custom domain (later) | The custom domain | Subdomain → 301 to the custom domain, every path | Links use the custom domain | Links use the custom domain |
+| Content | Scholar without the tier | White-label site on `<slug>.alummahnow.net` | White-label site on its own domain |
+|---|---|---|---|
+| Profile / About | www `/{l}/scholars/{slug}/` | The site's About page. The www scholar page becomes a directory entry with `rel=canonical` to the site | Same, on the domain |
+| Articles and posts | www `/{l}/articles/{slug}/` | The site. Existing www URLs **301** to the site when the tier is granted (SS6) | The domain |
+| Videos and Shorts | videos watch page | **videos watch page**; the site's watch page has `rel=canonical` to videos | **The site's watch page**; the videos watch page points `rel=canonical` to it, and the videos sitemap leaves it out |
+| Sitemap / robots.txt | www | Each host serves its own; www and videos sitemaps leave out site-canonical URLs | Same |
+| Losing the tier | – | 302 to www for 90 days; canonicals return to www/videos within one cache cycle | Same |
 
-- **Reserved slugs** (never a scholar host): `www`, `videos`, `api`, `auth`, `account`, `profile`, `admin`, `cms`, `media`, `images`, `realtime`, `qa`, `stage`, `mail`, `status`, `help`, `docs`, `static`, `cdn`, plus any existing DNS label.
-- **QA and stage** scholar hosts follow the environment pattern and are always noindex.
+**SEO-side requirements on the sites:**
+- **JSON-LD:** `Person` `@id` = `https://{site-host}/#person` (or www `/{l}/scholars/{slug}/#person` without the tier). The channel's `ProfilePage` uses it in `sameAs` / `mainEntity`.
+- **Hosts:** an unknown wildcard host answers 404, never a 200 shell. Reserved labels are never site slugs: `www videos api auth account profile admin cms media images realtime live qa stage mail status help docs static cdn`.
+- **Non-production:** QA/stage site hosts are always noindex.
+- **Videos canonical override (own domains):** the videos watch page reads the site registry (KV `SITES`, `channel:<id>`) to set the cross-host canonical. The videos sitemap and `VideoObject` follow the same lookup.
 
 ### Sitemap architecture
 
@@ -314,7 +316,10 @@ https://videos.alummahnow.net/sitemap.xml            ← sitemap index
 | Every QA and stage host | `Disallow: /` | `X-Robots-Tag: noindex, nofollow` from the environment |
 | Scholar hosts | as www | as www |
 
-**AI crawlers:** Cloudflare's managed robots.txt is on, but no `Content-Signal` is set ([D-SEO-8](#d-seo-8-ai-crawler-content-signals)).
+**AI crawlers** ([D-SEO-8](#d-seo-8-ai-crawlers)), on every public host (www, videos, scholar sites):
+- **Allowed:** search and answer bots that link back to the source: `Googlebot`, `Bingbot`, `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `Claude-SearchBot`, `Claude-User`, `DuckAssistBot`, `Applebot`.
+- **Blocked** (`Disallow: /` each): training-only crawlers `Google-Extended`, `GPTBot`, `CCBot`, `ClaudeBot`, `anthropic-ai`, `Applebot-Extended`, `Bytespider`, `meta-externalagent`, `Meta-ExternalAgent`, `FacebookBot`, `cohere-training-data-crawler`, `Diffbot`, `Omgilibot`, `img2dataset`, `PanguBot`, `Timpibot`.
+- **Content signals:** `Content-Signal: search=yes, ai-input=yes, ai-train=no` in Cloudflare's managed robots.txt (zone setting).
 
 ### Deleted, private and scheduled content
 
@@ -323,7 +328,7 @@ https://videos.alummahnow.net/sitemap.xml            ← sitemap index
 | Public, ready | 200, indexable | yes | yes | 200 |
 | Processing or failed upload | 404 to signed-out visitors | no | no | 404 |
 | Private (owner-only) | **404** for everyone but the owner. Never 403, which confirms the URL exists | no | no | 404 |
-| Unlisted, if introduced ([D-SEO-5](#d-seo-5-unlisted-videos)) | 200, `noindex`, no sitemap; link-sharing works | no | OG yes (sharing), JSON-LD no | 200 |
+| **Unlisted** ([D-SEO-5](#d-seo-5-unlisted-videos)) | 200 to anyone with the link, `noindex`; never in lists, search, feeds, recommendations, playlists of others or sitemaps | no | OG yes (sharing), JSON-LD no | 200 |
 | Scheduled (not yet public) | 404 until published, then 200. `uploadDate` = publish time | added on publish | – | 404 |
 | Live upcoming | 200, indexable, `BroadcastEvent` with `startDate` | `live.xml` | yes | 200 |
 | Soft-deleted (30-day restore window) | **404** (restorable) | removed | – | 404 |
@@ -383,70 +388,119 @@ https://videos.alummahnow.net/sitemap.xml            ← sitemap index
 
 ## Phased plan
 
-| Phase | Scope | Repos | Size |
-|---|---|---|---|
-| **0: stop the damage (days)** | Non-production noindex + Disallow on videos and every non-www host (#2); noindex + `Disallow: /` on auth, profile, account, admin, cms and API hosts (#8); utility pages noindex (#8); soft 404 → 404 for video and playlist, and 503 on API errors (#1); `?vid=` → 301 and card links → `/video/{id}`, watch → `@handle` (#6); fix `alummahnow.com` in live OG (#13); www stops emitting signed thumbnails (#9); Search Console + Bing verification and sitemap submission (#10, owner) | AlUmmahNow, Auth, openauth, UI | S each |
-| **1: be understood (1–2 weeks)** | Title template and descriptions (#7, #11); `VideoObject`, `BroadcastEvent`, `BreadcrumbList`, `WebSite` + `SearchAction` (#5); videos robots.txt + sitemap index with video sitemaps (#3); www sitemap fixes, list pages → `ItemList` (#9); `publishedAt` set for every upload; release `seo.spec.ts` in all three repos | AlUmmahNow, UI, CMS | M |
-| **2: be fast and server-rendered (2–3 weeks)** | Watch, home, channel-tab and playlist content server-rendered (#4); LCP work and RUM (#15); legal and help pages as CMS pages (#14); 410 after purge; www trailing-slash 308, CMS borrowed-page noindex, 404 canonical (#16, #19) | AlUmmahNow, UI, CMS | M–L |
-| **3: grow** | Post permalinks + `SocialMediaPosting` (#12); scholar sites under the matrix above; slug and handle history redirects (#17); IndexNow (#21); chapters as `Clip`; image sitemap; weekly crawl job | all | M |
+Updated after the owner's decisions. Each phase ships as PRs merged on green and goes out with the next release of each repo.
 
-## Decisions for the owner
+| Phase | Scope | Repos |
+|---|---|---|
+| **0: stop the damage** ✅ in PR | Real 404/503 (#1), non-production noindex (#2), private hosts and utility pages noindex (#8), `?vid=` 301 (#6), `/ar` title (#7) | AlUmmahNow, Auth, CMS |
+| **1: decisions D-1, D-4, D-5** | x-default on every hreflang set (D-1); 410 after purge on API and pages (D-4); **Unlisted** visibility in API, Studio, upload, web and admin, plus a native issue (D-5) | AlUmmahNow, native issue |
+| **2: be understood** | Title template + D-6 descriptions; channel, playlist and home metadata; `VideoObject` (with `contentUrl` from D-11 when an R2 MP4 exists), `BroadcastEvent`, `BreadcrumbList`, `WebSite` + `SearchAction`; videos sitemap index (videos, Shorts, channels, playlists, live) + `Sitemap:` line; www sitemap fixes, `ItemList`, unsigned thumbnails; `publishedAt` on every upload; AI-crawler robots rules (D-8); release `seo.spec.ts` | AlUmmahNow, UI, CMS |
+| **3: URLs and media** | `/shorts/{id}` + 301 (D-10); R2 MP4 rendition + public `contentUrl` (D-11); www slug history + 301 (D-7); landing page + referrer source in in-house analytics (D-9); IndexNow | AlUmmahNow, UI, CMS |
+| **4: fast and server-rendered** | Server-rendered watch, home, channel tabs and playlists (#4); LCP work, Font Awesome removal, RUM (#15); legal and help pages (#14); www trailing slash 308, borrowed-page noindex, 404 canonical (#16, #19) | AlUmmahNow, UI, CMS |
+| **5: grow** | Post permalinks + `SocialMediaPosting` (#12); scholar-site SEO with AUN-SCHOLAR-SITES; handle history; chapters as `Clip`; weekly production crawl | all |
+
+## Owner decisions (2026-11-13)
 
 ### D-SEO-1: Watch-page language URLs
 
-Every video has `/en/video/{id}` and `/ar/video/{id}`. Only the interface language differs; the title and description are the same text.
+**Decided:** both `/en/video/{id}` and `/ar/video/{id}` stand as their own canonical (a video's language is not known). Each page is self-canonical with an `en`/`ar` hreflang pair and `x-default` = `/en/`. The same applies to Shorts, channels, playlists, live and list pages.
 
-- **A (recommended):** the canonical is the URL in the **video's content language** (Arabic video → `/ar/…`). The other-language URL stays usable and sets its canonical to it. No hreflang on watch pages, and the sitemap lists one URL per video. This consolidates signals and halves crawling. It needs a content language per video: a field, or detection from the title's script.
-- **B:** keep both indexable with hreflang en/ar + x-default (today, plus x-default). Simpler, but Google sees two near-duplicates per video.
+### D-SEO-2 and D-SEO-3: Scholar content
 
-### D-SEO-2: Canonical home for scholar content
-
-- **A (recommended):** the scholar site is canonical for the scholar's profile and articles. www features link there.
-- **B:** www stays canonical; the scholar site is a branded view with canonical tags to www. Easier, but the scholar sites build no search presence of their own.
-
-### D-SEO-3: www scholar pages after scholar sites ship
-
-- **A (recommended):** `/{l}/scholars/{slug}/` 301s to the scholar site, and the www directory stays.
-- **B:** keep them as summaries with canonical tags to the scholar site.
+**Decided:**
+- White-label scholar sites are independent: their own content is canonical on their own host, including external custom domains.
+- Scholars without the tier keep the www scholar page canonical.
+- Details follow [AUN-SCHOLAR-SITES §4.4](AUN-SCHOLAR-SITES-scholar-sites.md); see [Scholar sites](#scholar-sites) above.
 
 ### D-SEO-4: Deleted content status
 
-404 during the 30-day restore window, then 410 after purge or an admin's permanent delete (recommended). The alternative is 410 immediately.
+**Decided:** 404 during the 30-day restore window, then **410** after purge. The `admin_deletions` row with `purged_at` set is the tombstone.
 
 ### D-SEO-5: Unlisted videos
 
-Today "unlisted" is treated as private. Should a real unlisted state exist (200 by link, noindex, not in lists or sitemaps)? The recommendation is yes, since it is common on sharing sites. It is gated by plans like other creator features.
+**Decided:** add a real **Unlisted** visibility. It is link-only, and never appears in lists, search, sitemaps or feeds. Its pages are noindex.
+
+**Model:** `isPublic: false` plus `isUnlisted: true`.
+- Every list, index and feed that already requires `isPublic` keeps unlisted videos out by default.
+- Only single-item reads by id (watch, embed, oEmbed, `/thumb`, playback, comments, views) admit them.
 
 ### D-SEO-6: Default description and tagline
 
-The proposed text replaces "Excerpts from scholars' clips about the state of the nation today":
-
-- **en:** "Watch and share videos, Shorts and live streams from creators and scholars, in Arabic and English."
-- **ar:** «شاهد وشارك المرئيات والمقاطع القصيرة والبث المباشر من صنّاع المحتوى والعلماء، بالعربية والإنجليزية.»
-
-The www Articles list blurb ("Announcements and updates from the Al Ummah Now team") changes to match.
+**Decided** (to be aligned with the copy audit once it is approved):
+- en: "Watch, share and discuss videos, Shorts and posts from channels across the Muslim community."
+- ar: «شاهد وشارك وناقش المرئيات والمقاطع القصيرة والمنشورات من قنوات المجتمع المسلم.»
 
 ### D-SEO-7: Slug history redirects on www
 
-Renamed slugs return 404 today, by design. The recommendation is a slug-history table and 301s, because shared and indexed links survive.
+**Decided:** yes. Renamed slugs keep a history row in the CMS, and www answers **301** old → new.
 
-### D-SEO-8: AI crawler content signals
+### D-SEO-8: AI crawlers
 
-Cloudflare's managed robots.txt is on, but no `Content-Signal` line is set. The recommendation is `search=yes, ai-input=yes, ai-train=no`. Alternatives are no to all AI, or yes to all.
+**Decided:**
+- Allow AI search and answer bots that link back.
+- Block training-only crawlers on all public hosts.
+- See [robots rules](#robots-rules) for both lists.
 
-### D-SEO-9: Analytics on videos
+### D-SEO-9: Analytics
 
-- **A (recommended):** in-house RUM (web-vitals to the existing endpoint) + Search Console.
-- **B:** also allow Cloudflare Web Analytics (cookieless) as www already does. This needs the CSP test changed.
+**Decided:** our own analytics only, with no third party and no cookies. The in-house analytics are extended with **landing page** and **referrer source** (search engine / social / direct / other site, from `document.referrer`).
 
-### D-SEO-10: Video URL slugs and Shorts URLs
+### D-SEO-10: Shorts URLs
 
-Keep ID-only URLs (`/video/{id}`) with no title slug and no separate `/shorts/{id}` route (recommended). The alternative adds `/video/{id}/{english-slug}` using the CMS slug rule.
+**Decided:** add `/{l}/shorts/{id}`, a vertical viewer.
+- `/{l}/video/{id}` of a Short **301**s there.
+- Sitemaps and JSON-LD use the Shorts URL.
+- Video URLs stay ID-only.
 
 ### D-SEO-11: A stable `contentUrl`
 
-For public R2 videos, expose a stable public HLS or MP4 URL as `contentUrl`. The recommendation is **not now**: `embedUrl` is enough, and a public URL adds egress cost against the $500 cap.
+**Decided:** expose a stable public **R2 MP4** as `contentUrl` for videos that have an R2 rendition. Bunny-only videos keep `embedUrl` only.
 
-### D-SEO-12: Search Console account
+**The rendition:**
+- **One progressive MP4 at the 480p rung** (portrait: 480 wide), remuxed from the 480p HLS rung the transcoder already makes (`-c copy -movflags +faststart`, no second encode). Peak rate is 1.4 Mb/s + 128 kb/s audio; about **0.45 GB per hour** at CRF 23.
+- **URL:** `https://media.alummahnow.net/v/{id}/{rev}/480p.mp4`, through the public R2 custom domain and CDN.
+- **Headers:** `Cache-Control: public, max-age=31536000, immutable`, because the revision is in the path. `Content-Disposition: inline`. Range requests are supported.
+- **Scope:** public, ready videos only. Private, unlisted and removed videos have no public MP4; their media stays under `/priv/`.
 
-Which Google account owns the Domain property, and who else gets access? The owner adds the DNS TXT record in Cloudflare.
+**Hotlinking and abuse:**
+- Egress is free on R2, so the risk is request volume.
+- A Cloudflare rate-limit rule on `media.*/v/*.mp4` (per IP, e.g. 60/min).
+- CDN caching absorbs repeats.
+- The cost-monitor gets an R2 Class B line for the bucket.
+
+**Projected cost at the [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) scales:**
+
+| Scale | Library | Extra storage | Storage $/mo ($0.015/GB) | Reads (CDN-cached; ≤ 10 M Class B) | Total |
+|---|---|---|---|---|---|
+| S1 | 500 h | 0.23 TB | $3.4 | ≤ $3.6 | **≈ $7** |
+| S2 (near the $500 cap) | 2,500 h | 1.1 TB | $17 | ≤ $3.6 | **≈ $21** |
+| S3 | 5,000 h | 2.25 TB | $34 | ≤ $3.6 | **≈ $38** |
+
+Transcode cost is negligible, because the MP4 is a remux of an existing rung.
+
+### D-SEO-12: Search Console and Bing (owner steps)
+
+The owner uses their own Google account. One **Domain property** covers every host, including scholar subdomains.
+
+**Google Search Console:**
+1. Open <https://search.google.com/search-console>, choose **Add property → Domain**, and enter `alummahnow.net`.
+2. Google shows a TXT record like `google-site-verification=XXXXXXXX`. Copy it.
+3. In Cloudflare, open **alummahnow.net → DNS → Records → Add record**:
+   - Type **TXT**
+   - Name **`@`** (the apex)
+   - Content: the full `google-site-verification=…` value
+   - TTL **Auto**
+   - Save. Keep the existing Proton Mail TXT records.
+4. Back in Search Console, click **Verify**. DNS usually propagates in minutes; retry after an hour if it fails.
+5. **Sitemaps → Add a new sitemap**, one per host. The Domain property accepts full URLs:
+   - `https://www.alummahnow.net/sitemap.xml`
+   - `https://videos.alummahnow.net/sitemap.xml` (live once phase 2 ships; submitting earlier just shows "couldn't fetch")
+   - Each white-label site: `https://{slug}.alummahnow.net/sitemap.xml`, and own domains in their own properties
+6. **Settings → Users and permissions:** add any other account that should see the reports (Full or Restricted).
+
+**Bing Webmaster Tools:**
+1. Open <https://www.bing.com/webmasters>, sign in, and choose **Import from Google Search Console**. This brings the verified property and its sitemaps, with no DNS change.
+2. If importing fails, add the site manually, choose **DNS verification**, and add the CNAME or TXT record Bing shows in Cloudflare DNS, as in step 3 above.
+3. Under **Settings → IndexNow**, nothing is needed: the IndexNow key file is served by the sites once phase 3 ships.
+
+**Own domains of white-label sites:** each is its own Domain property, verified the same way in that domain's DNS. The site's Studio SEO screen stores the token (AUN-SCHOLAR-SITES `seo_json`).
