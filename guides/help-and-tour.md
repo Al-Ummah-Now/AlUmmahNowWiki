@@ -29,7 +29,7 @@ This is the behaviour on main once #1152 (subscribe as yourself), #1153 (video c
 | Comment and reply on videos and posts | Yes, with your display name and picture | Yes, with the channel's name and picture |
 | Like videos and comments, vote in polls | Yes | Yes. Each identity's like counts separately |
 | Subscribe | Yes | Yes. A separate subscription that counts separately |
-| Playlists: Save, a video card's "Save to playlist", create, edit | Yes: your own playlists, in the Library's Playlists section | Yes: the channel's playlists |
+| Playlists: Save, a video card's "Save to playlist", create, edit | Yes: your own playlists, in the Playlists section of You (/library) | Yes: the channel's playlists |
 | Upload, Studio, schedule, go live | No | Yes |
 | Write posts on the Community tab | No | The channel owner only |
 
