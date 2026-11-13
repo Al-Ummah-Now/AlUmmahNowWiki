@@ -222,7 +222,7 @@ Rules:
 
 - **`thumbnailUrl` is always the stable `/thumb/{id}.jpg`**, never a signed Bunny or R2 URL. That includes www and scholar sites, which currently embed tokens that expire within a day.
 - **`uploadDate`** is the moment the video became public. Use `publishedAt` when it is set; the field being added must be set for normal uploads too, not only by the scheduler. Fall back to `dateCreated`.
-- **`contentUrl` is omitted.** The HLS URL is signed and expires; `embedUrl` is enough for Google ([D-SEO-11](#d-seo-11-a-stable-contenturl)).
+- **`contentUrl`** is the stable public R2 MP4 ([D-SEO-11](#d-seo-11-a-stable-contenturl)), never the signed HLS URL. api-videos names it in the playable view (`contentUrl`) only for public videos that have the R2 rendition. The web keeps it only as an absolute https URL on a video that is not unlisted or private, and `VideoObject` emits it only then. Bunny-only videos keep `embedUrl` alone. The video sitemap's `<video:content_loc>` follows once `/api/sitemap` carries the URL (AlUmmahNow#1200).
 - `hasPart` `Clip` entries come from chapters when they exist (Epic 8).
 - Only on public, ready, published videos. Never emit JSON-LD for anything a signed-out visitor cannot watch.
 
@@ -303,7 +303,9 @@ https://videos.alummahnow.net/sitemap.xml            ← sitemap index
 **Submission:**
 
 - Every production robots.txt has a `Sitemap:` line. Sitemaps are submitted in Search Console (one Domain property) and Bing.
-- **IndexNow** (Bing, Yandex) is pinged on publish, update and delete from the CMS and from api-videos. It is cheap and stateless. Google has no ping API; it relies on the sitemap `lastmod`.
+- **IndexNow** (Bing, Yandex) is pinged on publish, update and delete from the CMS and from api-videos. Google has no ping API; it relies on the sitemap `lastmod`. Both hosts use key `9e1b0c3eec45ae20f6d905e0d4c5b004`, served at `/<key>.txt` (www from AlUmmahNowUI `public/`, videos from `apps/web/public`). Both ping production only.
+  - **www (CMS):** a stateless 30-minute cron sends every post and page that changed or went live in the last 35 minutes.
+  - **videos (api-videos):** D1 triggers on `search_videos` (search migration `0030`) queue a video in `indexnow_pending` when its row is inserted, when its `content_hash`/`visible`/`is_short` changes, or when it is deleted. That table holds exactly the videos everyone may see, so this covers publish, a scheduled release (the scheduler goes through the processor's search sync), Unlisted/Private → Public, title/description/tag edits, and delete/private/unlisted/moderation (removed URLs are sent too). The triggers catch every writer (api-videos, processor, admin-api). Views, likes and the reconcile touch leave the hash alone, so they never ping. The 10-minute cron (`lib/indexnow.ts`) sends `/{en,ar}/video/<id>` (Shorts: `/shorts/<id>` plus the old `/video/<id>`) in one POST of at most 10,000 URLs. It removes the rows it sent; 429, 5xx and network errors retry on the next run. QA and stage only empty the queue.
 
 ### robots rules
 
