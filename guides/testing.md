@@ -63,13 +63,14 @@ A spec creates everything it reads or changes through the builders in [`apps/web
 ### Cleanup and leftover checks
 
 - Builders register teardown as they create. Teardown always runs, even on failure, and treats a 404 as already gone ([#998](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/998)).
+- A builder user is torn down last. A run account on QA or stage only has its auth account deleted: the api-videos run-user sweep erases its profile and anything left within 10 minutes, and the deployed leftover check reports that as "erase pending". On the local stack (no crons) and for non-run accounts, the builder runs the privacy erase first ([#1140](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1140)).
 - Run cleanup purges trashed videos together with their Bunny video ([#986](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/986)).
 - **Local:** `scripts/local-stack/leftovers.ts --marker <run id>` lists every D1 row, R2 object, KV entry and fake Bunny video or image that still holds the run id or a run user's id ([#993](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/993)). It gates the admin suite and is report-only for batches that don't yet clean up fully.
 - **Deployed:** the release suite's leftover step also covers QA's Bunny library and R2 ([#1004](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1004)), and counts only rows of run accounts that still exist ([#1074](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1074)).
 
 ### Per-run accounts
 
-Every E2E job registers its own accounts, `e2e+<run>-<attempt>-<name>@e2e.alummahnow.net`, so runs never share users and need no queue ([#732](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/732)). Registration marks them as run accounts on the auth server (QA and stage only). An `always()` step erases their content and deletes them through the auth server's QA/stage-only test route. The few specs that change global state (site theme, shared translations, the shared error group) run in a `shared-state` project under a lock held as a compare-and-swap git ref.
+Every E2E job registers its own accounts, `e2e+<run>-<attempt>-<name>@e2e.alummahnow.net`, so runs never share users and need no queue ([#732](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/732)). Registration marks them as run accounts on the auth server (QA and stage only). An `always()` step erases their content and deletes them through the auth server's QA/stage-only test route. `scripts/e2e/teardown-run-users.ts` deletes 4 accounts at a time, with a 30-second timeout per request. The deployed workflows size the step's timeout to the job's account count with `--step-minutes`: 15 seconds per account per lane, plus 2 minutes, and at least 5 ([#1140](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1140)). The few specs that change global state (site theme, shared translations, the shared error group) run in a `shared-state` project under a lock held as a compare-and-swap git ref.
 
 ### Waits, retries and quarantine
 
