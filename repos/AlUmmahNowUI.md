@@ -26,20 +26,20 @@ Astro 5 with server rendering on Cloudflare Workers, Tailwind 4, English and Ara
 
 www follows the site theme the admin sets in the videos admin (one of the four Fanous themes, Fawanees by default). Light and Dark stay per viewer: a header toggle with no "System" option; the first visit follows the device. The Worker reads the theme from the videos admin API's public site-theme endpoint, caches it for about 30 seconds, and renders it on `<html data-theme>`. A change reaches every page within about a minute, with no deploy. If the read fails, the page renders Fawanees and isn't stored in the HTML cache.
 
-The theme CSS is vendored from the monorepo by `npm run sync:fanous`, pinned in [`fanous.lock.json`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/fanous.lock.json). Only the four built-in themes are vendored, so a theme package made in the theme builder renders as the default here ([#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)). Details: [`src/lib/site-theme.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/src/lib/site-theme.ts) and [Theming](../guides/theming.md).
+The theme CSS is vendored from the monorepo by `npm run sync:fanous`, pinned in [`fanous.lock.json`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/fanous.lock.json). Only the four built-in themes are vendored, so a theme package made in the theme builder renders as the default here ([#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)). Details: [`src/lib/site-theme.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/src/lib/site-theme.ts) and [Theming](../guides/theming.md).
 
 ## Layout
 
 | Path | What it is |
 |---|---|
-| [`src/worker.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/src/worker.ts) | Edge wrapper around Astro: redirects, language choice, security headers |
-| [`src/pages`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/src/pages) | Locale pages, auth routes, health, sitemap, errors |
-| [`src/lib`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/src/lib) | CMS fallback chain, home feed, list pages, search, site theme, videos, embeds, auth, session, edge cache |
-| [`src/components`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/src/components) | Header, timeline, card viewer, blocks, search box |
-| [`src/i18n`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/src/i18n) | English and Arabic strings |
-| [`src/content/fallback`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/src/content/fallback) | Built-in content for when the CMS is unavailable |
+| [`src/worker.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/src/worker.ts) | Edge wrapper around Astro: redirects, language choice, security headers |
+| [`src/pages`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/src/pages) | Locale pages, auth routes, health, sitemap, errors |
+| [`src/lib`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/src/lib) | CMS fallback chain, home feed, list pages, search, site theme, videos, embeds, auth, session, edge cache |
+| [`src/components`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/src/components) | Header, timeline, card viewer, blocks, search box |
+| [`src/i18n`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/src/i18n) | English and Arabic strings |
+| [`src/content/fallback`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/src/content/fallback) | Built-in content for when the CMS is unavailable |
 | [`scripts`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/scripts) | Config and secrets checks, Fanous theme sync, release scripts |
-| [`e2e`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/e2e) | Playwright |
+| [`e2e`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/www/e2e) | Playwright |
 
 ## Run and test locally
 
@@ -73,7 +73,7 @@ Release notes:
 
 ## Key docs
 
-[README](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/README.md) · [Spec](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/SPEC.md) · [Plan](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/PLAN.md) · [CMS public API](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/CMS_PUBLIC_API.md) · [SECURITY.md](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/SECURITY.md)
+[README](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/README.md) · [Spec](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/docs/SPEC.md) · [Plan](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/docs/PLAN.md) · [CMS public API](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/docs/CMS_PUBLIC_API.md) · [SECURITY.md](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/SECURITY.md)
 
 ## Owners and contacts
 

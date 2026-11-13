@@ -61,6 +61,6 @@ Platform-wide constraints that apply to every epic:
 
 - [docs/design/THEMES.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/design/THEMES.md)
 - [docs/themes/README.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/themes/README.md)
-- [AlUmmahNowUI/src/lib/site-theme.ts](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/src/lib/site-theme.ts)
+- [AlUmmahNowUI/src/lib/site-theme.ts](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/src/lib/site-theme.ts)
 - [AlUmmahNow#455](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/455), [AlUmmahNow#492](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/492)
 - [AlUmmahNow#564](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/564), [AlUmmahNow#587](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/587)
