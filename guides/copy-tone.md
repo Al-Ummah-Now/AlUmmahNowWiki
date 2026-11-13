@@ -29,7 +29,8 @@ Al Ummah Now is a content-sharing site, not a lectures library. Write the way Yo
 - Repo strings: each repo's i18n files (en and ar with the same keys). Each repo's CLAUDE.md carries a short form of these rules.
 - www hero, tagline, About and list intros: edited in the CMS by editors. `AlUmmahNowUI/src/content/fallback/` holds the copy shown when the CMS is unreachable and must match.
 
-## Open owner decisions (2026-11-13)
+## Owner decisions (2026-11-13)
 
-- **"Library" → "You" / «أنت»** for the videos site's personal hub: not approved yet; mockups are on the review page.
-- **www tagline**: being rewritten without the word "Islamic"; options are on the review page.
+- **Tagline:** "Share what matters to the Ummah" / «شارك ما يهمّ الأمة». Long line (hero text, default description on www and the videos site): "Upload videos, go live and post to your channel, and see what the community is sharing, in Arabic and English." / «ارفع المرئيات وابدأ البث المباشر وانشر في قناتك، وتابع ما يشاركه المجتمع، بالعربية والإنجليزية.» The tagline does not say "Islamic".
+- **"You" / «أنت»** is the name of the videos site's personal hub (history, Watch later, liked videos, playlists, saved posts), never "Library". In the open sidebar and the drawer it is the heading link "You ›"; the address stays `/library`.
+- The **"Islamic Lectures"** content category keeps its name.
