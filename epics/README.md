@@ -22,10 +22,10 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 |---|---|
 | shipped | 30 |
 | in progress | 41 |
-| planned | 12 |
+| planned | 13 |
 | deferred | 7 |
 | rejected | 2 |
-| **All** | **92** |
+| **All** | **93** |
 
 ## All epics
 
@@ -109,6 +109,7 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 | [AUN-COST](AUN-COST-cost-monitoring.md) | Cost monitoring dashboard and alerts | AlUmmahNow | in progress | [docs/cost-monitoring/README.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/cost-monitoring/README.md); [AlUmmahNow#266](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/266) | 2026-11-12 |
 | [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) | Transcription, translation and inline translation (Quran-aware) | AlUmmahNow | planned | [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/614c4e302fa1d11110f5d59a6494c2b213f99d21/docs/specs/TRANSCRIPTION-TRANSLATION.md) (PR [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816)) | 2026-11-11 |
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions and tiers plan | AlUmmahNow | planned | [docs/plans/SUBSCRIPTIONS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/3c0327b4735c8c82840b66af36411222baadfc5e/docs/plans/SUBSCRIPTIONS.md) (PR [#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)) | 2026-11-11 |
+| [AUN-SEO](AUN-SEO-search-visibility.md) | Search visibility (SEO): audit and spec | AlUmmahNow, AlUmmahNowUI, AlUmmahNowCMS | planned | This page (audit of 2026-11-13; draft for owner review) | 2026-11-13 |
 | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) | Scalability audit and index-backed lists | AlUmmahNow | in progress | [docs/architecture/SCALABILITY-AUDIT.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/architecture/SCALABILITY-AUDIT.md); [AlUmmahNow#506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/506) | 2026-11-12 |
 | [CHAT-ADMIN-CONTENT](CHAT-ADMIN-CONTENT-admin-content-management.md) | Videos admin: platform content management *(chat only)* | AlUmmahNow | shipped | [AlUmmahNow#576](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/576), [AlUmmahNow#627](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/627) | 2026-11-10 |
 | [CHAT-CONTACT](CHAT-CONTACT-contact-us.md) | Contact us page and admin inbox *(chat only)* | AlUmmahNow, AlUmmahNowUI | shipped | [AlUmmahNow#568](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/568), [AlUmmahNow#584](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/584) | 2026-11-10 |
