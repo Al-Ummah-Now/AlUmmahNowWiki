@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-13: bot protection
+
+- **CAPTCHA and bot block:** Cloudflare Turnstile (no puzzles; almost everyone sees nothing) on sign-up, password reset and email codes, sign-in after 3 failed attempts, Contact us, reports, and an account's first comment or post. Rate limits at the edge on comments, posts, likes and votes, reports, upload starts and search. Scripted clients (curl and the like) are refused on writes in production. A new admin **Abuse** page counts checks and refusals per endpoint, with no personal data. Production starts with the checks off, then monitor, then enforce; QA and stage enforce with Cloudflare's test keys, so tests are never blocked ([Auth#358](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/358), [#1248](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1248), [CMS#120](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/120)). Owner steps for Bot Fight Mode, WAF rules and the edge rate limit: [Bot protection](bot-protection.md).
+
 ## 2026-11-13: status page
 
 - **Public status page** at `status.alummahnow.net` (stage and QA have their own). Its own Worker and database, so it stays up when other services are down. It checks 13 components every 2 minutes, shows 90 days of uptime, and lists incidents and scheduled maintenance in English and Arabic, with feeds and a JSON endpoint. Admins post incidents from the new admin **Status** page; outages alert admins through the Errors page. Only user-facing services are public; the CMS, admins, APIs and email are monitored but shown only on the admin Status page ([#1232](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1232)). Linked from the videos sidebar and the www footer ([#1194](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1194), [UI#85](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/85); subscriptions: [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md).
