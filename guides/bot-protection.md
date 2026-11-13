@@ -168,6 +168,15 @@ Read on the Abuse page (Operations → Abuse, environment production, last 7 day
 
 Cross-checks: the Turnstile widget's own page in the Cloudflare dashboard (solve rate, how often the click box was shown); the admin Errors page and Contact us messages for "I can't sign up / comment"; sign-ups completed per day (they should not drop).
 
+### Checklist before any `enforce` switch
+
+- [ ] The Abuse-page numbers above hold for the endpoint being switched.
+- [ ] **Native apps keep working.** They cannot show the widget; a token Auth signed for a registered native client is their pass (they sign up and sign in on Auth's web pages, which carry Turnstile). `NATIVE_CLIENT_IDS` on api-videos lists every native client of the environment: Viewer (iOS / Android), Viewer (TV), Viewer (desktop), Studio (iOS / Android), Studio (desktop) ([#1275](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1275); the test `native-clients.spec.ts` pins the lists).
+- [ ] **Native User-Agents pass** the scripted-client refusal (production, `enforce`): Core `aun-core/…` with the app prefix, Apple URLSession (Studio TUS uploads), Android OkHttp and Dalvik (TUS), the Windows and Linux apps, or none. Pinned by the same test; a native client never ships a library default such as curl, python-requests, Go-http-client or `Java/…`.
+- [ ] **A new native client** (the native admin app, AUN-ADMIN-NATIVE) is registered in Auth, added to `NATIVE_CLIENT_IDS` and the test, and sends a named User-Agent (`AlUmmahNow-Admin-<platform>/<version>`), before it ships.
+- [ ] A Studio upload from iOS, Android and Windows on stage succeeds after the switch (TUS create, PATCH, finish).
+- [ ] Stronger native proof (App Attest / Play Integrity, [#1274](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1274)) is not required for `enforce`; it replaces the signed-client exemption later.
+
 ### When
 
 - **Auth:** read every day from 2026-11-14 for 7 days. If the table above holds on 2026-11-20, `enforce` for sign-up and password reset first, sign-in a day later. With too little traffic by then, extend the window rather than guess.
