@@ -17,6 +17,7 @@ The owner approved the design on 2026-11-13. It was built in AlUmmahNow [#1154](
 | When the tour shows | Once per account, after sign-in. It is remembered on the account (`GET/PUT /api/profile/onboarding`), not in the browser. Finishing it, skipping it or choosing "Not now" all count as seen. |
 | Pictures | Annotated screenshots for every topic, plus three clips: switching identity, uploading and the mini player. A script makes them from the real site on the local stack, and it runs again for every release. |
 | Wording | The account menu's identity section is labelled **Acting as** / «تتصرّف باسم». With no channel active it reads **Yourself (no channel)** / «اسمك الشخصي (بدون قناة)». The comment boxes say **Commenting as {name}** / «تعلّق باسم {name}», with a **Switch** link for members who have channels. |
+| Entry point | **Help** is in the side menu's More group only, next to the guidelines and Contact: a destination lives in one place among header, side menu and account menu (NAV-060). Empty states and channel messages link to the matching Help page. |
 | Tone | A general content-sharing site. Arabic uses «مرئي / مرئيات». |
 
 ## What the guide says about identities
