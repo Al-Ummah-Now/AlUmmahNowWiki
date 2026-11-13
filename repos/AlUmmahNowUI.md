@@ -12,7 +12,7 @@ What it shows:
 
 - **Home:** a hero, then one timeline of posts, card posts, videos and channels, newest first. Editors manage it in the CMS, which publishes it to Workers KV. www only reads it. See [www home timeline](../epics/CMS-HOME-TIMELINE-www-home-timeline.md).
 - **List pages:** `/videos` and `/articles` are CMS list pages (filter pages over everything published). Other CMS pages can be content pages (blocks) or curated lists. The old `/news/` URLs answer 301 to `/articles/`.
-- **Card posts** show all their slides (up to 10) inline in lists and on the timeline.
+- **Card posts** show all their slides (up to 10) in lists and on the timeline, as a stacked deck. Timeline posts have no boxes, videos play a muted preview on hover, and a Short opens the vertical Shorts viewer ([#63](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/63); design in [the epic](../epics/CMS-HOME-TIMELINE-www-home-timeline.md#how-posts-look-owner-design-2026-11-12)).
 - **Scholar pages** at `/{en,ar}/scholars/`, with bylines and an RSS feed per scholar.
 - **Search:** a live autocomplete box in the header and a search page over published CMS posts, backed by the CMS search API. Videos are not searched here.
 - **Draft preview** for CMS drafts, uncached and `noindex`.
