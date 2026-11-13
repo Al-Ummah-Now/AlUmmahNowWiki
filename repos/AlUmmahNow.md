@@ -67,10 +67,10 @@ The checks CI requires, such as `pnpm check:config`, `pnpm check:migrations`, `p
 |---|---|---|
 | [`deploy.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/deploy.yml) | PRs, pushes to `main` | Tests, release checks and builds. Push to `main` deploys QA (including `apps/media`) and syncs QA's translation store |
 | [`local-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/local-e2e.yml) | PRs, pushes to `main`, nightly, releases | E2E on a local stack per job: release, admin and web suites |
-| [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | PRs and releases | Release suite's deployed specs on QA (PRs) or stage (releases) |
+| [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | Releases, manual | Release suite's deployed specs on stage (the release gate); by hand on QA or stage |
 | [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release.yml) | `v*` tag on `main`, or manual | Tag: stage → stage E2E + Local E2E + secrets checks → production. Manual run on `main`: stage only |
 | [`rollback.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/rollback.yml) | Manual | Rolls back stage or production |
-| [`e2e-tests.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/e2e-tests.yml) | Nightly, manual | Legacy web specs not yet on the local stack, against QA. Gates nothing |
+| [`e2e-tests.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/e2e-tests.yml) | After each release tag's Release run, manual | Legacy web specs not yet on the local stack, against QA. Gates nothing |
 | [`media-cdn.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/media-cdn.yml) | Manual | Media host's Cloudflare settings as code |
 | Cleanup workflows | Hourly, daily, manual | Run-account sweep, QA leftovers, Bunny test-library census and sweep, orphan collections, production test data. See [Testing and E2E](../guides/testing.md#cleanup-jobs-for-shared-environments) |
 

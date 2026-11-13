@@ -16,17 +16,18 @@ How end-to-end tests run across the videos monorepo, and the rules every spec fo
 | Check | Workflow | Runs | Target | Gates |
 |---|---|---|---|---|
 | **Local E2E** | [`local-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/local-e2e.yml) | Every PR, every push to `main`, nightly, every release | Local stack (`E2E_ENV=local`) | PRs and releases |
-| **Release regressions (qa)** | [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | Every PR except docs-only | QA, deployed specs only | PRs |
-| **Stage E2E** | `release.yml` → `release-e2e.yml` | Every release | Stage, deployed specs only | Production |
-| **Legacy E2E suite** | [`e2e-tests.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/e2e-tests.yml) | Nightly and by hand only | QA, web specs not yet moved to the local stack | Nothing ([#1054](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1054)) |
-| **Nightly flake hunt** | [`release-e2e-nightly.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e-nightly.yml) | Nightly | QA, release suite 3× with no retries | Nothing; keeps one `e2e-flaky-nightly` issue |
+| **Stage E2E** | `release.yml` → [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | Every release; by hand on QA or stage | Stage, deployed specs only | Production |
+| **Legacy E2E suite** | [`e2e-tests.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/e2e-tests.yml) | Once after each release tag's Release run (`workflow_run`), and by hand | QA, web specs not yet moved to the local stack | Nothing; a run of its own, so it never turns the release red ([#1054](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1054), [#1190](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190)) |
+| **Flake hunt** | [`release-e2e-nightly.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e-nightly.yml) | By hand only | QA, release suite 3× with no retries | Nothing; keeps one `e2e-flaky-nightly` issue |
 | **Admin E2E (QA)** | [`admin-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/admin-e2e.yml) | By hand only | QA | Nothing; the admin suite's gate is now Local E2E |
 | **Player E2E** | [`player-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/player-e2e.yml) | PRs that touch the player | Local `next dev` with a harness page and HLS fixtures | Those PRs |
 | **Theme visibility** | [`theme-visibility.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/theme-visibility.yml) | PRs that touch web or themes | Local `next dev`, mocked API, every theme × light/dark × en/ar | Those PRs |
 
-The legacy QA suite used to run on every PR and after every release. Since 2026-11-12 it runs only nightly, only for the web specs still placed on QA, and gates nothing. The owner's rule is that no spec may stop running: a spec leaves the nightly run only by moving to the local stack's list (`e2e/test-utils/local-web-specs.ts`).
+**Tests run against the deployed QA only on numbered releases** (owner, 2026-11-13; QA's D1 read volume ran to billions of rows a day). Nothing tests QA on a pull request, a push to `main` or a schedule: pull requests rely on Local E2E, and the release suite runs on stage as the release gate (not on QA too: stage runs the same specs on the same code). QA is still deployed on every push to `main` ([#1190](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190)).
 
-A `skip-qa-e2e` label keeps a PR's QA-bound suites off QA ([#928](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/928)).
+The legacy QA suite runs once after each release tag, only for the web specs still placed on QA, and gates nothing. The owner's rule is that no spec may stop running: a spec leaves that run only by moving to the local stack's list (`e2e/test-utils/local-web-specs.ts`).
+
+The `skip-qa-e2e` label ([#928](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/928)) no longer does anything: no suite runs against QA on a pull request ([#1190](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190)).
 
 ## The local stack
 
@@ -84,7 +85,7 @@ Every E2E job registers its own accounts, `e2e+<run>-<attempt>-<name>@e2e.alumma
 - **Slow third-party encodes skip, they don't fail** ([#952](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/952)). Wrong behaviour after the encode finished still fails.
 - **Upload budget.** After each deployed run, `scripts/release/upload-budget.ts` counts the run's uploads from the API's own counters and warns above 30. It never fails the job.
 - **Parallel encode part and Bunny upload cap** ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061), merged 2026-11-13). The deployed release suite runs as two parallel parts. **main** runs the specs that don't wait for an encode, then shared-state, then the non-blocking `@load` report. **encode** runs the encode-waiting specs under the 2-slot lock, with its own run accounts, leftover check and upload budget. Its check is named `Release regressions (<env>) - encode`, and `stage-e2e` waits for both. The encode part uploads three shared run clips that specs reuse (`E2E_SHARED_RUN_VIDEOS=1`). That makes about **8 real Bunny uploads per release**, and a "Bunny upload cap" step fails the part above 10.
-- **Load and timing specs** carry the `@load` tag. Every gating run leaves them out; they run in a non-blocking step nightly, by hand and in releases, never on PRs.
+- **Load and timing specs** carry the `@load` tag. Every gating run leaves them out; they run in a non-blocking step by hand and in releases, never on PRs.
 
 ## Cleanup jobs for shared environments
 

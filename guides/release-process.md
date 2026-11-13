@@ -80,7 +80,7 @@ The repository variable `RELEASE_SKIP_STAGE_E2E` is an emergency override: while
 
 Sources: [monorepo deploy rules](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/CLAUDE.md#deploy-rules), [release pipeline spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/release-pipeline/SPEC.md), [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release.yml).
 
-Between releases, the monorepo's PR checks include Local E2E and the release suite's deployed specs against QA.
+Between releases, the monorepo's PR checks include Local E2E; nothing tests the deployed QA on a pull request. After each release tag the legacy QA suite runs once, as its own run ([#1190](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190)).
 
 ### www and CMS
 
