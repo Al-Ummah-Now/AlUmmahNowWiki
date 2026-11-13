@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-13: every local E2E suite cleans up fully
+
+- **Leftover checks gate everywhere:** the web and release suites' leftover checks were report-only; they now fail the job like the admin suite's, so a run that leaves anything of its own behind is red. The suites gained a teardown that erases accounts that signed up on the web page and runs the purges the deployed crons run ([#1256](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1256)). See [Testing and E2E](testing.md#cleanup-and-leftover-checks).
+- **More erased on account erasure and permanent video deletes** (found by those checks): rate counters, creator tier, bot-check pass, upload sessions, undo records, subtitles, scheduler entries, playlist adds, file claims; deleted channels' search rows keep only their id; reorders of channel sections no longer fail in the queue ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)). See [Deletion, erasure and cleanup](data-lifecycle.md#account-erasure).
+
 ## 2026-11-13: bot protection
 
 - **CAPTCHA and bot block:** Cloudflare Turnstile (no puzzles; almost everyone sees nothing) on sign-up, password reset and email codes, sign-in after 3 failed attempts, Contact us, reports, and an account's first comment or post. Rate limits at the edge on comments, posts, likes and votes, reports, upload starts and search. Scripted clients (curl and the like) are refused on writes in production. A new admin **Abuse** page counts checks and refusals per endpoint, with no personal data. Production starts with the checks off, then monitor, then enforce; QA and stage enforce with Cloudflare's test keys, so tests are never blocked ([Auth#358](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/358), [#1248](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1248), [CMS#120](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/120)). Owner steps for Bot Fight Mode, WAF rules and the edge rate limit: [Bot protection](bot-protection.md).

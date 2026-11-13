@@ -33,6 +33,8 @@ A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-a
 - The channel's **Bunny collections**, whenever a channel record is deleted ([#1086](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1086)), and the user's own collection.
 - **Channel subscriptions** an account made as itself (no channel), as well as those its channels made. The export marks each one `subscribedAs` member or channel ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
 - On the Auth side, purging an account also removes its **email → subject** record and its **invite rows** ([Auth#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [Auth#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
+- On 2026-11-13, found by the web and release suites' leftover checks ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)): the user's **upload rate counters**, **creator tier**, **bot-check pass** (`HUMAN_VERIFIED`, 180 days), **TUS upload sessions** and **bulk edit undo records**; for run accounts also their **Watch later and personal playlists** and privacy footprints. A video deleted for good (purge, cleanup or erasure) now also takes its **subtitles**, **upload marker**, **scheduler entry**, **playlist adds** and **file claim**. A deleted channel's hidden search row keeps only its id, and the admin list-count cache no longer stores the admin's search (an email) in its key.
+- Still open: purged rows of the admin deletion registry and finished admin jobs keep an erased user's titles and id ([#1253](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1253)); dead-letter bodies keep raw ids, and data that reaches the processor after the erasure step keeps the user id ([#1255](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1255)).
 
 ### The event archive
 
@@ -43,7 +45,7 @@ The processor keeps a copy of queue messages (`al-ummah-now-messages`) for stati
 - **Erasure cuts the archive off.** The erase deletes the person's secret, and from then on nothing can tie their archived events back to them. Later messages about the account, and the erase messages themselves, are archived as `deleted-user`.
 - **Older entries were rewritten once.** Entries from before this change were rewritten with a key that existed only for that run and was then deleted.
 
-The archive itself still expires after 13 months. The local E2E leftover check stays strict on it: a test run's ids turning up there would mean the scrubbing broke. See the [GDPR notes, section 3](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md#3-event-archive-analytics-and-logs).
+The archive itself still expires after 13 months. The local E2E leftover check stays strict on it: a test run's ids turning up there would mean the scrubbing broke. A run's own entries still match through its video and channel titles (the scrubber keeps titles; whether it should is [#1254](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1254)), so the local teardown deletes them as test data. See the [GDPR notes, section 3](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md#3-event-archive-analytics-and-logs).
 
 The local E2E stack's leftover check is what finds gaps like these: an admin spec erases an account and the check lists anything still keyed by it.
 
