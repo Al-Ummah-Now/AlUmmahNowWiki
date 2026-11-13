@@ -253,7 +253,7 @@ Rules:
 
 ### Scholar sites
 
-Decided by the owner (D-SEO-2/3) and specified in [AUN-SCHOLAR-SITES §4.4](AUN-SCHOLAR-SITES-scholar-sites.md) ([Wiki#22](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/22)). **The canonical follows the brand host.** This page adopts those rules:
+Decided by the owner (D-SEO-2/3) and specified in [AUN-SCHOLAR-SITES §4.4](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/blob/docs/scholar-sites-spec/epics/AUN-SCHOLAR-SITES-scholar-sites.md) ([Wiki#22](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/22)). **The canonical follows the brand host.** This page adopts those rules:
 
 | Content | Scholar without the tier | White-label site on `<slug>.alummahnow.net` | White-label site on its own domain |
 |---|---|---|---|
@@ -410,7 +410,7 @@ Updated after the owner's decisions. Each phase ships as PRs merged on green and
 **Decided:**
 - White-label scholar sites are independent: their own content is canonical on their own host, including external custom domains.
 - Scholars without the tier keep the www scholar page canonical.
-- Details follow [AUN-SCHOLAR-SITES §4.4](AUN-SCHOLAR-SITES-scholar-sites.md); see [Scholar sites](#scholar-sites) above.
+- Details follow [AUN-SCHOLAR-SITES §4.4](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/blob/docs/scholar-sites-spec/epics/AUN-SCHOLAR-SITES-scholar-sites.md); see [Scholar sites](#scholar-sites) above.
 
 ### D-SEO-4: Deleted content status
 
