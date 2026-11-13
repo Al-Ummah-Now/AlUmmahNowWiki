@@ -6,14 +6,14 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (renders the sites), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site store, registry, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 3, waiting on the owner (15 open decisions: SS1–SS9, SS11–SS16) |
+| **Status** | **planned**: revision 4, waiting on the owner (16 open decisions: SS1–SS9, SS11–SS17) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
 >
-> **Theme (2026-11-13, revision 3):** a white-label site chooses its theme **independently** of the platform. It can use any built-in theme or build its own in the site-scoped theme builder. A change to the platform's active theme never changes a white-label site.
+> **Theme (2026-11-13, revision 4, which replaces revision 3's theme builder):** white-label sites use the **same theme infrastructure** as the platform. Al Ummah Now provides the themes, and a site only **chooses** one of them, independently of the platform's active theme. There is no theme editing, no site-scoped theme builder and no theme package of the site's own. The choice is pinned per site and never falls back to the platform theme. Branding beyond the theme is the **logo, name and favicon** only.
 >
 > Code facts were read from `main` on 2026-11-13: AlUmmahNow [`de8c284`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/de8c284f8a1b84b7008c416a68e2f007de55ab5c), AlUmmahNowCMS [`d661daf`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/tree/d661daf7d266cb6804637cf616fa7b5fa680b21b), AlUmmahNowUI [`b521637`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/b5216371b3aa37a8308f1bc3b6491af4b8689a82). The visual review page, with diagrams and mocks, is linked from the PR description.
 
@@ -24,7 +24,7 @@ There are two levels for a scholar:
 | | **Scholar page** (no tier, every scholar) | **White-label site** (a tier; admins choose who gets it) |
 |---|---|---|
 | Where | `www.alummahnow.net/{en,ar}/scholars/{slug}/` | Its own host: `<slug>.alummahnow.net` and/or the scholar's **own domain** (`example.com`) |
-| Looks like | Al Ummah Now (platform theme and header) | **The scholar's own brand**: their theme, logo, header, footer and favicon. The Al Ummah Now mark is optional by tier |
+| Looks like | Al Ummah Now (platform theme and header) | **The scholar's brand on one of our themes**: a theme the site chooses (independent of the platform's), plus its own logo, name and favicon. The Al Ummah Now mark is optional by tier |
 | Written in | The CMS (writer role, as today) | **Studio, acting as the site's CMS**: pages, posts of every kind, About, navigation, home layout, SEO, domains |
 | Canonical | www | **The site's own host**, for everything it publishes |
 | Featured on the www home | Editors feature from the CMS (as today) | Optional: the site can share posts to Al Ummah Now, and editors may feature them. The item links to the site |
@@ -62,7 +62,7 @@ The recommendation in short:
 - **One site per channel.** A scholar with several channels picks the channel that holds the site. Institutions can get one too, because the tier is on the channel.
 - **The same website, toned down.** A site has the www page kinds (home timeline, post pages, content pages, list pages, videos, About, search, RSS, sitemap). It has no platform-wide pieces: no other channels, no global explore, no platform menus.
 - **Independent.** It has its own brand, host, canonical URLs, navigation and pages. Al Ummah Now provides the hosting, the player, sign-in and moderation.
-- **Platform code only.** The scholar edits content and settings in Studio. They can't upload HTML, CSS or scripts (§9.3). "Own theme" means a built-in theme or a theme package made in the site-scoped theme builder, checked for contrast. Either way it belongs to the site, not to the platform (§5.3).
+- **Platform code only.** The scholar edits content and settings in Studio. They can't upload HTML, CSS or scripts (§9.3). The site **chooses** one of the platform's themes; it can't edit a theme or make its own. The choice belongs to the site, not to the platform (§5.3).
 
 ### 3.2 Tier and entitlement keys
 
@@ -73,7 +73,6 @@ The tier follows [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) and [Epic 27](E27-pl
 | `site.enabled` | bool | The channel may have a white-label site | ✓ | ✓ |
 | `site.customDomains.max` | int | How many outside domains it may use (0 = subdomain only) | 0 | 2 |
 | `site.platformMark` | enum `required` \| `minimal` \| `none` | `required`: "on Al Ummah Now" footer band and the platform account menu. `minimal`: a small footer link. `none`: only the legal and report links | `minimal` | `none` |
-| `site.themeBuilder` | bool | The site may build its own theme package in the site theme builder. Every white-label site can always pick any built-in theme | ✓ | ✓ |
 | `site.pages.max` | int | Content pages it may publish | 20 | 100 |
 | `site.navigation.max` | int | Items in the main menu | 8 | 12 |
 | `site.analytics` | bool | Site analytics in Studio | ✓ | ✓ |
@@ -86,7 +85,7 @@ The seed names and values are suggestions; admins change them in the plans edito
 | | Channel (any creator) | Scholar page on www | White-label site |
 |---|---|---|---|
 | Address | `videos/@handle` | `www/…/scholars/slug/` | `slug.alummahnow.net` or own domain |
-| Branding | Avatar and banner | Al Ummah Now | Own theme, logo, header, favicon |
+| Branding | Avatar and banner | Al Ummah Now | A chosen platform theme + its own logo, name and favicon |
 | Written in | Studio (community posts) | CMS (writer) | Studio as the site CMS |
 | Content pages | – | – | ✓ (blocks) |
 | Own navigation | – | – | ✓ |
@@ -182,20 +181,25 @@ How a request works:
 
 ### 5.3 Theme and branding
 
-**Owner rule:** a white-label site's theme is chosen **independently** of the platform's site theme (`site.theme` in the videos admin). A platform theme change never changes a white-label site.
+**Owner rules (revision 4):** sites use the same theme infrastructure as the platform. We provide the themes, and a site **chooses one, independently of the platform's active theme**. There is no theme editing, no site theme builder and no site-owned packages. Branding beyond the theme is the **logo, name and favicon** only.
 
-- **The choice.** In Studio → Site → Theme & brand the owner picks either:
-  - **any built-in theme** (Lantern, Zujaj, Nahas, Fawanees), whatever the platform is running; or
-  - **their own package**, made in the site-scoped theme builder.
-- **Stored on the site, pinned to a version.** `sites.theme_ref` holds `builtin:<id>@<version>` or `site-pkg:<id>@<version>`. It is never empty and never means "follow the platform". At grant, the site starts from the platform's current theme, copied in as a pinned ref, so it doesn't change afterwards.
-- **Built-in theme updates are offered, not applied.** When the monorepo ships a new version of a built-in theme (for example Fawanees 1.2 → 1.3), the site keeps its pinned version. Studio shows "Update available" with a side-by-side preview, and the owner chooses. Security or contrast fixes are the only exception: admins can push one to every site pinned to a version, and the push is audited and announced in Studio. www keeps every pinned version's compiled CSS, as immutable R2 objects keyed by version, for as long as a site uses it.
-- **Never falls back to the platform theme.** If the theme read fails, www renders the site's last-known theme from KV (`SITES` holds the compiled CSS URL). Platform pages fall back to Fawanees, but a site never does.
-- **Site-scoped theme builder.** The theme builder (today only in the videos admin) gets a site mode in Studio. The owner starts from any built-in theme, sets brand colours, fonts from the allowed list, radius, and light and dark values, then publishes versions and can restore an older one. The builder already refuses packages that fail contrast, and that check stays. Site packages are private to the site: they are not listed in the platform admin's theme list, and admins see them read-only for moderation.
-- **Isolation from the platform theme pipeline.** The platform's `GET /public/site-theme` and `?theme=` preview never apply on a site host. On www, `x-www-site-theme` is set from the site record for site hosts.
-- **www renders packages.** This is open as [UI#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55), and this spec makes it a phase 1 dependency. The compiled package CSS is served from R2 through the CDN with a version in the URL, so each site loads one stylesheet.
-- **The header follows the site's theme.** "The header is always dark" is a rule for the platform's own themes. A white-label site's own package can have a light header (answered by the independence rule), but it must pass contrast in both modes.
-- **Logo, wordmark, favicon and social image** are uploaded in Studio and used as-is (crop and resize only).
-- **Light, dark and system** are per viewer, and a site may also lock to one mode. The lantern street shows only on sites whose chosen theme is Fawanees (or a package built from it with the street kept).
+- **What a site can choose.** It can choose any theme in the platform's catalogue:
+  - the four built-in themes (Lantern, Zujaj, Nahas, Fawanees);
+  - later, packages that **platform admins** publish in the existing admin theme builder and mark *Offered to sites* (SS17).
+
+  Themes are made and changed only by platform admins, through the existing theme pipeline: theme packages, the contrast gate, `check:tokens` and theme visibility runs.
+- **Independent of the platform.** The site's choice is stored on the site. The platform's `site.theme` setting (videos admin), the `GET /public/site-theme` read and the `?theme=` preview never apply on a site host. When admins change the platform's active theme, no site changes.
+- **Pinned to a version.** `sites.theme_ref` holds `<themeId>@<version>`, for example `fawanees@1.2.0`. It is never empty and never means "follow the platform". At grant, the site starts on the platform's current theme, copied in as a pinned ref, and the owner can choose another at any time.
+- **Theme updates are offered, not applied.** When the platform ships a new version of a theme (for example Fawanees 1.2 → 1.3), a pinned site keeps its version. Studio shows "Update available" with a side-by-side preview, and the owner chooses. Only a contrast or security fix can be pushed by an admin to sites pinned to that version, and the push is audited and announced in Studio. www keeps each pinned version's compiled CSS as an immutable object keyed by version, for as long as a site uses it.
+- **Never falls back to the platform theme.** If a read fails, www renders the site's last-known theme ref from KV `SITES`. Platform pages fall back to Fawanees; a site never does.
+- **What www needs.** Built-in themes already ship on every www page (`html[data-theme]`), so phase 1 needs only the per-site ref and version-pinned CSS. Admin-published packages need www to render packages ([UI#55](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/55)), which matters only when SS17 offers them.
+- **Header.** Every platform theme has a dark header (a builder rule), so sites have one too. The former question about light headers no longer arises.
+- **Branding = logo, name and favicon only.**
+  - The **name** (en/ar) shows in the header, titles and feeds.
+  - The **logo** is square, used as-is (crop and resize only), and shown in the header.
+  - The **favicon** is used as-is, with exact-size PNGs generated as for the platform apps.
+  - There are no banners, colour overrides, fonts, custom CSS or wordmarks. The social share image is generated from the logo, name and chosen theme, not uploaded.
+- **Light, dark and system** are per viewer, as on the platform. The lantern street shows when the chosen theme is Fawanees.
 
 ### 5.4 Platform mark and sign-in
 
@@ -223,8 +227,8 @@ create table sites (
   status text not null,                -- setup | live | suspended | revoked
   primary_host text not null,
   locales text not null,               -- '["ar","en"]', first = default
-  theme_ref text not null,             -- builtin:<id>@<ver> | site-pkg:<id>@<ver>; never 'platform'
-  branding_json text not null,         -- logo, wordmark, favicon, social image, tagline en/ar
+  theme_ref text not null,             -- <platform themeId>@<ver>, chosen by the site; never 'platform'
+  branding_json text not null,         -- logo, favicon, name en/ar (nothing else; §5.3)
   home_json text not null,             -- home layout blocks (§7.4)
   seo_json text not null,              -- title template, description, verification tokens
   config_version integer not null default 1,
@@ -323,9 +327,9 @@ interface PostV2 {
 | **Navigation** | Main menu and footer links per language: pages, list pages, Videos/Shorts/Posts/About, external links. Drag to reorder, up to `site.navigation.max` | CMS nav |
 | **Home** | Ordered home blocks: hero (pinned video or post), live banner, latest videos, Shorts, timeline, playlists, a page's blocks, CTA | Channel sections and the www home |
 | **About** | Bio (en/ar), photo, links, contact, credentials | CMS scholar profile, channel About |
-| **Theme & brand** | Pick any built-in theme or the site's own package (independent of the platform theme), update offers for built-ins, site theme builder with versions and restore (§5.3), logo, wordmark, favicon, social image, preview in both modes | Admin theme builder |
+| **Theme & brand** | Choose one of the platform's themes (independent of the platform's active theme), see and accept update offers, upload the logo and favicon, set the site name (en/ar), preview in both modes. No theme editing (§5.3) | The admin Site theme page (choose only) |
 | **Domains** | Subdomain, own domains, DNS steps, status, primary host | – |
-| **SEO** | Title template, description, social image, search console verification token, redirects | CMS SEO fields |
+| **SEO** | Title template, description, search console verification token, redirects (social image generated) | CMS SEO fields |
 | **Analytics** | Site views, top pages and posts, referrers, languages, devices | Channel analytics |
 
 Preview: an iframe of the real site with a signed, 10-minute, channel-bound preview token that shows drafts. It is never cached and is `noindex`.
@@ -364,7 +368,7 @@ Assumptions: 300 white-label sites, 150 with an own domain (2 hostnames each = 3
 |---|---|---|
 | Worker requests and CPU (www) | $0.30 / M requests after the included 10 M; $0.02 / M CPU-ms | ≈ $1–3 |
 | KV, D1 site store, CMS and videos reads | Cached 60 s; D1 reads only on a miss | < $2 |
-| Theme package CSS (R2 + CDN) | Class B reads, cached | < $0.50 |
+| Version-pinned theme CSS (R2 + CDN) | Class B reads, cached | < $0.50 |
 | Analytics Engine | Included, then $0.25 / M | ≈ $0.50 |
 | Platform subdomains (Workers Custom Domains) | No charge | $0 |
 | **Own domains (Cloudflare for SaaS)** | 100 free, then $0.10 per hostname | **$20** (300 hostnames) |
@@ -380,20 +384,20 @@ The same as www: `s-maxage=60, stale-while-revalidate=600`. Signed-in views are 
 
 ### 9.3 Security and tenant isolation
 
-- **Only platform code runs on a site.** Content is markdown and blocks, sanitised as on www. Theme packages are data that is compiled and validated: CSS values only, no `url()` outside the site's own R2 assets, no `@import`, no expressions. This matters most on `*.alummahnow.net`, which is **same-site** with every app.
+- **Only platform code runs on a site.** Content is markdown and blocks, sanitised as on www. Sites have no theme or CSS input at all: they choose a platform theme, and the only uploads are the logo and favicon (images, re-encoded). This matters most on `*.alummahnow.net`, which is **same-site** with every app.
 - **Cookies stay host-only.** Add a release check that fails if any app sets `Domain=.alummahnow.net`. Each site host gets its own `__Host-aun_site` session.
 - **CSP** is the same as www: `script-src 'self'` plus hashes, `frame-src` only the videos embed host, `form-action` auth, `frame-ancestors 'none'`. HSTS on every host. An own domain gets HSTS without `includeSubDomains`, because we don't own their other subdomains.
 - **Host validation.** `SITE_URL` always comes from the registry, never from the raw `Host` header, so a spoofed host can't poison the cache. Unknown hosts get a bare 404.
 - **OAuth.** Each host's exact redirect URI is registered when the host goes live and removed when it is detached. Auth never accepts wildcard redirect URIs.
 - **API tokens.** Two scoped tokens in the Secrets Store: Workers Custom Domains + DNS on `alummahnow.net`, and Custom Hostnames on the SaaS zone. Only admin-api's jobs use them.
-- **Phishing risk on own domains.** A white-label site can look like anything. Mitigations: admin-only grants; the legal and report footer is always present; sign-in always says it is an Al Ummah Now account; no forms other than platform forms (no custom form builder in v1).
+- **Phishing risk on own domains.** A white-label site carries someone else's name and logo on an outside domain. Mitigations: admin-only grants; the legal and report footer is always present; sign-in always says it is an Al Ummah Now account; no forms other than platform forms (no custom form builder in v1).
 
 ### 9.4 Accessibility
 
 WCAG 2.1 AA is the floor:
 
-- axe runs on every page kind in both languages and both modes, on one fixture site per built-in theme and one with a custom package.
-- The site theme builder's contrast gate covers the header, menus and buttons.
+- axe runs on every page kind in both languages and both modes, on one fixture site per platform theme.
+- Contrast is guaranteed by the platform's theme pipeline. Sites can't change colours.
 - Image and cards posts must have alt text. Reduced motion is honoured.
 - `lang` and `dir` are set on `<html>`, and every page has a skip link.
 
@@ -402,8 +406,8 @@ WCAG 2.1 AA is the floor:
 | Phase | Scope | Done when |
 |---|---|---|
 | **0. Decisions** | Owner answers SS1–SS16 | Recorded in the [decision log](decisions.md) |
-| **1. White-label site, set up by staff** | Tier keys and seeds; grant flow in admin; site store (D1) and KV `SITES`; www multi-tenant rendering (home, videos, Shorts, watch, posts, About, RSS, sitemap) from existing channel content and CMS posts; **theme packages on www (UI#55)**, set up by staff for the first site; platform subdomain; **own-domain support (SaaS zone, custom hostnames, DNS flow in admin)**; canonical rules; CMS `primary_channel_id` | mustafa-elbadry's site live on its subdomain (and on its own domain if they have one), after QA and stage |
-| **2. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home layout, Pages (blocks and list pages), Theme & brand (site theme builder), Domains self-serve, SEO, preview, revisions | The scholar runs their site without staff help |
+| **1. White-label site, set up by staff** | Tier keys and seeds; grant flow in admin; site store (D1) and KV `SITES`; www multi-tenant rendering (home, videos, Shorts, watch, posts, About, RSS, sitemap) from existing channel content and CMS posts; the site's chosen theme pinned per site (version-pinned CSS), logo, name and favicon, set up by staff for the first site; platform subdomain; **own-domain support (SaaS zone, custom hostnames, DNS flow in admin)**; canonical rules; CMS `primary_channel_id` | mustafa-elbadry's site live on its subdomain (and on its own domain if they have one), after QA and stage |
+| **2. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home layout, Pages (blocks and list pages), Theme & brand (choose a theme, logo, name, favicon), Domains self-serve, SEO, preview, revisions | The scholar runs their site without staff help |
 | **2b. One post model** | `packages/post-schema` (posts and blocks); CMS kinds widened (`FEED_FORMAT` 4); `uid` backfill; Studio article and cards editors; share-to-platform and featuring; move-in tool for CMS posts | A site's poll or article can be featured on the www home, with one discussion |
 | **3. Engagement and identity** | Inline comments, likes and votes on sites; site sign-in; branded sign-in; site analytics | A viewer comments on a site post without leaving the site |
 | **Native apps** | Channel screens link to the site | – |
@@ -431,12 +435,12 @@ Migration numbers are assigned when building.
 | SaaS hostname costs grow | `site.customDomains.max` per tier, a cost-monitor line and an alert |
 | Duplicate content | One canonical per item, chosen by the brand host (§4.4); platform sitemaps leave site-canonical URLs out |
 | www is a single point of failure for every site | www's stale-cache and KV snapshot fallbacks also cover sites; release E2E covers one site per host kind |
-| Theme packages break contrast or layout | The builder's contrast gate; a theme visibility run on fixture sites |
+| A theme update changes a site unexpectedly | Sites stay pinned; updates are offered with a preview; only audited contrast or security fixes are pushed |
 | A scholar leaves the tier | 90-day offline period with everything kept; posts stay on the channel |
 
 ## 12. Decisions for the owner
 
-The owner's 2026-11-13 direction answered these earlier questions: it is a **tier**, white-label, with its **own theme and branding**, **independent** (canonical on its own host), **not every scholar** gets it, and **own domains** are in scope. The revision 3 theme rule answered more: the theme is **chosen independently** of the platform (any built-in or its own package), and a platform theme change **never** changes a site. That also settles the former **SS10** (a white-label theme may have a light header, but it must pass contrast), so SS10 is removed and the other numbers are kept. What is left:
+The owner's 2026-11-13 direction answered these earlier questions: it is a **tier**, white-label, with **its own choice of theme and its own name and logo**, **independent** (canonical on its own host), **not every scholar** gets it, and **own domains** are in scope. The theme rules answered more. A site **chooses one of our themes, independently** of the platform's active theme, pinned per site, with no fallback to the platform theme. There is **no theme editing or site theme builder**, and branding is **logo, name and favicon only**. The former **SS10** (light headers) no longer arises, because every platform theme has a dark header, so it is removed and the other numbers are kept. What is left:
 
 | # | Decision | Recommendation |
 |---|---|---|
@@ -454,7 +458,8 @@ The owner's 2026-11-13 direction answered these earlier questions: it is a **tie
 | SS13 | Can a site be single-language (Arabic only, for example)? | Yes; the default is both |
 | SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
 | SS15 | For scholars **without** the tier, mirror their Studio community posts into the CMS so editors can feature them | Yes |
-| SS16 | First site: mustafa-elbadry, set up by staff in phase 1 (their chosen built-in theme or package, subdomain, own domain if they have one), with Studio self-service in phase 2 | Yes |
+| SS16 | First site: mustafa-elbadry, set up by staff in phase 1 (their chosen platform theme, logo, name and favicon, subdomain, own domain if they have one), with Studio self-service in phase 2 | Yes |
+| SS17 | Which platform themes are offered to sites: the four built-ins at launch, then admin-published packages marked *Offered to sites* once www renders packages (UI#55)? | Yes |
 
 ## Open questions, not decisions
 
