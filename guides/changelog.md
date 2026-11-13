@@ -7,7 +7,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 ## 2026-11-13: follow-ups
 
 - **Session cookies:** the videos web app's session cookies are no longer Secure on a plain-http localhost, which lifts the WebKit quarantine on the local stack ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)). Deployed hosts are unchanged.
-- **Encode cap:** the release suite's parallel encode job and 8-upload cap are still an open PR ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061)). [Testing and E2E](testing.md#encodes-and-load) describes both the current state and the pending change.
+- **Encode cap:** stage and QA E2E now run in two parallel parts (main and encode). The encode part shares run clips, which makes about 8 Bunny uploads per release, and fails above 10 ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061), merged). See [Testing and E2E](testing.md#encodes-and-load).
 - **Sources:** epic and decision pages now cite PRs and issues instead of chat threads.
 - **Repo docs:** stale docs were fixed in the repos themselves (monorepo CLAUDE.md, README and THEMES.md; the CMS architecture and roadmap; www's plan and README; openauth's release notes; Android's merge rule).
 - **Issues closed after checking the code:** Auth [#251](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/251) and [#252](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/252), CMS [#45](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/45) and [#69](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/69), and Apple [#5](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/5).

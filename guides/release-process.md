@@ -56,7 +56,7 @@ Production waits for all of these ([`release.yml`](https://github.com/Al-Ummah-N
 - **Local E2E:** every spec placed `local`, on the tagged commit, each job on its own local stack ([#1050](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1050)). See [Testing and E2E](testing.md).
 - **Secrets checks** of stage and production: every worker has its required secrets and no test-only secret is in production. Names only, never values.
 
-Load and timing specs (`@load`) run in releases but never block one ([#952](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/952)). Encode-waiting specs run in their own step under a 2-slot lock, and a slow third-party encode skips rather than fails.
+Load and timing specs (`@load`) run in releases but never block one ([#952](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/952)). Encode-waiting specs run in a parallel `encode` part of stage E2E under a 2-slot lock, capped at 10 Bunny uploads (about 8 per release), and a slow third-party encode skips rather than fails ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061)).
 
 The repository variable `RELEASE_SKIP_STAGE_E2E` is an emergency override: while it is `true`, a failed stage E2E doesn't block production. Everything else still gates. Use it only with the owner's OK and unset it afterwards ([#690](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/690)).
 
