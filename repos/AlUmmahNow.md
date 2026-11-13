@@ -109,6 +109,37 @@ Subscriptions belong to the account, as on other video sites ([#1152](https://gi
 - **Storage.** D1 `channel_subscriptions` (NOTIFICATIONS_DB, migration 0008), one row per (channel, subscriber). An account's own subscription uses the subscriber key `user:<userId>`; channel ids never contain a colon. Queue events carry `subscriberType` (`user`/`channel`) and `subscriberChannelId` (null for an account's own subscription).
 - **Privacy.** The data export lists every subscription with `subscribedAs` (`member`/`channel`). Erasure removes both kinds and takes them off the counts.
 
+## Video comments without a channel
+
+A signed-in user comments on videos as the identity in use now, the same way as on community posts since [#1139](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1139) and #1144 ([#1153](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1153), issue [#1151](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1151)).
+
+- **Who comments.** With no active channel, the user comments, replies and likes comments **as themselves**. The author is their profile: display name (else first + last name) and avatar. With a channel active, all of these act **as that channel**, as before.
+- **The comment box** says who it posts as: "Commenting as {name}" / «تعلّق باسم {name}». Signed-out visitors get the sign-in prompt.
+- **Editing and deleting.** The author edits or deletes their own comment whatever identity is active. Video owners and channel moderators can still delete it.
+- **Likes** are per identity: a channel's like, or the user's own when no channel is active. `isLiked` in the comment list follows the identity in use.
+- **API.** The `channelId` header is optional on `POST/PUT/DELETE /api/videos/:id/comments[/:cid]`. A comment made without one has `channelId: null`, and so does its author block. Queue events and the moderation scan carry no channel for it.
+- **Privacy.** Export, erasure and footprints key on the user id, so they cover these comments and likes too.
+
+Save to playlist no longer needs a channel either: see [Playlists without a channel](#playlists-without-a-channel). **Watch later** is per user.
+
+## Playlists without a channel
+
+Playlists belong to the account when no channel is active ([#1183](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1183)).
+
+- **Personal playlists.** With no active channel, a signed-in user creates, renames, reorders, deletes and fills **their own playlists**. These have `channelId: ''` (the same convention as Watch later) and are owned by the account. With a channel active, Save and Manage Playlists use **the channel's playlists**, as before. Studio, uploads and channel playlist sections only ever use channel playlists.
+- **Where.** **Save** on the watch page (Shorts play there too), **Save to playlist** in every video card's ⋮ menu, the **Playlists** section under You, and **You › Playlists** (`/library/playlists`). That page offers the same editor as channels, without the channel video picker; videos come from Save.
+- **Which videos.** A personal playlist takes any public video. A channel playlist takes the channel's own videos, plus public videos saved from their watch pages.
+- **Visibility.** Every playlist is **Public**, **Unlisted** or **Private**.
+  - Unlisted (`isPublic: false` + `isUnlisted: true`) opens for anyone with the link: the page, Play all, the embed and the queue. It never appears in lists, channel sections, search, feeds or sitemaps.
+  - Private opens only for its owner (and a channel playlist's managers).
+  - The playlist page is `noindex` unless public.
+- **API.**
+  - The `channelId` header is optional on `POST/PATCH/DELETE /api/playlists[/:id]` and `POST/DELETE /api/playlists/:id/videos[/:videoId]`.
+  - `GET /api/playlists?mine=true` lists the caller's personal playlists, private and unlisted included.
+  - `visibility: public | unlisted | private` on create and update wins over `isPublic`. Responses carry `visibility`.
+- **Moderation and privacy.** The admin Playlists list marks "Personal (no channel)" and "Unlisted". Export, erasure and privacy footprints key on the owner, so personal playlists are covered.
+- **Native apps.** Playlists exist only in Studio (channel playlists). Viewer playlists are tracked in [Core#39](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/39), [Android#19](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/19), [Apple#30](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/30) and [Desktop#38](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/38).
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
