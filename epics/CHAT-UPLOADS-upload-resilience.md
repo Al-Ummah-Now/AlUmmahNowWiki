@@ -19,6 +19,7 @@ Uploads resume after deploys and failures, never from 0; stuck uploads are flagg
 ## Decisions and constraints
 
 - [O26](decisions.md#o26-always-async-with-admin-visible-errors): Always async, with admin-visible errors (decided)
+- **A finished file picked again is never a silent duplicate** (owner, 2026-11-13). The single uploader and the batch uploader both show **Already uploaded** with a link to the video. A second video is created only through the explicit **Upload again as a new video** action, which is in-page with no browser prompt. An unfinished file still resumes at its offset ([AlUmmahNow#1126](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1126)).
 
 Platform-wide constraints that apply to every epic:
 
@@ -29,7 +30,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- PRs [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522), [AlUmmahNow#578](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/578), [AlUmmahNow#592](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/592), [AlUmmahNow#606](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/606), [AlUmmahNow#612](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/612), [AlUmmahNow#613](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/613), [AlUmmahNow#623](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/623), [AlUmmahNow#634](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/634), [AlUmmahNow#680](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/680)
+- PRs [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522), [AlUmmahNow#578](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/578), [AlUmmahNow#592](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/592), [AlUmmahNow#606](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/606), [AlUmmahNow#612](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/612), [AlUmmahNow#613](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/613), [AlUmmahNow#623](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/623), [AlUmmahNow#634](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/634), [AlUmmahNow#680](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/680), [AlUmmahNow#1126](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1126)
 
 ## Open questions
 

@@ -6,6 +6,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-13: follow-ups
 
+- **Upload the same file again:** the single uploader now does what batch does when a file it already uploaded is picked again. It shows **Already uploaded** with a link to the video, plus **Upload again as a new video** and **Choose another file**, instead of silently creating a second video ([#1126](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1126)). Unfinished uploads still resume at their offset.
 - **Session cookies:** the videos web app's session cookies are no longer Secure on a plain-http localhost, which lifts the WebKit quarantine on the local stack ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)). Deployed hosts are unchanged.
 - **Encode cap:** stage and QA E2E now run in two parallel parts (main and encode). The encode part shares run clips, which makes about 8 Bunny uploads per release, and fails above 10 ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061), merged). See [Testing and E2E](testing.md#encodes-and-load).
 - **Sources:** epic and decision pages now cite PRs and issues instead of chat threads.
