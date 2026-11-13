@@ -62,5 +62,5 @@ Platform-wide constraints that apply to every epic:
 - [docs/design/THEMES.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/design/THEMES.md)
 - [docs/themes/README.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/themes/README.md)
 - [AlUmmahNowUI/src/lib/site-theme.ts](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/src/lib/site-theme.ts)
-- Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 23:38–23:42 UTC, position 7842 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
-- Chat: thread `c47d8fed-0a4a-44e7-b1fd-bc6b54ff3ffd`, 2026-11-10 03:35 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3Ac47d8fed-0a4a-44e7-b1fd-bc6b54ff3ffd`)
+- [AlUmmahNow#455](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/455), [AlUmmahNow#492](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/492)
+- [AlUmmahNow#564](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/564), [AlUmmahNow#587](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/587)

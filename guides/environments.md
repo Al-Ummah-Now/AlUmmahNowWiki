@@ -41,7 +41,7 @@ The admin apps are deployed to production by every monorepo release (`release.ym
 - The native apps have QA and production builds. There is no native stage build in their plans.
 - **QA and stage share one Bunny Stream test library**, told apart by a `[stage] ` title prefix. Production has its own libraries. See [Video delivery](video-delivery.md#bunny-libraries-and-collections).
 - **E2E tests mostly don't use QA any more.** They run on a local stack each CI job boots for itself. QA keeps the deployed specs on PRs and a nightly run. See [Testing and E2E](testing.md).
-- **Session cookies are `Secure`** on every deployed host. On a plain-http `localhost` origin (the local E2E stack, local development) browsers drop Secure cookies, so the Auth issuer's `__session` ([Auth#336](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/336), openauth 1.0.47) and admin-web's session cookie (on `main` since 2026-11-13) are not Secure there. The same change for the videos web app is still an open PR ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)).
+- **Session cookies are `Secure`** on every deployed host. On a plain-http `localhost` origin (the local E2E stack, local development) browsers drop Secure cookies, so the Auth issuer's `__session` ([Auth#336](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/336), openauth 1.0.47) admin-web's session cookie and the videos web app's session cookies ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)) are not Secure there.
 
 ## Where each environment comes from
 

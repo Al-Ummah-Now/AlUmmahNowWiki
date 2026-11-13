@@ -69,5 +69,5 @@ Platform-wide constraints that apply to every epic:
 
 - [AlUmmahNowAuth/docs/account-hub/SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/5d563e10662615e910a1e00d98e029a7b1e6329e/docs/account-hub/SPEC.md)
 - [AlUmmahNowAuth/docs/account-hub/PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/5d563e10662615e910a1e00d98e029a7b1e6329e/docs/account-hub/PLAN.md)
-- Chat: thread `26081015-8e1e-48a5-bfcc-d2049759df6d`, 2026-11-09 03:06 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Aecc01bc5-fad0-4ead-b91b-d432567940f7%3Adelegate-task%3A26081015-8e1e-48a5-bfcc-d2049759df6d`)
-- Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 03:40 UTC, position 8409 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+- [AlUmmahNowAuth#250](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/250)
+- [AlUmmahNowAuth#253](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/253)

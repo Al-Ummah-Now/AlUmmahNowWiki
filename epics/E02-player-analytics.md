@@ -20,7 +20,7 @@ Complete the Phase 3 engagement tracking for the player (#79).
 - Track all player events
 - Send to backend
 - Creator insights
-- Chat 2026-11-08 05:50 UTC: the owner asked for a working watch-history and analytics event pipeline; done through the history fixes (#294, #327) and #336. Chat: thread `88772cab-cd6a-40d2-9802-f083f911ba67`, 2026-11-08 05:51 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ad22bb4e2-cbf1-4dd6-9fa0-cd4e141aa218%3Adelegate-task%3A88772cab-cd6a-40d2-9802-f083f911ba67`)
+- Chat 2026-11-08 05:50 UTC: the owner asked for a working watch-history and analytics event pipeline; done through the history fixes (#294, #327) and #336. Sources: [AlUmmahNow#234](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/234), [AlUmmahNow#336](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/336)
 
 ## Stories
 

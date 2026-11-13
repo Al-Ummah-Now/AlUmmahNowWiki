@@ -40,4 +40,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [CREATOR-STUDIO.md (PR #476)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476)
-- Chat: thread `1f3dfeca-e7b7-402a-bffa-b86b7ead8935`, 2026-11-09 15:52 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ab2e9b7ca-d930-4636-bb7f-68323b3fa1ff%3Adelegate-task%3A1f3dfeca-e7b7-402a-bffa-b86b7ead8935`)
+- [AlUmmahNow#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476), [AlUmmahNow#482](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/482)

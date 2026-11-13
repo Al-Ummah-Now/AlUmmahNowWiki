@@ -36,4 +36,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [docs/architecture/SCALABILITY-AUDIT.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/architecture/SCALABILITY-AUDIT.md)
-- Chat: thread `a83a74e9-2889-4e3a-830d-8b191f961789`, 2026-11-09 20:47 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ab2e9b7ca-d930-4636-bb7f-68323b3fa1ff%3Adelegate-task%3Aa83a74e9-2889-4e3a-830d-8b191f961789`)
+- [AlUmmahNow#506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/506)

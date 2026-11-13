@@ -71,4 +71,4 @@ Platform-wide constraints that apply to every epic:
 - [AlUmmahNowCMS/docs/SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/6d9ea9ef7d34129325d39e48f8fc2cdc4b6f95a1/docs/SPEC.md)
 - [AlUmmahNowUI/docs/SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/f2c14bac52a6a5ef2769b0a4b6cb078ae8806188/docs/SPEC.md)
 - [AlUmmahNowCMS/ROADMAP.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/6d9ea9ef7d34129325d39e48f8fc2cdc4b6f95a1/ROADMAP.md)
-- Chat: thread `587be9f1-6f4c-4256-b1aa-787596bac5f6`, 2026-11-08 11:04 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3A444e2ab3-52df-463a-848e-1004dbc78f19%3Adelegate-task%3A587be9f1-6f4c-4256-b1aa-787596bac5f6`)
+- [AlUmmahNowCMS#6](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/6), [AlUmmahNowUI#2](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/2)

@@ -37,4 +37,4 @@ Platform-wide constraints that apply to every epic:
 
 ## Sources
 
-- Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 03:51–05:35 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+- [AlUmmahNow#578](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/578), [AlUmmahNow#592](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/592), [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522)

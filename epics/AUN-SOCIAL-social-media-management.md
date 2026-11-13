@@ -49,4 +49,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [docs/specs/social-media-management.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/social-media-management.md)
-- Chat: thread `182645f3-6610-4421-a48c-af8196ccea36`, 2026-11-10 03:45 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3A182645f3-6610-4421-a48c-af8196ccea36`)
+- [AlUmmahNow#569](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/569), [AlUmmahNow#581](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/581)

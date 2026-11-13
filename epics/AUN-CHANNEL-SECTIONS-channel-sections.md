@@ -45,4 +45,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [docs/specs/CHANNEL-SECTIONS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/CHANNEL-SECTIONS.md)
-- Chat: thread `340f1cee-a3a1-4c9a-8e32-49114bbf803f`, 2026-11-10 04:59 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3A340f1cee-a3a1-4c9a-8e32-49114bbf803f`)
+- [AlUmmahNow#602](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/602), [AlUmmahNow#631](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/631)

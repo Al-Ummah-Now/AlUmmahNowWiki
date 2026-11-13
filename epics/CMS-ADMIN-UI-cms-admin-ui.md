@@ -54,4 +54,4 @@ Platform-wide constraints that apply to every epic:
 
 - [AlUmmahNowCMS/docs/ADMIN_UI_SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/ADMIN_UI_SPEC.md)
 - [AlUmmahNowCMS/docs/SOFT_DELETE.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/SOFT_DELETE.md)
-- Chat: thread `7904fb76-d01a-48a1-8f1f-bfe8c90b015a`, 2026-11-09 23:08 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3A5350b6b8-40d1-470e-b39c-db4070082e6a%3Adelegate-task%3A7904fb76-d01a-48a1-8f1f-bfe8c90b015a`)
+- [AlUmmahNowCMS#21](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/21), [AlUmmahNowCMS#22](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/22)

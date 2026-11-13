@@ -47,4 +47,4 @@ Platform-wide constraints that apply to every epic:
 
 - [docs/specs/VIDEO-PLAYER.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/VIDEO-PLAYER.md)
 - [docs/specs/VIDEO-PLAYER-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/VIDEO-PLAYER-PLAN.md)
-- Chat: thread `93d9de70-f692-414d-9966-180d1e1cd209`, 2026-11-09 12:10 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Aacc6a73a-4719-4518-9670-74b346eaa748%3Adelegate-task%3A93d9de70-f692-414d-9966-180d1e1cd209`)
+- [AlUmmahNow#472](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/472)

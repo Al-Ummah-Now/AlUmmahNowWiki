@@ -52,4 +52,4 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [openauth/packages/openauth/PLAN.md](https://github.com/Al-Ummah-Now/openauth/blob/8529f59fe365137438a6a47147ad1748d2a762b2/packages/openauth/PLAN.md)
-- Chat: thread `a12e0f7f-1213-435d-95f2-dd4a403ff85f`, 2026-11-09 20:46 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ab2e9b7ca-d930-4636-bb7f-68323b3fa1ff%3Adelegate-task%3Aa12e0f7f-1213-435d-95f2-dd4a403ff85f`)
+- [openauth#21](https://github.com/Al-Ummah-Now/openauth/pull/21), [AlUmmahNowAuth#261](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/261), [openauth#37](https://github.com/Al-Ummah-Now/openauth/pull/37)

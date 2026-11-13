@@ -55,7 +55,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Open questions
 
-- Two queue issues look done in code but are still open: [AlUmmahNowCMS#45](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/45) (a key for the old provider, not needed on Workers AI) and [AlUmmahNowCMS#46](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/46) (the monthly budget stop, shipped in CMS #65). They can be closed.
+- [AlUmmahNowCMS#45](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/45) (a key for the old provider) was closed on 2026-11-13 as superseded by Workers AI. [AlUmmahNowCMS#46](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/46) stays open: the hard stop shipped in CMS #65, but the admin warning at 80% of the budget is still to build.
 - Quran text: a flag on a Qur'an span offers "Use official text", which opens the ayah on quran.com. Inserting the official text and a recognised translation automatically is a gap noted in [`docs/TRANSLATION_FLAGS.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/TRANSLATION_FLAGS.md).
 
 ## Conflicts between sources
@@ -67,4 +67,4 @@ Platform-wide constraints that apply to every epic:
 - [AlUmmahNowCMS/docs/AI_ASSIST_SPEC.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/AI_ASSIST_SPEC.md)
 - [AlUmmahNowCMS/docs/AI_PROVIDERS.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/AI_PROVIDERS.md)
 - [AlUmmahNowCMS/docs/AI_ASSIST_PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/6d9ea9ef7d34129325d39e48f8fc2cdc4b6f95a1/docs/AI_ASSIST_PLAN.md)
-- Chat: thread `418f5c94-05c4-42b9-ae87-700818bcbd8a`, 2026-11-10 13:27 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3A418f5c94-05c4-42b9-ae87-700818bcbd8a`)
+- [AlUmmahNowCMS#17](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/17), [AlUmmahNowCMS#47](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/47), [AlUmmahNowCMS#55](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/55)

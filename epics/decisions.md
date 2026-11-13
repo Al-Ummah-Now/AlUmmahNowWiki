@@ -100,7 +100,7 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 **Blocks / affects:** Was blocking 9.6 (R2 adapter), Epic 14 (downloads), D3 and through it Epics 17, 18.7 and 19.7, D11, and E4 (embed delivery cost). All unblocked now; the migration itself is AlUmmahNow#687.
 
-**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`); Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 16:55 UTC, position 15208 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`); [AlUmmahNow#687](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687)
 
 ### D3: Live provider
 
@@ -483,7 +483,7 @@ Open: Business Verification would unlock Facebook/Instagram/Threads for every ch
 
 **Blocks / affects:** D2, every epic's infrastructure
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 02:09 UTC, position 1216 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#892](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/892), [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686)
 
 ### O2: Native apps, viewer and Studio
 
@@ -493,7 +493,7 @@ Open: Business Verification would unlock Facebook/Instagram/Threads for every ch
 
 **Blocks / affects:** Epics 9–24
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 02:19 UTC, position 1253 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#164](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/164), [AlUmmahNow#323](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/323)
 
 ### O3: Embeds, comments widget, everything tiered
 
@@ -503,7 +503,7 @@ Embeds with comments for third-party sites; all features have tiers built in for
 
 **Blocks / affects:** Epics 25–27
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 03:26 UTC, position 1319 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#164](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/164)
 
 ### O4: Pluggable payment providers, never Stripe, admin-managed plans
 
@@ -513,7 +513,7 @@ Embeds with comments for third-party sites; all features have tiers built in for
 
 **Blocks / affects:** Epics 24, 27
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 03:35 UTC, position 1351 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#164](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/164)
 
 ### O5: AI moderation on Cloudflare
 
@@ -523,7 +523,7 @@ Embeds with comments for third-party sites; all features have tiers built in for
 
 **Blocks / affects:** Epic 28
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 03:34 UTC, position 1343 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#164](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/164)
 
 ### O6: Core web completion epic
 
@@ -533,7 +533,7 @@ Channels, posting, comments, profiles, likes, search, subscriptions and explore 
 
 **Blocks / affects:** Epic 29
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 04:22 UTC, position 1466 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#164](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/164)
 
 ### O7: Start Sprint A
 
@@ -543,7 +543,7 @@ Channels, posting, comments, profiles, likes, search, subscriptions and explore 
 
 **Blocks / affects:** Epic 29
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 04:35 UTC, position 1529 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#168](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/168), [AlUmmahNow#169](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/169), [AlUmmahNow#170](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/170)
 
 ### O8: Bunny token signing
 
@@ -553,7 +553,7 @@ Channels, posting, comments, profiles, likes, search, subscriptions and explore 
 
 **Blocks / affects:** 9.6, Bunny delivery until the R2 move
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 17:40 UTC, position 3293 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#182](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/182)
 
 ### O9: Findings are actioned at once
 
@@ -563,7 +563,7 @@ Every finding is delegated right away or filed as a `queue` issue.
 
 **Blocks / affects:** All work
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 19:54 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** Owner decision, 2026-11-07 (no public record yet)
 
 ### O10: Stage slot before production; spec → plan → implement
 
@@ -573,7 +573,7 @@ Production gets a tested stage slot then a switch; CI tests for every app; data 
 
 **Blocks / affects:** Release pipeline
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 02:37 UTC, position 4827 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#203](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/203), [AlUmmahNow#248](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/248)
 
 ### O11: Production only from tags on main
 
@@ -583,7 +583,7 @@ Deploy production only from main through CI, using tags to control when.
 
 **Blocks / affects:** Release pipeline
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 12:43 UTC, position 5926 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/286)
 
 ### O12: Protect main; merge own PRs when green
 
@@ -593,7 +593,7 @@ PRs required; agents merge when tests pass.
 
 **Blocks / affects:** All repos
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 17:30 UTC, position 6750 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#211](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/211), [AlUmmahNow#286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/286)
 
 ### O13: Signed in once means signed in everywhere
 
@@ -603,7 +603,7 @@ Every app uses SSO; the website shows all signed-in accounts.
 
 **Blocks / affects:** Auth, all apps
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 04:20 UTC, position 5017 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowAuth#254](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/254), [AlUmmahNowUI#14](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/14)
 
 ### O14: Auth is a separable SSO provider
 
@@ -613,7 +613,7 @@ Auth can be split out for other sites; auth and videos are separate apps; the vi
 
 **Blocks / affects:** Identity platform, admin content
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 03:27 UTC, position 8301 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowAuth#275](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/275)
 
 ### O15: `account.*` is only a redirect
 
@@ -623,7 +623,7 @@ Auth can be split out for other sites; auth and videos are separate apps; the vi
 
 **Blocks / affects:** Account hub
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 03:40 UTC, position 8409 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowAuth#253](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/253)
 
 ### O16: Channel roles separate from site roles; only super admins transfer ownership
 
@@ -633,7 +633,7 @@ Owners can add admins but not transfer ownership; channel roles are unrelated to
 
 **Blocks / affects:** Channel roles, claim/transfer
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 03:49 UTC, position 8493 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)
 
 ### O17: Super admins claim and assign official channels
 
@@ -643,7 +643,7 @@ Spec only (PR #460, open).
 
 **Blocks / affects:** Channel claim
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 02:56 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#460](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460)
 
 ### O18: Four themes, Fawanees default
 
@@ -653,7 +653,7 @@ Lantern, Zujaj, Nahas, Fawanees; Fawanees as main in production. Switching "with
 
 **Blocks / affects:** Themes
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 18:14 UTC, position 9610 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#455](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/455), [AlUmmahNow#492](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/492)
 
 ### O19: Themes in the native apps too
 
@@ -663,7 +663,7 @@ Lantern, Zujaj, Nahas, Fawanees; Fawanees as main in production. Switching "with
 
 **Blocks / affects:** Native themes
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 19:53 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowApple#13](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/13), [AlUmmahNow#500](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/500)
 
 ### O20: Buildable theme packages in admin
 
@@ -673,7 +673,7 @@ Each theme a JSON file and folder, a package, built in an admin theme builder.
 
 **Blocks / affects:** Themes
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 03:34 UTC, position 11118 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#564](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/564), [AlUmmahNow#587](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/587)
 
 ### O21: English default on sign-in and profile
 
@@ -683,7 +683,7 @@ Sign-in and profile pages render RTL/LTR from a parameter, **English unless `?la
 
 **Blocks / affects:** Auth, openauth, account hub
 
-**Sources:** Chat: thread `a12e0f7f-1213-435d-95f2-dd4a403ff85f`, 2026-11-09 20:46 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Ab2e9b7ca-d930-4636-bb7f-68323b3fa1ff%3Adelegate-task%3Aa12e0f7f-1213-435d-95f2-dd4a403ff85f`)
+**Sources:** [AlUmmahNowAuth#261](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/261), [openauth#21](https://github.com/Al-Ummah-Now/openauth/pull/21)
 
 ### O22: CMS keeps bknd under our own admin screens
 
@@ -693,7 +693,7 @@ Sign-in and profile pages render RTL/LTR from a parameter, **English unless `?la
 
 **Blocks / affects:** CMS admin UI
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-09 23:07 UTC, position 10334 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowCMS#21](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/21)
 
 ### O23: www is the UI, CMS its admin; both auth clients
 
@@ -703,7 +703,7 @@ www hosts videos from the videos app through CMS and the embeds work.
 
 **Blocks / affects:** CMS/www
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 11:09 UTC, position 5629 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowCMS#6](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/6), [AlUmmahNowUI#2](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/2)
 
 ### O24: Cost dashboard; per-channel cost later; opt-in alerts
 
@@ -713,7 +713,7 @@ Alerts are register-based for admins who ask, and cover only our Workers.
 
 **Blocks / affects:** Cost monitoring
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 12:09 UTC, position 5772 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#266](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/266)
 
 ### O25: Invite-only uploads with admin-assigned creator tiers
 
@@ -723,7 +723,7 @@ Alerts are register-based for admins who ask, and cover only our Workers.
 
 **Blocks / affects:** Creator tiers, Epic 27
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 05:36 UTC, position 12138 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#630](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/630), [AlUmmahNow#623](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/623)
 
 ### O26: Always async, with admin-visible errors
 
@@ -733,7 +733,7 @@ Alerts are register-based for admins who ask, and cover only our Workers.
 
 **Blocks / affects:** All work
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 04:26 UTC, position 11507 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#589](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/589), [AlUmmahNow#607](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/607), [AlUmmahNow#584](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/584)
 
 ### O27: One Short rule
 
@@ -743,7 +743,7 @@ Alerts are register-based for admins who ask, and cover only our Workers.
 
 **Blocks / affects:** Shorts
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 04:23 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNow#591](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/591)
 
 ### O28: Home timeline in weekly KV buckets
 
@@ -753,7 +753,7 @@ Built on Workers KV after the owner asked whether KV beats R2; owner first said 
 
 **Blocks / affects:** www home timeline
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 15:13 UTC, position 14614 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowCMS#51](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/51)
 
 ### O29: Keep the openauth fork
 
@@ -763,7 +763,7 @@ Keep our fork; don't rebuild auth or move to OpenIddict/C#. The assistant recomm
 
 **Blocks / affects:** Auth
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 01:36 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** Owner decision, 2026-11-07 (no public record yet)
 
 ### O30: Social media answers
 
@@ -773,7 +773,7 @@ Facebook and X first; post the native video, not links; per-rule choice of whole
 
 **Blocks / affects:** Social media management
 
-**Sources:** Chat: thread `c733146c-fb89-4bd7-98a1-449910c7598f`, 2026-11-10 04:17 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3Ac733146c-fb89-4bd7-98a1-449910c7598f`)
+**Sources:** [AlUmmahNow#581](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/581)
 
 ### O31: Transcode on Cloudflare Containers
 
@@ -783,7 +783,7 @@ Our own transcoding (FFmpeg) for the R2 pipeline runs on Cloudflare Containers, 
 
 **Blocks / affects:** [D2](D2-video-delivery.md), [R2 video migration](AUN-R2-MIGRATION-r2-video-migration.md)
 
-**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); chat thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10
+**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); [AlUmmahNow#892](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/892)
 
 ### O32: Run Bunny and R2 side by side before switching
 
@@ -793,7 +793,7 @@ Keep Bunny and the new R2 + CDN delivery running at the same time to compare spe
 
 **Blocks / affects:** [D2](D2-video-delivery.md), [R2 video migration](AUN-R2-MIGRATION-r2-video-migration.md)
 
-**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); chat thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10
+**Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); [AlUmmahNow#892](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/892)
 
 ### LIC: Repo licence for Core and the app repos
 
@@ -803,7 +803,7 @@ Repos are `UNLICENSED`; asked 2026-11-08 18:21 UTC, no answer in chat.
 
 **Blocks / affects:** Core 1.0, app repos
 
-**Sources:** [AlUmmahNowCore/docs/PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNowCore/blob/45d873a0b0fa908bead87d91f28bd33a2b41bedb/docs/PLAN.md); Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-08 18:21 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [AlUmmahNowCore/docs/PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNowCore/blob/45d873a0b0fa908bead87d91f28bd33a2b41bedb/docs/PLAN.md); Licence question to the owner, 2026-11-08 (no public record yet)
 
 ### GDPR: GDPR defaults (retention, consent)
 
@@ -813,4 +813,4 @@ Proposed: 18 months history, 13 months raw events, consent re-asked every 6 mont
 
 **Blocks / affects:** Epic 1 story 1.3
 
-**Sources:** Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-07 02:58 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)
+**Sources:** [docs/compliance/GDPR.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/compliance/GDPR.md) (proposed defaults, "Decision needed")
