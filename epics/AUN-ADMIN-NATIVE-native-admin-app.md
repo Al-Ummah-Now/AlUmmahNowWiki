@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-ADMIN-NATIVE` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md) (iPhone, iPad, macOS), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) (Windows), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNow](../repos/AlUmmahNow.md) (admin-api, processor push, api-videos devices), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (OAuth clients, roles, step-up) |
-| **Status** | **in progress**: v1 spec, owner decisions AD1–AD14 recorded 2026-11-13. Phase 1 shipped on iPhone/iPad/macOS, Windows and Android phone, on fixtures until the review API deploys (see the Progress sections) |
+| **Status** | **in progress**: v1 spec, owner decisions AD1–AD14 recorded 2026-11-13. Phase 1 shipped on iPhone/iPad/macOS, Windows and Android phone, on fixtures until the review API deploys (see the Progress sections). Step 0a shipped in `v2026.11.14.4` |
 | **Last updated** | 2026-11-14 |
 
 Read from AlUmmahNow `origin/main` [`4029d59`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/4029d5971), the Apple, Android, Desktop and Core repos, and [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md) on 2026-11-13. Builds on [Epic 9](E09-native-platform-foundations.md) (push registry), [Epic 18](E18-studio-mobile.md) (Studio mobile), [Epic 19](E19-studio-desktop.md) (Studio desktop), [Epic 28](E28-ai-moderation.md) (AI moderation) and [CHAT-ERRORS](CHAT-ERRORS-error-reporting.md). Passkeys are their own epic: [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md).
@@ -34,9 +34,9 @@ Admin is web only (admin-web + admin-api). The pre-publication review (AUN-VIDEO
 | Native Studio apps | Studio MVP on iPhone, iPad and Android: SSO with several accounts, upload, manage, bulk edit, analytics, en/ar. Desktop Studio on Windows and Linux in preview | Apple `Apps/StudioIOS`, `Apps/StudioMac`; Android `studio-mobile`; Desktop `AlUmmahNow.Studio.*` |
 | Shared Core | Rust core with `aun-api`, `aun-auth`, `aun-i18n`, `aun-sync`, `aun-telemetry` and others; v0.3.0-rc.1 | AlUmmahNowCore |
 | Viewer and Studio are separate apps | Separate targets and bundle ids | Apple `Apps/*`; Android `viewer-mobile`, `studio-mobile` |
-| Push device registry | `PUT/DELETE /api/v1/devices/:installId`; table `push_devices`; at most 20 devices per user; platforms include `macos` (apns) and `windows` (wns) | api-videos `lib/push-devices.ts`; processor `migrations-notifications/0003` |
+| Push device registry | `PUT/DELETE /api/v1/devices/:installId`; table `push_devices` with an `app` column; at most 20 devices per user; platforms include `macos` (apns) and `windows` (wns) | api-videos `lib/push-devices.ts`; processor `migrations-notifications/0003` |
 | Push senders | One interface for APNs, FCM, WNS and Web Push. APNs, FCM and WNS send once their Secrets Store values are set (#1286). Web Push (VAPID + RFC 8291) is built ([#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371)) and waits for the VAPID key pair ([#1376](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1376)). Transient failures retry through the queue (60 s, 5 min, 30 min), then the DLQ flags the Errors page with Replay | processor `src/push/provider.ts`; [#414](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/414), [#1287](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1287) |
-| Push latency | Push dispatch rides `al-ummah-now-videos` with `max_batch_timeout: 30` s | processor `wrangler.jsonc` |
+| Push latency | Review alerts use the dedicated `al-ummah-now-review-alerts` queue with batch size 1 and a 1 s timeout | processor `wrangler.jsonc` |
 | Admin roles | `super_admin`, `admin`, `moderator`; permissions per role in one table; `permissionsFor(roles)` | admin-api `lib/roles.ts` |
 | Admin queues | Reports (Action needed / History), AI moderation, Errors, Status, Users, Channels, Abuse | admin-web `(protected)/*`; admin-api routers |
 | Suspend and delete | Videos admin sends a moderation request to Auth (`auth_requests:send`, admins only) | admin-api `authRequests.router.ts` |
@@ -46,9 +46,9 @@ Admin is web only (admin-web + admin-api). The pre-publication review (AUN-VIDEO
 
 | # | Finding | Tracked |
 |---|---|---|
-| F1 | The push registry does not record which app a device belongs to. APNs needs the topic (bundle id) of the app that registered | [#1264](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1264) |
-| F2 | All push senders are log-only. Nothing reaches a device today | [#414](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/414) |
-| F3 | Push waits up to 30 s in a shared batch queue behind video jobs | [#1265](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1265) |
+| F1 | The push registry does not record which app a device belongs to. APNs needs the topic (bundle id) of the app that registered | Fixed: `push_devices.app` ([#1278](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1278), #1264) |
+| F2 | All push senders are log-only. Nothing reaches a device today | APNs, FCM and WNS senders built ([#1286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1286), #414); log-only until the owner fills the Secrets Store values. Web Push merged separately in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371) |
+| F3 | Push waits up to 30 s in a shared batch queue behind video jobs | Fixed: own queue `al-ummah-now-review-alerts`, batch 1, 1 s ([#1282](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1282), #1265) |
 | F4 | Staff accounts have no second factor and Auth cannot ask for a recent sign-in | [AlUmmahNowAuth#361](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/361), [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) |
 | F5 | The review spec said a 24 h target | Fixed: VR6 is now 5 minutes |
 
@@ -250,7 +250,7 @@ Shipped on AlUmmahNowApple `main` ([#33](https://github.com/Al-Ummah-Now/AlUmmah
 
 | Step | Repo | What |
 |---|---|---|
-| 0a | AlUmmahNow | APNs HTTP/2 spike from a Worker; APNs, FCM and WNS senders with owner credentials (#414); `push_devices.app` column (#1264); review-alert queue (#1265) |
+| 0a | AlUmmahNow | Shipped in `v2026.11.14.4`: APNs HTTP/2 spike, APNs/FCM/WNS senders, `push_devices.app`, review-alert queue and rota screen ([details](#step-0a-what-shipped)) |
 | 0b | AlUmmahNowAuth, openauth | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) staff phase; admin OAuth clients; reviewer roles; `prompt=login`, `max_age`, `auth_time`, `amr` (AlUmmahNowAuth#361) |
 | 0c | AlUmmahNow | admin-api: `me` permissions, claim and renew, reveal and capture audit, per-item signed stream URLs, undo with notification withdrawal and creator correction, version checks, rota settings, admin devices list |
 | 0d | AlUmmahNowCore | Admin API client and models from the admin-api OpenAPI |
@@ -259,6 +259,59 @@ Shipped on AlUmmahNowApple `main` ([#33](https://github.com/Al-Ummah-Now/AlUmmah
 | 3 | Apple, Android, Desktop | Errors, Status, user and channel lookup, warn and suspend |
 
 Each step updates this page and the AUN-VIDEO-REVIEW page.
+
+## Step 0a: what shipped
+
+The four implementation PRs merged by 2026-11-14 and shipped together in `v2026.11.14.4`.
+
+| PR | What |
+|---|---|
+| [#1278](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1278) | `push_devices.app` (`viewer`, `studio`, `admin`; default `viewer` for old clients), notifications D1 migration 0013. `PUT /api/v1/devices/:installId` takes `app`; `admin` needs a staff role (403 `staff_only`). Token uniqueness stays per (provider, token). Ordinary notifications go to the viewer and Studio apps only. Shared roles gained `content_reviewer`, `senior_reviewer`, `isStaff`, `isSeniorReviewer` |
+| [#1282](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1282) | Queue `al-ummah-now-review-alerts[-stage\|-qa]` (batch 1, 1 s, the env DLQ), consumed by the processor; release registers the processor's consumers. `ReviewAlert` message (MessageType 260): `held`, `escalate`, `opened`, `claimed`, `decided`. Rota fan-out, escalations as delayed messages, claim/decide clear pushes, timings table `review_alerts` (notifications D1 migration 0016) |
+| [#1286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1286) | APNs (ES256 token auth, renewed every 40 min, topic per app and platform, time-sensitive alerts, collapse id per item, silent clear), FCM HTTP v1 (service-account OAuth, high priority, channel `review_queue`), WNS (client credentials, urgent toast, raw clear) |
+| [#1292](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1292) | admin-api `/api/review-alerts` (settings, history, stats, staff devices) and the admin-web **Review alerts** screen (Moderation): rota, owners, escalation minutes, time to decision, staff devices with "Sign out this device" |
+
+**APNs spike: a Worker reaches APNs over HTTP/2; no relay.**
+- A throwaway Worker ran on the edge with `wrangler dev --remote`; nothing was deployed.
+- It sent 5 requests to each of `api.sandbox.push.apple.com` and `api.push.apple.com`.
+- Every request got `403 {"reason":"InvalidProviderToken"}` with an `apns-id`, which APNs only sends over HTTP/2.
+- Latency was about 65–80 ms (291 ms for the first connection).
+- The Containers relay was not built.
+
+**Who gets an alert**
+- **Held:** reviewers on call now who may see the item.
+- **Step 1** (default 2 min): every eligible reviewer on the rota, on call or not.
+- **Step 2** (default 4 min): the senior reviewers and the owners.
+- **Senior only:** items with a minor present, and escalations, never go to a non-senior, at any step.
+- **Paused** reviewers get nothing.
+- Each step pushes only people not alerted yet. A claim or decision stops the escalations.
+- **Where it is set:** the rota (user, senior, IANA time zone, weekly shifts, paused), the owners and both times are admin settings. They are stored in reports D1 `site_settings`, key `review-alerts:settings`, and changing them needs `review_alerts:manage`.
+
+**Push text:** "Video held for review · <reason> · <n> min left". In Arabic: «مرئي محجوز للمراجعة · <السبب> · بقي <n> د». The push carries the review id and a deep link, nothing else.
+
+**Measured:** each held item records when it was held, alerted, escalated (step 1 and 2), opened, claimed and decided, plus who was alerted. Rows are kept 400 days. admin-web shows the daily median and p90 for each stage.
+
+**Secrets (Secrets Store, created with the value `placeholder`; the owner fills them)**
+
+A placeholder keeps that sender log-only.
+
+| Binding (processor) | production | stage | QA |
+|---|---|---|---|
+| `APNS_KEY_P8` (.p8, PKCS#8 PEM) | `apns-key-p8` | `apns-key-p8-stage` | `apns-key-p8-qa` |
+| `APNS_KEY_ID` | `apns-key-id` | `apns-key-id-stage` | `apns-key-id-qa` |
+| `APPLE_TEAM_ID` | `apple-team-id` | `apple-team-id-stage` | `apple-team-id-qa` |
+| `APNS_BUNDLE_IDS` (JSON app → bundle id, or platform → bundle id) | `apns-bundle-ids` | `apns-bundle-ids-stage` | `apns-bundle-ids-qa` |
+| `FCM_SERVICE_ACCOUNT` (service-account JSON) | `fcm-service-account` | `fcm-service-account-stage` | `fcm-service-account-qa` |
+| `FCM_PROJECT_ID` | `fcm-project-id` | `fcm-project-id-stage` | `fcm-project-id-qa` |
+| `WNS_PACKAGE_SID` | `wns-package-sid` | `wns-package-sid-stage` | `wns-package-sid-qa` |
+| `WNS_CLIENT_SECRET` | `wns-client-secret` | `wns-client-secret-stage` | `wns-client-secret-qa` |
+
+Example `APNS_BUNDLE_IDS`: `{"admin":{"ios":"<Admin iOS id>","ipados":"<Admin iOS id>","macos":"<Admin macOS id>"},"studio":"<Studio id>","viewer":"<Viewer id>"}`.
+
+**Still open**
+- **Hold hook:** the processor's review consumer (AlUmmahNow #1273) has to call `queueReviewAlert` on a hold. The consumer merged in #1273; wiring the hold event to the alert queue is a follow-up.
+- **Reviewer events:** the admin-api review routes (claim, open, decide) have to POST `/internal/review-alerts/events` on the processor. They are added when those routes land.
+**Later follow-ups:** "Sign out this device" removes the push registration and queues revocation of that install's Auth tokens ([AlUmmahNowAuth#363](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/363)). Web Push merged in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371) and requires the VAPID key pair.
 
 ## Owner decisions (2026-11-13)
 
