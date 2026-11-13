@@ -62,7 +62,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Conflicts between sources
 
-- AlUmmahNowUI's copy of the shared plan ([`docs/PLAN.md`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/PLAN.md)) still says to rotate a CMS client secret; the CMS is a public PKCE client with no secret (CMS SPEC v1.1). Still true on 2026-11-12.
+- AlUmmahNowUI's copy of the shared plan ([`docs/PLAN.md`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/docs/PLAN.md)) still says to rotate a CMS client secret; the CMS is a public PKCE client with no secret (CMS SPEC v1.1). Still true on 2026-11-12.
 - www picks `/en/` or `/ar/` from a cookie, then Accept-Language, then `en`. The English-default rule covers only sign-in and profile pages, so this is a different surface.
 
 ## Sources

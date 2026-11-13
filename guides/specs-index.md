@@ -50,4 +50,4 @@ These live outside `docs/specs`:
 - [Native apps epics](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/native-apps/EPICS.md)
 - [Embeds plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/embeds/PLAN.md)
 - [Account hub](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/account-hub/SPEC.md), in AlUmmahNowAuth
-- [www](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/docs/SPEC.md) and [CMS](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/SPEC.md), in their own repos
+- [www](https://github.com/Al-Ummah-Now/AlUmmahNowUI/blob/main/apps/www/docs/SPEC.md) and [CMS](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/SPEC.md), in their own repos
