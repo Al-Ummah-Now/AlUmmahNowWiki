@@ -447,6 +447,8 @@ It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUm
 
 **Decided:** our own analytics only, with no third party and no cookies. The in-house analytics are extended with **landing page** and **referrer source** (search engine / social / direct / other site, from `document.referrer`).
 
+**Shipped:** counting in [#1184](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1184); the admin **Site visits** page in [#1202](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1202). See [Site visits (admin)](../repos/AlUmmahNow.md#site-visits-admin).
+
 ### D-SEO-10: Shorts URLs
 
 **Decided:** add `/{l}/shorts/{id}`, a vertical viewer.
