@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 6, waiting on the owner (open: SS7, SS8, SS9, SS11–SS14, SS16, SS18) |
+| **Status** | **planned**: revision 6, waiting on the owner (open: SS8, SS9, SS11–SS14, SS16, SS18) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
@@ -17,7 +17,7 @@
 > - **SS3:** sites run on a **separate "sites" Worker**, with its own deploy and routes, so attaching domains never touches www. It shares www's rendering code through a package. Workers for Platforms is not needed (§5.2).
 > - **SS5:** yes, one post format for the CMS and community, with engagement on the videos side.
 > - **SS6 (changes the model):** from the start, a scholar's content, on the www scholar page and on the white-label site, is **fuelled by the channel's community posts**. www holds only thin, hidden **references** (like a repost), which editors can feature or curate without copying. This applies to every scholar, with or without the tier (§6.3).
-> - **SS7** stays open.
+> - **SS7:** as recommended. Videos are canonical on the videos site for subdomain sites; on a scholar's own domain, the site's watch page is canonical.
 >
 > **Answers (2026-11-13, revision 5):** SS1 is an admin add-on with two tiers. SS2: the channel's owner and admins **are** the site's owner and admins; the site follows the channel, one per channel. SS17: a site can choose **any active platform theme**. SS4: reuse existing storage. Site posts **are** the channel's community posts, and new storage is added only for what doesn't exist yet (§6.2).
 >
@@ -141,7 +141,7 @@ The seed names and values are suggestions; admins change them in the plans edito
 
 **Why videos depend on the domain.** A site on `*.alummahnow.net` is still inside the Al Ummah Now family. Pointing a video's canonical at it would split one video's search signals between two platform hosts for no gain. The videos watch page also holds the comments, recommendations and full player, so it stays canonical.
 
-A scholar on their own domain is building their own brand. Independence means search results should lead to their domain, so the site's watch page is canonical. The videos platform still plays the video, counts the views and hosts the comments; only the page search engines index moves. This is consistent: **the canonical follows the brand host** (SS7).
+A scholar on their own domain is building their own brand. Independence means search results should lead to their domain, so the site's watch page is canonical. The videos platform still plays the video, counts the views and hosts the comments; only the page search engines index moves. This is consistent: **the canonical follows the brand host** (SS7, decided 2026-11-13).
 
 Other rules:
 
@@ -498,6 +498,7 @@ Migration numbers are assigned when building.
 | SS4 | Studio is the site CMS on **existing storage**; only settings, pages and the host index are new R2 objects | 2026-11-13 |
 | SS5 | One post format for the CMS and community; engagement on the videos side | 2026-11-13 |
 | SS6 | Scholar content is **fuelled by community posts** from the start (with or without the tier); www holds hidden references; existing CMS scholar posts are converted | 2026-11-13 |
+| SS7 | Videos are canonical on the videos site for subdomain sites; on a scholar's own domain, the site's watch page is canonical (§4.4) | 2026-11-13 |
 | SS10 | No longer applies: every platform theme has a dark header | 2026-11-13 |
 | SS15 | Covered by SS6: every scholar post gets a ref, so editors can feature it | 2026-11-13 |
 | SS17 | Any active platform theme, automatically (choose-only, pinned) | 2026-11-13 |
@@ -507,7 +508,6 @@ Migration numbers are assigned when building.
 
 | # | Decision | Recommendation |
 |---|---|---|
-| SS7 | Videos canonical: on videos for subdomain sites; on the **site** for own-domain sites (§4.4). *Explanation pending with the owner* | Yes |
 | SS8 | Can a scholar mark a post "not for Al Ummah Now" (`offerToPlatform = false`), so it gets no www ref and can't be featured? The default is on | Yes, default on |
 | SS9 | Own domains go on a **separate SaaS zone** (a new domain the owner registers) | Yes; the owner picks the name |
 | SS11 | Viewers sign in with their Al Ummah Now account everywhere; branded sign-in still names it | Yes |
