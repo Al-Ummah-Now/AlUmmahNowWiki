@@ -36,6 +36,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Authentication and SSO](guides/authentication.md) | How sign-in works across the apps |
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
+| [Copy Tone Guide](guides/copy-tone.md) | How UI text reads in English and Arabic: content sharing, not a lecture library |
 | [Specs index](guides/specs-index.md) | Every spec in the monorepo, with status |
 | [Changelog](guides/changelog.md) | What changed across the repos, by date and feature |
 
