@@ -43,6 +43,32 @@ The admin apps are deployed to production by every monorepo release (`release.ym
 - **E2E tests mostly don't use QA any more.** They run on a local stack each CI job boots for itself. QA keeps the deployed specs on PRs and a nightly run. See [Testing and E2E](testing.md).
 - **Session cookies are `Secure`** on every deployed host. On a plain-http `localhost` origin (the local E2E stack, local development) browsers drop Secure cookies, so the Auth issuer's `__session` ([Auth#336](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/336), openauth 1.0.47) admin-web's session cookie and the videos web app's session cookies ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)) are not Secure there.
 
+## Search engines (crawler rules)
+
+Search engines see only production, and on production only the public sites. The full spec is AUN-SEO (draft, [Wiki#23](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/23)).
+
+| Host | robots.txt | Pages |
+|---|---|---|
+| `www` (production) | `Allow: /`, `Disallow: /auth/`, `Sitemap:` | indexable; noindex on search results, borrowed-language pages, previews, errors |
+| `videos` (production) | `Allow: /`, `Disallow: /api/` | indexable, except `X-Robots-Tag: noindex` on viewer-only pages: search (`noindex, follow`), history, library, settings, upload, Studio, notifications, profile, subscriptions, dashboard, analytics, auth, dev, video edit. Embeds are noindex |
+| `auth`, `profile.auth`, `account`, `admin.auth`, `admin`, `videos.api`, `admin.api`, `realtime`, the live host | `Disallow: /` | `X-Robots-Tag: noindex, nofollow` on every response |
+| `cms` | `Allow: /api/public/v1/media/`, `Disallow: /` | noindex on everything except public media (www's article and share images) |
+| `media` Worker (`/priv/*`) | – | noindex on every response |
+| Every QA and stage host | `Disallow: /` | `X-Robots-Tag: noindex, nofollow` on every response |
+
+- **Environment, not host.** The videos site decides from `NEXTJS_ENV` (`production` only). If the variable is missing, it falls back to the host, so production is never hidden by mistake and QA is never indexed.
+- **Cloudflare's managed robots.txt** (content signals) is prepended to each host's own file on production.
+
+**Status codes on the videos site:**
+
+| Situation | Status |
+|---|---|
+| A video or playlist nobody here may see (unknown, private, deleted, hidden, scheduled) | **404**, never a 200 "not found" |
+| The owner viewing their own private video or playlist | 200 with noindex |
+| The videos API is down | **503** with `Retry-After: 120`, never 404 (`worker.ts` maps page 500s) |
+
+The old watch URL `/{locale}/video?vid={id}` is a **301** to `/{locale}/video/{id}`, and every link uses the canonical form. `/{locale}/video` with no id is a 404.
+
 ## Where each environment comes from
 
 See [Release process](release-process.md).
