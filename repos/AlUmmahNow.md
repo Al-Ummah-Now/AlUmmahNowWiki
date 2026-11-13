@@ -140,6 +140,24 @@ Playlists belong to the account when no channel is active ([#1183](https://githu
 - **Moderation and privacy.** The admin Playlists list marks "Personal (no channel)" and "Unlisted". Export, erasure and privacy footprints key on the owner, so personal playlists are covered.
 - **Native apps.** Playlists exist only in Studio (channel playlists). Viewer playlists are tracked in [Core#39](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/39), [Android#19](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/19), [Apple#30](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/30) and [Desktop#38](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/38).
 
+## Site visits (admin)
+
+The admin's **Overview → Site visits** page (`/site-visits`, every admin) shows how people reach the videos site ([#1202](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1202); counting since [#1184](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1184), decision [D-SEO-9](../epics/AUN-SEO-search-visibility.md#d-seo-9-analytics)).
+
+- **How visits are counted.** One visit is the first page a browser tab opens on the videos site. The web server classifies it (landing page kind, referrer source and host) and the processor adds it to daily counters in D1 `analytics_daily` (entity `site`/`videos`). No cookies, no ids, no IP or user agent, no third party: the page shows **aggregates only**, never anything about one visitor. Visitors who decline analytics are not counted. Days are UTC.
+- **Period.** Last 7, 30 or 90 days (`?days=`), today included. Every number on the page is for that period, not since launch.
+- **Tiles.** *Visits in the period* (the sum of the daily counts, with the date range), *Average per day* and *Busiest day*.
+- **Visits per day.** The shared admin line chart (0-based round value axis; in Arabic the axis is on the right and days run right to left). "Show the numbers" opens the table. A day with no counter is 0.
+- **Where visits came from.** Grouped, largest first, with each row's count and share of the period's visits:
+  - *Search engines*: Google, Bing, DuckDuckGo, … and *AI assistants* (ChatGPT, Perplexity, Copilot, Claude, Gemini).
+  - *Social networks*: X, Facebook, WhatsApp, Telegram, YouTube, …
+  - *Al Ummah Now sites*: www, scholar sites and our other apps.
+  - *Other websites*: any other referring site.
+  - *Direct*: no referrer (typed or bookmarked links, apps that hide the referrer).
+- **Pages visits started on.** The landing page kind: Home, Watch page, Shorts, Channel page, Playlist, Search results, Explore, Videos list, Channels directory, Live, account pages (history, subscriptions), Other pages.
+- **Top referring websites.** The 30 referring hosts with the most visits in the period (direct visits have no host).
+- **API.** admin-api `GET /api/content/analytics/visits?days=N` (1–365), which reads api-videos' internal `/analytics/visits`.
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
