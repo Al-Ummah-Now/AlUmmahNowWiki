@@ -25,6 +25,7 @@ C# and .NET. WinUI 3 on Windows, GTK 4 and libadwaita through Gir.Core on Linux,
 | [`src/AlUmmahNow.Studio`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/src/AlUmmahNow.Studio) | Shared Studio layer |
 | [`src/AlUmmahNow.Studio.Windows`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/src/AlUmmahNow.Studio.Windows), [`src/AlUmmahNow.Studio.Linux`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/src/AlUmmahNow.Studio.Linux) | Studio for Windows (WinUI 3) and Linux (GTK 4) |
 | [`tests`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/tests) | xUnit tests |
+| [`src/AlUmmahNow.Admin`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/src/AlUmmahNow.Admin), [`src/AlUmmahNow.Admin.Windows`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/src/AlUmmahNow.Admin.Windows) | Internal Admin app for Windows ([AUN-ADMIN-NATIVE](../epics/AUN-ADMIN-NATIVE-native-admin-app.md)): review queue; signed MSIX to a private channel only |
 | [`packaging`](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/tree/main/packaging) | Flatpak and Windows (MSI) packaging |
 
 ## Run and test locally
