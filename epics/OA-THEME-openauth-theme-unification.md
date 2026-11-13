@@ -7,9 +7,9 @@
 | **ID** | `OA-THEME` |
 | **Owning repos** | [openauth](../repos/openauth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
-> Plan phases are all unticked, but per-request theme and language rendering shipped (openauth#10–#12, #21) and the owner's English-default rule is tested (#37).
+> Plan phases are all unticked, but per-request theme and language rendering shipped (openauth#10–#12, #21) and the owner's English-default rule is tested (#37). On the Auth side, Auth now keeps its own theme packages and the auth admin picks the sign-in theme (Auth #279, #282).
 
 ## Goal
 
@@ -39,6 +39,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - openauth [openauth#10](https://github.com/Al-Ummah-Now/openauth/pull/10), [openauth#11](https://github.com/Al-Ummah-Now/openauth/pull/11), [openauth#12](https://github.com/Al-Ummah-Now/openauth/pull/12), [openauth#21](https://github.com/Al-Ummah-Now/openauth/pull/21), [openauth#36](https://github.com/Al-Ummah-Now/openauth/pull/36), [openauth#37](https://github.com/Al-Ummah-Now/openauth/pull/37)
+- Auth [AlUmmahNowAuth#279](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/279), [AlUmmahNowAuth#282](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/282)
 
 ## Open questions
 

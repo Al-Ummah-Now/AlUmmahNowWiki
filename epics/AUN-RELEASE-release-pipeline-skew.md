@@ -7,7 +7,7 @@
 | **ID** | `AUN-RELEASE` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
 > Spec #203, tag-only production #286 merged 2026-11-08; skew protection (pages open during a deploy keep working) #583, #618, #620 merged 2026-11-10.
 
@@ -30,6 +30,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
+- Since 2026-11-10: Local E2E gates every release ([#1050](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1050)); translation store synced on every deploy ([#1005](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1005)); media Worker deployed and smoke-tested in releases ([#948](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/948)); rollback dry run after every promote ([#692](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/692)); `RELEASE_SKIP_STAGE_E2E` emergency override ([#690](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/690)); load specs never block ([#952](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/952)). Current process: [Release process](../guides/release-process.md).
 - PRs [AlUmmahNow#203](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/203), [AlUmmahNow#223](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/223), [AlUmmahNow#286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/286), [AlUmmahNow#583](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/583), [AlUmmahNow#618](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/618), [AlUmmahNow#620](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/620)
 
 ## Open questions

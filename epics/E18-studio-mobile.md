@@ -7,9 +7,9 @@
 | **ID** | `E18` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
-> Studio iOS AVFoundation edit spike (Apple #12) and Android upload skeleton, Transformer edit spike and `feature-live` ("D3 pending") exist. 18.7 waits on D3, unblocked 2026-11-10.
+> Studio MVP shipped on iPhone, iPad and Android phone and tablet (2026-11-11 to 11-12): sign-in with several accounts, channel picker, resumable single and batch upload, manage videos, bulk edit, soft delete and restore, analytics. Release pipelines exist (Apple: TestFlight on a tag, none cut yet; Android: GitHub pre-release `v2026.11.11`). Comments, notifications, the editor and go-live are still to do; 18.7 waits on D3.
 
 ## Goal
 
@@ -23,11 +23,11 @@ Manage, upload, edit and go live from a phone.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 18.1 | Dashboard |  |
-| 18.2 | Upload from phone (TUS, background) |  |
-| 18.3 | Edit details |  |
+| 18.1 | Dashboard | Partly shipped: account and channel picker, content tabs with counts ([AlUmmahNowApple#16](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/16), [AlUmmahNowAndroid#7](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/7)). |
+| 18.2 | Upload from phone (TUS, background) | Shipped: resumable single and batch upload with set-for-all values ([AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowAndroid#8](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/8)). |
+| 18.3 | Edit details | Shipped: single and bulk edit, soft delete and restore ([AlUmmahNowApple#18](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/18), [AlUmmahNowAndroid#9](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/9)). |
 | 18.4 | Comments & community |  |
-| 18.5 | Analytics |  |
+| 18.5 | Analytics | Basic charts shipped ([AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25), [AlUmmahNowAndroid#9](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/9)); Android value-axis fix open ([AlUmmahNowAndroid#12](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/12)). |
 | 18.6 | Channel management |  |
 | 18.7 | Go live from phone over RTMP/SRT (D3) | Waits on D3 (unblocked 2026-11-10; recommendation: self-hosted RTMP/SRT → HLS in R2). |
 | 18.8 | Notifications |  |
@@ -50,6 +50,10 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - D2/D3 update: [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
+
+- Studio MVP, Apple: [AlUmmahNowApple#16](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/16), [AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowApple#18](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/18), [AlUmmahNowApple#19](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/19) (TestFlight on a tag), [AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25) (merged 2026-11-12)
+- Studio MVP, Android: [AlUmmahNowAndroid#7](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/7), [AlUmmahNowAndroid#8](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/8), [AlUmmahNowAndroid#9](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/9), [AlUmmahNowAndroid#10](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/10) (GitHub Releases, Play internal when configured) (merged 2026-11-11)
+- Core used by both: [AlUmmahNowCore#30](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/30) (`v0.3.0-rc.1`)
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 

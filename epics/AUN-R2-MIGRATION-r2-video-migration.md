@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `AUN-R2-MIGRATION` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-10 |
+| **Status** | **in progress** |
+| **Last updated** | 2026-11-12 |
 
-> Filed as AlUmmahNow#687 ("a new epic", no number) right after D2 was decided, 2026-11-10.
+> Filed as AlUmmahNow#687 ("a new epic", no number) right after D2 was decided, 2026-11-10. Side-by-side delivery live in every environment since 2026-11-12; viewers move only when an admin changes the delivery switch. How it works: [Video delivery](../guides/video-delivery.md).
 
 ## Goal
 
@@ -17,12 +17,19 @@ Infrastructure, transcoding into R2 and migration off Bunny, including the legac
 
 ## Scope
 
-- Cache-everything rule, Smart Tiered Cache, custom media hostname (see [D2](D2-video-delivery.md))
+- Cache-everything rule, Smart Tiered Cache, custom media hostname (see [D2](D2-video-delivery.md)): **done**, applied as code by releases
+- Transcoder on Cloudflare Containers (`apps/media`): **done** ([#893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/893))
+- Dual write beside Bunny, playback switch with fallback to Bunny, QoE per source, daily cost inputs, Delivery comparison page: **done** ([#894](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/894), [#895](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/895), [#896](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/896), [#897](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/897))
+- Keep our own originals; transcodes start at upload: **done** ([#972](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/972))
+- API picks the source and returns one URL: **done** ([#1013](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1013))
+- Release gate for R2 delivery: **done** ([#1016](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1016))
+- Backfill of existing videos into R2: **waiting** for the owner to approve a cost report
+- Moving viewers off Bunny and retiring the legacy library: **not started**
 
 ## Decisions and constraints
 
 - [D2](decisions.md#d2-video-delivery): Video delivery (decided), see the [D2 page](D2-video-delivery.md)
-- [D3](decisions.md#d3-live-provider): Live provider (pending), see the [D3 page](D3-live-provider.md)
+- [D3](decisions.md#d3-live-provider): Live provider (decided 2026-11-11: both, round-robin), see the [D3 page](D3-live-provider.md)
 - [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (open)
 
 Platform-wide constraints that apply to every epic:
@@ -36,6 +43,8 @@ Platform-wide constraints that apply to every epic:
 
 - Issue [AlUmmahNow#687](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687)
 - Decision PR [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
+- Live in stage and production with release `v2026.11.12.3` ([#948](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/948))
+- [Media delivery runbook](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/RUNBOOK.md), [R2 delivery plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/R2-DELIVERY-PLAN.md)
 
 ## Open questions
 

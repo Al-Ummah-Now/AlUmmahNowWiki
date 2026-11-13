@@ -7,7 +7,7 @@
 | **ID** | `TOOLS-PLANS` |
 | **Owning repos** | [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
 | **Status** | **planned** |
-| **Last updated** | 2025-10-19 |
+| **Last updated** | 2026-11-12 |
 
 > Consolidation looks done in code (no FileScanApi; SignalR client exists) though the plan says "Proposed"; the 7-week testing plan is all unticked; the encoding and Bunny roadmaps have no status.
 
@@ -22,7 +22,7 @@ Smaller Tools plans.
 | Consolidation P1–P5 | Merge FileScanApi into the Windows service with SignalR | Looks done (observation) |
 | Testing Wk 1–7 | ViewModel tests, E2E (WinAppDriver), CI | Not started |
 | Encoding P1–P4 | FFMpegCore metadata, thumbnails, throttled upload, transcoding | FFMpegCore added (Tools #21) |
-| Bunny P1–P4 | Retry, refactor, resumable uploads, cost monitoring | Retry/rate limiting merged (Tools #19, #24) |
+| Bunny P1–P4 | Retry, refactor, resumable uploads, cost monitoring | Retry/rate limiting merged (Tools #19, #24); 429/5xx retry with jittered backoff and `Retry-After` ([AlUmmahNowTools#39](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/39), 2026-11-10) |
 
 ## Decisions and constraints
 
@@ -36,7 +36,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- None found on GitHub or in the repos.
+- FileScan service concurrency fixes from the monorepo's [scalability audit](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/architecture/SCALABILITY-AUDIT.md) (TOOLS-5 to TOOLS-9): [AlUmmahNowTools#32](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/32), [AlUmmahNowTools#35](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/35), [AlUmmahNowTools#36](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/36), [AlUmmahNowTools#37](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/37), [AlUmmahNowTools#38](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/38) (merged 2026-11-10). They harden the consolidated service; the plan documents themselves are unchanged.
 
 ## Open questions
 

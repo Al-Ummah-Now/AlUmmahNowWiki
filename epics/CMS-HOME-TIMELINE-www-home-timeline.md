@@ -7,13 +7,22 @@
 | **ID** | `CMS-HOME-TIMELINE` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
-> Merged 2026-11-10 (CMS #51, UI #30): weekly buckets published to Workers KV.
+> Merged 2026-11-10 (CMS #51, UI #30): weekly buckets published to Workers KV. Since then the feed rebuilds itself when its format changes (CMS #72), card posts show all their slides (CMS #58, UI #34), the home is one list with channels as timeline items (CMS #92, UI #51), and video frames take the video's shape with the channel name in the page language (CMS #98, UI #57).
 
 ## Goal
 
 A timeline-style www home with videos inside, managed in the CMS.
+
+## How it works
+
+- Staff manage the timeline on the CMS Timeline screen: posts join by default, editors add videos, playlists and channels, and can pin or hide any item. Every change is logged.
+- The CMS is the only writer of the `FEED` KV namespace. www only reads it, so the home page never calls the CMS on the request path.
+- Every stored feed carries a format number (`FEED_FORMAT`, now 3). A deploy whose code has a newer format rebuilds the feed by itself, so nobody needs to press "Rebuild everything" after a shape change.
+- The home page is the hero, then this one list. There are no tabs, rails or "all …" links. `/videos` and `/articles` are separate CMS list pages, not filters of the home list.
+
+Design: [`docs/FEED.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/FEED.md) and [`docs/specs/WWW-PAGES.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/specs/WWW-PAGES.md).
 
 ## Decisions and constraints
 
@@ -28,12 +37,14 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- CMS [AlUmmahNowCMS#51](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/51)
-- UI [AlUmmahNowUI#30](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/30)
+- CMS [AlUmmahNowCMS#51](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/51), [AlUmmahNowCMS#53](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/53), [AlUmmahNowCMS#58](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/58), [AlUmmahNowCMS#72](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/72), [AlUmmahNowCMS#87](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/87), [AlUmmahNowCMS#88](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/88), [AlUmmahNowCMS#92](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/92), [AlUmmahNowCMS#98](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/98)
+- UI [AlUmmahNowUI#30](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/30), [AlUmmahNowUI#34](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/34), [AlUmmahNowUI#51](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/51), [AlUmmahNowUI#57](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/57)
 
 ## Open questions
 
-- None recorded in the sources.
+- Curated home videos keep showing after the video is deleted on the videos site ([AlUmmahNowCMS#77](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/77)).
+- A scholar's byline on the timeline should link to their page ([AlUmmahNowUI#42](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/42)).
+- Scholars release note: rebuild the KV timeline once per environment ([AlUmmahNowCMS#78](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/78)).
 
 ## Conflicts between sources
 
@@ -41,6 +52,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Sources
 
-- [AlUmmahNowCMS/docs/FEED.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/6d9ea9ef7d34129325d39e48f8fc2cdc4b6f95a1/docs/FEED.md)
+- [AlUmmahNowCMS/docs/FEED.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/FEED.md)
+- [AlUmmahNowCMS/docs/specs/WWW-PAGES.md](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/specs/WWW-PAGES.md)
 - Chat: thread `0c0b9655-0e2d-4ba3-9c6c-03b7baa17f2a`, 2026-11-10 15:15 UTC (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/thread:delegated-task:command%3Amcp%3Afb56a035-d93a-45fa-80ca-07cf6fd15c9b%3Adelegate-task%3A0c0b9655-0e2d-4ba3-9c6c-03b7baa17f2a`)
 - Chat: thread `b3036b4f-e700-45ac-8658-dede17f5d691`, 2026-11-10 15:13 UTC, position 14614 (`t3-thread://v2/2cc5e992-ec65-4390-8c9f-89a484014a6f/b3036b4f-e700-45ac-8658-dede17f5d691`)

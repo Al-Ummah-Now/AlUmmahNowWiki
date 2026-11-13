@@ -7,9 +7,9 @@
 | **ID** | `E09` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [openauth](../repos/openauth.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-12 |
 
-> 9.1, 9.2, 9.3, 9.4 (part), 9.5, 9.9 merged; 9.6, 9.7, 9.8 in open PRs; 9.6 was blocked on D2 (decided 2026-11-10).
+> 9.1, 9.2, 9.3, 9.4 (part), 9.5, 9.9 merged; 9.6, 9.7, 9.8 still in open PRs (#434, #433, #432) on 2026-11-12. Native Studio sign-in now works on Apple, Android and Desktop with the registered native clients.
 
 ## Goal
 
@@ -48,6 +48,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
+- Core sign-out now revokes the refresh token ([AlUmmahNowCore#27](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/27)), for [AlUmmahNow#720](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/720). That issue is still open: the browser session is not ended.
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
@@ -96,7 +97,7 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ## Conflicts between sources
 
-- Every native repo waits on 9.1/9.2 native OAuth client IDs (owner inputs) before sign-in works; Android's `AuthBridge` throws `Unavailable` and Apple runs as a guest.
+- Earlier sources say every native repo waits on native OAuth client IDs before sign-in works. As of 2026-11-12 the Studio apps sign in with the registered native clients ([AlUmmahNowApple#16](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/16), [AlUmmahNowAndroid#7](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/7), [AlUmmahNowDesktop#24](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/24)); the Apple viewers still run as a guest.
 
 ## Sources
 

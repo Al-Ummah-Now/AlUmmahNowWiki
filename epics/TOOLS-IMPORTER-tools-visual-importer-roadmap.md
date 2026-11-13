@@ -7,7 +7,7 @@
 | **ID** | `TOOLS-IMPORTER` |
 | **Owning repos** | [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
 | **Status** | **deferred** |
-| **Last updated** | 2025-10-19 |
+| **Last updated** | 2026-11-12 |
 
 > No status in the roadmap. `FEATURE_MATRIX.md` says "Overall Health 21%"; `IMPLEMENTATION_COMPLETE.md` says the watch/approval UI is "100% Complete". Native Epic 19.2 absorbs bulk import and retires the .NET importer once it ships.
 
@@ -40,6 +40,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - Tools [AlUmmahNowTools#19](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/19), [AlUmmahNowTools#21](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/21), [AlUmmahNowTools#23](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/23), [AlUmmahNowTools#27](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/27), [AlUmmahNowTools#30](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/30), [AlUmmahNowTools#31](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/31)
+- Importer work merged 2026-11-09 to 11-10, not tracked against the sprint list. Scalability-audit fixes: idempotent imports [AlUmmahNowTools#34](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/34), session-scoped lookups [AlUmmahNowTools#31](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/31), one upload routine for import and Resume [AlUmmahNowTools#33](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/33), unique storage keys [AlUmmahNowTools#30](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/30). Other changes: thumbnails keep the video's shape [AlUmmahNowTools#40](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/40), no hard-delete of platform content [AlUmmahNowTools#41](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/41), channel autocomplete [AlUmmahNowTools#42](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/42), owner's icon art [AlUmmahNowTools#45](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/45).
 
 ## Open questions
 

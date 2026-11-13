@@ -6,17 +6,17 @@
 
 ## Purpose
 
-The monorepo for the videos product: the viewer site, its APIs, background processing, realtime delivery, scheduled publishing and the staff admin site.
+The monorepo for the videos product: the viewer site and Creator Studio, its APIs, background processing, video transcoding into R2, realtime delivery, scheduled publishing, the platform analytics collector and the staff admin site.
 
 ## Tech stack
 
 - Turborepo with pnpm workspaces, TypeScript
 - `web` and `admin-web`: Next.js 16 on Cloudflare Workers through OpenNext
 - `api-videos` and `admin-api`: Hono, with OpenAPI 3.1 through chanfana on `api-videos`
-- Cloudflare R2, D1, KV, Queues, Durable Objects and Workers AI
-- Bunny.net for video streaming and image storage
+- Cloudflare R2, D1, KV, Queues, Durable Objects, Containers and Workers AI
+- Bunny.net for video streaming and image storage, with R2 + Cloudflare CDN delivery beside it (see [Video delivery](../guides/video-delivery.md))
 
-The root [README](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/README.md) still says Next.js 15. `apps/web/package.json` is on 16.
+The root [README](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/README.md) and the `apps/web` section of CLAUDE.md still say Next.js 15. `apps/web/package.json` is on 16.
 
 ## Layout
 
@@ -29,12 +29,17 @@ The root [README](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/README.md
 | [`apps/admin-api`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/admin-api) | Staff API | D1, R2, KV, queue producer |
 | [`apps/admin-web`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/admin-web) | Staff site | None bound directly |
 | [`apps/scheduler`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/scheduler) | Per-minute cron for scheduled publishing | R2, KV, Durable Objects, queue producer |
+| [`apps/media`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/media) | R2 transcoder: transcode queue consumer, FFmpeg on Cloudflare Containers, private `/priv/*` route on `media.*` | R2 (public and private media buckets), queue, Containers, D1 |
+| [`apps/cost-monitor`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/cost-monitor) | Scheduled collector of platform analytics and costs for the admin Operations page | D1 |
 | [`apps/log-service`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/apps/log-service) | Local log aggregator, never deployed | None |
 | [`packages/shared-types`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/shared-types) | Shared TypeScript types | |
 | [`packages/logger`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/logger) | Shared logging | |
 | [`packages/fanous-tokens`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/fanous-tokens) | Design tokens and per-platform generators | |
+| [`packages/theme-packages`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/theme-packages) | Theme package format v1 and the built-in themes as packages | |
+| [`packages/app-icons`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/app-icons) | Per-app favicon sets made from the owner's art | |
 | [`packages/mcp-log-server`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/packages/mcp-log-server) | MCP server for watching logs | |
-| [`scripts/release`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/scripts/release) | Release gates, promote, rollback, smoke | |
+| [`scripts/release`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/scripts/release) | Release gates, promote, rollback, smoke, translation sync | |
+| [`scripts/local-stack`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/main/scripts/local-stack) | The local E2E stack: one Miniflare, fakes, leftover check | |
 
 ## Run and test locally
 
@@ -50,7 +55,9 @@ pnpm lint
 pnpm test
 ```
 
-Default ports from the README: web 3001, api-videos 3086, websocket 3087, processor 3088, log-service 3089.
+Default ports from the README: web 3001, api-videos 3086, websocket 3087, processor 3088, log-service 3089, admin-api 3090, admin-web 3091.
+
+For E2E, boot the local stack instead of pointing at QA. See [Testing and E2E](../guides/testing.md).
 
 The checks CI requires, such as `pnpm check:config`, `pnpm check:migrations`, `pnpm check:schema`, `pnpm check:tokens` and `pnpm test:scripts`, are listed in [CLAUDE.md, "Release gates"](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/CLAUDE.md#release-gates).
 
@@ -58,10 +65,16 @@ The checks CI requires, such as `pnpm check:config`, `pnpm check:migrations`, `p
 
 | Workflow | Runs on | Does |
 |---|---|---|
-| [`deploy.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/deploy.yml) | PRs, pushes to `main` | Tests, release checks and builds. Push to `main` deploys QA |
-| [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | PRs and releases | Release regression E2E suite |
-| [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release.yml) | `v*` tag on `main`, or manual | Tag: stage → stage E2E → production. Manual run on `main`: stage only |
+| [`deploy.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/deploy.yml) | PRs, pushes to `main` | Tests, release checks and builds. Push to `main` deploys QA (including `apps/media`) and syncs QA's translation store |
+| [`local-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/local-e2e.yml) | PRs, pushes to `main`, nightly, releases | E2E on a local stack per job: release, admin and web suites |
+| [`release-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release-e2e.yml) | PRs and releases | Release suite's deployed specs on QA (PRs) or stage (releases) |
+| [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/release.yml) | `v*` tag on `main`, or manual | Tag: stage → stage E2E + Local E2E + secrets checks → production. Manual run on `main`: stage only |
 | [`rollback.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/rollback.yml) | Manual | Rolls back stage or production |
+| [`e2e-tests.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/e2e-tests.yml) | Nightly, manual | Legacy web specs not yet on the local stack, against QA. Gates nothing |
+| [`media-cdn.yml`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/.github/workflows/media-cdn.yml) | Manual | Media host's Cloudflare settings as code |
+| Cleanup workflows | Hourly, daily, manual | Run-account sweep, QA leftovers, Bunny test-library census and sweep, orphan collections, production test data. See [Testing and E2E](../guides/testing.md#cleanup-jobs-for-shared-environments) |
+
+The release promotes seven workers (web, admin-web, api-videos, processor, websocket-server, admin-api and scheduler), then deploys `cost-monitor` and `media`. CLAUDE.md's "App Responsibilities" still says the scheduler is deployed by hand; the release scripts (`scripts/release/apps.ts`) include it.
 
 See [Release process](../guides/release-process.md).
 
@@ -73,6 +86,10 @@ Many of the 472 files under `docs/` are old. `docs/archive/` and `docs/legacy/` 
 - [BEFORE_YOU_CODE.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/BEFORE_YOU_CODE.md): required development process
 - [CONTRIBUTING.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/CONTRIBUTING.md)
 - [Release pipeline spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/release-pipeline/SPEC.md) and [plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/release-pipeline/PLAN.md)
+- [Local E2E stack](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/testing/LOCAL-STACK.md)
+- [Media delivery runbook](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/RUNBOOK.md) and [Bunny libraries](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/operations/bunny-libraries.md)
+- [Admin analytics and live updates](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/admin/LIVE_OPS.md), [account action requests](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/admin/AUTH_MODERATION_REQUESTS.md), [invites](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/admin/INVITES.md)
+- [Logging policy](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/operations/logging.md)
 - [PRD](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/PRD.md), [epics 1–8](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/epics.md), [native epics](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/native-apps/EPICS.md)
 - [Specs index](../guides/specs-index.md)
 - [Themes](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/design/THEMES.md)
@@ -84,15 +101,24 @@ Many of the 472 files under `docs/` are old. `docs/archive/` and `docs/legacy/` 
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
 
-## Current state (2026-11-09)
+## Current state (2026-11-12)
 
-181 open issues, 131 labelled `queue`. 50 open PRs. Latest release tag: `v2026.11.08.5`.
+303 open issues, 152 labelled `queue`. 45 open PRs. Latest release tag: `v2026.11.12.9`. About 430 PRs merged from 2026-11-09 to 2026-11-12; the [changelog](../guides/changelog.md) groups them.
 
-Active work includes the site-wide theme ([#492](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/492), on hold for the owner), Creator Studio ([#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476), [#482](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/482), [#484](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/484)), the production video player spec ([#472](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/472)), channel roles ([#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)) and plans and entitlements ([#390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/390), [#428](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/428), [#429](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/429)).
+What shipped in those four days, by area:
 
-Examples from the queue: per-PR preview deploys for web E2E ([#486](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/486)), Firefox and WebKit release smoke ([#471](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/471)), short pages from `GET /api/videos` ([#451](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/451)).
+- **Testing:** most E2E moved off shared QA onto a local Miniflare stack with own-data builders and leftover checks; the QA-wide suite is nightly only. See [Testing and E2E](../guides/testing.md).
+- **Video delivery:** R2 + Cloudflare CDN beside Bunny in every environment, the API choosing one playback URL, a new production Bunny library and per-channel collections. See [Video delivery](../guides/video-delivery.md).
+- **Creator Studio** on the web ([#498](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/498)), with bulk rename and bulk edit ([#765](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/765), [#809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/809), [#812](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/812)), creator trash ([#764](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/764)) and Studio Live ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)).
+- **Admin:** a redesigned shell that follows the site theme, with grouped navigation, breadcrumbs and ⌘K search ([#820](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/820)); shared lists ([#823](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/823)); Action needed / History queues ([#821](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/821), [#822](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/822)); Warn user ([#824](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/824)); soft delete with 30-day purge ([#698](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/698)); every lookup an autocomplete that opens with content ([#696](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/696), [#852](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/852)); live pages over WebSockets with polling only as a fallback ([#967](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/967), [#971](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/971), [#973](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/973)); an Operations page with platform analytics per environment ([#974](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/974), [#976](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/976)); Delivery and Live streaming pages ([#897](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/897), [#871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/871)).
+- **Live streaming:** a provider-neutral live layer with Bunny Live and self-hosted adapters, round-robin ([#867](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/867)). See [D3](../epics/D3-live-provider.md).
+- **Playlists:** playback with the list in the URL, a queue API, autoplay and a pane ([#856](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/856)); bilingual names ([#833](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/833)); Watch later per user ([#847](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/847)).
+- **Themes:** the site-wide theme set by admins, Fawanees by default ([#492](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/492)), theme packages and the theme builder ([#575](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/575), [#587](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/587)). See [Theming](../guides/theming.md).
+- **Scale and correctness:** the scalability audit's fixes (atomic counters, conditional writes, D1 indexes, sharded websockets). See [AUN-SCALABILITY](../epics/AUN-SCALABILITY-scalability-audit.md).
+- **Privacy:** account erasure covers invites, error identity, category suggestions and upload traces; channel deletes remove Bunny collections. See [Deletion, erasure and cleanup](../guides/data-lifecycle.md).
+- **Product rules:** one display-name rule (display name, else first + last, email only as a last resort; [#1032](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1032)); the Arabic plural for videos is «المرئيات» ([#1033](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1033)); dislikes are hidden and their routes answer 410 ([#884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/884), [#889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/889)); a Short is ≤ 3 minutes and vertical or square ([#591](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/591)); uploads and channel creation are by creator-tier invitation ([#630](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/630), [#715](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/715)).
 
-Recently merged: playback resume fix ([#470](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/470)), QA E2E cleanup ([#467](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/467)), playlist thumbnails ([#466](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/466)).
+Open: the videos web app's localhost session cookie ([#1094](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1094)), R2 backfill of existing videos (waiting for a cost report), and the remaining legacy web specs to move to the local stack.
 
 ## Epics for this repo
 
@@ -135,15 +161,15 @@ Recently merged: playback resume fix ([#470](https://github.com/Al-Ummah-Now/AlU
 | [Production video player (themed, token-driven)](../epics/AUN-VIDEO-PLAYER-production-video-player.md) | in progress |
 | [Channel sections (Home tab)](../epics/AUN-CHANNEL-SECTIONS-channel-sections.md) | shipped |
 | [Social media management for channels](../epics/AUN-SOCIAL-social-media-management.md) | planned |
-| [Web Creator Studio](../epics/AUN-CREATOR-STUDIO-web-creator-studio.md) | planned |
+| [Web Creator Studio](../epics/AUN-CREATOR-STUDIO-web-creator-studio.md) | shipped |
 | [Per-channel roles](../epics/AUN-CHANNEL-ROLES-channel-roles.md) | in progress |
 | [Channel claim, transfer and self-service account move](../epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md) | planned |
 | [Account hub ("Al Ummah Now Account")](../epics/AUTH-ACCOUNT-HUB-account-hub.md) | in progress |
 | [CMS AI writing assist](../epics/CMS-AI-ASSIST-cms-ai-writing-assist.md) | shipped |
-| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | planned |
+| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | in progress |
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
 | [Release pipeline, tagged releases and skew protection](../epics/AUN-RELEASE-release-pipeline-skew.md) | shipped |
-| [Cost monitoring dashboard and alerts](../epics/AUN-COST-cost-monitoring.md) | planned |
+| [Cost monitoring dashboard and alerts](../epics/AUN-COST-cost-monitoring.md) | in progress |
 | [Scalability audit and index-backed lists](../epics/AUN-SCALABILITY-scalability-audit.md) | in progress |
 | [Videos admin: platform content management](../epics/CHAT-ADMIN-CONTENT-admin-content-management.md) | shipped |
 | [Contact us page and admin inbox](../epics/CHAT-CONTACT-contact-us.md) | shipped |

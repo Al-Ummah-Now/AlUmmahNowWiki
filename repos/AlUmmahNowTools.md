@@ -22,6 +22,7 @@
 | [`AlUmmahNow.BunnyBulkUploader`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/tree/master/AlUmmahNow.BunnyBulkUploader) | Command-line bulk uploader |
 | [`AlUmmahNow.FileScanService`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/tree/master/AlUmmahNow.FileScanService) | Background scanner with a SignalR hub |
 | [`AlUmmahNow.VisualImporterUno`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/tree/master/AlUmmahNow.VisualImporterUno) | Cross-platform GUI |
+| [`AlUmmahNow.VisualImporterUno.UITests`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/tree/master/AlUmmahNow.VisualImporterUno.UITests) | GUI tests |
 | [`AlUmmahNow.Tests`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/tree/master/AlUmmahNow.Tests) | Tests |
 
 ## Run and test locally
@@ -48,11 +49,18 @@ The many other Markdown files at the repo root are point-in-time reports from 20
 
 No individual owners are named.
 
-## Current state (2026-11-09)
+## Current state (2026-11-12)
 
-No open issues. One open PR: SECURITY.md and pinned actions ([#29](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/29)).
+Still no release workflow; operators build and run the tools. Most work since 2026-11-09 fixed the TOOLS findings from the monorepo's [scalability audit](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/architecture/SCALABILITY-AUDIT.md):
 
-Apart from a maintenance change in November 2026, the last merges were in October 2025, such as Linux support ([#27](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/27)).
+- Imports are idempotent: one run per folder, claimed rows, one record per file (TOOLS-1, [#34](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/34)); lookups scoped to the session (TOOLS-2, [#31](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/31)); one upload routine for import and Resume (TOOLS-3, [#33](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/33)).
+- Unique storage keys and no silent overwrites (TOOLS-4, [#30](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/30)).
+- FileScan service concurrency fixes (TOOLS-5 to TOOLS-8, [#32](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/32), [#35](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/35), [#36](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/36), [#37](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/37)) and a filter-preset deadlock (TOOLS-9, [#38](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/38)).
+- Bunny uploads retry 429 and 5xx with jittered backoff and honour `Retry-After` (TOOLS-10, [#39](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/39)).
+- Thumbnails keep the video's shape ([#40](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/40)); the tools can't hard-delete platform content, which only the platform's soft delete and purge remove ([#41](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/41)).
+- Channel boxes suggest as you type ([#42](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/42)); app icons use the owner's art ([#45](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/45)).
+
+Open: SECURITY.md and pinned actions ([#29](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/29)); issues for confirmation dialogs on destructive actions ([#46](https://github.com/Al-Ummah-Now/AlUmmahNowTools/issues/46)), the Uno app icon ([#44](https://github.com/Al-Ummah-Now/AlUmmahNowTools/issues/44)) and hardcoded English strings ([#43](https://github.com/Al-Ummah-Now/AlUmmahNowTools/issues/43)).
 
 ## Epics for this repo
 
@@ -63,5 +71,5 @@ Apart from a maintenance change in November 2026, the last merges were in Octobe
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
 | [Visual Importer roadmap: 6 sprints / milestones](../epics/TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | deferred |
 | [Tools: FileScan consolidation, testing plan, encoding and Bunny research roadmaps](../epics/TOOLS-PLANS-tools-consolidation-testing-research.md) | planned |
-| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | planned |
+| [Move video delivery to R2 + Cloudflare CDN](../epics/AUN-R2-MIGRATION-r2-video-migration.md) | in progress |
 | [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |

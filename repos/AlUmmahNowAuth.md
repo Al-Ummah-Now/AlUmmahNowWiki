@@ -13,7 +13,7 @@ The single sign-on provider for every Al Ummah Now app, plus the account profile
 - pnpm monorepo, TypeScript, Cloudflare Workers
 - `@al-ummah-now/openauth`, published from the [openauth fork](openauth.md)
 - React Router v7 and shadcn/ui for the admin dashboard
-- Cloudflare D1, KV, Queues and Analytics Engine
+- Cloudflare D1, KV, Queues, Analytics Engine and Workers Rate Limiting. D1 is the source of truth for users, sessions of profile and admin, and revocations
 - Vitest and Playwright
 
 ## Layout
@@ -22,7 +22,7 @@ The single sign-on provider for every Al Ummah Now app, plus the account profile
 |---|---|
 | [`apps/auth`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/apps/auth) | The OAuth/OIDC issuer, at `auth.*` |
 | [`apps/profile`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/apps/profile) | Account profile, at `profile.auth.*` |
-| [`apps/admin`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/apps/admin) | User and client administration, at `admin.auth.*` |
+| [`apps/admin`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/apps/admin) | Users, clients, roles, moderation requests, sign-in themes and recently deleted items, at `admin.auth.*` |
 | [`apps/audit-consumer`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/apps/audit-consumer) | Queue consumer that writes audit events |
 | [`packages/ui`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/packages/ui) | Shared UI |
 | [`e2e`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/main/e2e) | Playwright suites |
@@ -38,16 +38,17 @@ pnpm test:unit
 pnpm test:e2e
 ```
 
-Local database setup and seeding are in [QUICKSTART.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/QUICKSTART.md).
+Local database setup and seeding are in [QUICKSTART.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/QUICKSTART.md). The issuer adds a `Server-Timing` header per request with its stage and binding timings, which helps when a sign-in is slow ([#315](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/315)).
 
 ## Deployment
 
 | Workflow | Runs on | Does |
 |---|---|---|
-| [`test.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/test.yml) | PRs, pushes to `main` | Type check, unit tests, config and migration checks, and calls `qa-e2e.yml` |
-| [`qa-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/qa-e2e.yml) | Called from `test.yml` | Deploys to QA and runs E2E |
+| [`test.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/test.yml) | PRs, pushes to `main` | Lint, type check, unit tests, config and migration checks, and calls `qa-e2e.yml` under a waiting QA lock |
+| [`qa-e2e.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/qa-e2e.yml) | Called from `test.yml` | Deploys to QA and runs E2E with per-run accounts |
 | [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/release.yml) | Every push to `main`, or manual | Build once → stage → production |
 | [`rollback.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/rollback.yml) | Manual | Rolls back workers |
+| [`local-stack-bundle.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/local-stack-bundle.yml) | After each successful release, or manual | Publishes the released auth, profile and admin workers and migrations as a `local-stack-<sha>` prerelease, which AlUmmahNow's local E2E stack downloads |
 
 Unlike the monorepo, **every merge to `main` releases to production** after passing stage. Moving to tags is proposed in [#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217) but hasn't happened. See [Release process](../guides/release-process.md).
 
@@ -55,6 +56,7 @@ Unlike the monorepo, **every merge to `main` releases to production** after pass
 
 - [Release pipeline notes](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/release-pipeline.md) and [CICD.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/CICD.md)
 - [ARCHITECTURE.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/ARCHITECTURE.md)
+- [Moderation requests](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/MODERATION_REQUESTS.md) and [admin invites](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/USER_INVITES.md)
 - [Account hub spec](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/account-hub/SPEC.md) and [plan](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/account-hub/PLAN.md)
 - [Identity platform spec](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/IDENTITY_PLATFORM_SPEC.md)
 - [Client integration guide](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/plans/CLIENT-INTEGRATION-GUIDE.md)
@@ -67,15 +69,20 @@ Some older docs are out of date. `ARCHITECTURE.md` and `USER_MANAGEMENT.md` desc
 
 No individual owners are named and there is no CODEOWNERS file. Security reports go through private vulnerability reporting.
 
-## Current state (2026-11-09)
+## Current state (2026-11-12)
 
-42 open issues, 22 labelled `queue`. 23 open PRs, including dependency updates.
+61 open issues, 23 labelled `queue`. 22 open PRs, mostly dependency updates; the shared nav ([#329](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/329)) is a held draft. The fork is pinned at openauth 1.0.47.
 
-Active work: sign-in and profile following the site theme ([#257](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/257)), single sign-on across profile and auth admin ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/254)) and `account.*` redirects ([#253](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/253)).
+Shipped since 2026-11-09:
 
-Examples from the queue: profile token refresh ([#252](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/252)), state and PKCE on the profile redirect ([#251](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/251)), billing roles for Epic 27 ([#227](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/227)).
+- **Security and scale audit.** PKCE for every first-party web client, single-use codes and atomic refresh rotation (openauth 1.0.42 on D1), Workers Rate Limiting, attempt limits, D1 as the source of truth for users and revocations, profile and admin sessions in D1 with one refresh at a time, and no tokens for suspended or deleted accounts ([#266](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/266), [#268](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/268), [#264](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/264), [#273](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/273), [#285](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/285), [#286](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/286), [#288](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/288), [#302](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/302)).
+- **Admin.** Moderation requests from client apps ([#275](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/275)), invites that pre-provision accounts ([#299](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/299)), the Scholar role ([#298](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/298)), 30-day soft delete ([#293](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/293)), in-page confirm dialogs and user autocompletes ([#294](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/294), [#295](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/295), [#320](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/320)).
+- **Look and language.** English unless `?lang=ar`, per-request theme, Auth's own theme packages managed in the auth admin, Fawanees by default ([#261](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/261), [#257](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/257), [#279](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/279), [#282](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/282), [#322](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/322)). One email design, each email in one language ([#319](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/319)). One display-name rule shared with the monorepo ([#327](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/327)).
+- **Reliability.** JWKS and discovery edge-cached with a last good copy ([#333](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/333)), sign-in latency work ([#315](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/315)), lower D1/KV/log usage ([#321](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/321)).
+- **Privacy.** Purging an account removes its email-to-subject record and invite rows ([#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
+- **Testing.** Per-run E2E accounts and QA/stage-only teardown routes ([#303](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/303), [#309](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/309)), a local-stack bundle per release ([#323](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/323)).
 
-Recently merged: 15-minute access tokens on production and stage ([#244](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/244)), account hub spec ([#250](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/250)).
+Open examples: auth admin following the site theme ([#330](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/330)), PII in sign-in logs ([#313](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/313)), the invites view in the admin ([#301](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/301)), Dependabot alert triage ([#297](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/297)), billing roles ([#227](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/227)). Releasing from tags is still only proposed ([#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217)).
 
 ## Epics for this repo
 

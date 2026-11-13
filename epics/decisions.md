@@ -37,7 +37,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [Q27-4](decisions.md#q27-4-free-has-real-limits) | Free has real limits | **decided** | 2026-11-08 | 27.4 |
 | [M1](decisions.md#m1-extension-classifier-model) | Extension classifier model | **open** | 2026-11-07 | Epic 28 |
 | [M2](decisions.md#m2-auto-hide-scope) | Auto-hide scope | **open** | 2026-11-07 | Epic 28 |
-| [M3](decisions.md#m3-religiousauthenticity-flags) | `religious_authenticity` flags | **open** | 2026-11-07 | Epic 28 |
+| [M3](decisions.md#m3-religious_authenticity-flags) | `religious_authenticity` flags | **open** | 2026-11-07 | Epic 28 |
 | [M4](decisions.md#m4-csam-coverage-for-r2-served-media) | CSAM coverage for R2-served media | **open** | 2026-11-07 | Epic 28 |
 | [M5](decisions.md#m5-reviewer-staffing--slas) | Reviewer staffing & SLAs | **open** | 2026-11-07 | Epic 28 |
 | [M6](decisions.md#m6-transparency-reporting) | Transparency reporting | **open** | 2026-11-07 | Epic 28 |
@@ -104,9 +104,9 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 ### D3: Live provider
 
-**Status:** pending · **Date:** 2026-11-10 · **Page:** [D3-live-provider.md](D3-live-provider.md)
+**Status:** decided · **Date:** 2026-11-11 · **Page:** [D3-live-provider.md](D3-live-provider.md)
 
-**Unblocked** now that D2 is decided. Recommendation: self-hosted RTMP/SRT ingest → HLS in the same R2 bucket (instead of Bunny Stream Live, which is in preview). **Owner decision pending.** Details on the [D3 page](D3-live-provider.md). Before the cost cap (2026-11-07 02:04 UTC) the assistant had called Bunny Stream Live the best fit.
+**Decided 2026-11-11:** both providers (Bunny Stream Live and self-hosted) ship to production together, new streams are assigned round-robin, and the choice is made on data. Built in [#867](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/867), [#871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/871) and [#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872). Earlier history: **unblocked** once D2 was decided. Recommendation: self-hosted RTMP/SRT ingest → HLS in the same R2 bucket (instead of Bunny Stream Live, which is in preview). **Owner decision pending.** Details on the [D3 page](D3-live-provider.md). Before the cost cap (2026-11-07 02:04 UTC) the assistant had called Bunny Stream Live the best fit.
 
 **Blocks / affects:** Epic 17, 18.7, 19.7, 29.17 chat, 28.12, live-streaming Phase 2
 

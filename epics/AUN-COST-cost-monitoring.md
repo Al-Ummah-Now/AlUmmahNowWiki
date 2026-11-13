@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `AUN-COST` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-10 |
+| **Status** | **in progress** |
+| **Last updated** | 2026-11-12 |
 
-> Spec merged (#266, 2026-11-08); phases P0–P4 are open issues #268–#272.
+> Spec merged (#266, 2026-11-08); phases P0–P4 are open issues #268–#272. On 2026-11-12 a first slice landed: the `apps/cost-monitor` collector (deployed by every release) feeds platform analytics per environment to the admin **Operations** page ([#974](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/974), [#976](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/976)), per the [admin analytics design](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/admin/LIVE_OPS.md). The Delivery page has daily cost inputs per source ([#896](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/896)). QA's own usage was cut in [#863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/863).
 
 ## Goal
 
@@ -20,7 +20,7 @@ Admin cost/usage dashboard with register-based alerts, built from the CloudFlare
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | P0 | Verify data sources, read-only token, CF notifications | Open #268 |
-| P1 | Collector worker, costs D1, minimal overview | Open #269 |
+| P1 | Collector worker, costs D1, minimal overview | Open #269; collector and Operations page partly built ([#974](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/974), [#976](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/976)) |
 | P2 | Alert engine | Open #270 |
 | P3 | Full dashboard | Open #271 |
 | P4 | Resend cost, invoice reconciliation | Open #272 |

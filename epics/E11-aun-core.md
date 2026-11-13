@@ -7,9 +7,9 @@
 | **ID** | `E11` |
 | **Owning repos** | [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-12 |
 
-> aun-core 0.1.0 and 0.2.0 released 2026-11-08 (every crate). Apple and Android still use temporary native bridges; Desktop pins Core 0.1.0.
+> aun-core 0.1.0 and 0.2.0 released 2026-11-08; pre-release `0.3.0-rc.1` on 2026-11-11 added `aun-search`, sign-out revocation, loopback sign-in and the upload resume fix. Studio on Apple, Android and Desktop pins `0.3.0-rc.1` for sign-in, uploads and search. The Apple and Android viewers still use temporary native bridges.
 
 ## Goal
 
@@ -25,13 +25,13 @@ One implementation of logic that must behave identically everywhere, with thin b
 |---|---|---|
 | 11.1 | Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) |  |
 | 11.2 | API client from the api-videos OpenAPI |  |
-| 11.3 | Auth module: PKCE, device flow, multi-account, secure storage |  |
+| 11.3 | Auth module: PKCE, device flow, multi-account, secure storage | Used by Studio on every platform. Added since: `LoginPrompt` ([AlUmmahNowCore#22](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/22)), refresh-token revocation and loopback redirects ([AlUmmahNowCore#27](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/27)). |
 | 11.4 | i18n shared bundles, plurals, runtime locale |  |
 | 11.5 | Player behaviour spec + conformance tests |  |
-| 11.6 | Download & upload engines (`aun-upload`) |  |
+| 11.6 | Download & upload engines (`aun-upload`) | Studio uploads on every platform use it. Store locks ([AlUmmahNowCore#23](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/23)), resume through the proxy ([AlUmmahNowCore#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29)). |
 | 11.7 | Analytics & consent |  |
 | 11.8 | Realtime client |  |
-| 11.9 | Per-platform app layers |  |
+| 11.9 | Per-platform app layers | Studio adapters on all three platforms; viewers partly. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -48,6 +48,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
+- Since 2026-11-09: [AlUmmahNowCore#22](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/22), [AlUmmahNowCore#23](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/23), [AlUmmahNowCore#24](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/24) (`aun-search`), [AlUmmahNowCore#27](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/27), [AlUmmahNowCore#28](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/28) (`request_path`), [AlUmmahNowCore#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29), [AlUmmahNowCore#30](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/30) (`v0.3.0-rc.1`), [AlUmmahNowCore#35](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/35) (display-name rule, unreleased). `v0.3.0-rc.2` open as [AlUmmahNowCore#36](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/36).
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 

@@ -7,10 +7,10 @@
 | **ID** | `CHAT-SSO` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [openauth](../repos/openauth.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-09 |
+| **Last updated** | 2026-11-12 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
-> Merged 2026-11-08/09 (Auth #254, UI #14/#15, CMS #20, openauth #15).
+> Merged 2026-11-08/09 (Auth #254, UI #14/#15, CMS #20, openauth #15). Hardened 2026-11-10 to 11-12 after an SSO audit: PKCE for every web client, logout CSRF guard, sign-out revokes refresh tokens, account switch drops the old token. Native apps still open (Android #5, Desktop #21).
 
 ## Goal
 
@@ -32,7 +32,9 @@ Platform-wide constraints that apply to every epic:
 - Auth [AlUmmahNowAuth#254](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/254)
 - UI [AlUmmahNowUI#14](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/14), [AlUmmahNowUI#15](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/15)
 - CMS [AlUmmahNowCMS#20](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/20)
-- openauth [openauth#15](https://github.com/Al-Ummah-Now/openauth/pull/15)
+- openauth [openauth#15](https://github.com/Al-Ummah-Now/openauth/pull/15), [openauth#28](https://github.com/Al-Ummah-Now/openauth/pull/28)
+- Hardening: Auth [AlUmmahNowAuth#276](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/276), [AlUmmahNowAuth#283](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/283), [AlUmmahNowAuth#302](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/302); monorepo [AlUmmahNow#559](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/559), [AlUmmahNow#718](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/718), [AlUmmahNow#984](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/984)
+- Still open: [AlUmmahNowAndroid#5](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/5), [AlUmmahNowDesktop#21](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/21), native sign-out [AlUmmahNowAuth#310](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/310)
 
 ## Open questions
 
