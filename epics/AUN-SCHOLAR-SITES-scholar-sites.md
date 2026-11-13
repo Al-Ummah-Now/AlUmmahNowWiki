@@ -6,12 +6,17 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 6, waiting on the owner (open: SS8, SS9, SS11–SS14, SS16, SS18) |
+| **Status** | **planned**: revision 6, waiting on the owner (open: SS9, SS12, SS14, SS16, SS18) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
+>
+> **Answers (2026-11-13, revision 7):**
+> - **SS8:** no opt-out. Every public post on a scholar's primary channel gets a www reference, and editors decide what to feature.
+> - **SS11:** yes. One Al Ummah Now account everywhere, and branded sign-in still says so.
+> - **SS13:** yes. A site may be single-language.
 >
 > **Answers (2026-11-13, revision 6):**
 > - **SS3:** sites run on a **separate "sites" Worker**, with its own deploy and routes, so attaching domains never touches www. It shares www's rendering code through a package. Workers for Platforms is not needed (§5.2).
@@ -154,7 +159,7 @@ Other rules:
 
 ### 5.1 Pages (the www page set, scoped to one channel)
 
-All paths are under `/<locale>/` (`en`, `ar`). The site sets its default locale and can be single-language (SS13).
+All paths are under `/<locale>/` (`en`, `ar`). The site sets its default locale and can be single-language (SS13, decided): a single-language site serves only that locale, and the other prefix 301s to it.
 
 | Page | Path | Content |
 |---|---|---|
@@ -231,7 +236,7 @@ Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي
 
 - `site.platformMark` decides the footer: a band ("Videos and posts on Al Ummah Now", plus the platform account menu), a small link, or none. **Every site keeps** a footer link to its terms and privacy notice and a "Report content" link, because the platform hosts and moderates it.
 - **Accounts stay Al Ummah Now accounts** (one identity, O13). A viewer signs in to comment, like, vote or subscribe. On a platform subdomain the silent sign-in probe works (same site). On an own domain sign-in is a click, because browsers block the probe's third-party cookie.
-- **Branded sign-in** (`site.brandedSignIn`): Auth shows the site's logo and theme on the sign-in page for that site's OAuth redirect, using Auth's existing theme packages. The text still says it is an Al Ummah Now account, so people know which account they are using (SS11).
+- **Branded sign-in** (`site.brandedSignIn`): Auth shows the site's logo and theme on the sign-in page for that site's OAuth redirect, using Auth's existing theme packages. The text still says it is an Al Ummah Now account, so people know which account they are using (SS11, decided).
 
 ## 6. Data model and connections
 
@@ -309,7 +314,7 @@ interface PostV2 {                   // one format: community JSON and CMS staff
   gif?: MediaRef; link?: { url: string; title?: string; image?: MediaRef };
   status: 'draft'|'scheduled'|'published'|'deleted';
   visibility: 'public'|'subscribers'|'members';
-  publishAt?: string; offerToPlatform?: boolean;    // SS8
+  publishAt?: string;               // no opt-out from www (SS8): editors decide what to feature
   commentsEnabled: boolean; tags?: string[]; createdAt: string; updatedAt: string;
 }
 ```
@@ -368,7 +373,7 @@ A scholar without a channel can't be converted. The script lists them, and admin
 | Area | What it does | Today's equivalent |
 |---|---|---|
 | Overview | Status, hosts, quick links, checklist (logo, About, first page, domain) | – |
-| **Posts** | The channel's community posts: every `PostV2` kind, with schedule, en/ar pair, offer to Al Ummah Now (SS8), pin and comments switch. For every scholar, not only the tier | Community posts, plus the article and cards editors (from the CMS) |
+| **Posts** | The channel's community posts: every `PostV2` kind, with schedule, en/ar pair, pin and comments switch. Every public post gets a www reference, with no opt-out (SS8); editors decide what is featured. For every scholar, not only the tier | Community posts, plus the article and cards editors (from the CMS) |
 | **Pages** | Block pages (markdown, image, gallery, posts list, cards, videos, video, CTA, columns, quote, divider) and list pages (curated or filter), drafts, schedule, revisions, preview | CMS pages, blocks and page kinds |
 | **Navigation** | Main menu and footer links per language: pages, list pages, Videos/Shorts/Posts/About, external links. Drag to reorder, up to `site.navigation.max` | CMS nav |
 | **Home** | The channel's Home sections (the same editor and storage as the Home tab), plus the site-only `page` and `cta` sections | Channel sections (reused) |
@@ -499,7 +504,10 @@ Migration numbers are assigned when building.
 | SS5 | One post format for the CMS and community; engagement on the videos side | 2026-11-13 |
 | SS6 | Scholar content is **fuelled by community posts** from the start (with or without the tier); www holds hidden references; existing CMS scholar posts are converted | 2026-11-13 |
 | SS7 | Videos are canonical on the videos site for subdomain sites; on a scholar's own domain, the site's watch page is canonical (§4.4) | 2026-11-13 |
+| SS8 | No opt-out: every public scholar post gets a www reference; editors decide what to feature | 2026-11-13 |
 | SS10 | No longer applies: every platform theme has a dark header | 2026-11-13 |
+| SS11 | One Al Ummah Now account everywhere; branded sign-in still names it | 2026-11-13 |
+| SS13 | A site may be single-language | 2026-11-13 |
 | SS15 | Covered by SS6: every scholar post gets a ref, so editors can feature it | 2026-11-13 |
 | SS17 | Any active platform theme, automatically (choose-only, pinned) | 2026-11-13 |
 | – | Earlier: it is a tier; white-label; independent with posts canonical on the site; not every scholar gets it; own domains in scope; platform mark optional by tier; sites choose one of our themes, with no editing; branding is logo, name and favicon | 2026-11-13 |
@@ -508,11 +516,8 @@ Migration numbers are assigned when building.
 
 | # | Decision | Recommendation |
 |---|---|---|
-| SS8 | Can a scholar mark a post "not for Al Ummah Now" (`offerToPlatform = false`), so it gets no www ref and can't be featured? The default is on | Yes, default on |
 | SS9 | Own domains go on a **separate SaaS zone** (a new domain the owner registers) | Yes; the owner picks the name |
-| SS11 | Viewers sign in with their Al Ummah Now account everywhere; branded sign-in still names it | Yes |
 | SS12 | A renamed subdomain keeps a 301 for 12 months | Yes |
-| SS13 | Can a site be single-language (Arabic only, for example)? | Yes; the default is both |
 | SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
 | SS16 | First site: mustafa-elbadry, set up by staff in phase 2, with Studio self-service in phase 3 | Yes |
 | SS18 | Scholars write only in Studio, and the CMS writer role becomes a link to Studio. This follows from SS6. Today's CMS writers lose the CMS editor, but their posts are migrated and keep their URLs | Yes |
