@@ -6,10 +6,12 @@
 |---|---|
 | **ID** | `AUN-CAPTIONS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (later AlUmmahNowCMS for the shared provider layer, and the native Studio apps) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-11 (v2) |
+| **Status** | **in progress** (owner go 2026-11-13) |
+| **Last updated** | 2026-11-13 (build started: mode A) |
 
 > v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
+
+> **2026-11-13, owner go:** build now with **mode A**, a local index from the Quran Foundation Content Sync copy. QF search (mode B) is not used because the `search` scope is not granted. The Arabic text comes from our daily Content Sync copy; translations stay live; captions store references only. QA and stage sync from production QF, each into its own bucket. Tests use fixtures only. Stacked PRs: [#1303](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1303) Quran foundations (Content Sync job, matcher, passage API) → [#1271](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1271) (the video review uses the matcher) → caption drafts → [#1296](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1296) (review transcript → caption draft). As built: spec §5.5.1.
 
 ## Goal
 
@@ -28,8 +30,8 @@
 | Transcript translation | DeepSeek V4.1 Flash on Workers AI, falling back to Gemma 4 26B | $0.024/h per language |
 | Inline title translation | Gemma 4 26B, falling back to DeepSeek. Free on every tier with a daily fair-use limit (O5); the $20/month budget is the backstop. | about $0.00002 per title |
 | Not used | Bunny transcription ($6/h per language, no better), m2m100 (unusable), Cloudflare Stream captions (no Arabic) | |
-| Quran: source | **quran.com (Quran Foundation API) only**. Captions store references; the player fetches text and translation live (edge cache ≤ 6 days); QF down → reference plus a quran.com link | free |
-| Quran: identify | Now: QF search + Content fetch + our verification (22/55 auto, 0 wrong, 0/20 false). Later: a local index from Content Sync once QF grants it; an index built from regular API responses isn't allowed | free |
+| Quran: source | **quran.com (Quran Foundation) only**. Captions store references. The Arabic text is served from our daily **Content Sync copy** (owner 2026-11-13); translations are fetched live. A copy not synced for 7 days is deleted (QF terms) → reference plus a quran.com link | free |
+| Quran: identify | **Mode A:** a local index built from the Content Sync copy, rebuilt after each daily sync (27/55 auto, 0 wrong, 0/20 false). QF search isn't used (no `search` scope); an index built from regular API responses isn't allowed | free |
 | Quran translations | QF `translations` by id, fetched live. Each channel picks its edition per language (platform default Saheeh International, changeable by admins); edition name shown (O7) | free, with attribution |
 
 ## Zero-mistake Quran: measured on 20 clips (2026-11-11)
@@ -81,7 +83,7 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| P0 | Provider interfaces, Quran store from Tanzil/QuranEnc (QF sync once cleared), zero-mistake Quran detector, glossary, translation cache, additive entitlement grants | planned |
+| P0 | QF Content Sync copy and index (daily, queued, retry + DLQ, admin flag, 7-day deletion), zero-mistake Quran matcher, `GET /api/v1/quran/passage`; then provider interfaces, glossary, translation cache, additive entitlement grants | in progress: [#1303](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1303) |
 | P1 | Inline title/description translation (upload, Studio, Set values), Quran-aware titles | planned; p95 ≤ 2 s |
 | P2 | On-demand transcription: jobs, queue, audio-extraction container, editor, publish, metering with refunds, budget stop | planned |
 | P3 | Transcript translation with official Quran translations; bulk actions; upload flag; admin grants | planned |
