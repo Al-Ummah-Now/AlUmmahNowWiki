@@ -37,11 +37,11 @@ The owner asked for "a better design … without a container that is seen" and c
   - Resting the mouse plays a muted preview in place, with play/pause, sound and progress controls.
   - The controls act on the preview only and never open the post (owner bug: unmute opened the Short).
   - There is no preview on touch, under reduced motion or with Save-Data.
-- **Shorts** are one per post, vertical and centred, at most 32rem tall. One click or tap opens the **Shorts viewer**, already playing with sound:
+- **Shorts** are one per post, vertical and centred, at most 32rem tall. They play like videos: **one click or tap plays the Short inline**, with sound and the same controls (owner, 2026-11-13: "clicking a Short to play doesn't play inline"). A small **Open in Shorts** button in the post's top corner opens the **Shorts viewer**:
   - It is full screen, with one Short per screen; scroll or swipe up (or ↑ ↓) for the next.
-  - It starts with sound (falling back to muted) and has a link to the videos site.
-  - Esc returns focus to the Short. Nothing autoplays under reduced motion.
-  - If the videos platform does not answer, the Short plays in place as before.
+  - It carries on where the inline Short was, playing with sound, and has a link to the videos site.
+  - Esc returns focus to the button.
+  - If the videos platform does not answer, the Short plays in place with the videos site's player.
 - **Articles** read as text: byline (scholar avatar or the site mark, name, time), cover, title and excerpt.
 
 The previews and the viewer use the videos platform's public play API: `GET /api/v1/videos/{id}/play` and `GET /api/v1/shorts?after=`. Both are on the videos API ([AlUmmahNow#1102](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1102), contract in `docs/embeds/README.md` §8). www's CSP allows that API in `connect-src` and the platform's media hosts in `media-src`.
@@ -62,7 +62,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - CMS [AlUmmahNowCMS#51](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/51), [AlUmmahNowCMS#53](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/53), [AlUmmahNowCMS#58](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/58), [AlUmmahNowCMS#72](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/72), [AlUmmahNowCMS#87](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/87), [AlUmmahNowCMS#88](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/88), [AlUmmahNowCMS#92](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/92), [AlUmmahNowCMS#98](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/98)
-- UI [AlUmmahNowUI#30](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/30), [AlUmmahNowUI#34](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/34), [AlUmmahNowUI#51](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/51), [AlUmmahNowUI#57](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/57), [AlUmmahNowUI#63](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/63) (design without boxes, card deck, previews, Shorts viewer)
+- UI [AlUmmahNowUI#30](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/30), [AlUmmahNowUI#34](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/34), [AlUmmahNowUI#51](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/51), [AlUmmahNowUI#57](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/57), [AlUmmahNowUI#63](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/63) (design without boxes, card deck, previews, Shorts viewer), [AlUmmahNowUI#90](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/90) (Shorts play inline)
 - Videos API (play + next Shorts): [AlUmmahNow#1102](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1102)
 
 ## Open questions
