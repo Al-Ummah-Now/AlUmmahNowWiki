@@ -71,6 +71,10 @@ flowchart LR
 - The embed player fills its frame on the theme's night colour ([#1034](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1034)).
 - Playlist embeds play the playlist's saved order from the queue API ([#858](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/858)).
 
+## Public MP4
+
+Each R2 rendition also has one progressive MP4, `pub/<id>/<rev>/video.mp4` (a stream copy of the 480p rung, 360p for a smaller source), which public videos give search engines as `contentUrl` ([D-SEO-11](../epics/AUN-SEO-search-visibility.md#d-seo-11-a-stable-contenturl), [#1181](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1181), [#1201](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1201)). Renditions made before it got the MP4 from a remux-only backfill on 2026-11-13 ([#1243](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1243), `scripts/release/mp4-backfill.ts`). Downloads are limited per IP by a zone rate-limit rule kept in `scripts/media-cdn/apply.ts` (10 per 10 s, block), which goes live once the release token has Zone WAF Edit. The Operations page shows the MP4 reads as their own R2 line.
+
 ## Costs
 
 Container seconds per job, R2 storage and operations, and media-host requests and cache status all show on the admin Delivery page. The whole platform must stay under **$500/month** ([O1](../epics/decisions.md#o1-whole-platform-cost-cap)). Backfilling existing videos into R2 waits for the owner to approve a cost report.
