@@ -97,6 +97,18 @@ Many of the 472 files under `docs/` are old. `docs/archive/` and `docs/legacy/` 
 - [GDPR notes](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md)
 - [SECURITY.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/SECURITY.md)
 
+## Channel subscriptions
+
+Subscriptions belong to the account, as on other video sites ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
+
+- **Who subscribes.** A signed-in user with no active channel subscribes **as themselves**; no channel is needed. With a channel active, the user subscribes **as that channel**: the web sends it in the `channelId` header, and the API refuses a channel the caller doesn't own (403). No one can subscribe to their own channel.
+- **Status.** `GET /api/channels/:id/subscriptions/status` answers for the identity in use now (the active channel, or the account itself), so the Subscribe button always shows what clicking it will change.
+- **Counts.** Each subscriber identity counts once. An account that subscribes as itself and as one of its channels counts twice, as two subscribers. Analytics (new subscribers per day and totals) come from the same store and include both kinds.
+- **Lists.** The Subscriptions feed, `/subscriptions/manage` and the sidebar list are per account: a channel appears once, whichever identities subscribe to it. Unsubscribe on the manage page (`DELETE …/subscriptions?scope=all`) removes every one of those subscriptions; the Subscribe button removes only the current identity's.
+- **Notifications.** The channel owner gets "new subscriber" for both kinds. The new-video bell is per account and stays on while any of the account's identities still subscribes.
+- **Storage.** D1 `channel_subscriptions` (NOTIFICATIONS_DB, migration 0008), one row per (channel, subscriber). An account's own subscription uses the subscriber key `user:<userId>`; channel ids never contain a colon. Queue events carry `subscriberType` (`user`/`channel`) and `subscriberChannelId` (null for an account's own subscription).
+- **Privacy.** The data export lists every subscription with `subscribedAs` (`member`/`channel`). Erasure removes both kinds and takes them off the counts.
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
