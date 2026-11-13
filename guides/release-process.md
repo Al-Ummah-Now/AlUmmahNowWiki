@@ -22,12 +22,13 @@
 Merging to `main` deploys QA only. Production moves only when someone pushes a release tag.
 
 ```sh
-git fetch origin
-git tag -a v2026.11.12 origin/main -m "Release v2026.11.12"
-git push origin v2026.11.12
+git fetch origin --tags
+TAG=$(pnpm -s release:tag next)    # monorepo: today's US Eastern date, next free number
+git tag -a "$TAG" origin/main -m "Release $TAG"
+git push origin "$TAG"
 ```
 
-Tags are `vYYYY.MM.DD`, and a later release the same day is `vYYYY.MM.DD.N` with N from 2 (for example `v2026.11.12.9`). In the monorepo, tag a commit only after its `deploy.yml` run and QA deploy are green. Releases are cut from green `main` often, several a day.
+Tags are `vYYYY.MM.DD`, and a later release the same day is `vYYYY.MM.DD.N` with N from 2 (for example `v2026.11.12.9`). **The date is the US Eastern date (America/New_York), never UTC** (owner, 2026-11-12): at 20:58 ET on 12 November, which is 01:58 UTC on 13 November, the next tag is `v2026.11.12.10`, not `v2026.11.13`. In the monorepo, `pnpm release:tag next` prints the next free tag ([#1104](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1104)); the same date rule applies to the www and CMS tags. In the monorepo, tag a commit only after its `deploy.yml` run and QA deploy are green. Releases are cut from green `main` often, several a day.
 
 ```mermaid
 flowchart LR
