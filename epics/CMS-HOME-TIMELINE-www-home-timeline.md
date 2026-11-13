@@ -33,11 +33,11 @@ The owner asked for "a better design … without a container that is seen" and c
   - Screen readers hear "Card 2 of 5". Only the top card is reachable; the cards behind it are inert.
   - Reduced motion: the cards cross-fade and nothing is thrown. Without JS it is a scroll-snap strip.
   - The pager has no eight-point stars (owner correction).
-- **Videos** show only the media. Title, channel and time appear over the top on hover or focus.
+- **Videos** show only the media. Title, channel and time appear over the top on hover or focus. **One click or tap plays a video in place, with sound** (owner: "videos only need 1 click to play"); play data is fetched before the click so playback starts inside it.
   - Resting the mouse plays a muted preview in place, with play/pause, sound and progress controls.
   - The controls act on the preview only and never open the post (owner bug: unmute opened the Short).
   - There is no preview on touch, under reduced motion or with Save-Data.
-- **Shorts** are one per post, vertical and centred, at most 32rem tall. A click or tap opens the **Shorts viewer**:
+- **Shorts** are one per post, vertical and centred, at most 32rem tall. One click or tap opens the **Shorts viewer**, already playing with sound:
   - It is full screen, with one Short per screen; scroll or swipe up (or ↑ ↓) for the next.
   - It starts with sound (falling back to muted) and has a link to the videos site.
   - Esc returns focus to the Short. Nothing autoplays under reduced motion.
