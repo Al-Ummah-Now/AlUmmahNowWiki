@@ -109,6 +109,19 @@ Subscriptions belong to the account, as on other video sites ([#1152](https://gi
 - **Storage.** D1 `channel_subscriptions` (NOTIFICATIONS_DB, migration 0008), one row per (channel, subscriber). An account's own subscription uses the subscriber key `user:<userId>`; channel ids never contain a colon. Queue events carry `subscriberType` (`user`/`channel`) and `subscriberChannelId` (null for an account's own subscription).
 - **Privacy.** The data export lists every subscription with `subscribedAs` (`member`/`channel`). Erasure removes both kinds and takes them off the counts.
 
+## Video comments without a channel
+
+A signed-in user comments on videos as the identity in use now, the same way as on community posts since [#1139](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1139) and #1144 ([#1153](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1153), issue [#1151](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1151)).
+
+- **Who comments.** With no active channel, the user comments, replies and likes comments **as themselves**. The author is their profile: display name (else first + last name) and avatar. With a channel active, all of these act **as that channel**, as before.
+- **The comment box** says who it posts as: "Commenting as {name}" / «تعلّق باسم {name}». Signed-out visitors get the sign-in prompt.
+- **Editing and deleting.** The author edits or deletes their own comment whatever identity is active. Video owners and channel moderators can still delete it.
+- **Likes** are per identity: a channel's like, or the user's own when no channel is active. `isLiked` in the comment list follows the identity in use.
+- **API.** The `channelId` header is optional on `POST/PUT/DELETE /api/videos/:id/comments[/:cid]`. A comment made without one has `channelId: null`, and so does its author block. Queue events and the moderation scan carry no channel for it.
+- **Privacy.** Export, erasure and footprints key on the user id, so they cover these comments and likes too.
+
+Still channel-only, by design: **Save to playlist**, because playlists belong to a channel. **Watch later** is per user.
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
