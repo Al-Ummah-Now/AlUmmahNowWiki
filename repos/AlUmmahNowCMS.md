@@ -23,7 +23,7 @@ Post and page addresses are generated from the title. An Arabic title gets a sho
 
 [bknd](https://bknd.io) 0.21 in code mode on a Cloudflare Worker, wrapped by a Hono app. bknd keeps storage, the data API and permissions. Its admin UI is retired: staff use our own server-rendered screens in [`src/admin`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/tree/main/src/admin) ([`docs/ADMIN_UI_SPEC.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/ADMIN_UI_SPEC.md)). Cloudflare D1, R2, KV, Queues and Workers AI. Vitest and Playwright.
 
-The admin follows the site theme the admin sets in the videos admin (Fawanees if the read fails). Light, Dark and System are per viewer. Fanous tokens are vendored by `npm run sync:fanous` and pinned in [`fanous.lock.json`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/fanous.lock.json).
+The admin follows the site theme the admin sets in the videos admin (Fawanees if the read fails). Light and Dark are per viewer (no "System" option: the first visit follows the device). Fanous tokens are vendored by `npm run sync:fanous` and pinned in [`fanous.lock.json`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/fanous.lock.json).
 
 ## Layout
 
