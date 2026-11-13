@@ -5,13 +5,19 @@
 | | |
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
-| **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (renders the sites), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 5, waiting on the owner (12 open decisions: SS3, SS5–SS9, SS11–SS16) |
+| **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
+| **Status** | **planned**: revision 6, waiting on the owner (open: SS7, SS8, SS9, SS11–SS14, SS16, SS18) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
+>
+> **Answers (2026-11-13, revision 6):**
+> - **SS3:** sites run on a **separate "sites" Worker**, with its own deploy and routes, so attaching domains never touches www. It shares www's rendering code through a package. Workers for Platforms is not needed (§5.2).
+> - **SS5:** yes, one post format for the CMS and community, with engagement on the videos side.
+> - **SS6 (changes the model):** from the start, a scholar's content, on the www scholar page and on the white-label site, is **fuelled by the channel's community posts**. www holds only thin, hidden **references** (like a repost), which editors can feature or curate without copying. This applies to every scholar, with or without the tier (§6.3).
+> - **SS7** stays open.
 >
 > **Answers (2026-11-13, revision 5):** SS1 is an admin add-on with two tiers. SS2: the channel's owner and admins **are** the site's owner and admins; the site follows the channel, one per channel. SS17: a site can choose **any active platform theme**. SS4: reuse existing storage. Site posts **are** the channel's community posts, and new storage is added only for what doesn't exist yet (§6.2).
 >
@@ -21,25 +27,25 @@
 
 ## 1. Summary
 
-There are two levels for a scholar:
+There are two levels for a scholar. Both are **fuelled by the scholar's channel's community posts** (SS6):
 
 | | **Scholar page** (no tier, every scholar) | **White-label site** (a tier; admins choose who gets it) |
 |---|---|---|
 | Where | `www.alummahnow.net/{en,ar}/scholars/{slug}/` | Its own host: `<slug>.alummahnow.net` and/or the scholar's **own domain** (`example.com`) |
+| Content comes from | The channel's community posts (via www references) and videos | The same community posts and videos, plus the site's pages |
 | Looks like | Al Ummah Now (platform theme and header) | **The scholar's brand on one of our themes**: a theme the site chooses (independent of the platform's), plus its own logo, name and favicon. The Al Ummah Now mark is optional by tier |
-| Written in | The CMS (writer role, as today) | **Studio, acting as the site's CMS**: pages, posts of every kind, About, navigation, home layout, SEO, domains |
+| Written in | **Studio** (community posts of every kind, including articles and cards) | **Studio**, also acting as the site's CMS: pages, navigation, home layout, SEO, domains |
+| Rendered by | www Worker | The **sites Worker** (same render package as www) |
 | Canonical | www | **The site's own host**, for everything it publishes |
-| Featured on the www home | Editors feature from the CMS (as today) | Optional: the site can share posts to Al Ummah Now, and editors may feature them. The item links to the site |
-
-A white-label site is **the same website as www, toned down**. It runs on www's renderer, with the same page kinds, post kinds, timeline, card viewer, player embed and languages. It is wearing the scholar's brand and is scoped to one channel.
+| On the www home | When editors feature the post's www reference | Same: the reference links to the site |
 
 The recommendation in short:
 
-- **www's Worker renders every white-label site** and picks the site by hostname. That gives "the same website" literally, with no second renderer to keep in step.
-- **Studio becomes the site's CMS, using existing storage.** Site posts **are** the channel's community posts (R2 JSON, existing APIs). The site's home **is** the channel's Home sections. Only pages, navigation, site settings and the host index are new, and they are JSON objects in the existing api-videos R2 buckets. There is **no new database and no new KV namespace** (§6.2).
-- **Own domains from day one**, through Cloudflare for SaaS custom hostnames ($0.10 per hostname per month after the first 100). Subdomains of `alummahnow.net` are free Workers Custom Domains.
-- **Independence:** text content is canonical on the site's host. Videos stay canonical on the videos site, except on a site with its own domain, where the site's watch page becomes canonical (§4.4).
-- **The tier is a plan add-on on the channel**, with keys for the platform mark, domains, theme and pages. Admins grant it; there is no payment.
+- **One source of truth for scholar content: the community post.** Scholars write in Studio. The CMS keeps a thin hidden **reference** per post (slug, locale, featuring, curation and a summary cache for the feed) and never a copy of the content. Existing CMS scholar posts are converted (§6.6).
+- **A separate sites Worker** (`al-ummah-now-sites`) serves every white-label host, through per-site custom domains and the SaaS zone's fallback origin. Its rendering comes from a package shared with www, so "the same website, toned down" stays literally true, and www's config is never touched when a domain is attached. Workers for Platforms is not needed, because we run our own code for every site.
+- **Existing storage first:** community posts (R2), channel Home sections (R2), the channel record (R2). New storage is only the site's settings, pages and host index, as R2 objects in existing buckets, plus reference rows in the CMS's existing `posts` table. No new database or KV namespace (§6.2).
+- **Own domains from day one**, through Cloudflare for SaaS custom hostnames ($0.10 per hostname per month after the first 100).
+- **The tier is an admin add-on on the channel** (SS1), with two tiers. The channel's owner and admins run the site (SS2). The site chooses any active platform theme, pinned (SS17).
 
 ## 2. What exists today
 
@@ -88,7 +94,7 @@ The seed names and values are suggestions; admins change them in the plans edito
 |---|---|---|---|
 | Address | `videos/@handle` | `www/…/scholars/slug/` | `slug.alummahnow.net` or own domain |
 | Branding | Avatar and banner | Al Ummah Now | A chosen platform theme + its own logo, name and favicon |
-| Written in | Studio (community posts) | CMS (writer) | Studio as the site CMS |
+| Written in | Studio (community posts) | Studio (community posts; www holds refs) | Studio (posts) + Studio as the site CMS |
 | Content pages | – | – | ✓ (blocks) |
 | Own navigation | – | – | ✓ |
 | Post kinds | Community kinds | article, cards | Every `PostV2` kind |
@@ -101,12 +107,12 @@ The seed names and values are suggestions; admins change them in the plans edito
 
 | Kind | Example | How Cloudflare serves it | Cost |
 |---|---|---|---|
-| **Platform subdomain** (every white-label site) | `mustafa-elbadry.alummahnow.net`; QA `…qa.alummahnow.net`; stage `…stage.alummahnow.net` | A **Workers Custom Domain** on the www Worker, attached by admin-api when the site is granted. Each gets its own certificate | Free |
+| **Platform subdomain** (every white-label site) | `mustafa-elbadry.alummahnow.net`; QA `…qa.alummahnow.net`; stage `…stage.alummahnow.net` | A **Workers Custom Domain** on the **sites Worker**, attached by admin-api through the Cloudflare API when the site is granted. Each gets its own certificate. www's config is never involved | Free |
 | **Own domain** (`site.customDomains.max > 0`) | `example.com`, `www.example.com` | A **Cloudflare for SaaS custom hostname** on a dedicated SaaS zone. The scholar adds a CNAME to `sites.<saas-zone>`, and Cloudflare issues the certificate (HTTP or TXT validation) | First 100 hostnames free, then **$0.10 per hostname per month** |
 
 ### 4.2 Own domains with Cloudflare for SaaS
 
-- **A dedicated zone.** The custom hostnames live on a separate zone (a new domain the owner registers, SS9). That zone has a proxied fallback origin (`sites.<saas-zone>`) and a Worker route `*/*` to the www Worker. A catch-all route on `alummahnow.net` itself would sit beside twenty platform hosts, and one routing mistake could take them down. A separate zone keeps the platform zone untouched.
+- **A dedicated zone.** The custom hostnames live on a separate zone (a new domain the owner registers, SS9). That zone has a proxied fallback origin (`sites.<saas-zone>`) and a Worker route `*/*` to the **sites Worker**. A catch-all route on `alummahnow.net` itself would sit beside twenty platform hosts, and one routing mistake could take them down. A separate zone keeps the platform zone untouched.
 - **Flow in Studio → Site → Domains:**
   1. The owner types `example.com`.
   2. Studio shows the DNS records: a CNAME `www.example.com → sites.<saas-zone>`, and for the apex either their DNS provider's CNAME flattening/ALIAS or a redirect from the apex to `www`.
@@ -164,22 +170,40 @@ All paths are under `/<locale>/` (`en`, `ar`). The site sets its default locale 
 
 Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي / مرئيات» for video and never «فيديو». Shorts are «المقاطع القصيرة».
 
-### 5.2 Rendering: www, multi-tenant by host
+### 5.2 Rendering: a separate sites Worker sharing www's code (SS3, answered)
 
-| | **www Astro Worker (recommended)** | Videos web app (Next.js on OpenNext) | A new site Worker |
-|---|---|---|---|
-| "Same website, toned down" | It *is* the website | A different app | A copy |
-| Already renders | Timeline, articles, cards, pages and blocks, list pages, scholar page, RSS, JSON-LD | Channel pages, community | Nothing |
-| Cost per page | Light SSR plus HTML edge cache | Heavy bundle, client React | Light |
-| Data reach | CMS binding, videos API, KV fallbacks | Videos API | Would need both |
+**Why a separate Worker.** The owner wants domains handled independently of www. Attaching a subdomain or an own domain, the SaaS zone's `*/*` route, and a bad site config must never touch www's deploy, routes or cache.
 
-How a request works:
+| | www Worker (`al-ummah-now-www`) | **Sites Worker (`al-ummah-now-sites[-qa\|-stage]`)** |
+|---|---|---|
+| Hosts | `www.` and the apex (as today) | Every white-label host: per-site Workers Custom Domains on `alummahnow.net`, plus the SaaS zone's `*/*` route for own domains |
+| Code | `apps/www` | `apps/sites` |
+| Shared | `packages/render`: Astro components (timeline, post and cards renderers, blocks, video facades, layouts), data clients (CMS, videos, community), themes, i18n, edge cache helpers | Same package |
+| Deploy | Its own release | Its own release, gated by the same E2E. A sites deploy can't break www, and the reverse |
+| Bindings | CMS service binding, `FEED`, `CONTENT_SNAPSHOT` | CMS service binding (directory entry, references), `CONTENT_SNAPSHOT` (last good site configs), no `FEED` |
 
-1. `src/worker.ts` reads `Host`. `www` and the apex behave as today.
-2. Any other host → isolate cache (60 s) → `GET {videos-api}/api/sites/by-host/:host` (Cache API 60 s, served from the R2 host index and the site's `settings.json`) → `{channelId, primaryHost, locales, themeRef, mark, nav, configVersion, status}`. The last good answer is also kept in www's existing `CONTENT_SNAPSHOT` KV, so a videos API outage still renders the site with its own theme. An unknown host gets a bare 404 that is never cached.
-3. A non-primary host 301s to the primary.
-4. Astro renders the same `[locale]` routes with a site context. The layout is `SiteLayout` (the site's own header, menu and footer). The data is scoped to the channel and its site objects. Canonicals, `SITE_URL` and the theme come from the site.
-5. The edge cache key is URL (with host) + build + `configVersion` + theme version.
+**Where the code lives.** AlUmmahNowUI becomes a small workspace: `apps/www`, `apps/sites` and `packages/render`. One PR changes both apps, and CI builds both. That is lighter than publishing a package from another repo, and the two can't drift.
+
+**How a request works (sites Worker):**
+
+1. Read `Host`, then isolate cache (60 s), then `GET {videos-api}/api/sites/by-host/:host` (Cache API 60 s, from the R2 host index and `settings.json`). The last good answer is kept in `CONTENT_SNAPSHOT`, so a videos API outage still renders the site in its own theme. An unknown host gets a bare 404 that is never cached.
+2. A non-primary host 301s to the primary.
+3. Render the same `[locale]` routes from `packages/render` with `SiteLayout`, scoped to the channel.
+4. The edge cache key is URL (with host) + build + `configVersion` + theme version.
+
+**Do we need Workers for Platforms?** No.
+
+| | **Cloudflare for SaaS + one sites Worker (recommended)** | Workers for Platforms (WfP) |
+|---|---|---|
+| What it is for | Serving **many customer domains** with TLS from one zone, routed to our Worker | Running **customer-supplied code**: thousands of isolated user Workers in a dispatch namespace, each uploaded by or for a customer |
+| Fits us? | Yes. We run **our own code** for every site; only the data differs | No. No site runs its own code (§9.3), and WfP doesn't provide domains: you still need Cloudflare for SaaS for custom hostnames |
+| Price | Our existing Workers Paid plan ($5/month account-wide; 10 M requests and 30 M CPU-ms included, then $0.30 / M requests and $0.02 / M CPU-ms). Custom hostnames: 100 free, then $0.10 each per month | **$25/month** base (includes about 20 M requests, 60 M CPU-ms and 1,000 scripts), then about $0.30 / M requests, $0.02 / M CPU-ms and $0.02 per script per month, **plus** the same Cloudflare for SaaS hostname fees |
+| Limits | Custom hostnames: up to tens of thousands on non-Enterprise plans. Workers Custom Domains: per-zone limit to confirm | Script count and dispatch limits per namespace |
+| Operations | One Worker to deploy | A dispatch Worker plus per-site scripts to upload, version and keep in step |
+
+**Unverified:** the WfP and SaaS prices and limits above are from Cloudflare's public pricing as remembered on 2026-11-13. Check them in the dashboard before phase 2. The recommendation doesn't depend on the exact numbers: WfP solves a problem we don't have (untrusted code), and it still needs Cloudflare for SaaS for domains.
+
+**To verify in phase 2:** that `wrangler deploy` of the sites Worker leaves custom domains attached through the API alone. Its config declares no routes for site hosts. If it doesn't, subdomains also become SaaS custom hostnames (same flow, $0.10 each after the first 100).
 
 ### 5.3 Theme and branding
 
@@ -213,10 +237,9 @@ How a request works:
 
 ### 6.1 Scholar ↔ channel ↔ site
 
-- A scholar has up to 5 channels and one **primary** channel: add `scholars.primary_channel_id` to the CMS, backfilled from `channel_ids[0]`, picked with an autocomplete.
-- A channel belongs to at most one scholar, and a channel has at most one site.
-- **Without the tier:** the CMS stays the scholar's home (scholar page, writer role, featuring), as today.
-- **With the tier:** the site and Studio become the home. The CMS keeps the scholar profile for the www directory entry, and the bio is edited in Studio and synced back (§6.4).
+- A scholar has up to 5 channels and one **primary** channel (`scholars.primary_channel_id` in the CMS, backfilled from `channel_ids[0]`). The primary channel's community posts **are** the scholar's posts (SS6).
+- A channel belongs to at most one scholar, and has at most one site (SS2). The site's owner and admins are the channel's (SS2).
+- **Every scholar, with or without the tier, writes in Studio.** The CMS keeps the scholar profile (bio and avatar for the www directory) and the references. The CMS writer screen becomes a link to Studio (SS18).
 
 ### 6.2 Where everything is stored (reuse first)
 
@@ -224,7 +247,8 @@ Owner rule (SS4): reuse existing storage. Site posts **are** the channel's commu
 
 | What | Where | New? | Why there |
 |---|---|---|---|
-| Site posts (every kind) | **Community posts**, R2 `community-posts`: `posts/{channelId}/{postId}.json` and the index, via the existing `/channels/:id/posts` API | No: it **is** the channel's Community tab | Same posts, same likes, votes and comments. `PostV2` adds fields to the same JSON (§6.3) |
+| **Every scholar post** (scholar page, site, Community tab) | **Community posts**, R2 `community-posts`: `posts/{channelId}/{postId}.json` and the index, via the existing `/channels/:id/posts` API | No: the single source of truth | Same posts, same likes, votes and comments. `PostV2` adds fields to the same JSON (§6.3) |
+| www references to scholar posts (slug, locale, featuring, curation, timeline, search, summary cache) | CMS D1 `posts`, rows with `kind = 'ref'` | No new table: new columns on `posts` | Featuring, curated pages, search and the KV feed already run on `posts` |
 | Videos, Shorts, playlists, live | Existing videos, playlists and live stores and APIs | No | – |
 | Site home layout | **Channel Home sections**, R2 `channel_sections` (AUN-CHANNEL-SECTIONS: up to 12 sections, 13 types including Spotlight, Shorts, Live, playlists and Community posts) | No. Two section types are added: `page` (embed a site page) and `cta`. The videos channel page ignores them | Editing the site home and the channel Home tab is one job, not two |
 | About, name, logo | The channel record, R2 `channels` (`nameLocalized`, `descriptionLocalized`, `avatarUrl`, `links`, `contactEmail`) | No. The site name defaults to the channel name, and the logo to the avatar | The site follows the channel |
@@ -253,14 +277,16 @@ Owner rule (SS4): reuse existing storage. Site posts **are** the channel's commu
 
 **Grant and lifecycle:** admin-api records the grant in its existing tables and calls api-videos `POST /internal/sites/:channelId` (create, suspend, restore, revoke). api-videos writes `settings.json` and the subdomain's host index object, and admin-api attaches the Cloudflare domain. Revoking moves the `site/{channelId}/` prefix into the 30-day trash, the same soft-delete rule as other content.
 
-### 6.3 Posts: one schema (`PostV2`)
+### 6.3 Posts: one format, community as the source (SS5, SS6 answered)
+
+**Rule.** A scholar's content is always a **community post on their primary channel**. www, the scholar page and the white-label site all read it from there. The CMS holds only a **reference**, a thin hidden row, so editors can feature and curate it without copying it. Staff posts, which have no channel, stay native CMS posts.
 
 **Kinds** are the same everywhere: `article`, `cards`, `text`, `image`, `video` (video, Short or playlist), `poll`, `quiz`, `gif`, and `link` if SS14 says so. Page-only block types (quote, CTA, columns, divider) stay blocks.
 
 | Kind | www / CMS today | Community today | After |
 |---|---|---|---|
-| Article | ✓ | Link-out mirror | Both; Studio editor |
-| Cards (≤40) | ✓ | – | Both; Studio editor |
+| Article | ✓ | Link-out mirror | Community (Studio editor); staff in the CMS |
+| Cards (≤40) | ✓ | – | Community (Studio editor); staff in the CMS |
 | Text | – | ✓ | Both |
 | Image (1–10, alt required) | Blocks only | ✓ | Both |
 | Video / Short / playlist | Timeline entries | ✓ (video) | Both |
@@ -270,11 +296,10 @@ Owner rule (SS4): reuse existing storage. Site posts **are** the channel's commu
 | Link | – | – | SS14 |
 
 ```ts
-interface PostV2 {
-  uid: string;                       // pst_<ulid>, the same wherever the post appears
+interface PostV2 {                   // one format: community JSON and CMS staff posts
+  uid: string;                       // pst_<ulid>
   kind: 'article'|'cards'|'text'|'image'|'video'|'poll'|'quiz'|'gif'|'link';
-  home: 'cms' | 'community';         // where it is edited
-  channelId?: string; siteId?: string; authorSub?: string;
+  channelId?: string; authorSub?: string;          // community posts always have a channel
   locale: 'en'|'ar'; translationKey?: string;
   slug?: string; title?: string; text?: string; cover?: MediaRef;
   slides?: Slide[]; images?: MediaRef[];
@@ -284,33 +309,57 @@ interface PostV2 {
   gif?: MediaRef; link?: { url: string; title?: string; image?: MediaRef };
   status: 'draft'|'scheduled'|'published'|'deleted';
   visibility: 'public'|'subscribers'|'members';
-  publishAt?: string; sharedToPlatform?: boolean; featuredAt?: string;
+  publishAt?: string; offerToPlatform?: boolean;    // SS8
   commentsEnabled: boolean; tags?: string[]; createdAt: string; updatedAt: string;
 }
 ```
 
-- **The types live in** `packages/post-schema` (types, a zod validator, limits and fixtures). The CMS and www vendor it with a pinned sync, the way they vendor Fanous (`sync:posts`, `check:posts`).
-- **Renderers:** each kind gets one CSS file and pure HTML-string renderers for www and the sites. The videos app wraps the same classes in React. A fixture test renders every kind in both.
-- **Stores:**
-  - Studio posts, including every white-label site post, live in the **community store**, written there as `PostV2`.
-  - CMS posts by staff and by scholars without the tier stay in **CMS D1**.
-  - Engagement (likes, votes, quiz answers, comments) is **always on the community copy**, so there is one discussion wherever a post is read.
-- **Links:** the CMS → community mirror (`community_links`) widens to every kind. For scholars **without** the tier, community → CMS mirroring lets editors feature their Studio posts on www (SS15).
-- **Sharing a white-label post to www:** a site post with `sharedToPlatform` (on by default, per post) is mirrored to the CMS as a reference. Editors can then feature it on the www home timeline. Its link and canonical point to the site. Feed items gain every kind, which changes the feed shape, so `FEED_FORMAT` goes to 4.
+**The www reference (CMS `posts`, `kind = 'ref'`).** New columns on the existing table:
 
-### 6.4 Moving a scholar onto the tier, and off it
+| Column | Meaning |
+|---|---|
+| `ref_post_id`, `ref_channel_id` | The community post it points to |
+| `slug`, `locale`, `translation_key`, `published_at`, `status` | Copied from the post, for www URLs, alternates and lists |
+| `author_sub` | The scholar (as today) |
+| `featured_at`, `featured_by`, `show_on_timeline`, tags, page entries | **Editorial state, owned by www.** This is the only part editors change |
+| `summary_json` | A cache of title, excerpt, cover and first slides, used by the KV feed builder and search. Refreshed on every sync. Never edited |
 
-- **On:** a one-time **move** of the scholar's CMS posts into the site. Each post is copied into the community store as `PostV2` with the same `uid`, slug and translations. Its home becomes `community`. The CMS row turns into a read-only reference whose www URL 301s to the site (an exception to www's no-redirect rule, because the content moved; SS6). Comments and likes already live on the community copy. Bio and avatar: Studio becomes the editor, and changes sync to the CMS profile for the www directory entry.
-- **Off:** the site goes offline (§4.4), and posts stay in the community store and on the channel's Community tab. Pages and settings are kept for 90 days, so restoring the tier brings the site back as it was. After 90 days pages move to the 30-day trash.
+- **Hidden:** refs don't appear in the CMS posts list as editable posts. Editors see them in a **Scholar posts** picker (autocomplete) on the Timeline and Featuring screens, with *Feature* and *Add to page*, and an *Open in Studio* link for the scholar.
+- **Created automatically:** api-videos keeps an outbox. Every create, update or delete of a public post on a scholar's primary channel calls the CMS (`PUT/DELETE /internal/refs/:postId`, `X-API-Key` from the Secrets Store), with the same retry and backoff as today's `community_links`, in the opposite direction. One ref per post, so the scholar page, search, the sitemap and featuring all work without an extra step.
+- **Rendering:** list views (timeline, scholar page, curated pages) render from `summary_json`. A post page fetches the community post itself (Cache API, 60 s), so an edit in Studio shows on www within a minute. A featured ref whose post is deleted drops off the timeline on the next feed build.
+- **Engagement** (likes, votes, quiz answers, comments) is always on the community post, so there is one discussion wherever it is read.
+- **Feed shape:** feed items gain every kind and a `ref` source, so `FEED_FORMAT` goes to 4 (automatic rebuild).
+- **Canonical:** without the tier, the www post URL. With the tier, the site (§4.4). The www URL stays the same in both cases, so getting the tier needs no move. Only the canonical and a 301 change (SS6).
+- **Shared code:** `packages/post-schema` (types, zod validator, limits, fixtures) in the monorepo, vendored by the CMS and AlUmmahNowUI with a pinned sync (`sync:posts`, `check:posts`). Renderers for each kind live in `packages/render` (www and sites). The videos app wraps the same CSS classes in React, and a fixture test renders every kind in both.
+
+### 6.4 Getting the tier, and losing it
+
+- **On:** nothing moves, because the posts already live on the channel. The site starts showing them. The refs' canonical switches to the site, and the www post URLs 301 to the site's post URLs. Bio and avatar stay editable in Studio and sync to the CMS directory entry.
+- **Off:** the site goes offline (§4.4). The www URLs serve again and become canonical. Pages and settings are kept for 90 days, then go to the 30-day trash.
 
 ### 6.5 Comments and likes
 
-| Surface | Phase 1 | Phase 3 |
+| Surface | Before phase 4 | Phase 4 |
 |---|---|---|
 | Site post and watch pages | Counts, plus "Join the discussion" on the videos post | Inline comments, likes and votes through the videos API, signed in with the site's own session (`__Host-aun_site`) |
-| www | As today | Same component |
+| www scholar posts | Counts, plus "Join the discussion" | Same inline component |
 
-## 7. Studio as the site's CMS
+### 6.6 Migration: existing CMS scholar posts become community posts
+
+Applies to every CMS post with `author_sub` set (scholar posts), per environment.
+
+1. **Freeze:** the CMS writer screen switches to "Write in Studio". Editors can still feature.
+2. **Convert each post** onto the scholar's primary channel:
+   - **Articles that already have a community mirror** (`community_post_id` set through `community_links`): the existing community post is **upgraded in place** to a full `article` (body, cover, slug, locale, translation key). It keeps its id, likes and comments.
+   - **Cards posts and articles without a mirror:** a new community post (`article` or `cards`), with media re-referenced, not copied.
+3. **Turn the CMS row into a ref:** `kind = 'ref'`, plus the ref columns. The slug, locale, `translation_key`, `featured_at`/`featured_by` and page entries are kept, so **www URLs and the home timeline don't change**. The original body and slides go into the revisions table and are kept for 30 days for rollback.
+4. Retire `community_links` (CMS → community) once every row is converted. The ref outbox (community → CMS) replaces it.
+5. Bump `FEED_FORMAT` to 4 (automatic rebuild).
+6. **Check:** a script compares each converted post with its original (title, body hash, slide count, slug, featured state) and lists any differences. Only then is the rollback copy dropped.
+
+A scholar without a channel can't be converted. The script lists them, and admins link a channel first. QA, then stage, then production, each with the owner's go-ahead for production (data change).
+
+## 7. Studio as the site's CMS## 7. Studio as the site's CMS
 
 ### 7.1 Scope
 
@@ -319,7 +368,7 @@ interface PostV2 {
 | Area | What it does | Today's equivalent |
 |---|---|---|
 | Overview | Status, hosts, quick links, checklist (logo, About, first page, domain) | – |
-| **Posts** | Create and edit every `PostV2` kind, with schedule, en/ar pair, share to Al Ummah Now, pin and comments switch | Community posts (6 kinds) plus CMS articles and cards |
+| **Posts** | The channel's community posts: every `PostV2` kind, with schedule, en/ar pair, offer to Al Ummah Now (SS8), pin and comments switch. For every scholar, not only the tier | Community posts, plus the article and cards editors (from the CMS) |
 | **Pages** | Block pages (markdown, image, gallery, posts list, cards, videos, video, CTA, columns, quote, divider) and list pages (curated or filter), drafts, schedule, revisions, preview | CMS pages, blocks and page kinds |
 | **Navigation** | Main menu and footer links per language: pages, list pages, Videos/Shorts/Posts/About, external links. Drag to reorder, up to `site.navigation.max` | CMS nav |
 | **Home** | The channel's Home sections (the same editor and storage as the Home tab), plus the site-only `page` and `cta` sections | Channel sections (reused) |
@@ -334,12 +383,12 @@ Preview: an iframe of the real site with a signed, 10-minute, channel-bound prev
 ### 7.2 What the CMS keeps
 
 - www itself: the home timeline, featuring, staff pages and posts, list pages, translations and the AI writing assist.
-- Scholars **without** the tier keep writing in the CMS (writer role).
-- The www scholar directory, plus the reference rows for shared and moved site posts.
+- The scholar directory (bio, avatar) and the **references** to scholar posts. Editors feature and curate refs; they never edit scholar content.
+- The scholar writer role becomes "Write in Studio" (SS18). Scholars still sign in to the CMS only if they also have staff duties.
 
 ### 7.3 Reuse, not a second CMS
 
-- **The block schema becomes shared.** Block types move into `packages/post-schema` (as `BlockV1`), so the CMS and Studio validate the same JSON and www renders both with the same `Blocks.astro`.
+- **The block schema becomes shared.** Block types move into `packages/post-schema` (as `BlockV1`), so the CMS and Studio validate the same JSON and www and the sites Worker render both with the same `Blocks.astro` from `packages/render`.
 - **The editors are React in Studio**, built on the shared schema. The CMS keeps its own editor. Both write the same JSON. Fixture tests keep the two in step.
 - **AI assist** (slug, translate, summarise) uses the same Workers AI routes and budget guard as the CMS, metered per site (feature `site-assist`) and off in tests.
 - **Moderation:** site posts and pages are platform content. They go through the same reports, AI moderation (Epic 28) and admin actions as community posts.
@@ -363,7 +412,7 @@ Assumptions: 300 white-label sites, 150 with an own domain (2 hostnames each = 3
 
 | Item | Unit price | Monthly |
 |---|---|---|
-| Worker requests and CPU (www) | $0.30 / M requests after the included 10 M; $0.02 / M CPU-ms | ≈ $1–3 |
+| Worker requests and CPU (sites Worker) | $0.30 / M requests after the included 10 M; $0.02 / M CPU-ms | ≈ $1–3 |
 | R2 site objects, CMS and videos reads | Cached 60 s; R2 Class B only on a miss | < $2 |
 | Version-pinned theme CSS (R2 + CDN) | Class B reads, cached | < $0.50 |
 | Analytics Engine | Included, then $0.25 / M | ≈ $0.50 |
@@ -402,24 +451,24 @@ WCAG 2.1 AA is the floor:
 
 | Phase | Scope | Done when |
 |---|---|---|
-| **0. Decisions** | Owner answers SS1–SS16 | Recorded in the [decision log](decisions.md) |
-| **1. White-label site, set up by staff** | Tier keys and seeds; grant flow in admin; site objects in the existing R2 buckets (settings, host index); **UI#55 (www renders admin theme packages)**; www multi-tenant rendering (home, videos, Shorts, watch, posts, About, RSS, sitemap) from existing channel content and CMS posts; the site's chosen theme pinned per site (version-pinned CSS), logo, name and favicon, set up by staff for the first site; platform subdomain; **own-domain support (SaaS zone, custom hostnames, DNS flow in admin)**; canonical rules; CMS `primary_channel_id` | mustafa-elbadry's site live on its subdomain (and on its own domain if they have one), after QA and stage |
-| **2. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home layout, Pages (blocks and list pages), Theme & brand (choose a theme, logo, name, favicon), Domains self-serve, SEO, preview, revisions | The scholar runs their site without staff help |
-| **2b. One post model** | `packages/post-schema` (posts and blocks); CMS kinds widened (`FEED_FORMAT` 4); `uid` backfill; Studio article and cards editors; share-to-platform and featuring; move-in tool for CMS posts | A site's poll or article can be featured on the www home, with one discussion |
-| **3. Engagement and identity** | Inline comments, likes and votes on sites; site sign-in; branded sign-in; site analytics | A viewer comments on a site post without leaving the site |
-| **Native apps** | Channel screens link to the site | – |
+| **0. Decisions** | Owner answers the open decisions | Recorded in the [decision log](decisions.md) |
+| **1. Community-fuelled scholar content** (every scholar) | `packages/post-schema`; Studio article and cards editors; CMS ref rows, the ref outbox and the Scholar posts picker; the www scholar page and post pages read community posts; `FEED_FORMAT` 4; **migration §6.6**; CMS `primary_channel_id` | Every scholar post on www is a ref to a community post, with URLs and featuring unchanged |
+| **2. Sites Worker and the first white-label site** (can start alongside phase 1) | AlUmmahNowUI workspace (`apps/www`, `apps/sites`, `packages/render`); sites Worker per environment; tier keys and seeds; grant in admin; site objects in existing R2; per-site custom domains; **SaaS zone and own domains**; UI#55 (admin themes on www and sites); canonical rules | mustafa-elbadry live on its subdomain (and its own domain if any), after QA and stage |
+| **3. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home (channel sections + `page`/`cta`), Pages, Theme & brand (choose), Domains, SEO, preview, revisions | The scholar runs the site without staff |
+| **4. Engagement and identity** | Inline comments, likes and votes on www and sites; site sign-in; branded sign-in; site analytics | A viewer comments without leaving the page |
 
 Every phase updates this page and the repo pages (wiki rule).
 
 ### Migrations
 
-| Repo | Migration | Phase |
+| Repo | Change | Phase |
 |---|---|---|
-| AlUmmahNow admin-api | Entitlement keys and the two add-on seeds | 1 |
-| AlUmmahNow api-videos | **No new database.** New R2 key prefixes `site/{channelId}/…` (in `channel_sections`) and `site-hosts/` (in `channel_tabs`); two new section types | 1, 2 |
-| AlUmmahNowCMS | `primary_channel_id` (1); post kinds, `uid`, `origin`, reference rows (2b) | 1, 2b |
-| AlUmmahNow community store | R2 backfill adding `uid` and `schemaVersion: 2` | 2b |
-| AlUmmahNowAuth | Per-host redirect URIs on the sites client; branded sign-in per redirect | 1, 3 |
+| AlUmmahNowCMS | `primary_channel_id`; ref columns on `posts` (`ref_post_id`, `ref_channel_id`, `summary_json`); conversion script (§6.6) | 1 |
+| AlUmmahNow community store | `PostV2` fields (`uid`, `schemaVersion: 2`, article/cards bodies), backfilled lazily and by a one-off job | 1 |
+| AlUmmahNow api-videos | Ref outbox; no new database. New R2 key prefixes `site/{channelId}/…` (`channel_sections`) and `site-hosts/` (`channel_tabs`); two section types | 1, 2 |
+| AlUmmahNow admin-api | Entitlement keys and the two add-on seeds | 2 |
+| AlUmmahNowUI | Workspace split; new `al-ummah-now-sites` Worker (QA, stage, production) | 2 |
+| AlUmmahNowAuth | Per-host redirect URIs for the sites client; branded sign-in | 2, 4 |
 
 Migration numbers are assigned when building.
 
@@ -427,32 +476,46 @@ Migration numbers are assigned when building.
 
 | Risk | Mitigation |
 |---|---|
-| Studio grows into a second CMS that drifts from the CMS | One shared schema for posts and blocks, one renderer (www), fixture tests in both editors |
+| Studio grows into a second CMS that drifts from the CMS | One shared schema for posts and blocks, one render package (www and sites), fixture tests in both editors |
+| Refs drift from their community posts | Idempotent outbox with retries, a nightly reconcile (community index ↔ refs), and post pages that read the community post directly |
+| Converting existing scholar posts loses content | Upgrade in place where a mirror exists, a comparison script, and the original body kept 30 days for rollback |
 | Own-domain sites used for phishing or impersonation | Admin-only grant, validated DNS, the legal/report footer always on, sign-in always names the account, no custom forms |
 | SaaS hostname costs grow | `site.customDomains.max` per tier, a cost-monitor line and an alert |
 | Duplicate content | One canonical per item, chosen by the brand host (§4.4); platform sitemaps leave site-canonical URLs out |
-| www is a single point of failure for every site | www's stale-cache and `CONTENT_SNAPSHOT` fallbacks also cover sites, including each site's last good config; release E2E covers one site per host kind |
+| A bad sites deploy takes every site down | Separate Worker and release, so www is unaffected; stale-cache and `CONTENT_SNAPSHOT` fallbacks with each site's last good config; release E2E covers one site per host kind |
 | A theme update changes a site unexpectedly | Sites stay pinned; updates are offered with a preview; only audited contrast or security fixes are pushed |
 | A scholar leaves the tier | 90-day offline period with everything kept; posts stay on the channel |
 
 ## 12. Decisions for the owner
 
-The owner's 2026-11-13 direction answered these earlier questions: it is a **tier**, white-label, with **its own choice of theme and its own name and logo**, **independent** (canonical on its own host), **not every scholar** gets it, and **own domains** are in scope. The theme rules answered more. A site **chooses one of our themes, independently** of the platform's active theme, pinned per site, with no fallback to the platform theme. There is **no theme editing or site theme builder**, and branding is **logo, name and favicon only**. The former **SS10** (light headers) no longer arises, because every platform theme has a dark header, so it is removed. Revision 5 answered **SS1** (an admin add-on with two tiers), **SS2** (channel owner and admins are the site's owner and admins; the site follows the channel), **SS4** (Studio is the CMS on existing storage: posts are community posts, and only pages, navigation, settings and the host index are new R2 objects) and **SS17** (any active platform theme, automatically). The other numbers are kept. What is left:
+**Answered** (kept here for the record):
+
+| # | Answer | Date |
+|---|---|---|
+| SS1 | An admin-granted add-on on the channel, with two tiers: "White-label" and "White-label + domain" | 2026-11-13 |
+| SS2 | The channel's owner and admins **are** the site's owner and admins (channel roles); the site follows the channel, one per channel | 2026-11-13 |
+| SS3 | A **separate sites Worker** that shares www's rendering code through a package. Cloudflare for SaaS + one Worker, not Workers for Platforms | 2026-11-13 |
+| SS4 | Studio is the site CMS on **existing storage**; only settings, pages and the host index are new R2 objects | 2026-11-13 |
+| SS5 | One post format for the CMS and community; engagement on the videos side | 2026-11-13 |
+| SS6 | Scholar content is **fuelled by community posts** from the start (with or without the tier); www holds hidden references; existing CMS scholar posts are converted | 2026-11-13 |
+| SS10 | No longer applies: every platform theme has a dark header | 2026-11-13 |
+| SS15 | Covered by SS6: every scholar post gets a ref, so editors can feature it | 2026-11-13 |
+| SS17 | Any active platform theme, automatically (choose-only, pinned) | 2026-11-13 |
+| – | Earlier: it is a tier; white-label; independent with posts canonical on the site; not every scholar gets it; own domains in scope; platform mark optional by tier; sites choose one of our themes, with no editing; branding is logo, name and favicon | 2026-11-13 |
+
+**Still open:**
 
 | # | Decision | Recommendation |
 |---|---|---|
-| SS3 | www's Worker renders the sites ("the same website, toned down") | Yes |
-| SS5 | One post schema (`PostV2`) and one block schema shared by the CMS and Studio; engagement always on the videos community post | Yes |
-| SS6 | When a scholar gets the tier, their existing CMS posts **move** to the site, and old www URLs 301 to the site (an exception to the no-redirect rule) | Yes, with the scholar's consent at grant |
-| SS7 | Videos: canonical on videos for subdomain sites; on the **site** for sites with their own domain | Yes (§4.4) |
-| SS8 | White-label posts can be **shared to Al Ummah Now** (on by default per post) so editors can feature them on www; the item links to the site | Yes |
-| SS9 | Own domains go on a **separate SaaS zone** (a new domain the owner registers) rather than a catch-all on `alummahnow.net` | Yes; the owner picks the domain name |
-| SS11 | Viewers sign in with their Al Ummah Now account everywhere. Branded sign-in still says "Al Ummah Now account" | Yes |
+| SS7 | Videos canonical: on videos for subdomain sites; on the **site** for own-domain sites (§4.4). *Explanation pending with the owner* | Yes |
+| SS8 | Can a scholar mark a post "not for Al Ummah Now" (`offerToPlatform = false`), so it gets no www ref and can't be featured? The default is on | Yes, default on |
+| SS9 | Own domains go on a **separate SaaS zone** (a new domain the owner registers) | Yes; the owner picks the name |
+| SS11 | Viewers sign in with their Al Ummah Now account everywhere; branded sign-in still names it | Yes |
 | SS12 | A renamed subdomain keeps a 301 for 12 months | Yes |
 | SS13 | Can a site be single-language (Arabic only, for example)? | Yes; the default is both |
 | SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
-| SS15 | For scholars **without** the tier, mirror their Studio community posts into the CMS so editors can feature them | Yes |
-| SS16 | First site: mustafa-elbadry, set up by staff in phase 1 (their chosen platform theme, logo, name and favicon, subdomain, own domain if they have one), with Studio self-service in phase 2 | Yes |
+| SS16 | First site: mustafa-elbadry, set up by staff in phase 2, with Studio self-service in phase 3 | Yes |
+| SS18 | Scholars write only in Studio, and the CMS writer role becomes a link to Studio. This follows from SS6. Today's CMS writers lose the CMS editor, but their posts are migrated and keep their URLs | Yes |
 
 ## Open questions, not decisions
 
