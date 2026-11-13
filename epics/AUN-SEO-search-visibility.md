@@ -11,6 +11,23 @@
 
 Read from `origin/main` on 2026-11-13: AlUmmahNow [`de8c284`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/de8c284f8a1b84b7008c416a68e2f007de55ab5c), AlUmmahNowUI [`b521637`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/b5216371b3aa37a8308f1bc3b6491af4b8689a82), AlUmmahNowCMS [`d661daf`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/tree/d661daf7d266cb6804637cf616fa7b5fa680b21b). The live checks fetched production pages as Googlebot (smartphone) and as desktop Chrome, read-only. Lighthouse 12.6 ran locally in mobile mode, because the PageSpeed Insights API was over its daily quota.
 
+## Progress
+
+Defect fixes that need no decision, opened 2026-11-13. Live behaviour is in [Environments: Search engines](../guides/environments.md#search-engines-crawler-rules).
+
+| Gap | Fix | PR |
+|---|---|---|
+| #1 soft 404s | Real 404 (owner sees their private one, noindex); 503 when the API is down | [#1158](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1158) |
+| #2 QA/stage indexable | Non-production videos: noindex + `Disallow: /` | [#1158](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1158) |
+| #6 (part) `?vid=` | 301 to `/video/{id}`; every link canonical | [#1158](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1158) |
+| #7 (part) `/ar` title | Site name in the page's language | [#1158](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1158) |
+| #8 utility pages, private hosts | Videos viewer-only pages noindex | [#1158](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1158) |
+| #8 utility pages, private hosts | admin, APIs, realtime, media | [#1160](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1160) |
+| #8 utility pages, private hosts | auth, profile/account, auth admin | [Auth#342](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/342) |
+| #8 utility pages, private hosts | cms (public media stays crawlable) | [CMS#104](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/104) |
+
+410 after purge waits on [D-SEO-4](#d-seo-4-deleted-content-status). Everything else waits on the decisions below.
+
 ## Summary
 
 - **www is in reasonable shape.** It renders on the server, returns real 404s, sets canonical and hreflang tags, and has JSON-LD, a sitemap, RSS and a production-only robots.txt.
