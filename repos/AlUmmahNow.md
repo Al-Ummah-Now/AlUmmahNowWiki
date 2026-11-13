@@ -158,6 +158,20 @@ The admin's **Overview → Site visits** page (`/site-visits`, every admin) show
 - **Top referring websites.** The 30 referring hosts with the most visits in the period (direct visits have no host).
 - **API.** admin-api `GET /api/content/analytics/visits?days=N` (1–365), which reads api-videos' internal `/analytics/visits`.
 
+## Notification badge and read state
+
+The header bell's badge counts what is **new since the user last opened the notification menu** (unseen), not every unread notification. Read state stays per notification ([#1197](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1197)).
+
+- **Opening the menu** clears the badge for that user in every tab and on every device (realtime `notifications_state` on `user:<id>`). It is stored server-side: D1 `notification_seen` (NOTIFICATIONS_DB, migration 0012), one row per user, one upsert per open.
+- **What opening also does** is a platform setting, videos admin → **Platform settings** → *When the notification menu is opened*:
+  - **Clear the badge only** (default): notifications stay unread until the user clicks *Mark as read* / *Mark all as read* or opens the notification.
+  - **Mark the shown notifications as read**.
+  Any admin role can see it; changing it needs `settings:manage` (admins and super admins). Every change is audited (`site_settings_log`, key `notifications:menu-open`) and listed on the page. Bells pick a change up within about 30 seconds.
+- **Controls:** each notification has *Mark as read* / *Mark as unread* (bell dropdown and the Notifications page), *Mark all as read* stays, and opening a notification marks it read. Marking one unread again does not bring it back on the badge.
+- **Badge:** capped at `9+`; the bell is named "Notifications, N new" («الإشعارات، N جديدة»).
+- **API:** `POST /api/notifications/seen` `{ ids? }`, `POST /api/notifications/unread` `{ ids }`; list and unread-count return `unseenCount` and `menuOpen` next to `unreadCount`. Native apps have no bell yet ([Core#40](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/40)).
+- **Privacy:** the seen time is exported (`notificationState`) and erased with the account.
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
