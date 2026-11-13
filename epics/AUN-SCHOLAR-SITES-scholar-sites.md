@@ -6,12 +6,14 @@
 |---|---|
 | **ID** | `AUN-SCHOLAR-SITES` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www and the new sites Worker, sharing one render package), [AlUmmahNow](../repos/AlUmmahNow.md) (Studio as the site CMS, site data in the existing R2 buckets, entitlements, community posts, admin), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (scholar pages for scholars without the tier, featuring), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (sign-in on new hosts, branded sign-in) |
-| **Status** | **planned**: revision 6, waiting on the owner (open: SS9, SS12, SS14, SS16, SS18) |
+| **Status** | **planned**: revision 8, waiting on the owner (open: SS12, SS14, SS16, SS18) |
 | **Last updated** | 2026-11-13 |
 
 > **Request (2026-11-13):** *"scholar sites, like mustafa-elbadry.alummahnow.net, which is a tier on its own, where the channel gets a site of its own filled with the channel's videos and community posts; connect the www scholars with channels, and community posts with www posts; and channel community should have the same post types as www."*
 >
 > **Direction (2026-11-13, revision 2):** *"A scholar site is a toned-down version of the website. It's the same, but WHITE-LABEL: they get their own theme and so on; maybe even Studio becomes their own CMS. The scholar sites are independent. Not all scholars will get the white label, and the white label might even allow full domains outside Al Ummah Now."*
+>
+> **Answers (2026-11-13, revision 8): SS9 and the domain plan.** Scholar sites live on **`alummahnow.org`**. Every white-label site gets `<slug>.alummahnow.org` (QA `<slug>.qa.alummahnow.org`, stage `<slug>.stage.alummahnow.org`). The same zone is the Cloudflare for SaaS zone for scholars' own domains, with the DNS target `sites.alummahnow.org`. The zone has been in our Cloudflare account since 2026-11-13. The main sites stay on `alummahnow.net`, `alummahnow.com` redirects to `.net`, and `alummahnow.app` is reserved for apps (§4).
 >
 > **Answers (2026-11-13, revision 7):**
 > - **SS8:** no opt-out. Every public post on a scholar's primary channel gets a www reference, and editors decide what to feature.
@@ -36,7 +38,7 @@ There are two levels for a scholar. Both are **fuelled by the scholar's channel'
 
 | | **Scholar page** (no tier, every scholar) | **White-label site** (a tier; admins choose who gets it) |
 |---|---|---|
-| Where | `www.alummahnow.net/{en,ar}/scholars/{slug}/` | Its own host: `<slug>.alummahnow.net` and/or the scholar's **own domain** (`example.com`) |
+| Where | `www.alummahnow.net/{en,ar}/scholars/{slug}/` | Its own host: `<slug>.alummahnow.org` and/or the scholar's **own domain** (`example.com`) |
 | Content comes from | The channel's community posts (via www references) and videos | The same community posts and videos, plus the site's pages |
 | Looks like | Al Ummah Now (platform theme and header) | **The scholar's brand on one of our themes**: a theme the site chooses (independent of the platform's), plus its own logo, name and favicon. The Al Ummah Now mark is optional by tier |
 | Written in | **Studio** (community posts of every kind, including articles and cards) | **Studio**, also acting as the site's CMS: pages, navigation, home layout, SEO, domains |
@@ -47,9 +49,9 @@ There are two levels for a scholar. Both are **fuelled by the scholar's channel'
 The recommendation in short:
 
 - **One source of truth for scholar content: the community post.** Scholars write in Studio. The CMS keeps a thin hidden **reference** per post (slug, locale, featuring, curation and a summary cache for the feed) and never a copy of the content. Existing CMS scholar posts are converted (§6.6).
-- **A separate sites Worker** (`al-ummah-now-sites`) serves every white-label host, through per-site custom domains and the SaaS zone's fallback origin. Its rendering comes from a package shared with www, so "the same website, toned down" stays literally true, and www's config is never touched when a domain is attached. Workers for Platforms is not needed, because we run our own code for every site.
+- **A separate sites Worker** (`al-ummah-now-sites`) serves every white-label host on the dedicated **`alummahnow.org`** zone: a wildcard route for `<slug>.alummahnow.org`, plus the zone's Cloudflare for SaaS fallback origin `sites.alummahnow.org` for own domains. Its rendering comes from a package shared with www, so "the same website, toned down" stays literally true, and www's config is never touched when a domain is attached. Workers for Platforms is not needed, because we run our own code for every site.
 - **Existing storage first:** community posts (R2), channel Home sections (R2), the channel record (R2). New storage is only the site's settings, pages and host index, as R2 objects in existing buckets, plus reference rows in the CMS's existing `posts` table. No new database or KV namespace (§6.2).
-- **Own domains from day one**, through Cloudflare for SaaS custom hostnames ($0.10 per hostname per month after the first 100).
+- **Own domains from day one**, through Cloudflare for SaaS custom hostnames on `alummahnow.org` ($0.10 per hostname per month after the first 100).
 - **The tier is an admin add-on on the channel** (SS1), with two tiers. The channel's owner and admins run the site (SS2). The site chooses any active platform theme, pinned (SS17).
 
 ## 2. What exists today
@@ -97,7 +99,7 @@ The seed names and values are suggestions; admins change them in the plans edito
 
 | | Channel (any creator) | Scholar page on www | White-label site |
 |---|---|---|---|
-| Address | `videos/@handle` | `www/…/scholars/slug/` | `slug.alummahnow.net` or own domain |
+| Address | `videos/@handle` | `www/…/scholars/slug/` | `slug.alummahnow.org` or own domain |
 | Branding | Avatar and banner | Al Ummah Now | A chosen platform theme + its own logo, name and favicon |
 | Written in | Studio (community posts) | Studio (community posts; www holds refs) | Studio (posts) + Studio as the site CMS |
 | Content pages | – | – | ✓ (blocks) |
@@ -108,31 +110,50 @@ The seed names and values are suggestions; admins change them in the plans edito
 
 ## 4. Domains
 
+### 4.0 The domain plan (SS9, decided 2026-11-13)
+
+| Domain | Use |
+|---|---|
+| `alummahnow.net` | The main sites (www, videos, auth, CMS, admin, media…), as today. Nothing for scholar sites |
+| **`alummahnow.org`** | **Scholar sites only.** `<slug>.alummahnow.org` per white-label site, and the Cloudflare for SaaS zone for scholars' own domains (`sites.alummahnow.org`). The zone has been in our Cloudflare account since 2026-11-13 |
+| `alummahnow.com` | Redirects to `alummahnow.net` |
+| `alummahnow.app` | Reserved for apps |
+
+The apex `alummahnow.org` and `www.alummahnow.org` 301 to `https://www.alummahnow.net/` (a scholar directory page can come later).
+
+Because `.org` is a **separate registrable domain**, scholar sites are a different "site" in browser terms from every platform app. That shapes sign-in (§5.4) and isolation (§9.3).
+
 ### 4.1 Two kinds of host
 
 | Kind | Example | How Cloudflare serves it | Cost |
 |---|---|---|---|
-| **Platform subdomain** (every white-label site) | `mustafa-elbadry.alummahnow.net`; QA `…qa.alummahnow.net`; stage `…stage.alummahnow.net` | A **Workers Custom Domain** on the **sites Worker**, attached by admin-api through the Cloudflare API when the site is granted. Each gets its own certificate. www's config is never involved | Free |
-| **Own domain** (`site.customDomains.max > 0`) | `example.com`, `www.example.com` | A **Cloudflare for SaaS custom hostname** on a dedicated SaaS zone. The scholar adds a CNAME to `sites.<saas-zone>`, and Cloudflare issues the certificate (HTTP or TXT validation) | First 100 hostnames free, then **$0.10 per hostname per month** |
+| **Platform subdomain** (every white-label site) | `mustafa-elbadry.alummahnow.org`; QA `mustafa-elbadry.qa.alummahnow.org`; stage `mustafa-elbadry.stage.alummahnow.org` | **Production:** a proxied wildcard DNS record `*.alummahnow.org`, the zone's Universal SSL certificate (which covers one level of wildcard), and a Worker route `*.alummahnow.org/*` to the production sites Worker. Adding a site writes only its host index entry; **no Cloudflare call per site**. **QA and stage:** routes `*.qa.alummahnow.org/*` and `*.stage.alummahnow.org/*` to their Workers. These names are two levels deep, so they need a wildcard certificate from Advanced Certificate Manager (one certificate covers both), or a free Workers Custom Domain per test site | Production free. QA/stage: ACM about $10 a month for the zone, or free with per-site custom domains |
+| **Own domain** (`site.customDomains.max > 0`) | `example.com`, `www.example.com` | A **Cloudflare for SaaS custom hostname** on the `alummahnow.org` zone. The scholar adds a CNAME to **`sites.alummahnow.org`** (the fallback origin), and Cloudflare issues the certificate (HTTP or TXT validation) | First 100 hostnames free, then **$0.10 per hostname per month** |
+
+**Route precedence.** The more specific `*.qa.` and `*.stage.` routes win over `*.alummahnow.org/*`, and own-domain traffic arrives through the fallback origin's `*/*` route to the production Worker. QA and stage own-domain tests use a test hostname with an explicit route to that environment's Worker. **To verify in phase 2:** route matching order on this zone, and that a custom hostname reaches the Worker through `*/*`.
 
 ### 4.2 Own domains with Cloudflare for SaaS
 
-- **A dedicated zone.** The custom hostnames live on a separate zone (a new domain the owner registers, SS9). That zone has a proxied fallback origin (`sites.<saas-zone>`) and a Worker route `*/*` to the **sites Worker**. A catch-all route on `alummahnow.net` itself would sit beside twenty platform hosts, and one routing mistake could take them down. A separate zone keeps the platform zone untouched.
+- **The zone is `alummahnow.org`**, dedicated to scholar sites, so the catch-all `*/*` route and the wildcard can't affect a platform host on `alummahnow.net`. Phase 2 setup on the zone:
+  1. Enable Cloudflare for SaaS.
+  2. Add the proxied fallback origin `sites.alummahnow.org`.
+  3. Add the wildcard DNS record and the routes.
+  4. Turn on HSTS for the apex and its subdomains. They are all ours, so `includeSubDomains` is safe.
 - **Flow in Studio → Site → Domains:**
   1. The owner types `example.com`.
-  2. Studio shows the DNS records: a CNAME `www.example.com → sites.<saas-zone>`, and for the apex either their DNS provider's CNAME flattening/ALIAS or a redirect from the apex to `www`.
-  3. admin-api creates the custom hostname through the Cloudflare API (custom hostnames edit, SaaS zone only).
+  2. Studio shows the DNS records: a CNAME `www.example.com → sites.alummahnow.org`, and for the apex either their DNS provider's CNAME flattening/ALIAS or a redirect from the apex to `www`.
+  3. admin-api creates the custom hostname through the Cloudflare API, with a token limited to custom hostnames on `alummahnow.org`.
   4. Status moves through *Waiting for DNS* → *Issuing certificate* → *Live*. A job checks every 10 minutes for 72 hours, then daily.
-  5. The owner picks the **primary host**. All other hosts 301 to it, and the subdomain stays as a fallback that also 301s.
-- **Removing a domain** deletes the custom hostname, and the site's primary falls back to the subdomain. The removed domain's DNS is the scholar's to clean up.
+  5. The owner picks the **primary host**. All other hosts 301 to it, and `<slug>.alummahnow.org` stays as a fallback that also 301s.
+- **Removing a domain** deletes the custom hostname, and the site's primary falls back to `<slug>.alummahnow.org`. The removed domain's DNS is the scholar's to clean up.
 - **Abuse and ownership:** the hostname goes live only after Cloudflare validates DNS. A domain that is already attached to another site is refused. Suspending the site serves a neutral "unavailable" page on every host.
-- **Limits:** SaaS custom hostnames scale into the thousands. **Unverified:** the plan limits and the current price should be confirmed in the dashboard before launch.
+- **Limits:** SaaS custom hostnames scale into the thousands. **Unverified:** the plan limits and price on the `alummahnow.org` zone should be confirmed in the dashboard before launch.
 
 ### 4.3 Slug rules (platform subdomain)
 
 - **Default** is the scholar's English CMS slug (CMS slug rule: English title → AI translation → transliteration), else the channel's English name, else its handle. An admin or the site owner can change it.
 - **Shape:** `[a-z0-9-]`, 3–40 characters, starting and ending with a letter or digit, no `--`, unique per environment.
-- **Reserved:** every platform host label (`www`, `videos`, `api`, `auth`, `admin`, `cms`, `media`, `images`, `realtime`, `profile`, `qa`, `stage`, `dev`, `mail`, `status`, `docs`, `help`, `embed`, `cdn`, `static`, `assets`) plus generic words (`app`, `login`, `account`, `support`, `blog`, `shop`, `pay`, `billing`, `about`, `news`, `live`, `kids`, `quran`, `scholars`, `ummah`, `alummah`). The list lives in `packages/shared-types`.
+- **Reserved:** on `alummahnow.org`: `www`, `sites` (the fallback origin), `qa`, `stage` and `app`; plus every platform host label (`www`, `videos`, `api`, `auth`, `admin`, `cms`, `media`, `images`, `realtime`, `profile`, `qa`, `stage`, `dev`, `mail`, `status`, `docs`, `help`, `embed`, `cdn`, `static`, `assets`) plus generic words (`app`, `login`, `account`, `support`, `blog`, `shop`, `pay`, `billing`, `about`, `news`, `live`, `kids`, `quran`, `scholars`, `ummah`, `alummah`). The list lives in `packages/shared-types`.
 - **Renames** keep the old subdomain as a 301 for 12 months (SS12).
 
 ### 4.4 Canonical URLs (decided by the owner's independence rule)
@@ -144,7 +165,7 @@ The seed names and values are suggestions; admins change them in the plans edito
 | Videos and Shorts | The videos watch page | **The videos watch page.** The site's watch page has `rel=canonical` to videos | **The site's watch page.** The videos watch page for that channel's videos points `rel=canonical` to the site and leaves them out of the videos sitemap |
 | Community tab on videos | – | Posts link to the site | Same |
 
-**Why videos depend on the domain.** A site on `*.alummahnow.net` is still inside the Al Ummah Now family. Pointing a video's canonical at it would split one video's search signals between two platform hosts for no gain. The videos watch page also holds the comments, recommendations and full player, so it stays canonical.
+**Why videos depend on the domain.** A site on `<slug>.alummahnow.org` is still an Al Ummah Now-branded host, although it is a separate registrable domain. Pointing a video's canonical at it would split one video's search signals between two platform hosts for no gain. The videos watch page also holds the comments, recommendations and full player, so it stays canonical.
 
 A scholar on their own domain is building their own brand. Independence means search results should lead to their domain, so the site's watch page is canonical. The videos platform still plays the video, counts the views and hosts the comments; only the page search engines index moves. This is consistent: **the canonical follows the brand host** (SS7, decided 2026-11-13).
 
@@ -181,7 +202,7 @@ Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي
 
 | | www Worker (`al-ummah-now-www`) | **Sites Worker (`al-ummah-now-sites[-qa\|-stage]`)** |
 |---|---|---|
-| Hosts | `www.` and the apex (as today) | Every white-label host: per-site Workers Custom Domains on `alummahnow.net`, plus the SaaS zone's `*/*` route for own domains |
+| Hosts | `www.alummahnow.net` and the apex (as today) | Every white-label host on the `alummahnow.org` zone: the wildcard routes `*.alummahnow.org/*` (and `*.qa.`/`*.stage.` per environment), plus the fallback origin's `*/*` route for own domains |
 | Code | `apps/www` | `apps/sites` |
 | Shared | `packages/render`: Astro components (timeline, post and cards renderers, blocks, video facades, layouts), data clients (CMS, videos, community), themes, i18n, edge cache helpers | Same package |
 | Deploy | Its own release | Its own release, gated by the same E2E. A sites deploy can't break www, and the reverse |
@@ -208,7 +229,7 @@ Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي
 
 **Unverified:** the WfP and SaaS prices and limits above are from Cloudflare's public pricing as remembered on 2026-11-13. Check them in the dashboard before phase 2. The recommendation doesn't depend on the exact numbers: WfP solves a problem we don't have (untrusted code), and it still needs Cloudflare for SaaS for domains.
 
-**To verify in phase 2:** that `wrangler deploy` of the sites Worker leaves custom domains attached through the API alone. Its config declares no routes for site hosts. If it doesn't, subdomains also become SaaS custom hostnames (same flow, $0.10 each after the first 100).
+**Routes are static.** The sites Worker's `wrangler.jsonc` declares its zone routes on `alummahnow.org` once. Adding a site never changes Cloudflare config, only the R2 host index. Only own domains (custom hostnames), and the QA/stage per-site domains if ACM isn't bought, are created through the API.
 
 ### 5.3 Theme and branding
 
@@ -235,7 +256,16 @@ Wording follows the [glossary](../guides/glossary.md): Arabic UI uses «مرئي
 ### 5.4 Platform mark and sign-in
 
 - `site.platformMark` decides the footer: a band ("Videos and posts on Al Ummah Now", plus the platform account menu), a small link, or none. **Every site keeps** a footer link to its terms and privacy notice and a "Report content" link, because the platform hosts and moderates it.
-- **Accounts stay Al Ummah Now accounts** (one identity, O13). A viewer signs in to comment, like, vote or subscribe. On a platform subdomain the silent sign-in probe works (same site). On an own domain sign-in is a click, because browsers block the probe's third-party cookie.
+- **Accounts stay Al Ummah Now accounts** (one identity, O13, SS11). A viewer signs in to comment, like, vote or subscribe.
+- **Cross-site sign-in works, by redirect.** `alummahnow.org` and own domains are a different registrable domain from `auth.alummahnow.net`. The silent background probe www uses (a credentialed fetch to `auth…/session/accounts`) would be a third-party request, and Safari, Firefox and Chrome with third-party cookies blocked drop its cookie. So sites **don't probe**. The flow:
+  1. The viewer clicks **Sign in**.
+  2. A **top-level redirect** goes to `auth.alummahnow.net/authorize` (PKCE, the sites client, the site's exact redirect URI). That is a first-party visit to auth, so its `__session` cookie (SameSite=Lax) is sent.
+  3. If the viewer is already signed in to Al Ummah Now, auth returns straight away with a code, with no password and no prompt. If not, they see the (branded) sign-in page.
+  4. The callback on the site sets the host-only `__Host-aun_site` session (sealed, 8 h).
+
+  The result: one click and no password for anyone signed in elsewhere. The same flow serves `<slug>.alummahnow.org` and own domains.
+- **Sign-out.** **Sign out** on a site redirects top-level to auth `/logout` and back. Signing out elsewhere can't reach a site through front-channel logout iframes, because those are third-party too. Instead, the site session holds the refresh token, auth's logout revokes refresh tokens (shipped in the SSO audit), and the site re-checks every 5 minutes. A site session therefore ends within 5 minutes of a sign-out anywhere, and after 8 h at most.
+- **Release check.** The SSO journey spec gains a site case: a viewer signed in on www signs in on a QA site with one click (no password), and a sign-out on www ends the site session within the re-check window.
 - **Branded sign-in** (`site.brandedSignIn`): Auth shows the site's logo and theme on the sign-in page for that site's OAuth redirect, using Auth's existing theme packages. The text still says it is an Al Ummah Now account, so people know which account they are using (SS11, decided).
 
 ## 6. Data model and connections
@@ -421,11 +451,12 @@ Assumptions: 300 white-label sites, 150 with an own domain (2 hostnames each = 3
 | R2 site objects, CMS and videos reads | Cached 60 s; R2 Class B only on a miss | < $2 |
 | Version-pinned theme CSS (R2 + CDN) | Class B reads, cached | < $0.50 |
 | Analytics Engine | Included, then $0.25 / M | ≈ $0.50 |
-| Platform subdomains (Workers Custom Domains) | No charge | $0 |
+| `<slug>.alummahnow.org` in production (wildcard DNS + Universal SSL) | No charge | $0 |
+| QA/stage wildcard certificate (Advanced Certificate Manager on `alummahnow.org`) | About $10 a month for the zone; optional (free alternative: per-site custom domains) | ≈ $10 |
 | **Own domains (Cloudflare for SaaS)** | 100 free, then $0.10 per hostname | **$20** (300 hostnames) |
-| SaaS zone (separate domain) | Free plan zone; domain registration ≈ $10 a year | ≈ $1 |
+| `alummahnow.org` zone | Already in the account; domain renewal ≈ $10–15 a year | ≈ $1 |
 | AI assist in Studio | Workers AI, per-site budget | Capped by budget (S13) |
-| **Total** | | **≈ $25–30**, about $0.10 per site per month for an own domain |
+| **Total** | | **≈ $25–40** (≈ $25–30 without ACM), about $0.10 per site per month for an own domain |
 
 At 1,000 own domains (2,000 hostnames) the SaaS line is $190 a month. That is why `site.customDomains.max` exists and is admin-set, and the cost-monitor gets a `custom_hostnames` line with an alert. Guard: a spec asserts that site HTML is cacheable.
 
@@ -435,12 +466,12 @@ The same as www: `s-maxage=60, stale-while-revalidate=600`. Signed-in views are 
 
 ### 9.3 Security and tenant isolation
 
-- **Only platform code runs on a site.** Content is markdown and blocks, sanitised as on www. Sites have no theme or CSS input at all: they choose a platform theme, and the only uploads are the logo and favicon (images, re-encoded). This matters most on `*.alummahnow.net`, which is **same-site** with every app.
-- **Cookies stay host-only.** Add a release check that fails if any app sets `Domain=.alummahnow.net`. Each site host gets its own `__Host-aun_site` session.
-- **CSP** is the same as www: `script-src 'self'` plus hashes, `frame-src` only the videos embed host, `form-action` auth, `frame-ancestors 'none'`. HSTS on every host. An own domain gets HSTS without `includeSubDomains`, because we don't own their other subdomains.
+- **Only platform code runs on a site.** Content is markdown and blocks, sanitised as on www. Sites have no theme or CSS input at all: they choose a platform theme, and the only uploads are the logo and favicon (images, re-encoded). Sites are on `alummahnow.org`, a **different registrable domain** from the platform (`alummahnow.net`). Browsers treat them as cross-site to every platform app. Platform cookies (SameSite=Lax) are never sent from a site page, and a site can't set cookies on `alummahnow.net`. Sites are same-site with **each other** under `alummahnow.org`, so their cookies stay host-only. If sites ever ran third-party code, `alummahnow.org` could go on the Public Suffix List; that isn't needed now.
+- **Cookies stay host-only.** Add a release check that fails if any app sets `Domain=.alummahnow.net` or the sites Worker sets `Domain=.alummahnow.org`. Each site host gets its own `__Host-aun_site` session.
+- **CSP** is the same as www: `script-src 'self'` plus hashes, `frame-src` only the videos embed host, `form-action` auth, `frame-ancestors 'none'`. HSTS on every host, with `includeSubDomains` on `alummahnow.org`. An own domain gets HSTS without `includeSubDomains`, because we don't own their other subdomains.
 - **Host validation.** `SITE_URL` always comes from the registry, never from the raw `Host` header, so a spoofed host can't poison the cache. Unknown hosts get a bare 404.
 - **OAuth.** Each host's exact redirect URI is registered when the host goes live and removed when it is detached. Auth never accepts wildcard redirect URIs.
-- **API tokens.** Two scoped tokens in the Secrets Store: Workers Custom Domains + DNS on `alummahnow.net`, and Custom Hostnames on the SaaS zone. Only admin-api's jobs use them.
+- **API tokens.** One scoped token in the Secrets Store: Custom Hostnames (plus Workers Custom Domains for QA/stage, if no ACM) on the `alummahnow.org` zone only. It has **no access to `alummahnow.net`**. Only admin-api's jobs use it.
 - **Phishing risk on own domains.** A white-label site carries someone else's name and logo on an outside domain. Mitigations: admin-only grants; the legal and report footer is always present; sign-in always says it is an Al Ummah Now account; no forms other than platform forms (no custom form builder in v1).
 
 ### 9.4 Accessibility
@@ -458,7 +489,7 @@ WCAG 2.1 AA is the floor:
 |---|---|---|
 | **0. Decisions** | Owner answers the open decisions | Recorded in the [decision log](decisions.md) |
 | **1. Community-fuelled scholar content** (every scholar) | `packages/post-schema`; Studio article and cards editors; CMS ref rows, the ref outbox and the Scholar posts picker; the www scholar page and post pages read community posts; `FEED_FORMAT` 4; **migration §6.6**; CMS `primary_channel_id` | Every scholar post on www is a ref to a community post, with URLs and featuring unchanged |
-| **2. Sites Worker and the first white-label site** (can start alongside phase 1) | AlUmmahNowUI workspace (`apps/www`, `apps/sites`, `packages/render`); sites Worker per environment; tier keys and seeds; grant in admin; site objects in existing R2; per-site custom domains; **SaaS zone and own domains**; UI#55 (admin themes on www and sites); canonical rules | mustafa-elbadry live on its subdomain (and its own domain if any), after QA and stage |
+| **2. Sites Worker and the first white-label site** (can start alongside phase 1) | AlUmmahNowUI workspace (`apps/www`, `apps/sites`, `packages/render`); **`alummahnow.org` zone setup** (Cloudflare for SaaS on, fallback origin `sites.alummahnow.org`, wildcard DNS and routes, HSTS, ACM for QA/stage if chosen, scoped API token); sites Worker per environment; tier keys and seeds; grant in admin; site objects in existing R2; per-site custom domains; **SaaS zone and own domains**; UI#55 (admin themes on www and sites); canonical rules | mustafa-elbadry live on its subdomain (and its own domain if any), after QA and stage |
 | **3. Studio as the site CMS** | Studio → Site: Overview, About, Navigation, Home (channel sections + `page`/`cta`), Pages, Theme & brand (choose), Domains, SEO, preview, revisions | The scholar runs the site without staff |
 | **4. Engagement and identity** | Inline comments, likes and votes on www and sites; site sign-in; branded sign-in; site analytics | A viewer comments without leaving the page |
 
@@ -505,6 +536,7 @@ Migration numbers are assigned when building.
 | SS6 | Scholar content is **fuelled by community posts** from the start (with or without the tier); www holds hidden references; existing CMS scholar posts are converted | 2026-11-13 |
 | SS7 | Videos are canonical on the videos site for subdomain sites; on a scholar's own domain, the site's watch page is canonical (§4.4) | 2026-11-13 |
 | SS8 | No opt-out: every public scholar post gets a www reference; editors decide what to feature | 2026-11-13 |
+| SS9 | Scholar sites live on **`alummahnow.org`**: `<slug>.alummahnow.org` per site (`.qa.`/`.stage.` in test), and the same zone is the Cloudflare for SaaS zone for own domains (target `sites.alummahnow.org`). `.net` stays for the main sites, `.com` redirects to `.net`, and `.app` is reserved for apps | 2026-11-13 |
 | SS10 | No longer applies: every platform theme has a dark header | 2026-11-13 |
 | SS11 | One Al Ummah Now account everywhere; branded sign-in still names it | 2026-11-13 |
 | SS13 | A site may be single-language | 2026-11-13 |
@@ -516,7 +548,6 @@ Migration numbers are assigned when building.
 
 | # | Decision | Recommendation |
 |---|---|---|
-| SS9 | Own domains go on a **separate SaaS zone** (a new domain the owner registers) | Yes; the owner picks the name |
 | SS12 | A renamed subdomain keeps a 301 for 12 months | Yes |
 | SS14 | Keep GIF posts, and add a Link kind? | Keep GIF; add Link |
 | SS16 | First site: mustafa-elbadry, set up by staff in phase 2, with Studio self-service in phase 3 | Yes |
@@ -525,7 +556,8 @@ Migration numbers are assigned when building.
 ## Open questions, not decisions
 
 - Does mustafa-elbadry have, or want, an own domain? Is their CMS slug and primary channel right in production? **Unverified.**
-- Cloudflare for SaaS plan limits and price on this account. **Unverified**; check before phase 1.
+- Cloudflare for SaaS plan limits and price on the `alummahnow.org` zone, and route precedence on it. **Unverified**; check before phase 2.
+- Advanced Certificate Manager for QA/stage (≈ $10 a month) or free per-site custom domains for test sites: an engineering call in phase 2, defaulting to ACM so test sites work instantly.
 
 ## Status evidence
 
