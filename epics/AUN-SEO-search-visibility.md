@@ -388,6 +388,38 @@ https://videos.alummahnow.net/sitemap.xml            ← sitemap index
 4. **Weekly production crawl:** a scheduled read-only job samples 200 URLs from the production sitemaps and reports non-200s, missing tags and JSON-LD errors as a GitHub issue. Budget: zero AI, a few hundred requests.
 5. **Rich results:** run Google's Rich Results Test by hand on one watch, one article and one channel after each phase.
 
+### Phase 4: server rendering and LCP (videos site), 2026-11-13
+
+Done in [#1210](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1210) (server rendering) and [#1211](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1211) (critical path), stacked on #1185.
+
+**Server-rendered** (in the first HTML, no JavaScript needed; the client starts from the same data and does not fetch it again):
+
+| Page | In the HTML |
+|---|---|
+| Watch `/video/{id}`, `/shorts/{id}` | title (`h1`), channel name linking to its `@handle` page, description, poster `<img src="/thumb/{id}.jpg" fetchpriority="high">` with its size. The player still stays mounted between videos (WatchShell). |
+| Home | hero and the first page of cards (links with title, channel, thumbnail) |
+| Channel (`/channels/{id}`, `/c/{handle}`, `/@handle`) | the active tab's first data: Home sections, or the first page of Videos / Shorts |
+| Playlist | title (`h1`), channel link, ordered item links with thumbnails |
+
+Each server read is the viewer's own (the same server actions the page calls) and is bounded to 1.2 s: a slow API renders the page as before and the client loads it.
+
+**LCP measures:** the poster is a real high-priority image (was a CSS background); the first card of a leading list loads eagerly with high priority, the rest of the first row eagerly, later cards lazily; lists preconnect to their thumbnail CDN; Font Awesome (render-blocking, unused) and Bunny `player.js` (unused) removed. Fonts were already self-hosted with `swap`.
+
+**LCP, mobile lab** (Playwright Chromium 412×823, 150 ms RTT, 1.6 Mbps, 4× CPU; local `next start` against the QA API; median of 5):
+
+| Page | Before | After |
+|---|---|---|
+| Home | 4064 ms | 916 ms |
+| Watch | 1940 ms | 1152 ms |
+| Short | 2036 ms | 1292 ms |
+| Channel, Videos tab | 4928 ms | 1380 ms |
+| Playlist | 4136 ms | 1400 ms |
+| Channel, Home tab without sections | 3588 ms | 3616 ms (the consent banner is the LCP element, [#1205](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1205)) |
+
+Spec `79-server-rendered.spec.ts` (local stack) loads the four pages with JavaScript off, en and ar.
+
+Open: field RUM, cookieless (D-SEO-9) [#1207](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1207); a channel without Home sections has no video links on its canonical URL [#1206](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1206); Shorts CLS 0.17 [#1208](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1208); stable sized thumbnails for cards and a poster `srcset` [#1209](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1209). Legal/help pages (#14) and the www items (#16, #19) are not part of this.
+
 ## Phased plan
 
 Updated after the owner's decisions. Each phase ships as PRs merged on green and goes out with the next release of each repo.
@@ -398,7 +430,7 @@ Updated after the owner's decisions. Each phase ships as PRs merged on green and
 | **1: decisions D-1, D-4, D-5** | x-default on every hreflang set (D-1); 410 after purge on API and pages (D-4); **Unlisted** visibility in API, Studio, upload, web and admin, plus a native issue (D-5) | AlUmmahNow, native issue |
 | **2: be understood** | Title template + D-6 default description (from the copy PRs); channel, playlist and home metadata; `VideoObject` (with `contentUrl` from D-11 when an R2 MP4 exists), `BroadcastEvent`, `BreadcrumbList`, `WebSite` + `SearchAction`; videos sitemap index (videos, Shorts, channels, playlists, live) + `Sitemap:` line; www sitemap fixes, `ItemList`, unsigned thumbnails; `publishedAt` on every upload; AI-crawler robots rules (D-8); release `seo.spec.ts` | AlUmmahNow, UI, CMS |
 | **3: URLs and media** | `/shorts/{id}` + 301 (D-10); R2 MP4 rendition + public `contentUrl` (D-11); www slug history + 301 (D-7); landing page + referrer source in in-house analytics (D-9); IndexNow | AlUmmahNow, UI, CMS |
-| **4: fast and server-rendered** | Server-rendered watch, home, channel tabs and playlists (#4); LCP work, Font Awesome removal, RUM (#15); legal and help pages (#14); www trailing slash 308, borrowed-page noindex, 404 canonical (#16, #19) | AlUmmahNow, UI, CMS |
+| **4: fast and server-rendered** ✅ videos site in PR ([details](#phase-4-server-rendering-and-lcp-videos-site-2026-11-13)) | Server-rendered watch, home, channel tabs and playlists (#4); LCP work, Font Awesome removal, RUM (#15); legal and help pages (#14); www trailing slash 308, borrowed-page noindex, 404 canonical (#16, #19) | AlUmmahNow, UI, CMS |
 | **5: grow** | Post permalinks + `SocialMediaPosting` (#12); scholar-site SEO with AUN-SCHOLAR-SITES; handle history; chapters as `Clip`; weekly production crawl | all |
 
 ## Owner decisions (2026-11-13)
