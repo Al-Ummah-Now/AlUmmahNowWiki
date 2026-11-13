@@ -22,10 +22,10 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 |---|---|
 | shipped | 30 |
 | in progress | 42 |
-| planned | 12 |
+| planned | 13 |
 | deferred | 7 |
 | rejected | 2 |
-| **All** | **93** |
+| **All** | **94** |
 
 ## All epics
 
@@ -80,6 +80,7 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 | [AUN-CHANNEL-SECTIONS](AUN-CHANNEL-SECTIONS-channel-sections.md) | Channel sections (Home tab) | AlUmmahNow | shipped | [docs/specs/CHANNEL-SECTIONS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/CHANNEL-SECTIONS.md); [AlUmmahNow#602](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/602), [AlUmmahNow#631](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/631) | 2026-11-10 |
 | [AUN-SOCIAL](AUN-SOCIAL-social-media-management.md) | Social media management for channels | AlUmmahNow | planned | [docs/specs/social-media-management.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/social-media-management.md); [AlUmmahNow#569](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/569), [AlUmmahNow#581](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/581) | 2026-11-09 |
 | [AUN-CREATOR-STUDIO](AUN-CREATOR-STUDIO-web-creator-studio.md) | Web Creator Studio | AlUmmahNow | shipped | [CREATOR-STUDIO.md (PR #476)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476) | 2026-11-12 |
+| [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (mobile-first moderation) | AlUmmahNowApple, AlUmmahNowAndroid, AlUmmahNowCore, AlUmmahNow, AlUmmahNowAuth | planned | This page (draft v1) | 2026-11-13 |
 | [AUN-CHANNEL-ROLES](AUN-CHANNEL-ROLES-channel-roles.md) | Per-channel roles | AlUmmahNow | in progress | [CHANNEL-ROLES.md (PR #462)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462); [Site roles and channel roles](../guides/roles.md); [AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625) | 2026-11-10 |
 | [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) | Channel claim, transfer and self-service account move | AlUmmahNow | planned | [CHANNEL-CLAIM-AND-TRANSFER.md (PR #460)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460) | 2026-11-10 |
 | [AUTH-R1](AUTH-R1-auth-tokens.md) | Auth v1.0 roadmap: Authentication & token management | AlUmmahNowAuth | in progress | [AlUmmahNowAuth/ROADMAP.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/5d563e10662615e910a1e00d98e029a7b1e6329e/ROADMAP.md); [AlUmmahNowAuth/.github/ISSUE_TEMPLATE/roadmap_epic.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/5d563e10662615e910a1e00d98e029a7b1e6329e/.github/ISSUE_TEMPLATE/roadmap_epic.md); [AlUmmahNowAuth#22](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/22) | 2024-12-01 |
