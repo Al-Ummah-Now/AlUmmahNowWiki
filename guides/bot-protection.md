@@ -146,7 +146,36 @@ the widget there.
 
 ## Turning it on in production
 
-1. After the pull requests above are merged and released, a one-line change per Worker sets
-   production to `monitor`. Watch the Abuse page for a few days: real people should almost all pass.
-2. Then `enforce`. To undo at any time, set `off` again (Auth deploys on merge; the videos Workers
-   with the next release).
+### Where each Worker is (2026-11-13)
+
+| Worker | Production mode | Since |
+| --- | --- | --- |
+| Auth (sign-up, reset, repeated sign-in) | `monitor` | [Auth#359](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/359), released 2026-11-13 18:32 UTC |
+| api-videos (comments, posts, reports), admin-api (Contact us) | `off` | [#1248](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1248); goes to `monitor` in a one-line PR after the first videos release that contains #1248 |
+
+QA and stage run `enforce` with Cloudflare's test keys in every Worker.
+
+### What decides `monitor` → `enforce`
+
+Read on the Abuse page (Operations → Abuse, environment production, last 7 days), per endpoint:
+
+| Signal | Meaning | Go for `enforce` when |
+| --- | --- | --- |
+| failed + no token ÷ all checks | how many visitors would be refused | at most 2% on normal days, and any spike is a burst (bots), not a steady share |
+| no token alone | the widget did not run (blocked script, very old browser) | at most 1%; above that, find out why before refusing anyone |
+| Turnstile unavailable | siteverify unreachable or our secret wrong | about 0; any steady count is a configuration fault to fix first |
+| passed | real traffic | enough to judge: at least ~200 checks on the endpoint in the window |
+
+Cross-checks: the Turnstile widget's own page in the Cloudflare dashboard (solve rate, how often the click box was shown); the admin Errors page and Contact us messages for "I can't sign up / comment"; sign-ups completed per day (they should not drop).
+
+### When
+
+- **Auth:** read every day from 2026-11-14 for 7 days. If the table above holds on 2026-11-20, `enforce` for sign-up and password reset first, sign-in a day later. With too little traffic by then, extend the window rather than guess.
+- **api-videos and admin-api:** 7 days after their `monitor` release, same rules: Contact us and reports first, then first comments and posts.
+- Each switch is a one-line PR. Auth deploys on merge; the videos Workers with the next release. To undo, set `off` (or back to `monitor`) the same way.
+
+`scripts/e2e/token-revocation.sh prod` signs up with curl; under `enforce` it stops at sign-up with a clear message (production has no bypass). Run it on QA, or while production Auth is in `monitor`.
+
+## Known flake
+
+The theme visibility CI job sometimes fails with "the page never hydrated" on a random theme spec (desktop or phone); a rerun of the same commit passes. It predates bot protection and is tracked in [#1196](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1196) with the evidence.
