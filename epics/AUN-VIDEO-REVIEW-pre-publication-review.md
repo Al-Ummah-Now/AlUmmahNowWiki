@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-VIDEO-REVIEW` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, processor, media, scheduler, admin-api, admin-web, web). The native Studio apps show the new status |
-| **Status** | **planned**: draft v1 spec, waiting on owner decisions VR1–VR16 |
+| **Status** | **in progress**: owner decided VR1–VR16 on 2026-11-13; being built (mode off, then shadow) |
 | **Last updated** | 2026-11-13 |
 
 Read from AlUmmahNow `origin/main` [`39a795d`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/39a795dd1) and the live reports D1 on 2026-11-13. Builds on [Epic 28](E28-ai-moderation.md) (AI moderation), [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) and [AUN-SUBS](AUN-SUBS-subscriptions-plan.md).
@@ -73,7 +73,7 @@ Owner: *"We need videos to be checked before they are available, for content iss
    - watch and playback for anyone but the owner
    - embed and oEmbed, public-play, R2 public access and short links
    - the scheduler
-4. **Studio** shows **In review** in text with an icon, and the ETA "usually within N hours" taken from the queue SLA. The owner can still watch the video and edit its metadata.
+4. **Studio** shows **In review** in text with an icon, and "usually within 5 minutes" for the automated check (admin-editable); a flagged video reads "a reviewer will check it" with the live queue time (VR6). The owner can still watch the video and edit its metadata.
 5. **Scheduled publishes** wait for approval. If the scheduled time has passed, the video publishes when it is approved (VR8).
 6. **Rejection.** The video stays private. The creator gets a reason from a fixed en/ar list, with the guideline section it breaks. They can edit and resubmit, and can appeal once; a different reviewer handles the appeal.
 7. **Live streams** are never pre-reviewed. Once a stream ends, its VOD is checked post-hoc. An NSFW hit or high risk pulls it back to In review.
@@ -114,7 +114,7 @@ Owner: *"We need videos to be checked before they are available, for content iss
 - **In review:** any NSFW hit, high risk, a failed check, or a channel policy that requires a person.
 - **Approved:** risk below the auto-approve threshold.
 
-**Other images.** On an NSFW hit, only the image is withheld. A default avatar, a plain banner or an "under review" tile shows in its place, and the image goes to the queue blurred. Each check costs about $0.00004.
+**Other images.** An NSFW hit on a community post image holds the whole post until a reviewer decides (VR16). On an avatar, banner or profile picture, only the image is withheld: the default tile shows in its place, and the image goes to the queue blurred. Each check costs about $0.00004.
 
 ## Human review queue (admin-web)
 
@@ -133,13 +133,11 @@ Owner: *"We need videos to be checked before they are available, for content iss
 ## Policy knobs (admin-managed)
 
 - **`video_review.mode`:** `off`, `shadow`, `enforce_nsfw` or `enforce`. It can only be set in prod, because of the env gate `VIDEO_REVIEW_ALLOWED`, which is set only in the production wrangler config.
-- **Per-channel policy:** pre-review (the default), auto-approve below threshold, or trusted post-hoc.
-  - A new channel's first 5 videos always go to a person.
-  - Trusted status is granted by an admin only.
+- **Per-channel policy:** checked before publishing (the default: auto-approved below the thresholds, a person only when flagged, VR1), or trusted post-hoc. Trusted status is granted by an admin only.
 - **Plan default:** the entitlement `review.policy`. Institution and Staff plans default to post-hoc. Safety checks are never tiered off.
 - **Thresholds per category, SLA and budget:**
   - thresholds are set per category
-  - the queue SLA starts at 24 h
+  - the creator ETA for the automated check starts at 5 minutes (VR6)
   - a daily budget stop starts at $10/day
 - **NSFW overrides every knob.** It holds the video on every channel, including trusted ones (VR2).
 
@@ -243,23 +241,64 @@ These are filed as issues before the build starts.
   - the visibility rule is copied in six or more places with different conditions
 - **F4:** Epic 28 text moderation is on in QA but off in prod.
 
-## Decisions for the owner
+## Owner decisions (2026-11-13)
 
-| # | Decision | Recommendation |
-|---|---|---|
-| VR1 | Who is pre-reviewed by default | Every channel. A new channel's first 5 videos go to a person; after that, auto-approve below the threshold. Admin-granted trusted channels are reviewed post-hoc |
-| VR2 | Does an NSFW hit hold trusted and post-hoc channels too, pulling back a published video | Yes, always |
-| VR3 | Models | clef-flash (stage 1) and Gemma 4 26B (stage 2) for images, Whisper large-v3-turbo, Llama Guard 3 for English, Gemma 4 for Arabic and the platform categories. Retire m2m100 |
-| VR4 | Frame sampling | Every 2 s plus every scene cut, with dedupe; cap 1,200 frames (then every 4 s plus cuts) |
-| VR5 | Seed thresholds | Auto-approve when NSFW p < 0.10 and risk < 0.15. An NSFW hit is stage-2 p ≥ 0.5. Escalate extremism or minors above 0.3. Retune after shadow |
-| VR6 | SLA shown to creators | 24 h target, shown as "usually within N h" |
-| VR7 | Reviewers | A new `content_reviewer` role plus a senior role. The owner names the first reviewers |
-| VR8 | Scheduled time passes while in review | Publish on approval and tell the creator |
-| VR9 | Live | Post-hoc review of the VOD now; sample live frames later |
-| VR10 | Rejection | The video stays private. Edit and resubmit any number of times; one appeal per decision, handled by a different reviewer |
-| VR11 | Moderation transcript as a caption draft | Offer it to the creator as an opt-in draft at no extra AI cost; Quran rules apply |
-| VR12 | Retention | Media 30 days after the decision or appeal; signals 12 months |
-| VR13 | Also turn off today's QA comment and post AI moderation | Yes. Off in QA and stage; prod goes through shadow, then enforce |
-| VR14 | Budget stop reached | Send unchecked videos to a person; $10/day stop plus a cost-monitor alert |
-| VR15 | Existing library | No backfill now. Option: an NSFW-only backfill (about $150 per 5,000 h) after a cost report |
-| VR16 | Other images | On an NSFW hit, withhold only the image until reviewed; other risks are flag-only |
+| # | Decision |
+|---|---|
+| VR1 | **Changed.** The AI checks every video from day one; a person sees it only when the AI flags or holds it. There is no "first 5 videos always human" rule. Admin-granted trusted channels keep post-hoc review |
+| VR2 | Yes. An NSFW hit always holds the video, and pulls a published video on a trusted channel back to In review |
+| VR3 | Models approved as listed. m2m100 is retired (#813) |
+| VR4 | Every 2 s plus every scene cut, capped at 1,200 frames |
+| VR5 | Seed thresholds as recommended, and **every threshold is admin-configurable** |
+| VR6 | **Changed.** Creators see "usually within 5 minutes" for the automated check (admin-editable). A flagged video reads "a reviewer will check it", with the live queue time. Reviewers get instant alerts |
+| VR7 | Two roles, `content_reviewer` and senior. The owner is the first senior reviewer |
+| VR8 | Publish on approval, and tell the creator |
+| VR9 | The VOD is reviewed post-hoc |
+| VR10 | Edit and resubmit; one appeal, handled by a different reviewer |
+| VR11 | Yes, as an opt-in caption draft. Once the creator claims it, it is their caption, not a review copy |
+| VR12 | Media 30 days after the decision or appeal; signals 12 months |
+| VR13 | Yes. Epic 28 is turned off in QA and stage now (#1242). Prod goes shadow, then enforce |
+| VR14 | The budget is set in admin. When it stops, videos are queued for a person |
+| VR15 | No backfill |
+| VR16 | **Changed.** An NSFW hit on a community post image holds the **whole post** until a reviewer decides. Avatars, banners and profile pictures have no post to hold, so only the image is withheld and the default tile shows |
+
+The native admin app is specified separately. The review API is built for a native client too: JSON, cursor paging, and push alerts to reviewers.
+
+## Build plan
+
+The code ships with `video_review.mode = off`. Once it is deployed to production, the mode moves to `shadow`, then to `enforce_nsfw` and finally to `enforce`. Each step is an admin switch. Outside production the env gate `VIDEO_REVIEW_ALLOWED` is unset, so the mode is always off there. The full contract lives in AlUmmahNow `docs/specs/VIDEO-REVIEW.md`. The work is split into these PRs:
+
+1. **Epic 28 off in QA and stage** (#1242).
+2. **Foundation:**
+   - shared-types review types and config
+   - a `review` field on videos, gated in `isVideoReady`
+   - reports D1 tables `video_reviews` and `video_review_findings`
+   - the env gate
+   - upload complete marks a video `checking` in enforce mode
+3. **Processor review pipeline:**
+   - a `ModerationProvider` interface with a Workers AI adapter and a fixture adapter, plus a loud guard in tests
+   - the checks: clef-flash, Gemma 4, Whisper and Llama Guard
+   - risk routing and the admin budget
+4. **Media transcoder:** extracts frames (every 2 s plus scene cuts, capped at 1,200) and 16 kHz audio chunks into `review/<videoId>/` in the same pass. The job event carries their keys.
+5. **api-videos:**
+   - an internal decision endpoint, the single writer of a video's review state
+   - `publishedAt` and the subscriber announcement on approval
+   - the creator notice (in-app and email, en/ar)
+   - the appeal flow
+   - Studio badges and ETA
+   - scheduled publish on approval
+   - the caption-draft claim
+   - post-hoc review of live VODs
+6. **admin-api review API (native-ready):**
+   - the queue and item detail
+   - decide, with undo
+   - an audited reveal
+   - config and stats
+   - the two roles
+   - instant reviewer alerts (in-app, websocket and push)
+   - the retention purge
+7. **admin-web review queue UI**, plus settings.
+8. **Images:**
+   - a community post with a flagged image is held as a whole post
+   - an avatar, banner or profile picture has only its image withheld
+9. **Arabic text moderation:** Gemma 4 replaces m2m100 (#813).
