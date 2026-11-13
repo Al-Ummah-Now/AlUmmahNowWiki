@@ -2,7 +2,7 @@
 
 # Environments and domains
 
-There are three shared environments, all on subdomains of `alummahnow.net`.
+There are three shared environments, all on subdomains of `alummahnow.net`; short share links use the `alummahnow.link` zone.
 
 | Environment | Purpose | Data |
 |---|---|---|
@@ -22,6 +22,7 @@ There are three shared environments, all on subdomains of `alummahnow.net`.
 | Admin site | `admin-web` | `admin.qa.alummahnow.net` | `admin.stage.alummahnow.net` | `admin.alummahnow.net` |
 | Admin API | `admin-api` | `admin.api.qa.alummahnow.net` | `admin.api.stage.alummahnow.net` | `admin.api.alummahnow.net` |
 | Media (R2 + CDN) | `media` Worker | `media.qa.alummahnow.net` | `media.stage.alummahnow.net` | `media.alummahnow.net` |
+| Short links | `short-links` Worker ([AUN-SHORT-LINKS](../epics/AUN-SHORT-LINKS-short-share-links.md)) | `qa.alummahnow.link` | `stage.alummahnow.link` | `alummahnow.link` |
 | Auth issuer | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) `auth` | `auth.qa.alummahnow.net` | `auth.stage.alummahnow.net` | `auth.alummahnow.net` |
 | Account profile | `profile` | `profile.auth.qa.alummahnow.net` | `profile.auth.stage.alummahnow.net` | `profile.auth.alummahnow.net` |
 | Auth admin | `admin` | `admin.auth.qa.alummahnow.net` | `admin.auth.stage.alummahnow.net` | `admin.auth.alummahnow.net` |
