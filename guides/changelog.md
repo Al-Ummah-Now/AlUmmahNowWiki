@@ -8,6 +8,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 - **Leftover checks gate everywhere:** the web and release suites' leftover checks were report-only; they now fail the job like the admin suite's, so a run that leaves anything of its own behind is red. The suites gained a teardown that erases accounts that signed up on the web page and runs the purges the deployed crons run ([#1256](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1256)). See [Testing and E2E](testing.md#cleanup-and-leftover-checks).
 - **More erased on account erasure and permanent video deletes** (found by those checks): rate counters, creator tier, bot-check pass, upload sessions, undo records, subtitles, scheduler entries, playlist adds, file claims; deleted channels' search rows keep only their id; reorders of channel sections no longer fail in the queue ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)). See [Deletion, erasure and cleanup](data-lifecycle.md#account-erasure).
+- **Erased accounts leave no trace in kept history:** admin history is kept 2 years, and an erased account's titles, names and ids in it become "erased video" / "erased user" placeholders; an erased creator's titles and channel names in the event archive are replaced the same way; dead letters keep hashed user ids for 30 days; error reports that arrive after an erasure are stored anonymised ([#1288](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1288)). See [Deletion, erasure and cleanup](data-lifecycle.md#admin-history).
 
 ## 2026-11-13: bot protection
 

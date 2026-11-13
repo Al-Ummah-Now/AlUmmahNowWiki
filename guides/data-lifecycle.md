@@ -2,7 +2,7 @@
 
 # Deletion, erasure and cleanup
 
-How data is deleted across the platform: soft deletes, the 30-day purge, account erasure and the cleanup jobs. Read from each repo's default branch on 2026-11-12. The privacy reference is the monorepo's [GDPR notes](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md).
+How data is deleted across the platform: soft deletes, the 30-day purge, account erasure and the cleanup jobs. Read from each repo's default branch on 2026-11-12, updated 2026-11-13. The privacy reference is the monorepo's [GDPR notes](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md).
 
 ## Admin deletes are soft deletes
 
@@ -34,7 +34,30 @@ A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-a
 - **Channel subscriptions** an account made as itself (no channel), as well as those its channels made. The export marks each one `subscribedAs` member or channel ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
 - On the Auth side, purging an account also removes its **email → subject** record and its **invite rows** ([Auth#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [Auth#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
 - On 2026-11-13, found by the web and release suites' leftover checks ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)): the user's **upload rate counters**, **creator tier**, **bot-check pass** (`HUMAN_VERIFIED`, 180 days), **TUS upload sessions** and **bulk edit undo records**; for run accounts also their **Watch later and personal playlists** and privacy footprints. A video deleted for good (purge, cleanup or erasure) now also takes its **subtitles**, **upload marker**, **scheduler entry**, **playlist adds** and **file claim**. A deleted channel's hidden search row keeps only its id, and the admin list-count cache no longer stores the admin's search (an email) in its key.
-- Still open: purged rows of the admin deletion registry and finished admin jobs keep an erased user's titles and id ([#1253](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1253)); dead-letter bodies keep raw ids, and data that reaches the processor after the erasure step keeps the user id ([#1255](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1255)).
+- Also from those checks (owner decisions 2026-11-13, [#1288](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1288)), the three cases below: admin history, archive titles, dead letters and late writes.
+
+### Admin history
+
+The admin deletion registry (`admin_deletions`) and the admin jobs (`admin_jobs`) are the record of what admins did. They're kept for **2 years**: the processor's daily cron deletes purged deletions and finished jobs older than that. Pending deletions and running jobs are never touched ([#1253](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1253)).
+
+Erasing an account keeps every action record but removes the person from it:
+
+- Its videos, channels and other content in the registry get the title **"erased video"**, **"erased channel"** (and so on), and the owner `deleted-user`.
+- Its own account row gets the title **"erased user"**. The row keeps its key (the account id) because the purge and the E2E run sweep look it up by id.
+- Wherever it deleted something or asked for a permanent delete, and wherever it was a job's actor, target or a user in its parameters or result, the id becomes `deleted-user`. Each job records the accounts it names, so the erasure finds them by index, never by scanning. A job still running when the erasure happens (usually the erasure job itself) keeps its target until it succeeds, and then drops it.
+
+### Archive titles
+
+The event archive keeps public titles and channel names for statistics ([#1254](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1254)). When a creator is erased they become placeholders:
+
+- Every archived message that carries a title or channel name is indexed under its owners: the content's owner, creator, author or actor, or whoever was notified about it. Viewers aren't owners. The index holds only a hash of the owner and the archive key.
+- The erasure queues its own step, which rewrites the creator's archived messages 50 at a time with **"erased video"**, **"erased channel"** or **"erased playlist"**, then drops the index rows. A message about a creator who was already erased gets the placeholders when it's written.
+- Older entries, from before the index, are handled by a one-off pass (`archive-privacy-rewrite.ts start --titles`, a dry run by default). It links each titled entry to the current owner of the content it names, and writes placeholders at once when that content no longer exists.
+
+### Dead letters and late writes
+
+- **Dead letters keep hashed ids.** A message that fails for good is stored for diagnosis with every user id replaced by a hash (`uh_…`), in the body and the failure reason, and expires after **30 days**. Hashed rows can't be replayed. Erasure steps are the exception: they keep the real id so a failed erasure can still be finished ([#1255](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1255)).
+- **Erase tombstone.** The erasure records a hash of the erased id for **30 days**. An error report that arrives later, for example from a page that was still open, is stored as `deleted-user` with no identifying details and doesn't count the person as an affected user.
 
 ### The event archive
 
@@ -45,7 +68,7 @@ The processor keeps a copy of queue messages (`al-ummah-now-messages`) for stati
 - **Erasure cuts the archive off.** The erase deletes the person's secret, and from then on nothing can tie their archived events back to them. Later messages about the account, and the erase messages themselves, are archived as `deleted-user`.
 - **Older entries were rewritten once.** Entries from before this change were rewritten with a key that existed only for that run and was then deleted.
 
-The archive itself still expires after 13 months. The local E2E leftover check stays strict on it: a test run's ids turning up there would mean the scrubbing broke. A run's own entries still match through its video and channel titles (the scrubber keeps titles; whether it should is [#1254](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1254)), so the local teardown deletes them as test data. See the [GDPR notes, section 3](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md#3-event-archive-analytics-and-logs).
+The archive itself still expires after 13 months. The local E2E leftover check stays strict on it: a test run's ids turning up there would mean the scrubbing broke. A run's own entries still match through its video and channel titles until its accounts are erased (see [Archive titles](#archive-titles)), so the local teardown deletes them as test data. See the [GDPR notes, section 3](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/compliance/GDPR.md#3-event-archive-analytics-and-logs).
 
 The local E2E stack's leftover check is what finds gaps like these: an admin spec erases an account and the check lists anything still keyed by it.
 
@@ -61,6 +84,7 @@ Admins can also **warn** a user: the warning is recorded and audited, and the us
 |---|---|---|
 | 30-day purge of soft-deleted items | Videos admin, Auth, CMS | Hourly |
 | Watch history older than 18 months; event archive older than 13 months | api-videos cron | Daily |
+| Admin history older than 2 years; dead letters, erase tombstones older than 30 days; archive title index past the archive's retention | processor cron | Daily |
 | Abandoned and orphan Bunny uploads (reaper; only removes what an upload made) | api-videos | Scheduled ([#613](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/613), [#634](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/634)) |
 | E2E leftovers on QA, stale run accounts, test-library sweeps, orphan collections | GitHub Actions | See [Testing and E2E](testing.md#cleanup-jobs-for-shared-environments) |
 | Production test data check | GitHub Actions | Daily and after every production test run |
