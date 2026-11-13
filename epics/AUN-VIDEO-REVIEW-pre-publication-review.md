@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-VIDEO-REVIEW` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, processor, media, scheduler, admin-api, admin-web, web). The native Studio apps show the new status |
-| **Status** | **in progress**: owner decided VR1–VR16 on 2026-11-13; being built (mode off, then shadow) |
+| **Status** | **built, shipping with mode off**: AlUmmahNow #1269, #1270, #1273, #1277, #1280, #1283, #1285 and #1293 (2026-11-13). Production goes to shadow after the release that contains them |
 | **Last updated** | 2026-11-13 |
 
 Read from AlUmmahNow `origin/main` [`39a795d`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/39a795dd1) and the live reports D1 on 2026-11-13. Builds on [Epic 28](E28-ai-moderation.md) (AI moderation), [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) and [AUN-SUBS](AUN-SUBS-subscriptions-plan.md).
@@ -264,7 +264,40 @@ These are filed as issues before the build starts.
 
 The native admin app is specified separately. The review API is built for a native client too: JSON, cursor paging, and push alerts to reviewers.
 
-## Build plan
+## Operating it
+
+- **Switch:** admin → Moderation → Videos in review → Settings. Admins only, and every change is audited. The stored settings live in global_settings `video-review/settings.json`; every worker picks a change up within 30 seconds.
+  - Modes: `off`, `shadow`, `enforce_nsfw`, `enforce`.
+  - Also set there: the creator ETA, the daily budget, media retention and every threshold.
+- **Environments:** QA and stage never run review. `VIDEO_REVIEW_ALLOWED` is `"true"` only in production, and `check:config` pins it.
+- **Queue:**
+  - Action needed, Checking (stalled checks), History, and Shadow mode (the rollout report).
+  - Escalations (minors, extremism) go to senior reviewers only; an appeal is decided by a different reviewer.
+  - Decisions can be undone for 10 minutes.
+  - NSFW media stays blurred until a reviewer presses Show, and every Show is audited.
+- **Alerts:** each reviewer turns on instant alerts in the queue. Each alert is an in-app and push `reviewNeeded` notice, plus a live admin event.
+- **Who reviews:**
+  - Admins and moderators review today; super admins count as seniors.
+  - The `content_reviewer` and `senior_reviewer` roles reach `/api/review` only.
+  - A review-only admin-web sign-in and the Auth roles are AlUmmahNow#1284.
+- **What creators see:**
+  - Studio shows the status: **In review** (usually within N minutes, or "a reviewer will check it" with the live queue time) or **Not approved** (with the reason, edit and check again, and appeal once).
+  - In-app notices `reviewApproved` and `reviewRejected`; the email is AlUmmahNow#1279.
+- **Trusted channels:** admin-api `PUT /api/review/channels/:id/trust` gives a channel post-hoc review. NSFW still pulls a video back.
+- **Images (VR16):** a post with an NSFW image is held whole. An avatar, banner or profile picture stays pending until clean.
+- **Cost and spend:**
+  - Costs go to `ai_usage_daily` under the feature `video_review`.
+  - At the daily budget stop, videos wait for a person.
+- **Retention:** a daily cron deletes review media and finding text 30 days after the decision, and findings after 12 months.
+- **Tests:**
+  - A fixture provider stands in for every model; markers in the title choose the outcome, for example `[review-fixture:nsfw_frame@42000]`.
+  - The Workers AI adapter refuses to build under test, CI or E2E.
+- **Follow-ups:**
+  - the Quran matcher hook (#1271)
+  - the rejection email (#1279)
+  - reviewer sign-in and the Auth roles (#1284)
+
+## Build plan (as built)
 
 The code ships with `video_review.mode = off`. Once it is deployed to production, the mode moves to `shadow`, then to `enforce_nsfw` and finally to `enforce`. Each step is an admin switch. Outside production the env gate `VIDEO_REVIEW_ALLOWED` is unset, so the mode is always off there. The full contract lives in AlUmmahNow `docs/specs/VIDEO-REVIEW.md`. The work is split into these PRs:
 
