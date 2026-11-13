@@ -118,7 +118,7 @@ What shipped in those four days, by area:
 - **Privacy:** account erasure covers invites, error identity, category suggestions and upload traces; channel deletes remove Bunny collections. See [Deletion, erasure and cleanup](../guides/data-lifecycle.md).
 - **Product rules:** one display-name rule (display name, else first + last, email only as a last resort; [#1032](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1032)); the Arabic plural for videos is «المرئيات» ([#1033](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1033)); dislikes are hidden and their routes answer 410 ([#884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/884), [#889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/889)); a Short is ≤ 3 minutes and vertical or square ([#591](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/591)); uploads and channel creation are by creator-tier invitation ([#630](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/630), [#715](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/715)).
 
-Open: the release suite's parallel encode job and 8-upload cap ([#1061](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1061)), R2 backfill of existing videos (waiting for a cost report), and the remaining legacy web specs to move to the local stack.
+Open: R2 backfill of existing videos (waiting for a cost report), and the remaining legacy web specs to move to the local stack.
 
 ## Epics for this repo
 
