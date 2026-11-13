@@ -21,7 +21,7 @@ The owner approved the design on 2026-11-13. It was built in AlUmmahNow [#1154](
 
 ## What the guide says about identities
 
-This is the behaviour on main once #1152 (subscribe as yourself) and #1153 (video comments without a channel) are merged.
+This is the behaviour on main once #1152 (subscribe as yourself), #1153 (video comments without a channel) and #1183 (playlists without a channel) are merged.
 
 | Action | As yourself (no channel) | As a channel |
 |---|---|---|
@@ -29,8 +29,11 @@ This is the behaviour on main once #1152 (subscribe as yourself) and #1153 (vide
 | Comment and reply on videos and posts | Yes, with your display name and picture | Yes, with the channel's name and picture |
 | Like videos and comments, vote in polls | Yes | Yes. Each identity's like counts separately |
 | Subscribe | Yes | Yes. A separate subscription that counts separately |
-| Save to a playlist, upload, Studio, schedule, go live | No (playlists belong to a channel) | Yes |
+| Playlists: Save, a video card's "Save to playlist", create, edit | Yes: your own playlists, in the Library's Playlists section | Yes: the channel's playlists |
+| Upload, Studio, schedule, go live | No | Yes |
 | Write posts on the Community tab | No | The channel owner only |
+
+Every playlist is public (listed and searchable), unlisted (link only: never in lists, channel sections, search or feeds) or private (only you, or the channel's playlist managers).
 
 The Subscriptions feed, the manage page and the side menu are per account: each channel is listed once. **Unsubscribe** on the manage page removes every subscription the account has to that channel. The new-video bell is also per account.
 
