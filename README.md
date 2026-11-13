@@ -30,6 +30,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Environments and domains](guides/environments.md) | QA, stage and production hostnames |
 | [Release process](guides/release-process.md) | How each repo reaches production |
 | [Testing and E2E](guides/testing.md) | Local E2E stack, placement, own data, leftover checks, cleanup jobs |
+| [Status page](guides/status-page.md) | status.alummahnow.net: what it checks, incidents and maintenance, alerts |
 | [Video delivery](guides/video-delivery.md) | Bunny and R2 side by side, playback source, signed URLs, libraries and collections |
 | [Deletion, erasure and cleanup](guides/data-lifecycle.md) | Soft delete and the 30-day purge, account erasure, scheduled cleanup |
 | [Contributing](guides/contributing.md) | Branches, PRs, tests, migrations, spec → plan → implement |
