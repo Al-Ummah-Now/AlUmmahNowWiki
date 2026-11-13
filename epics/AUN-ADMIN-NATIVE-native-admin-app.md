@@ -213,6 +213,18 @@ At scale: 5,000 uploads a month, 10% held, 20 reviewers.
 
 Never caching means every review streams again. At 500 held items a month that is still small. The real cost is people on call. The design never polls.
 
+## Progress: Windows, phase 1 (2026-11-13)
+
+Shipped on AlUmmahNowDesktop `main` ([#41](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/41), `5159426`); details in its `docs/ADMIN_WINDOWS.md`.
+
+- **Projects**: `AlUmmahNow.Admin` (shared, tested) and `AlUmmahNow.Admin.Windows` (WinUI 3, shares the Studio Windows CoreBridge, i18n and environment).
+- **Auth**: OAuth client "Admin (Windows)" ([AlUmmahNowAuth#365](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/365), migration `0039`; QA `306b6f10-…`, stage/prod `288b80b9-…`), system browser + PKCE, `alummahnow-admin://auth/callback` through the protocol registration and a single-instance redirect. `GET /api/me` decides staff. Windows Hello on open and after 5 minutes minimised or locked. Step-up adds `max_age=900` to Core's authorize URL until Core has a step-up prompt ([AlUmmahNowCore#42](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/42)).
+- **Queue**: built on the [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md) contract (admin-api #1280, #1297 field names), with a demo queue until the routes are deployed. Order SLA then risk, live search with suggestions, claim renewed every 90 s, Approve / Reject / Request changes (reason) / Escalate, 10-second undo, "Already approved by Name", text-only offline, single-key shortcuts (A R C E U S J K, `?` lists them).
+- **Media rule**: HLS/DASH only (progressive files are refused: Media Foundation's network source can keep a disk cache), no-cache HTTP stack, frames decoded from memory, `WDA_EXCLUDEFROMCAPTURE`, hidden while minimised, audited Show for NSFW/minor with re-blur. CI streams a loopback HLS video and fails if its bytes are found anywhere on disk.
+- **Push**: registration with `app: "admin"`, `provider: "wns"`; toast `open:`/`claim:` and raw `review_clear` handled. Off until the owner supplies the Partner Center identity. The server toast has no "Admin · Review queue" header yet ([AlUmmahNow#1307](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1307)).
+- **Distribution**: `release-admin-windows.yml` (tag `admin-windows-v1.2.3` on main) builds and signs the MSIX and uploads it to a private R2 bucket; never GitHub Releases or workflow artifacts. It stops at its gate until these owner secrets exist: `ADMIN_WINDOWS_CERT_PFX_BASE64` + `ADMIN_WINDOWS_CERT_PASSWORD` (code-signing certificate), `ADMIN_WINDOWS_PACKAGE_NAME` + `ADMIN_WINDOWS_PUBLISHER` (Partner Center identity), `ADMIN_RELEASE_BUCKET`; the processor needs `WNS_PACKAGE_SID` + `WNS_CLIENT_SECRET` of that identity.
+- No screenshot audit on Windows: the OS gives no screenshot event, and capture is blocked instead.
+
 ## Build plan (when the owner says go)
 
 | Step | Repo | What |
