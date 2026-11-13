@@ -7,7 +7,7 @@ The videos site explains itself in two ways:
 - **Help** at `videos.alummahnow.net/{en|ar}/help`: seven topics in English and Arabic, with annotated pictures and three short clips.
 - **The identity tour**: five steps over the real header and account menu. They show that you can act as yourself or as a channel, and how to switch.
 
-The owner approved the design on 2026-11-13. It was built in AlUmmahNow [#1154](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1154) (the "Acting as" wording and post comments without a channel) and [#1157](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1157) (Help and the tour). www links to it from its footer ([UI#74](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/74)). The developer record is [`docs/features/HELP-AND-TOUR.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/features/HELP-AND-TOUR.md).
+The owner approved the design on 2026-11-13. It shipped (merged 2026-11-13) in AlUmmahNow [#1154](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1154) (the "Acting as" wording and post comments without a channel) and [#1157](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1157) (Help and the tour). www links to it from its footer ([UI#74](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/74)). The developer record is [`docs/features/HELP-AND-TOUR.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/features/HELP-AND-TOUR.md).
 
 ## Decisions
 
