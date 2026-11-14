@@ -7,7 +7,7 @@
 | **ID** | `AUTH-PASSKEYS` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (issuer, profile, account hub, auth admin), [openauth](../repos/openauth.md) (fork: passkey provider, `amr`), [AlUmmahNow](../repos/AlUmmahNow.md) (admin-api, admin-web), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (CMS admin), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **building**: build-ready spec v2 (2026-11-13). PK1–PK8 are **built to recommendation, owner may change** |
-| **Last updated** | 2026-11-13 |
+| **Last updated** | 2026-11-13 (native apps section) |
 
 Read from AlUmmahNowAuth `origin/main` [`b7b0d53`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/b7b0d53) and openauth `origin/master` [`2d74b49`](https://github.com/Al-Ummah-Now/openauth/tree/2d74b49) on 2026-11-13. Comes from [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) decision AD6 and step-up decision AD5. Also closes [AlUmmahNowAuth#361](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/361).
 
@@ -173,12 +173,131 @@ New **Passkeys** section on `profile.auth.…`: each passkey with its name, "Syn
 3. **Production, staff:** the owner registers a passkey on `auth.alummahnow.net` from the account hub, then switches enforcement on. Existing staff get 7 days and a banner; new staff need one at once. **Waiting for the owner.**
 4. **Everyone:** the after-sign-in card is on from step 1 (PK1); nothing is enforced for non-staff.
 
+## Native apps: native passkey sign-in (owner decision 2026-11-13)
+
+Every native **Studio** and **Admin** app (Apple iOS/iPadOS/macOS, Android, Windows) offers two buttons on its sign-in screen:
+
+1. **Sign in with a passkey**: the platform passkey API directly, no browser window (Apple `ASAuthorizationPlatformPublicKeyCredentialProvider` + `ASAuthorizationSecurityKeyPublicKeyCredentialProvider`, Android Credential Manager `GetPublicKeyCredentialOption`, Windows `webauthn.dll` `WebAuthNAuthenticatorGetAssertion`). 1Password, iCloud Keychain, Google Password Manager, Windows Hello, security keys and a phone over QR all work.
+2. **Sign in another way**: today's system-browser flow, unchanged.
+
+A passkey saved on the website works natively and vice versa, because the native ceremony uses the **same RP ID** as the web.
+
+Copy (en/ar, same wording as the web sign-in page and passkey pages):
+
+| Key | en | ar |
+|---|---|---|
+| Passkey button | Sign in with a passkey | الدخول بمفتاح المرور |
+| Helper line | Use a passkey saved on this device, in your password manager, on your phone or on a security key. | استخدم مفتاح مرور محفوظًا على هذا الجهاز أو في مدير كلمات المرور أو على هاتفك أو على مفتاح أمان. |
+| Other button | Sign in another way | الدخول بطريقة أخرى |
+| Failure | That passkey didn't work. Try again or sign in another way. | لم ينجح مفتاح المرور. حاول مرة أخرى أو ادخل بطريقة أخرى. |
+| Add (signed in) | Add a passkey | إضافة مفتاح مرور |
+
+### RP ID per environment (verified 2026-11-13)
+
+`rpIdForHost` (openauth `src/passkey.ts`) strips a leading `auth.` from the issuer host; no environment sets `WEBAUTHN_RP_ID`.
+
+| Env | Issuer (`OPENAUTH_ISSUER`) | RP ID | Native origin accepted for Apple/Windows |
+|---|---|---|---|
+| Production | `https://auth.alummahnow.net` | `alummahnow.net` | `https://alummahnow.net` |
+| Stage | `https://auth.stage.alummahnow.net` | `stage.alummahnow.net` | `https://stage.alummahnow.net` |
+| QA | `https://auth.qa.alummahnow.net` | `qa.alummahnow.net` | `https://qa.alummahnow.net` |
+| Local | `http://localhost:3301` | `localhost` | (no native apps) |
+
+### Contract (issuer = the Auth host of the env)
+
+All requests and responses are JSON, `Cache-Control: no-store`. No cookies, no CORS (native callers only), **no Turnstile** (native client ids follow the AlUmmahNow#1275 exemption: these routes never show a challenge). Errors are always `{ "error", "error_description" }`.
+
+**Sign in**
+
+- `POST /native/passkey/options` body `{ client_id, code_challenge, code_challenge_method: "S256" }` → `200 { challenge_id, publicKey }`, where `publicKey` is a WebAuthn L3 `PublicKeyCredentialRequestOptionsJSON`: `{ rpId, challenge (base64url), allowCredentials: [] (discoverable), userVerification: "required", timeout: 120000 }`. The challenge is **single use**, expires after **2 minutes** and is bound to `client_id` + `code_challenge`.
+- `POST /native/passkey/verify` body `{ challenge_id, client_id, credential }`, `credential` = `AuthenticationResponseJSON` (WebAuthn L3 JSON, every binary field base64url: `id`, `rawId`, `type: "public-key"`, `response.{clientDataJSON, authenticatorData, signature, userHandle}`) → `200 { code }`: a one-time authorization code bound to `client_id` and the `code_challenge` from the options call.
+- The app then exchanges the code at the **existing** token endpoint, exactly like the browser flow: `POST /token` form `grant_type=authorization_code&code=…&client_id=…&code_verifier=…&redirect_uri=<the client's native redirect, below>`. Tokens, refresh, roles (frozen at sign-in), `amr: ["passkey"]`, `auth_time` and the staff `passkey_deadline` are identical to a browser passkey sign-in. The code lives 10 minutes (Auth `ttl.code`); exchange it at once.
+- The server checks: the challenge exists, is unexpired, unused, and belongs to `client_id`; the assertion signature with the stored public key; `rpIdHash` = SHA-256 of the RP ID; `type = webauthn.get`; the challenge; the origin (below); user verification; the counter; and `userHandle` (when sent) = the credential's owner. It then runs the **same success pipeline** as the web passkey sign-in (suspended/deleted accounts refused, RBAC roles, staff deadline, `auth.login.success` audit event). The after-sign-in passkey card never shows (the user has a passkey). No browser SSO session is created.
+
+**Add a passkey (signed in)**
+
+- `POST /native/passkey/register/options` with `Authorization: Bearer <access token>` (body `{}`) → `200 { challenge_id, publicKey }`, `publicKey` = `PublicKeyCredentialCreationOptionsJSON`: `{ rp: { id: rpId, name }, user: { id (base64url), name: email, displayName }, challenge, pubKeyCredParams (ES256, RS256), excludeCredentials (the account's passkeys), authenticatorSelection: { residentKey: "required", requireResidentKey: true, userVerification: "required" }, attestation: "none", timeout: 120000 }`. Same shape as sign-in (`challenge_id` next to `publicKey`), so `register/verify` can name the challenge.
+  - `401 { error: "step_up_required", max_age: 900 }` when the token's `auth_time` is older than 15 minutes: the app re-signs in (passkey or browser with `prompt=login&max_age=900`) and retries.
+  - `403 { error: "email_code_required", setup_url }` for a **staff** account adding its **first** passkey (the web asks for an emailed code then; a stolen password must not enrol the thief's passkey): the app opens `setup_url` (`https://auth.<env>alummahnow.net/passkeys/setup`) in the system browser.
+  - `409 { error: "passkey_limit" }` at 10 passkeys (PK6).
+- `POST /native/passkey/register/verify` Bearer + `{ challenge_id, credential, name? }`, `credential` = `RegistrationResponseJSON` → `200 { id, name, created_at }` (`created_at` epoch ms). The challenge is single use, 2 minutes, bound to the user. `400 { error: "invalid_credential" }` when the attestation does not verify. Writes `passkey.added` and sends the same email notice as the web.
+
+**Errors (every route)**
+
+| Status | `error` | When |
+|---|---|---|
+| 400 | `invalid_request` | Missing/malformed field, `code_challenge_method` not `S256`, `code_challenge` not 43–128 base64url chars |
+| 400 | `invalid_client` | `client_id` is not an accepted native client |
+| 401 | `invalid_credential` | Any sign-in failure: unknown, expired, replayed or other client's challenge, bad signature, wrong origin or RP, unknown credential, suspended or deleted account. **Generic on purpose** (no user enumeration) |
+| 401 | `invalid_token` | Registration without a valid access token |
+| 401 | `step_up_required` | Registration with `auth_time` older than 15 minutes |
+| 429 | `rate_limited` | Too many requests; `Retry-After` header (seconds) |
+| 500 | `server_error` | Unexpected; reported to the videos admin Errors page with a reference |
+
+**Rate limits:** Workers Rate Limiting binding `NATIVE_PASSKEY_LIMITER` (30 per 60 s) keyed per route + client IP + `client_id` on options, verify and both register routes.
+
+### Accepted native clients
+
+Only these public PKCE clients (`oauth_clients`, `metadata.type = "native"`, no secret, enabled), read **by id** (never a scan). Viewer and TV clients are not accepted. The code is bound to the client's private-use-scheme redirect, which the app sends as `redirect_uri` at `/token`:
+
+| App | Prod/stage `client_id` | QA `client_id` | `redirect_uri` for `/token` |
+|---|---|---|---|
+| Studio (iOS / Android) | `6f8073c6-754b-4d63-bf80-0546214e0d62` | `45364a42-21f4-4359-a76c-0a1e6615fd7b` | `alummahnow-studio://auth/callback` |
+| Studio (desktop: macOS, Windows) | `950e2b3b-6353-4472-affe-7c1f57f4e6a4` | `29b4792a-caad-4814-a83f-4337bc6a1aeb` | `alummahnow-studio://auth/callback` |
+| Admin (iOS) | `95adb86e-fdfb-4955-984b-347aa16a5023` | `77330b47-5747-4058-ba00-921e159f1ced` | `alummahnow-admin://auth/callback` |
+| Admin (macOS) | `6a65d365-1352-4ffa-922f-4053d461ac3a` | `1c230211-7b90-4d0a-be9d-3068ebd79d5b` | `alummahnow-admin://auth/callback` |
+| Admin (Windows) | `288b80b9-ecc6-4927-8b5a-bded5aa00e55` | `306b6f10-d9f0-4609-84a1-23c92da978e9` | `alummahnow-admin://auth/callback` |
+| Admin (Android) | `6634c4c9-a80d-4961-9427-d997349f8ea2` | `5b44a4f7-d369-4d12-bc69-028d0276604a` | `alummahnow-admin://auth/callback` |
+
+### Origins accepted in `clientDataJSON` (native routes only)
+
+- The web origins as today (the issuer origin).
+- `https://<RP ID>` (table above): what Apple's and Windows' platform APIs send (Windows apps build `clientDataJSON` themselves and must use exactly this origin).
+- `android:apk-key-hash:<base64url, no padding, of the SHA-256 of the signing certificate>` for every Android signing certificate configured for the env (Auth var `ANDROID_APP_CERTS`, below). Credential Manager sends this for apps.
+
+### Domain association files
+
+Served by the **`al-ummah-now-www`** Worker (repo **AlUmmahNowUI**, `src/worker.ts`), which owns `alummahnow.net`. QA and stage get the RP-ID hosts `qa.alummahnow.net` and `stage.alummahnow.net` as new custom domains on `al-ummah-now-www-qa` / `-stage` (they did not resolve before; every other path there 301s to `www.<env>`). The files are answered **before** the apex→www redirect: `200`, `application/json`, no redirect, `Cache-Control: public, max-age=300`, on every host of the Worker.
+
+- `/.well-known/apple-app-site-association`:
+  ```json
+  { "webcredentials": { "apps": ["<TEAMID>.net.alummahnow.studio", "<TEAMID>.net.alummahnow.studio.mac", "<TEAMID>.net.alummahnow.admin", "<TEAMID>.net.alummahnow.admin.mac"] } }
+  ```
+  No `applinks` (no app uses universal links on these hosts). QA lists the `.qa` bundle ids (`net.alummahnow.studio.qa`, `…studio.mac.qa`, `…admin.qa`, `…admin.mac.qa`, from AlUmmahNowApple `project.yml` + `Configs/QA.xcconfig`). Stage has no Apple build; it lists the production ids. Without `APPLE_TEAM_ID` the list is empty (valid JSON, nothing breaks).
+- `/.well-known/assetlinks.json`: one statement per Android app that has at least one fingerprint, relation `delegate_permission/common.get_login_creds` (no `handle_all_urls`: no App Links on these hosts):
+  ```json
+  [{ "relation": ["delegate_permission/common.get_login_creds"],
+     "target": { "namespace": "android_app", "package_name": "net.alummahnow.studio", "sha256_cert_fingerprints": ["5A:1B:…"] } }]
+  ```
+  Packages (AlUmmahNowAndroid `studio-mobile`/`admin-mobile` `build.gradle.kts`): `net.alummahnow.studio`, `net.alummahnow.admin`; QA flavour adds `.qa`. An app without fingerprints is left out; with none at all the file is `[]`.
+- Each app declares the domain: Apple `com.apple.developer.associated-domains` = `webcredentials:<RP ID>` (QA builds `webcredentials:qa.alummahnow.net`); Android `asset_statements` pointing at `https://<RP ID>/.well-known/assetlinks.json`; Windows needs no file.
+
+### Configuration (no secrets: team ids and certificate fingerprints are public)
+
+| Name | Where | Value |
+|---|---|---|
+| `APPLE_TEAM_ID` | www `wrangler.jsonc` vars, every env | 10-character Apple Developer Team ID. **Owner** |
+| `APPLE_WEBCREDENTIALS_BUNDLE_IDS` | www vars, per env | comma list of bundle ids (set as above) |
+| `ANDROID_APP_CERTS` | www vars **and** Auth `wrangler.json` / `wrangler.qa.json` vars, per env, same value in both | JSON `{ "<package>": ["AA:BB:…" SHA-256, …] }` |
+
+Known now: the CI **pre-release** key (GitHub pre-release APKs, both flavours) `5A:1B:3D:2B:57:6E:9A:2D:F0:BF:1B:E3:F1:8C:40:20:13:F9:5C:09:EA:EE:7C:F7:31:10:C4:2F:B5:69:DD:C0`: set for Studio (QA, stage, prod) and Admin (QA). **Owner values still needed:** the Apple Team ID; for each Android app on Play, the **Play app signing key** SHA-256 (Play Console → Test and release → App integrity) and the **upload key** SHA-256, per package (`net.alummahnow.studio`, `net.alummahnow.admin`, and the `.qa` packages if they go to Play).
+
+### Build status (native)
+
+| Piece | Repo | State |
+|---|---|---|
+| Native sign-in routes in the issuer (`nativePasskey` option) | openauth | building |
+| Native routes config, register routes, clients, origins, rate limit | AlUmmahNowAuth | building |
+| Domain association files + QA/stage RP-ID hosts | AlUmmahNowUI | building |
+| Apple / Android / Windows clients | AlUmmahNowApple / AlUmmahNowAndroid / AlUmmahNowDesktop | building (separate agents) |
+
 ## Tests
 
 - **Unit (openauth):** `amr` on code, refresh and silent sign-on; passkey options/verify with a fake authenticator; counter regression refused; embedded provider not on the select page.
 - **Unit (Auth):** staff policy and deadlines, refresh patch, routes (fresh session, 10 limit, last staff passkey refused, setup ticket single use, CSRF origin), every D1 query by key.
 - **E2E (local stack, Playwright Chromium with a CDP virtual authenticator `WebAuthn.addVirtualAuthenticator`):** add from the card, sign in with the button, sign in from autofill, rename/remove/undo in the hub, staff "Passkey needed" page and step-up. Every spec creates its own accounts and deletes them even on failure. No E2E against deployed QA on PRs; `sso-journey.spec.ts` stays green.
 - **Release:** one stage spec (virtual authenticator). Native flows: manual smoke per release.
+- **Native routes:** unit tests in openauth and Auth (good assertion, replayed challenge, wrong client, wrong origin, Android apk-key-hash origin, expired challenge, `step_up_required`, rate limit) and for both domain association files; an E2E against QA with a software authenticator that signs the assertion like a platform API (origin `https://qa.alummahnow.net`).
 
 ## Cost
 
@@ -186,7 +305,7 @@ Two to three D1 reads and one write per passkey sign-in, no external service. Un
 
 ## Later
 
-- PK2 (remove the password), native passkey APIs (ASAuthorizationController, Android Credential Manager, Windows WebAuthn) with associated-domain and asset-links files, and WebAuthn related origins (`/.well-known/webauthn`) for sites that sign in on their own host.
+- PK2 (remove the password) and WebAuthn related origins (`/.well-known/webauthn`) for sites that sign in on their own host. (Native passkey APIs moved out of Later: see **Native apps** above.)
 
 ## Build status
 
