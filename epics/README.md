@@ -21,11 +21,11 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 | Status | Epics |
 |---|---|
 | shipped | 30 |
-| in progress | 42 |
+| in progress | 43 |
 | planned | 14 |
 | deferred | 7 |
 | rejected | 2 |
-| **All** | **95** |
+| **All** | **96** |
 
 ## All epics
 
@@ -112,6 +112,7 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 | [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) | Transcription, translation and inline translation (Quran-aware) | AlUmmahNow | planned | [TRANSCRIPTION-TRANSLATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/614c4e302fa1d11110f5d59a6494c2b213f99d21/docs/specs/TRANSCRIPTION-TRANSLATION.md) (PR [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816)) | 2026-11-11 |
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions and tiers plan | AlUmmahNow | planned | [docs/plans/SUBSCRIPTIONS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/3c0327b4735c8c82840b66af36411222baadfc5e/docs/plans/SUBSCRIPTIONS.md) (PR [#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)) | 2026-11-11 |
 | [AUN-SEO](AUN-SEO-search-visibility.md) | Search visibility (SEO): audit and spec | AlUmmahNow, AlUmmahNowUI, AlUmmahNowCMS | in progress | This page (audit and owner decisions of 2026-11-13) | 2026-11-13 |
+| [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) | alummahnow.dev: project site for developers, contributors, investors, donors and partners | AlUmmahNowUI | in progress | Owner request 2026-11-14 (chat) | 2026-11-14 |
 | [AUN-SHORT-LINKS](AUN-SHORT-LINKS-short-share-links.md) | Short share links on alummahnow.link: redirects, share buttons, click counters | AlUmmahNow | in progress | [AlUmmahNow#1192](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1192) | 2026-11-13 |
 | [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md) | Pre-publication video review: In review state, open-weight NSFW and content checks, review queue | AlUmmahNow | planned | This page (draft v1, decisions VR1–VR16) | 2026-11-13 |
 | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) | Scalability audit and index-backed lists | AlUmmahNow | in progress | [docs/architecture/SCALABILITY-AUDIT.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/architecture/SCALABILITY-AUDIT.md); [AlUmmahNow#506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/506) | 2026-11-12 |
