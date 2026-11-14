@@ -30,22 +30,19 @@
         "en": "Live streams on two providers",
         "ar": "البث المباشر على مزوّدَين"
       },
-      "status": "live",
+      "status": "rolling",
       "apps": [
         "videos",
         "api",
         "videos-admin"
       ],
       "wiki": "epics/D3-live-provider.md",
-      "release": {
-        "repo": "AlUmmahNow",
-        "tag": "v2026.11.12.9"
-      },
       "prs": [
         "AlUmmahNow#867",
         "AlUmmahNow#871",
         "AlUmmahNow#872"
-      ]
+      ],
+      "note": "Built and in production releases since v2026.11.12.9 (Studio Live, Go live, the live watch page, the admin Live streaming page), but production cannot take a stream yet: Bunny Stream Live returns 403 for the production library until preview access is granted (AlUmmahNow#874), and the self-hosted edge has no production host attached (live.alummahnow.net is not a route of the production worker) and takes HTTPS HLS push only, no RTMP/SRT (AlUmmahNow#875). No real stream has run on production; the release E2E creates and ends a stream without sending video."
     },
     {
       "id": "posts-playlists-sections",

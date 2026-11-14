@@ -26,6 +26,16 @@ The earlier recommendation was "follows D2", then the self-hosted option. On 202
 - **Studio Live** and **Go live** on the web, the live watch page, and QoE beacons tagged with the provider ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)). Encoders push RTMP or HTTPS HLS, whichever provider was assigned.
 - Bunny Live is in preview with Bunny; see the open issues in the monorepo for its state.
 
+## Production status (checked 2026-11-14)
+
+**Built, rolling out, not live.** The code is in every production release since v2026.11.12.9, but production cannot take a stream yet:
+
+- **Bunny Stream Live**: the live API returns 403 for the production library (400189) until Bunny grants closed-preview access, an owner action ([#874](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/874)). The router sends every stream to self-hosted meanwhile.
+- **Self-hosted**: the production worker's config has no `live.alummahnow.net` route (stage has `live.stage.alummahnow.net`), and no release step attaches it. The edge takes HTTPS HLS push only; RTMP/SRT needs Spectrum into a Worker's `connect()` ([#875](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/875)).
+- **Tests**: the release E2E (`apps/web/e2e/release/live-go-live.spec.ts`) creates a stream, shows the encoder settings, goes live and ends it, but never sends video. No real stream has run on production.
+
+The feature registry lists `live-streams` as `rolling` until a production release carries a working ingest path and a stream has played there.
+
 ## Blocks
 
 - [Epic 17](E17-live-in-apps.md): live in the apps (watch, chat, premieres).
