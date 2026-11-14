@@ -7,9 +7,9 @@
 | **ID** | `OA-THEME` |
 | **Owning repos** | [openauth](../repos/openauth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-14 |
 
-> Plan phases are all unticked, but per-request theme and language rendering shipped (openauth#10–#12, #21) and the owner's English-default rule is tested (#37). On the Auth side, Auth now keeps its own theme packages and the auth admin picks the sign-in theme (Auth #279, #282).
+> Checked against openauth `master` on 2026-11-14: phases 1, 2, 3 and 5 are done. Phase 4 is half done: the default-tenant theme cache exists, but the theme middleware doesn't use it yet. Per-request theme and language rendering shipped (openauth#10–#12, #21) and the owner's English-default rule is tested (#37). On the Auth side, Auth now keeps its own theme packages and the auth admin picks the sign-in theme (Auth #279, #282).
 
 ## Goal
 
@@ -19,11 +19,11 @@ Theme every request by tenant branding → config → DB default tenant → env,
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| Phase 1 | Backwards-compatible theme prop | Prop exists in code |
-| Phase 2 | Context-aware theme in the enterprise issuer |  |
-| Phase 3 | Provider UIs |  |
-| Phase 4 | Default tenant fallback |  |
-| Phase 5 | Cleanup |  |
+| Phase 1 | Backwards-compatible theme prop | ✅ Done. `Layout` takes an optional `theme` (`src/ui/base.tsx`), falling back through `resolveTheme` (openauth `bc93048`, [openauth#5](https://github.com/Al-Ummah-Now/openauth/pull/5)) |
+| Phase 2 | Context-aware theme in the enterprise issuer | ✅ Done. `createEnterpriseThemeMiddleware` resolves tenant branding → `config.theme` → `THEME_OPENAUTH` and stores it on the request context (`RESOLVED_THEME_KEY`), not in a global ([openauth#21](https://github.com/Al-Ummah-Now/openauth/pull/21)) |
+| Phase 3 | Provider UIs | ✅ Done. `CodeUI`, `PasswordUI` and `SelectUI` render with `renderOptionsFromRequest` (this request's theme, locale and direction) ([openauth#10](https://github.com/Al-Ummah-Now/openauth/pull/10), [#12](https://github.com/Al-Ummah-Now/openauth/pull/12), [#21](https://github.com/Al-Ummah-Now/openauth/pull/21)) |
+| Phase 4 | Default tenant fallback | ◐ Half done. Step 11 is done: `enterprise/default-tenant-cache.ts` (`getDefaultTenantTheme`, version check across isolates, [openauth#36](https://github.com/Al-Ummah-Now/openauth/pull/36)) with tests. Step 10 isn't: `createEnterpriseThemeMiddleware` doesn't call it yet. Auth doesn't need it because it passes its own theme on each call ([Auth#279](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/279), [#282](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/282)) |
+| Phase 5 | Cleanup | ✅ Done. Header middleware kept for API consumers (`X-Theme-Vars`, `src/tenant/theme.ts`); `theme` documented in enterprise types; tests in `test/theme-resolution.test.ts` and `test/render-isolation.test.ts` |
 
 ## Decisions and constraints
 
@@ -47,7 +47,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Conflicts between sources
 
-- Plan checkboxes are unticked although the per-request theme work is merged.
+- `packages/openauth/PLAN.md` boxes are still unticked in the openauth repo; this page is the status of record.
 
 ## Sources
 
