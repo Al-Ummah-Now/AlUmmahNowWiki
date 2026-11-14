@@ -178,7 +178,7 @@ Because `.org` is a **separate registrable domain**, scholar sites are a differe
 | Content | Scholar without the tier | White-label on a platform subdomain | White-label on its own domain |
 |---|---|---|---|
 | Articles, cards, posts, pages | www (as today) | **The site** | **The site** (primary host) |
-| Scholar profile and About | The www scholar page | The site's About page. The www scholar page becomes a short directory entry with "Visit site" and `rel=canonical` to the site | Same |
+| Scholar profile and About | The www scholar page | The site. The www scholar page stays the full page (profile, posts, videos) as for every scholar (SS6), with no "Visit site" block; only its `rel=canonical` points to the site's home (owner, 2026-11-14) | Same |
 | Videos and Shorts | The videos watch page | **The videos watch page.** The site's watch page has `rel=canonical` to videos | **The site's watch page.** The videos watch page for that channel's videos points `rel=canonical` to the site and leaves them out of the videos sitemap |
 | Community tab on videos | – | Posts link to the site | Same |
 
@@ -189,7 +189,7 @@ A scholar on their own domain is building their own brand. Independence means se
 Other rules:
 
 - Each host serves its own `sitemap.xml` and `robots.txt`. www's and videos' sitemaps leave out URLs whose canonical is a site.
-- Structured data: `Person` or `Organization` with `sameAs` to the channel (and to the www directory entry), `WebSite`, `BreadcrumbList`, and `Article` or `VideoObject` per page.
+- Structured data: `Person` or `Organization` with `sameAs` to the channel (and to the www scholar page), `WebSite`, `BreadcrumbList`, and `Article` or `VideoObject` per page.
 - `hreflang` pairs `en` and `ar` through `translation_key`.
 - **Losing the tier:** for 90 days, hosts 302 to the www scholar page (or the channel). Canonicals go back to www and videos within one cache cycle. Custom hostnames are removed after 90 days. Content is kept (§6.4).
 
@@ -386,7 +386,7 @@ interface PostV2 {                   // one format: community JSON and CMS staff
 
 ### 6.4 Getting the tier, and losing it
 
-- **On:** nothing moves, because the posts already live on the channel. The site starts showing them. The refs' canonical switches to the site, and the www post URLs 301 to the site's post URLs. Bio and avatar stay editable in Studio and sync to the CMS directory entry.
+- **On:** nothing moves, because the posts already live on the channel. The site starts showing them. The refs' canonical switches to the site, and the www post pages stay, with `rel=canonical` to the site's post URLs (no 301). Bio and avatar stay editable in Studio and sync to the CMS directory entry.
 - **Off:** the site goes offline (§4.4). The www URLs serve again and become canonical. Pages and settings are kept for 90 days, then go to the 30-day trash.
 
 ### 6.5 Comments and likes
