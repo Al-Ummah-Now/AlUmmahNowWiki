@@ -221,22 +221,25 @@ All requests and responses are JSON, `Cache-Control: no-store`. No cookies, no C
 - `POST /native/passkey/register/options` with `Authorization: Bearer <access token>` (body `{}`) → `200 { challenge_id, publicKey }`, `publicKey` = `PublicKeyCredentialCreationOptionsJSON`: `{ rp: { id: rpId, name }, user: { id (base64url), name: email, displayName }, challenge, pubKeyCredParams (ES256, RS256), excludeCredentials (the account's passkeys), authenticatorSelection: { residentKey: "required", requireResidentKey: true, userVerification: "required" }, attestation: "none", timeout: 120000 }`. Same shape as sign-in (`challenge_id` next to `publicKey`), so `register/verify` can name the challenge.
   - `401 { error: "step_up_required", max_age: 900 }` when the token's `auth_time` is older than 15 minutes: the app re-signs in (passkey or browser with `prompt=login&max_age=900`) and retries.
   - `403 { error: "email_code_required", setup_url }` for a **staff** account adding its **first** passkey (the web asks for an emailed code then; a stolen password must not enrol the thief's passkey): the app opens `setup_url` (`https://auth.<env>alummahnow.net/passkeys/setup`) in the system browser.
-  - `409 { error: "passkey_limit" }` at 10 passkeys (PK6).
-- `POST /native/passkey/register/verify` Bearer + `{ challenge_id, credential, name? }`, `credential` = `RegistrationResponseJSON` → `200 { id, name, created_at }` (`created_at` epoch ms). The challenge is single use, 2 minutes, bound to the user. `400 { error: "invalid_credential" }` when the attestation does not verify. Writes `passkey.added` and sends the same email notice as the web.
+  - `403 { error: "limit" }` at 10 passkeys (PK6). Same code as the web's `/passkeys/register/*`.
+- `POST /native/passkey/register/verify` Bearer + `{ challenge_id, credential, name? }`, `credential` = `RegistrationResponseJSON` → `200 { id, name, created_at }` (`created_at` epoch ms). The challenge is single use, 2 minutes, bound to the user. `400 { error: "invalid_credential" }` when the attestation does not verify or the challenge is unknown, used, expired or another user's; `409 { error: "exists" }` when this authenticator is already on the account (same code as the web). Writes `passkey.added` and sends the same email notice as the web.
 
-**Errors (every route)**
+**Errors: every code, per route** (body always `{ error, error_description }`, plus the extra fields shown)
 
-| Status | `error` | When |
-|---|---|---|
-| 400 | `invalid_request` | Missing/malformed field, `code_challenge_method` not `S256`, `code_challenge` not 43–128 base64url chars, `redirect_uri` not registered for the client |
-| 400 | `invalid_client` | `client_id` is not an accepted native client |
-| 401 | `invalid_credential` | Any sign-in failure: unknown, expired, replayed or other client's challenge, bad signature, wrong origin or RP, unknown credential, suspended or deleted account. **Generic on purpose** (no user enumeration) |
-| 401 | `invalid_token` | Registration without a valid access token |
-| 401 | `step_up_required` | Registration with `auth_time` older than 15 minutes (body also has `max_age: 900`) |
-| 403 | `email_code_required` | Registration: a staff account's first passkey (body has `setup_url`) |
-| 409 | `passkey_limit` / `passkey_exists` | Registration: 10 passkeys already, or this authenticator is already on the account |
-| 429 | `rate_limited` | Too many requests; `Retry-After` header (seconds) |
-| 500 | `server_error` | Unexpected; reported to the videos admin Errors page with a reference |
+| Route | Status | `error` | When / extra fields |
+|---|---|---|---|
+| all four | 400 | `invalid_request` | Body not JSON or a field missing/malformed; options: `code_challenge_method` not `S256`, `code_challenge` not 43–128 base64url chars, `redirect_uri` not registered for the client |
+| all four | 429 | `rate_limited` | `Retry-After` header (seconds, 60) |
+| all four | 500 | `server_error` | Unexpected; `X-Error-Ref` header (and `reference` on register routes), reported to the videos admin Errors page |
+| options, verify | 400 | `invalid_client` | `client_id` is not an accepted native client (table below) |
+| verify | 401 | `invalid_credential` | **Any** sign-in failure: unknown, expired, replayed or other client's challenge, bad signature, wrong origin or RP, unknown credential, other user handle, suspended or deleted account. Generic on purpose (no user enumeration): apps show "That passkey didn't work" and offer **Sign in another way** |
+| register/* | 401 | `invalid_token` | No/invalid/expired access token, a revoked sign-in (sign out everywhere, password change), or a suspended/deleted account |
+| register/* | 400 | `invalid_client` | The token was issued to a client that is not an accepted native client (e.g. Viewer, web apps) |
+| register/* | 401 | `step_up_required` | `auth_time` older than 15 minutes; extra `max_age: 900`. Re-sign in, retry |
+| register/* | 403 | `email_code_required` | A staff account's first passkey; extra `setup_url` (open in the system browser) |
+| register/* | 403 | `limit` | 10 passkeys already (PK6) |
+| register/verify | 400 | `invalid_credential` | Attestation not verified, or the challenge unknown/used/expired/another user's |
+| register/verify | 409 | `exists` | This authenticator is already on the account |
 
 **Rate limits:** Workers Rate Limiting binding `NATIVE_PASSKEY_LIMITER` (30 per 60 s) keyed per route + client IP + `client_id` on options, verify and both register routes.
 
