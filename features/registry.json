@@ -1,0 +1,1313 @@
+{
+  "version": 1,
+  "features": [
+    {
+      "id": "videos-and-shorts",
+      "name": {
+        "en": "Videos and Shorts",
+        "ar": "المرئيات والمقاطع القصيرة"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/CHAT-SHORTS-shorts-rule.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#591",
+        "AlUmmahNow#601",
+        "AlUmmahNow#1185"
+      ],
+      "note": "Videos predate tagged releases. The Shorts rule shipped in v2026.11.10.15 and the /shorts page in v2026.11.13.9."
+    },
+    {
+      "id": "live-streams",
+      "name": {
+        "en": "Live streams on two providers",
+        "ar": "البث المباشر على مزوّدَين"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "epics/D3-live-provider.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.12.9"
+      },
+      "prs": [
+        "AlUmmahNow#867",
+        "AlUmmahNow#871",
+        "AlUmmahNow#872"
+      ]
+    },
+    {
+      "id": "posts-playlists-sections",
+      "name": {
+        "en": "Posts, playlists and channel sections",
+        "ar": "المنشورات وقوائم التشغيل وأقسام القنوات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/AUN-CHANNEL-SECTIONS-channel-sections.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#611",
+        "AlUmmahNow#631",
+        "AlUmmahNow#1203"
+      ],
+      "note": "Posts and playlists predate tagged releases; channel sections shipped in v2026.11.10.15."
+    },
+    {
+      "id": "comments-subscriptions",
+      "name": {
+        "en": "Comments and subscriptions",
+        "ar": "التعليقات والاشتراكات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#20",
+        "AlUmmahNow#170",
+        "AlUmmahNow#1152",
+        "AlUmmahNow#1153"
+      ],
+      "note": "Subscribing and commenting without a channel shipped in v2026.11.13.4."
+    },
+    {
+      "id": "notifications",
+      "name": {
+        "en": "Notifications",
+        "ar": "الإشعارات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#168",
+        "AlUmmahNow#1197"
+      ]
+    },
+    {
+      "id": "embeds",
+      "name": {
+        "en": "Embeddable player and share dialog",
+        "ar": "المشغّل القابل للتضمين ونافذة المشاركة"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/E25-sharing-embeds.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.08.3"
+      },
+      "prs": [
+        "AlUmmahNow#264",
+        "AlUmmahNow#858"
+      ]
+    },
+    {
+      "id": "short-links",
+      "name": {
+        "en": "Short share links (alummahnow.link)",
+        "ar": "روابط المشاركة القصيرة (alummahnow.link)"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/AUN-SHORT-LINKS-short-share-links.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13.9"
+      },
+      "prs": [
+        "AlUmmahNow#1192",
+        "AlUmmahNow#1250"
+      ]
+    },
+    {
+      "id": "content-categories",
+      "name": {
+        "en": "AI category suggestions",
+        "ar": "اقتراح التصنيفات بالذكاء الاصطناعي"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/CHAT-AI-CATEGORIES-ai-categories.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.10.15"
+      },
+      "prs": [
+        "AlUmmahNow#605"
+      ]
+    },
+    {
+      "id": "unlisted-videos",
+      "name": {
+        "en": "Unlisted videos and playlists",
+        "ar": "المرئيات وقوائم التشغيل غير المدرجة"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13.9"
+      },
+      "prs": [
+        "AlUmmahNow#1167",
+        "AlUmmahNow#1183"
+      ]
+    },
+    {
+      "id": "help-pages",
+      "name": {
+        "en": "Help pages and the identity tour",
+        "ar": "صفحات المساعدة وجولة التعريف"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13.9"
+      },
+      "prs": [
+        "AlUmmahNow#1157"
+      ]
+    },
+    {
+      "id": "bilingual",
+      "name": {
+        "en": "Arabic and English on every app",
+        "ar": "العربية والإنجليزية في كل التطبيقات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "www",
+        "cms",
+        "auth"
+      ],
+      "wiki": "epics/E03-i18n-enhancement.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.08.4"
+      },
+      "prs": [
+        "AlUmmahNow#339",
+        "AlUmmahNow#812"
+      ]
+    },
+    {
+      "id": "creator-tiers",
+      "name": {
+        "en": "Creator tiers: uploads by invitation",
+        "ar": "مستويات صنّاع المحتوى: الرفع بدعوة"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/CHAT-CREATOR-TIERS-creator-tiers.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.10.15"
+      },
+      "prs": [
+        "AlUmmahNow#630",
+        "AlUmmahNow#660",
+        "AlUmmahNow#715",
+        "AlUmmahNow#1363"
+      ],
+      "note": "A Tiers item in the admin menu (AlUmmahNow#1363) is in review."
+    },
+    {
+      "id": "creator-studio",
+      "name": {
+        "en": "Web Creator Studio",
+        "ar": "استوديو صنّاع المحتوى على الويب"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/AUN-CREATOR-STUDIO-web-creator-studio.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.11.4"
+      },
+      "prs": [
+        "AlUmmahNow#498"
+      ]
+    },
+    {
+      "id": "upload-resilience",
+      "name": {
+        "en": "Uploads that survive deploys, with rate limits",
+        "ar": "رفع يصمد أمام التحديثات، مع حدود للمعدّل"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/CHAT-UPLOADS-upload-resilience.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.08.3"
+      },
+      "prs": [
+        "AlUmmahNow#306",
+        "AlUmmahNow#522",
+        "AlUmmahNow#578",
+        "AlUmmahNow#583"
+      ]
+    },
+    {
+      "id": "playlist-tools",
+      "name": {
+        "en": "Playlists: add while uploading, bulk add, ordering",
+        "ar": "قوائم التشغيل: الإضافة أثناء الرفع، والإضافة الجماعية، والترتيب"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/CHAT-PLAYLISTS-playlist-improvements.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.10.15"
+      },
+      "prs": [
+        "AlUmmahNow#668",
+        "AlUmmahNow#677"
+      ]
+    },
+    {
+      "id": "transcripts",
+      "name": {
+        "en": "Transcripts and Quran-aware caption drafts",
+        "ar": "النصوص المفرّغة ومسودات ترجمة نصية تراعي القرآن"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-CAPTIONS-transcription-translation.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.14"
+      },
+      "prs": [
+        "AlUmmahNow#1303",
+        "AlUmmahNow#1311",
+        "AlUmmahNow#1312",
+        "AlUmmahNow#1315",
+        "AlUmmahNow#1318",
+        "AlUmmahNow#1332"
+      ],
+      "note": "Caption minutes per tier with audited grants. The Quran index shipped in v2026.11.13.10; Studio's Transcribe button in v2026.11.14.3."
+    },
+    {
+      "id": "caption-translation",
+      "name": {
+        "en": "Caption translation and inline translation",
+        "ar": "ترجمة النصوص والترجمة المضمّنة"
+      },
+      "status": "planned",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/AUN-CAPTIONS-transcription-translation.md"
+    },
+    {
+      "id": "community-rules",
+      "name": {
+        "en": "Published community rules",
+        "ar": "قواعد مجتمع منشورة"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/E06-community-moderation.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.08.4"
+      },
+      "prs": [
+        "AlUmmahNow#346"
+      ]
+    },
+    {
+      "id": "reporting",
+      "name": {
+        "en": "Reporting, and the reports queue",
+        "ar": "الإبلاغ وقائمة البلاغات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin"
+      ],
+      "wiki": "epics/E06-community-moderation.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#19",
+        "AlUmmahNow#822"
+      ],
+      "note": "Reporting predates tagged releases; the admin reports queue shipped in v2026.11.12.9."
+    },
+    {
+      "id": "bot-protection",
+      "name": {
+        "en": "Bot protection (Turnstile) and the Abuse page",
+        "ar": "الحماية من الروبوتات (Turnstile) وصفحة إساءة الاستخدام"
+      },
+      "status": "rolling",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "guides/bot-protection.md",
+      "prs": [
+        "AlUmmahNow#1248",
+        "AlUmmahNow#1275"
+      ],
+      "note": "Shipped in v2026.11.13.9, switched off in production (enforced on QA and stage)."
+    },
+    {
+      "id": "ai-moderation",
+      "name": {
+        "en": "AI moderation that holds, people decide",
+        "ar": "إشراف بالذكاء الاصطناعي يوقف، والبشر يقررون"
+      },
+      "status": "rolling",
+      "apps": [
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "epics/E28-ai-moderation.md",
+      "prs": [
+        "AlUmmahNow#330",
+        "AlUmmahNow#343",
+        "AlUmmahNow#366",
+        "AlUmmahNow#381",
+        "AlUmmahNow#384",
+        "AlUmmahNow#1263",
+        "AlUmmahNow#1294"
+      ],
+      "note": "In production in shadow mode since v2026.11.08.4; holding (enforce) is a per-category admin setting."
+    },
+    {
+      "id": "video-review",
+      "name": {
+        "en": "Pre-publication video review",
+        "ar": "مراجعة المرئيات قبل النشر"
+      },
+      "status": "rolling",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-VIDEO-REVIEW-pre-publication-review.md",
+      "prs": [
+        "AlUmmahNow#1293",
+        "AlUmmahNow#1298",
+        "AlUmmahNow#1299",
+        "AlUmmahNow#1302",
+        "AlUmmahNow#1292"
+      ],
+      "note": "In production since v2026.11.13.10 with review mode off."
+    },
+    {
+      "id": "csam-intake",
+      "name": {
+        "en": "Child abuse material intake: takedown, evidence, reports",
+        "ar": "استقبال بلاغات مواد إساءة معاملة الأطفال: الإزالة والأدلة والإبلاغ"
+      },
+      "status": "live",
+      "apps": [
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/E28-ai-moderation.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.14.3"
+      },
+      "prs": [
+        "AlUmmahNow#1327",
+        "AlUmmahNow#1329",
+        "AlUmmahNow#1330"
+      ],
+      "note": "Encrypted evidence, cases, NCMEC reports, legal hold, one-year minimum preservation and the Cloudflare notifications webhook."
+    },
+    {
+      "id": "transparency-reports",
+      "name": {
+        "en": "Moderation transparency reports",
+        "ar": "تقارير شفافية الإشراف"
+      },
+      "status": "planned",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "epics/decisions.md"
+    },
+    {
+      "id": "error-reporting",
+      "name": {
+        "en": "Errors flag the admin (Errors page)",
+        "ar": "الأعطال تُنبّه الإدارة (صفحة الأخطاء)"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/CHAT-ERRORS-error-reporting.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.10.15"
+      },
+      "prs": [
+        "AlUmmahNow#589",
+        "AlUmmahNow#599",
+        "AlUmmahNow#607",
+        "AlUmmahNow#608"
+      ]
+    },
+    {
+      "id": "signed-urls",
+      "name": {
+        "en": "Signed media addresses",
+        "ar": "روابط وسائط موقّعة"
+      },
+      "status": "live",
+      "apps": [
+        "api",
+        "videos"
+      ],
+      "wiki": "guides/video-delivery.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#182",
+        "AlUmmahNow#893"
+      ]
+    },
+    {
+      "id": "media-providers",
+      "name": {
+        "en": "Bunny and R2 side by side, with an admin switch",
+        "ar": "Bunny وR2 جنبًا إلى جنب، مع مفتاح في الإدارة"
+      },
+      "status": "live",
+      "apps": [
+        "api",
+        "videos",
+        "videos-admin"
+      ],
+      "wiki": "epics/D2-video-delivery.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.12"
+      },
+      "prs": [
+        "AlUmmahNow#893",
+        "AlUmmahNow#894",
+        "AlUmmahNow#895",
+        "AlUmmahNow#897",
+        "AlUmmahNow#948",
+        "AlUmmahNow#1331",
+        "AlUmmahNow#1335",
+        "AlUmmahNow#1340",
+        "AlUmmahNow#1341",
+        "AlUmmahNow#1342"
+      ],
+      "note": "Production plays Bunny first. Providers v2 (per-video pins and player fallback) shipped in v2026.11.14.3."
+    },
+    {
+      "id": "providers-page",
+      "name": {
+        "en": "Video providers page; Delivery becomes analytics only",
+        "ar": "صفحة مزوّدي المرئيات؛ والتوصيل للتحليلات فقط"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/D2-video-delivery.md",
+      "prs": [
+        "AlUmmahNow#1358"
+      ]
+    },
+    {
+      "id": "videos-site",
+      "name": {
+        "en": "Videos site",
+        "ar": "موقع المرئيات"
+      },
+      "status": "live",
+      "apps": [
+        "videos"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      }
+    },
+    {
+      "id": "videos-admin",
+      "name": {
+        "en": "Videos admin",
+        "ar": "إدارة المرئيات"
+      },
+      "status": "live",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/CHAT-ADMIN-CONTENT-admin-content-management.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "before": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNow#218",
+        "AlUmmahNow#576",
+        "AlUmmahNow#627"
+      ]
+    },
+    {
+      "id": "www-and-sites",
+      "name": {
+        "en": "Public site (www)",
+        "ar": "الموقع العام (www)"
+      },
+      "status": "live",
+      "apps": [
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CMS-WWW-V1-cms-www-v1.md",
+      "release": {
+        "repo": "AlUmmahNowUI",
+        "tag": "v2026.11.08"
+      },
+      "prs": [
+        "AlUmmahNowUI#7",
+        "AlUmmahNowUI#8"
+      ]
+    },
+    {
+      "id": "cms",
+      "name": {
+        "en": "CMS with our own admin",
+        "ar": "نظام إدارة المحتوى بواجهة إدارة خاصة بنا"
+      },
+      "status": "live",
+      "apps": [
+        "cms"
+      ],
+      "wiki": "epics/CMS-ADMIN-UI-cms-admin-ui.md",
+      "release": {
+        "repo": "AlUmmahNowCMS",
+        "tag": "v2026.11.09.3"
+      },
+      "prs": [
+        "AlUmmahNowCMS#21",
+        "AlUmmahNowCMS#22",
+        "AlUmmahNowCMS#25",
+        "AlUmmahNowCMS#29",
+        "AlUmmahNowCMS#30"
+      ]
+    },
+    {
+      "id": "home-timeline",
+      "name": {
+        "en": "www home timeline",
+        "ar": "الخط الزمني في الصفحة الرئيسية لـ www"
+      },
+      "status": "live",
+      "apps": [
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CMS-HOME-TIMELINE-www-home-timeline.md",
+      "release": {
+        "repo": "AlUmmahNowUI",
+        "tag": "v2026.11.10.3"
+      },
+      "prs": [
+        "AlUmmahNowUI#30",
+        "AlUmmahNowUI#63",
+        "AlUmmahNowUI#66",
+        "AlUmmahNowUI#90",
+        "AlUmmahNowCMS#51",
+        "AlUmmahNowCMS#72"
+      ]
+    },
+    {
+      "id": "page-blocks",
+      "name": {
+        "en": "Page blocks and card posts",
+        "ar": "كتل الصفحات والمنشورات البطاقية"
+      },
+      "status": "live",
+      "apps": [
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CMS-PAGE-BLOCKS-cms-page-blocks.md",
+      "release": {
+        "repo": "AlUmmahNowCMS",
+        "tag": "v2026.11.10.3"
+      },
+      "prs": [
+        "AlUmmahNowCMS#48",
+        "AlUmmahNowCMS#58",
+        "AlUmmahNowUI#34"
+      ]
+    },
+    {
+      "id": "articles-search",
+      "name": {
+        "en": "Articles and site search",
+        "ar": "المقالات والبحث في الموقع"
+      },
+      "status": "live",
+      "apps": [
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "release": {
+        "repo": "AlUmmahNowUI",
+        "tag": "v2026.11.10.4"
+      },
+      "prs": [
+        "AlUmmahNowUI#31",
+        "AlUmmahNowUI#35",
+        "AlUmmahNowCMS#56",
+        "AlUmmahNowCMS#60",
+        "AlUmmahNowCMS#120"
+      ]
+    },
+    {
+      "id": "cms-publishing",
+      "name": {
+        "en": "Scheduled publishing, revisions and draft preview",
+        "ar": "النشر المجدول والمراجعات ومعاينة المسودات"
+      },
+      "status": "live",
+      "apps": [
+        "cms",
+        "www"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "release": {
+        "repo": "AlUmmahNowCMS",
+        "tag": "v2026.11.10.3"
+      },
+      "prs": [
+        "AlUmmahNowCMS#38",
+        "AlUmmahNowCMS#41",
+        "AlUmmahNowCMS#43",
+        "AlUmmahNowUI#24"
+      ]
+    },
+    {
+      "id": "cms-ai-assist",
+      "name": {
+        "en": "CMS AI writing assist",
+        "ar": "مساعد الكتابة بالذكاء الاصطناعي في نظام إدارة المحتوى"
+      },
+      "status": "live",
+      "apps": [
+        "cms"
+      ],
+      "wiki": "epics/CMS-AI-ASSIST-cms-ai-writing-assist.md",
+      "release": {
+        "repo": "AlUmmahNowCMS",
+        "tag": "v2026.11.10.3"
+      },
+      "prs": [
+        "AlUmmahNowCMS#47",
+        "AlUmmahNowCMS#55",
+        "AlUmmahNowCMS#65",
+        "AlUmmahNowCMS#93"
+      ]
+    },
+    {
+      "id": "about-pages",
+      "name": {
+        "en": "About pages managed in the CMS",
+        "ar": "صفحات «من نحن» تُدار من نظام إدارة المحتوى"
+      },
+      "status": "rolling",
+      "apps": [
+        "www",
+        "cms",
+        "videos"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "prs": [
+        "AlUmmahNowCMS#130",
+        "AlUmmahNowUI#109",
+        "AlUmmahNow#1360"
+      ],
+      "note": "Merged, not in a production release yet. The built-in www About page has been live since UI v2026.11.08, and the scholar-site About page since UI v2026.11.13.8."
+    },
+    {
+      "id": "scholar-pages",
+      "name": {
+        "en": "Scholar pages",
+        "ar": "صفحات العلماء"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "www",
+        "api",
+        "cms"
+      ],
+      "wiki": "repos/AlUmmahNow.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.11.4"
+      },
+      "prs": [
+        "AlUmmahNow#723",
+        "AlUmmahNowUI#38",
+        "AlUmmahNowCMS#67"
+      ]
+    },
+    {
+      "id": "scholar-sites",
+      "name": {
+        "en": "Scholar sites, with their own domains",
+        "ar": "مواقع العلماء بنطاقاتها الخاصة"
+      },
+      "status": "live",
+      "apps": [
+        "sites",
+        "cms"
+      ],
+      "wiki": "repos/AlUmmahNowUI.md",
+      "release": {
+        "repo": "AlUmmahNowUI",
+        "tag": "v2026.11.13.8"
+      },
+      "prs": [
+        "AlUmmahNowUI#86",
+        "AlUmmahNowUI#87",
+        "AlUmmahNowUI#93",
+        "AlUmmahNowUI#94",
+        "AlUmmahNowUI#95",
+        "AlUmmahNowUI#97",
+        "AlUmmahNow#1204",
+        "AlUmmahNow#1272"
+      ],
+      "note": "Site pages, own domains and link cards shipped in UI v2026.11.14.2."
+    },
+    {
+      "id": "status-page",
+      "name": {
+        "en": "Public status page",
+        "ar": "صفحة حالة الخدمات العامة"
+      },
+      "status": "live",
+      "apps": [
+        "status",
+        "videos-admin",
+        "www"
+      ],
+      "wiki": "guides/status-page.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13.9"
+      },
+      "prs": [
+        "AlUmmahNow#1194",
+        "AlUmmahNow#1232",
+        "AlUmmahNow#1357",
+        "AlUmmahNowUI#85"
+      ],
+      "note": "A Light/Dark toggle and links back to www and the videos site (AlUmmahNow#1357) are in review."
+    },
+    {
+      "id": "seo",
+      "name": {
+        "en": "Search visibility (SEO)",
+        "ar": "الظهور في محركات البحث"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "www",
+        "sites",
+        "cms",
+        "api"
+      ],
+      "wiki": "epics/AUN-SEO-search-visibility.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13.4"
+      },
+      "prs": [
+        "AlUmmahNow#1158",
+        "AlUmmahNow#1160",
+        "AlUmmahNow#1170",
+        "AlUmmahNow#1176",
+        "AlUmmahNow#1178",
+        "AlUmmahNow#1199",
+        "AlUmmahNow#1210",
+        "AlUmmahNow#1320",
+        "AlUmmahNow#1322",
+        "AlUmmahNow#1333",
+        "AlUmmahNow#1337",
+        "AlUmmahNow#1345",
+        "AlUmmahNowUI#78",
+        "AlUmmahNowUI#80",
+        "AlUmmahNowUI#81",
+        "AlUmmahNowUI#99",
+        "AlUmmahNowUI#101",
+        "AlUmmahNowUI#106",
+        "AlUmmahNowCMS#104",
+        "AlUmmahNowCMS#108",
+        "AlUmmahNowCMS#109",
+        "AlUmmahNowCMS#110",
+        "AlUmmahNowCMS#128"
+      ],
+      "note": "Sitemaps, hreflang, structured data, 301s for renamed addresses, IndexNow and scholar-site canonicals, in releases from 2026-11-13 to 2026-11-14."
+    },
+    {
+      "id": "cost-budget",
+      "name": {
+        "en": "Monthly budget meter in the admin",
+        "ar": "مؤشر الميزانية الشهرية في الإدارة"
+      },
+      "status": "live",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-COST-cost-monitoring.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.14.3"
+      },
+      "prs": [
+        "AlUmmahNow#1343"
+      ]
+    },
+    {
+      "id": "dev-site",
+      "name": {
+        "en": "alummahnow.dev, this site",
+        "ar": "alummahnow.dev، هذا الموقع"
+      },
+      "status": "building",
+      "apps": [
+        "dev"
+      ],
+      "wiki": "epics/AUN-DEV-SITE-developer-and-partner-site.md",
+      "prs": [
+        "AlUmmahNowUI#110"
+      ]
+    },
+    {
+      "id": "fanous-themes",
+      "name": {
+        "en": "Fanous design system and themes",
+        "ar": "نظام التصميم فانوس وسماته"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "www",
+        "cms",
+        "auth"
+      ],
+      "wiki": "epics/AUN-THEMES-themes.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.10.15"
+      },
+      "prs": [
+        "AlUmmahNow#492",
+        "AlUmmahNowUI#54",
+        "AlUmmahNowUI#65",
+        "AlUmmahNowUI#107",
+        "AlUmmahNowCMS#95",
+        "AlUmmahNowCMS#101",
+        "AlUmmahNowAuth#257",
+        "AlUmmahNowAuth#322",
+        "AlUmmahNowAuth#338"
+      ],
+      "note": "Fawanees, the default theme, reached www in UI v2026.11.13.3."
+    },
+    {
+      "id": "shared-header",
+      "name": {
+        "en": "One header and account menu across the apps",
+        "ar": "ترويسة وقائمة حساب واحدة في كل التطبيقات"
+      },
+      "status": "live",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/E10-fanous-design-system.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.13"
+      },
+      "prs": [
+        "AlUmmahNow#1057",
+        "AlUmmahNow#1071",
+        "AlUmmahNow#1172",
+        "AlUmmahNowUI#59",
+        "AlUmmahNowUI#75",
+        "AlUmmahNowUI#76",
+        "AlUmmahNowUI#96",
+        "AlUmmahNowCMS#99",
+        "AlUmmahNowCMS#105",
+        "AlUmmahNowCMS#106",
+        "AlUmmahNowCMS#126",
+        "AlUmmahNowAuth#329",
+        "AlUmmahNowAuth#343",
+        "AlUmmahNowAuth#346",
+        "AlUmmahNowAuth#347",
+        "AlUmmahNowAuth#368"
+      ]
+    },
+    {
+      "id": "header-unification",
+      "name": {
+        "en": "Unified header controls: sun/moon toggle and language button everywhere",
+        "ar": "توحيد أدوات الترويسة: زر الشمس والقمر وزر اللغة في كل مكان"
+      },
+      "status": "building",
+      "apps": [
+        "www",
+        "sites",
+        "cms",
+        "status",
+        "videos",
+        "dev"
+      ],
+      "wiki": "epics/E10-fanous-design-system.md",
+      "prs": [
+        "AlUmmahNowUI#108",
+        "AlUmmahNowUI#110",
+        "AlUmmahNowCMS#131",
+        "AlUmmahNow#1357",
+        "AlUmmahNow#1362",
+        "AlUmmahNowAuth#379"
+      ]
+    },
+    {
+      "id": "sso",
+      "name": {
+        "en": "Single sign-on across the apps; sign-out ends it",
+        "ar": "دخول موحّد لكل التطبيقات؛ والخروج ينهيه"
+      },
+      "status": "live",
+      "apps": [
+        "auth",
+        "profile",
+        "videos",
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CHAT-SSO-sso-everywhere.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 42457931852,
+        "sha": "020de81a"
+      },
+      "prs": [
+        "AlUmmahNowAuth#196",
+        "AlUmmahNowAuth#205",
+        "AlUmmahNowAuth#232",
+        "AlUmmahNowAuth#235",
+        "AlUmmahNowAuth#254",
+        "AlUmmahNowAuth#276",
+        "AlUmmahNowAuth#283",
+        "AlUmmahNowAuth#286",
+        "AlUmmahNowAuth#287",
+        "AlUmmahNowAuth#302",
+        "AlUmmahNow#220",
+        "AlUmmahNow#308",
+        "AlUmmahNow#463",
+        "AlUmmahNow#718",
+        "AlUmmahNowUI#14",
+        "AlUmmahNowUI#15",
+        "AlUmmahNowUI#37",
+        "AlUmmahNowCMS#20",
+        "AlUmmahNowCMS#68",
+        "AlUmmahNowCMS#81"
+      ],
+      "note": "Logout CSRF guard, PKCE for every web client and sessions in D1 followed in Auth run 42896901332."
+    },
+    {
+      "id": "short-lived-tokens",
+      "name": {
+        "en": "15-minute tokens, revocation and sign out everywhere",
+        "ar": "رموز صالحة 15 دقيقة، وإلغاؤها، والخروج من كل الأجهزة"
+      },
+      "status": "live",
+      "apps": [
+        "auth",
+        "profile"
+      ],
+      "wiki": "epics/AUTH-R1-auth-tokens.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 42528239913,
+        "sha": "a59352c7"
+      },
+      "prs": [
+        "AlUmmahNowAuth#237",
+        "AlUmmahNowAuth#244",
+        "AlUmmahNowAuth#265",
+        "AlUmmahNowAuth#284",
+        "AlUmmahNowAuth#285",
+        "AlUmmahNowAuth#288"
+      ],
+      "note": "Refreshed tokens carry current roles since Auth run 42819216219."
+    },
+    {
+      "id": "token-hardening",
+      "name": {
+        "en": "Token verification hardening",
+        "ar": "تشديد التحقق من الرموز"
+      },
+      "status": "rolling",
+      "apps": [
+        "auth",
+        "auth-admin",
+        "api",
+        "videos-admin",
+        "videos"
+      ],
+      "wiki": "guides/authentication.md",
+      "prs": [
+        "AlUmmahNowAuth#378",
+        "AlUmmahNow#1361",
+        "AlUmmahNowCMS#129"
+      ],
+      "note": "The Auth side (admin scope for machine calls, no fallback session key) is live since Auth run 43646468455, and the CMS ES256 pin since CMS v2026.11.14. The videos API and admin fixes (AlUmmahNow#1361) are merged and wait for a release tag."
+    },
+    {
+      "id": "passkeys",
+      "name": {
+        "en": "Passkeys for sign-in, web and native",
+        "ar": "مفاتيح المرور لتسجيل الدخول على الويب والتطبيقات"
+      },
+      "status": "live",
+      "apps": [
+        "auth",
+        "profile",
+        "auth-admin"
+      ],
+      "wiki": "epics/AUTH-PASSKEYS-passkeys-everywhere.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 43523373072,
+        "sha": "d4ebb6af"
+      },
+      "prs": [
+        "AlUmmahNowAuth#366",
+        "AlUmmahNowAuth#370",
+        "AlUmmahNowAuth#372",
+        "AlUmmahNowAuth#376",
+        "AlUmmahNowAuth#377"
+      ],
+      "note": "Native passkey sign-in for the Studio and Admin apps went live in Auth run 43566695131."
+    },
+    {
+      "id": "staff-passkeys",
+      "name": {
+        "en": "Passkeys required for staff",
+        "ar": "مفاتيح المرور إلزامية لفريق العمل"
+      },
+      "status": "rolling",
+      "apps": [
+        "auth",
+        "auth-admin",
+        "videos-admin",
+        "cms"
+      ],
+      "wiki": "epics/AUTH-PASSKEYS-passkeys-everywhere.md",
+      "prs": [
+        "AlUmmahNowAuth#366",
+        "AlUmmahNowAuth#381",
+        "AlUmmahNow#1289",
+        "AlUmmahNow#1316",
+        "AlUmmahNowCMS#124",
+        "AlUmmahNowCMS#127"
+      ],
+      "note": "Shipped in Auth, the videos admin and the CMS, with enforcement off by default (a super admin switch); the clearer staff card (AlUmmahNowAuth#381) is in review."
+    },
+    {
+      "id": "account-hub",
+      "name": {
+        "en": "Your account: app launcher and your apps",
+        "ar": "حسابك: مشغّل التطبيقات وتطبيقاتك"
+      },
+      "status": "live",
+      "apps": [
+        "profile"
+      ],
+      "wiki": "epics/AUTH-ACCOUNT-HUB-account-hub.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 42457931852,
+        "sha": "020de81a"
+      },
+      "prs": [
+        "AlUmmahNowAuth#203",
+        "AlUmmahNowAuth#218",
+        "AlUmmahNowAuth#253",
+        "AlUmmahNowAuth#290"
+      ]
+    },
+    {
+      "id": "account-deletion-export",
+      "name": {
+        "en": "Account deletion and data export in the apps",
+        "ar": "حذف الحساب وتصدير البيانات من داخل التطبيقات"
+      },
+      "status": "live",
+      "apps": [
+        "auth",
+        "native"
+      ],
+      "wiki": "epics/E09-native-platform-foundations.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 42508468929,
+        "sha": "21713a46"
+      },
+      "prs": [
+        "AlUmmahNowAuth#231",
+        "AlUmmahNowAuth#233"
+      ]
+    },
+    {
+      "id": "auth-moderation",
+      "name": {
+        "en": "Account actions decided by Auth admins",
+        "ar": "إجراءات الحسابات يقرّرها مشرفو الدخول"
+      },
+      "status": "live",
+      "apps": [
+        "auth-admin",
+        "auth"
+      ],
+      "wiki": "epics/AUTH-IDP-identity-platform.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 42755719428,
+        "sha": "daee23be"
+      },
+      "prs": [
+        "AlUmmahNowAuth#275",
+        "AlUmmahNowAuth#278",
+        "AlUmmahNowAuth#281"
+      ]
+    },
+    {
+      "id": "rust-core",
+      "name": {
+        "en": "Shared Rust core for the native apps",
+        "ar": "نواة Rust مشتركة للتطبيقات الأصلية"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "epics/E11-aun-core.md",
+      "prs": [
+        "AlUmmahNowCore#35",
+        "AlUmmahNowCore#36"
+      ]
+    },
+    {
+      "id": "native-apps",
+      "name": {
+        "en": "Apple, Android, Windows, Linux and TV apps",
+        "ar": "تطبيقات Apple وAndroid وWindows وLinux والتلفاز"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "epics/E23-release-engineering.md",
+      "prs": [
+        "AlUmmahNowApple#33",
+        "AlUmmahNowApple#34",
+        "AlUmmahNowAndroid#22",
+        "AlUmmahNowAndroid#23"
+      ]
+    }
+  ]
+}

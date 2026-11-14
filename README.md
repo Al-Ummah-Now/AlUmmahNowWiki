@@ -48,6 +48,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | Page | Covers |
 |---|---|
 | [Epics](epics/README.md) | Every epic in every repo, shipped to rejected, with sources |
+| [Feature registry](features/README.md) | Every user-visible feature with its status and release; alummahnow.dev reads it |
 | [Decision log](epics/decisions.md) | Owner decisions (D1–D11 and others), with status and what each blocks |
 | [Glossary](guides/glossary.md) | Terms used across the project |
 

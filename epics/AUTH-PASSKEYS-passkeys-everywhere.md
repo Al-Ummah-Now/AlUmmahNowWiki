@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUTH-PASSKEYS` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (issuer, profile, account hub, auth admin), [openauth](../repos/openauth.md) (fork: passkey provider, `amr`), [AlUmmahNow](../repos/AlUmmahNow.md) (admin-api, admin-web), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (CMS admin), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **building**: build-ready spec v2 (2026-11-13). PK1–PK8 are **built to recommendation, owner may change** |
-| **Last updated** | 2026-11-13 (native apps section) |
+| **Status** | **in progress**: passkey sign-in, autofill and the hub list are live in Auth (run 43523373072, AlUmmahNowAuth #366); native passkeys for Studio and Admin since run 43566695131 (#372, #376). Requiring passkeys for staff is shipped in Auth, the videos admin (AlUmmahNow v2026.11.13.10) and the CMS (v2026.11.13.6), off by default behind a super admin switch. The clearer staff card is in review (#381). Spec v2 (2026-11-13) below |
+| **Last updated** | 2026-11-14 |
 
 Read from AlUmmahNowAuth `origin/main` [`b7b0d53`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/b7b0d53) and openauth `origin/master` [`2d74b49`](https://github.com/Al-Ummah-Now/openauth/tree/2d74b49) on 2026-11-13. Comes from [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) decision AD6 and step-up decision AD5. Also closes [AlUmmahNowAuth#361](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/361).
 

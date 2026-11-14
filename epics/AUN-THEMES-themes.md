@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-THEMES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [openauth](../repos/openauth.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **in progress**: Fanous themes are live on the videos site (AlUmmahNow v2026.11.10.15), www (UI v2026.11.12; Fawanees from v2026.11.13.3; street tiles v2026.11.14.5), the CMS (v2026.11.13.2) and Auth (run 42743454316). The shared sun/moon header toggle is in review: UI #108, CMS #131, AlUmmahNow #1357 and #1362, Auth #379 |
+| **Last updated** | 2026-11-14 |
 
 > Four themes with Fawanees as default (#455, #492), theme redesign (#525), theme packages and builder (#564, #571, #575, #587) merged. Since 2026-11-10: www follows the site theme (UI #54), the videos admin shell follows it (#820), Fawanees light 1.1.0 swaps page and surfaces (#883, synced to CMS #95 and Auth), builder preview fixes and a dark-header gate (#963), and the Apple apps follow the site theme (Apple #13). Open: native theme registry (#500), theme-builder packages on www (UI #55), a Fawanees light redesign (draft #1071).
 
