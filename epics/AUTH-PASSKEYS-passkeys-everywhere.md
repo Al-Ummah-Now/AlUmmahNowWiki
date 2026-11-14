@@ -211,9 +211,9 @@ All requests and responses are JSON, `Cache-Control: no-store`. No cookies, no C
 
 **Sign in**
 
-- `POST /native/passkey/options` body `{ client_id, code_challenge, code_challenge_method: "S256" }` → `200 { challenge_id, publicKey }`, where `publicKey` is a WebAuthn L3 `PublicKeyCredentialRequestOptionsJSON`: `{ rpId, challenge (base64url), allowCredentials: [] (discoverable), userVerification: "required", timeout: 120000 }`. The challenge is **single use**, expires after **2 minutes** and is bound to `client_id` + `code_challenge`.
+- `POST /native/passkey/options` body `{ client_id, code_challenge, code_challenge_method: "S256", redirect_uri? }` → `200 { challenge_id, publicKey }`, where `publicKey` is a WebAuthn L3 `PublicKeyCredentialRequestOptionsJSON`: `{ rpId, challenge (base64url), allowCredentials: [] (discoverable), userVerification: "required", timeout: 120000 }`. The challenge is **single use**, expires after **2 minutes** and is bound to `client_id` + `code_challenge` + the redirect. `redirect_uri` is optional: when sent it must be one of the client's registered redirects (exact, or a loopback `http://127.0.0.1/…` that differs only in port, as in the browser flow) and the code is bound to **exactly** that string (the Windows Studio app sends its loopback redirect); when omitted (Apple, Android, Admin Windows) the code is bound to the client's private-use-scheme redirect in the table below.
 - `POST /native/passkey/verify` body `{ challenge_id, client_id, credential }`, `credential` = `AuthenticationResponseJSON` (WebAuthn L3 JSON, every binary field base64url: `id`, `rawId`, `type: "public-key"`, `response.{clientDataJSON, authenticatorData, signature, userHandle}`) → `200 { code }`: a one-time authorization code bound to `client_id` and the `code_challenge` from the options call.
-- The app then exchanges the code at the **existing** token endpoint, exactly like the browser flow: `POST /token` form `grant_type=authorization_code&code=…&client_id=…&code_verifier=…&redirect_uri=<the client's native redirect, below>`. Tokens, refresh, roles (frozen at sign-in), `amr: ["passkey"]`, `auth_time` and the staff `passkey_deadline` are identical to a browser passkey sign-in. The code lives 10 minutes (Auth `ttl.code`); exchange it at once.
+- The app then exchanges the code at the **existing** token endpoint, exactly like the browser flow: `POST /token` form `grant_type=authorization_code&code=…&client_id=…&code_verifier=…&redirect_uri=<the redirect_uri sent on options, else the client's native redirect below>`. Tokens, refresh, roles (frozen at sign-in), `amr: ["passkey"]`, `auth_time` and the staff `passkey_deadline` are identical to a browser passkey sign-in. The code lives 10 minutes (Auth `ttl.code`); exchange it at once.
 - The server checks: the challenge exists, is unexpired, unused, and belongs to `client_id`; the assertion signature with the stored public key; `rpIdHash` = SHA-256 of the RP ID; `type = webauthn.get`; the challenge; the origin (below); user verification; the counter; and `userHandle` (when sent) = the credential's owner. It then runs the **same success pipeline** as the web passkey sign-in (suspended/deleted accounts refused, RBAC roles, staff deadline, `auth.login.success` audit event). The after-sign-in passkey card never shows (the user has a passkey). No browser SSO session is created.
 
 **Add a passkey (signed in)**
@@ -228,11 +228,13 @@ All requests and responses are JSON, `Cache-Control: no-store`. No cookies, no C
 
 | Status | `error` | When |
 |---|---|---|
-| 400 | `invalid_request` | Missing/malformed field, `code_challenge_method` not `S256`, `code_challenge` not 43–128 base64url chars |
+| 400 | `invalid_request` | Missing/malformed field, `code_challenge_method` not `S256`, `code_challenge` not 43–128 base64url chars, `redirect_uri` not registered for the client |
 | 400 | `invalid_client` | `client_id` is not an accepted native client |
 | 401 | `invalid_credential` | Any sign-in failure: unknown, expired, replayed or other client's challenge, bad signature, wrong origin or RP, unknown credential, suspended or deleted account. **Generic on purpose** (no user enumeration) |
 | 401 | `invalid_token` | Registration without a valid access token |
-| 401 | `step_up_required` | Registration with `auth_time` older than 15 minutes |
+| 401 | `step_up_required` | Registration with `auth_time` older than 15 minutes (body also has `max_age: 900`) |
+| 403 | `email_code_required` | Registration: a staff account's first passkey (body has `setup_url`) |
+| 409 | `passkey_limit` / `passkey_exists` | Registration: 10 passkeys already, or this authenticator is already on the account |
 | 429 | `rate_limited` | Too many requests; `Retry-After` header (seconds) |
 | 500 | `server_error` | Unexpected; reported to the videos admin Errors page with a reference |
 
@@ -240,12 +242,12 @@ All requests and responses are JSON, `Cache-Control: no-store`. No cookies, no C
 
 ### Accepted native clients
 
-Only these public PKCE clients (`oauth_clients`, `metadata.type = "native"`, no secret, enabled), read **by id** (never a scan). Viewer and TV clients are not accepted. The code is bound to the client's private-use-scheme redirect, which the app sends as `redirect_uri` at `/token`:
+Only these public PKCE clients (`oauth_clients`, `metadata.type = "native"`, no secret, enabled), read **by id** (never a scan). Viewer and TV clients are not accepted. Unless options named a `redirect_uri`, the code is bound to the client's private-use-scheme redirect, which the app then sends as `redirect_uri` at `/token`:
 
 | App | Prod/stage `client_id` | QA `client_id` | `redirect_uri` for `/token` |
 |---|---|---|---|
 | Studio (iOS / Android) | `6f8073c6-754b-4d63-bf80-0546214e0d62` | `45364a42-21f4-4359-a76c-0a1e6615fd7b` | `alummahnow-studio://auth/callback` |
-| Studio (desktop: macOS, Windows) | `950e2b3b-6353-4472-affe-7c1f57f4e6a4` | `29b4792a-caad-4814-a83f-4337bc6a1aeb` | `alummahnow-studio://auth/callback` |
+| Studio (desktop: macOS, Windows) | `950e2b3b-6353-4472-affe-7c1f57f4e6a4` | `29b4792a-caad-4814-a83f-4337bc6a1aeb` | `alummahnow-studio://auth/callback`, or the loopback `http://127.0.0.1:<port>/auth/callback` named on options (Windows) |
 | Admin (iOS) | `95adb86e-fdfb-4955-984b-347aa16a5023` | `77330b47-5747-4058-ba00-921e159f1ced` | `alummahnow-admin://auth/callback` |
 | Admin (macOS) | `6a65d365-1352-4ffa-922f-4053d461ac3a` | `1c230211-7b90-4d0a-be9d-3068ebd79d5b` | `alummahnow-admin://auth/callback` |
 | Admin (Windows) | `288b80b9-ecc6-4927-8b5a-bded5aa00e55` | `306b6f10-d9f0-4609-84a1-23c92da978e9` | `alummahnow-admin://auth/callback` |
@@ -254,7 +256,7 @@ Only these public PKCE clients (`oauth_clients`, `metadata.type = "native"`, no 
 ### Origins accepted in `clientDataJSON` (native routes only)
 
 - The web origins as today (the issuer origin).
-- `https://<RP ID>` (table above): what Apple's and Windows' platform APIs send (Windows apps build `clientDataJSON` themselves and must use exactly this origin).
+- `https://<RP ID>` (table above): what Apple's and Windows' platform APIs send (Windows apps build `clientDataJSON` themselves and must use exactly this origin). Accepted on the `/native/passkey/*` routes only (whose callers must be the accepted native clients), never on the web sign-in page.
 - `android:apk-key-hash:<base64url, no padding, of the SHA-256 of the signing certificate>` for every Android signing certificate configured for the env (Auth var `ANDROID_APP_CERTS`, below). Credential Manager sends this for apps.
 
 ### Domain association files
@@ -282,7 +284,7 @@ Served by the **`al-ummah-now-www`** Worker (repo **AlUmmahNowUI**, `src/worker.
 | `APPLE_WEBCREDENTIALS_BUNDLE_IDS` | www vars, per env | comma list of bundle ids (set as above) |
 | `ANDROID_APP_CERTS` | www vars **and** Auth `wrangler.json` / `wrangler.qa.json` vars, per env, same value in both | JSON `{ "<package>": ["AA:BB:…" SHA-256, …] }` |
 
-Known now: the CI **pre-release** key (GitHub pre-release APKs, both flavours) `5A:1B:3D:2B:57:6E:9A:2D:F0:BF:1B:E3:F1:8C:40:20:13:F9:5C:09:EA:EE:7C:F7:31:10:C4:2F:B5:69:DD:C0`: set for Studio (QA, stage, prod) and Admin (QA). **Owner values still needed:** the Apple Team ID; for each Android app on Play, the **Play app signing key** SHA-256 (Play Console → Test and release → App integrity) and the **upload key** SHA-256, per package (`net.alummahnow.studio`, `net.alummahnow.admin`, and the `.qa` packages if they go to Play).
+Known now: the CI **pre-release** key (GitHub pre-release APKs, both flavours) `5A:1B:3D:2B:57:6E:9A:2D:F0:BF:1B:E3:F1:8C:40:20:13:F9:5C:09:EA:EE:7C:F7:31:10:C4:2F:B5:69:DD:C0`: set for Studio only (QA `net.alummahnow.studio.qa`; stage/prod `net.alummahnow.studio`). Admin is never signed with it (Play internal testing only, no CI APK), so Admin has no fingerprint until Play App Signing exists; a developer testing Admin QA from a local build adds their debug key's SHA-256 to the QA value. **Owner values still needed:** the Apple Team ID; for each Android app on Play, the **Play app signing key** SHA-256 (Play Console → Test and release → App integrity) and the **upload key** SHA-256, per package (`net.alummahnow.studio`, `net.alummahnow.admin`, and the `.qa` packages if they go to Play).
 
 ### Build status (native)
 
