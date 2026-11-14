@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-SHORT-LINKS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (`apps/short-links`, videos web share buttons). Native apps: follow-up issues |
-| **Status** | **in progress**: Worker and web share buttons in [#1192](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1192); live on QA; stage and production arrive with the next release |
-| **Last updated** | 2026-11-13 |
+| **Status** | **shipped**: Worker and web share buttons ([#1192](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1192), #1250) live in production since v2026.11.13.9 |
+| **Last updated** | 2026-11-14 |
 
 Owner decision, 2026-11-13: short links **redirect** to the real pages, and every share button copies the short link. The owner added the `alummahnow.link` zone to the shared Cloudflare account.
 

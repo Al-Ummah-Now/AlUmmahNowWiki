@@ -1,0 +1,46 @@
+name: Feature registry
+
+# features/registry.json is the single source for feature status (features/README.md). Every PR and
+# push checks it. A push to main that changes it asks AlUmmahNowUI to rebuild alummahnow.dev, which
+# reads the registry at build time; without the optional UI_DISPATCH_TOKEN secret, UI's own scheduled
+# check (dev-registry.yml) picks the change up within a few hours instead.
+
+on:
+  pull_request:
+    paths: ['features/**', 'scripts/check-registry.mjs', '.github/workflows/registry.yml']
+  push:
+    branches: [main]
+    paths: ['features/**', 'scripts/check-registry.mjs', '.github/workflows/registry.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check the registry
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: '22'
+      - run: node scripts/check-registry.mjs
+
+  rebuild-dev-site:
+    name: Ask alummahnow.dev to rebuild
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Dispatch AlUmmahNowUI dev-registry.yml
+        env:
+          GH_TOKEN: ${{ secrets.UI_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::notice::No UI_DISPATCH_TOKEN: AlUmmahNowUI's scheduled dev-registry.yml rebuilds alummahnow.dev within its next run."
+            exit 0
+          fi
+          gh workflow run dev-registry.yml -R Al-Ummah-Now/AlUmmahNowUI -f reason="wiki ${GITHUB_SHA::7}"

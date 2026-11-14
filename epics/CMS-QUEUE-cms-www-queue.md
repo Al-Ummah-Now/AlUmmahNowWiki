@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `CMS-QUEUE` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **in progress**: draft preview, scheduled publishing, revisions, responsive images, Articles and search are live (CMS v2026.11.10.3 to v2026.11.10.5, UI v2026.11.10.2 to v2026.11.10.4). The About page managed in the CMS (CMS #130, UI #109) is merged, not yet in a production release |
+| **Last updated** | 2026-11-14 |
 
 > Scheduled publishing (#41), revisions (#43), draft preview (CMS #38, UI #24), image variants (#42) shipped 2026-11-10. Post search shipped on www (CMS #60, UI #35), and the CMS gained a writer role for scholars (CMS #67). A general Content Editor role, embedded discussions on www (Epic 26), continue watching on www, a newsletter and retiring the old `al-ummah-now-ui` Worker are still queued.
 

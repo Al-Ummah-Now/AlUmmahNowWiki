@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E28` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **in progress**: AI flagging runs in production in shadow mode (since v2026.11.08.4); holding is a per-category admin setting. 28.9 CSAM intake shipped in v2026.11.14.3 (AlUmmahNow #1327, #1329, #1330): takedown, encrypted evidence, cases, NCMEC reports, legal hold, one-year minimum preservation |
+| **Last updated** | 2026-11-14 |
 
 > Phase A in progress (EPIC-28-PLAN, 2026-11-08): schema, processor, producers, admin-api and admin-web PRs; later phases are `queue` issues. Chat (Epic 28 thread): merged and on QA in shadow / flag-only mode.
 

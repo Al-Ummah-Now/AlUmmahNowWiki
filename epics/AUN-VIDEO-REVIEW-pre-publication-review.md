@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-VIDEO-REVIEW` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, processor, media, scheduler, admin-api, admin-web, web). The native Studio apps show the new status |
-| **Status** | **built, shipping with mode off**: AlUmmahNow #1269, #1270, #1273, #1277, #1280, #1283, #1285 and #1293 (2026-11-13). Production goes to shadow after the release that contains them |
-| **Last updated** | 2026-11-13 |
+| **Status** | **in progress**: built and in production since v2026.11.13.10 with review mode off (AlUmmahNow #1269, #1270, #1273, #1277, #1280, #1283, #1285, #1293; #1298, #1299, #1302); review-alert rota screens in v2026.11.14.4 (#1292) |
+| **Last updated** | 2026-11-14 |
 
 Read from AlUmmahNow `origin/main` [`39a795d`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/39a795dd1) and the live reports D1 on 2026-11-13. Builds on [Epic 28](E28-ai-moderation.md) (AI moderation), [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) and [AUN-SUBS](AUN-SUBS-subscriptions-plan.md).
 

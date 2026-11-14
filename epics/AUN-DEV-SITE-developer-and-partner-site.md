@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-DEV-SITE` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (new app `apps/dev`) |
-| **Status** | **in progress**: spec in this page; site in an AlUmmahNowUI PR held for the owner's screenshots |
+| **Status** | **in progress**: spec in this page; site in AlUmmahNowUI #110, held for the owner's screenshots. Its feature statuses come from the [feature registry](../features/README.md) at build time |
 | **Last updated** | 2026-11-14 |
 | **Origin** | Owner request, 2026-11-14 (chat) |
 

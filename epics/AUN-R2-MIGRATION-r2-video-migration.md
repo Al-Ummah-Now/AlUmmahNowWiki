@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-R2-MIGRATION` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **in progress**: Bunny and R2 run side by side behind the admin switch (v2026.11.12); providers v2 with per-video pins and player fallback shipped in v2026.11.14.3 (AlUmmahNow #1331, #1335, #1340, #1341, #1342). Production still plays Bunny first. The providers page that leaves Delivery as analytics only is in review (#1358) |
+| **Last updated** | 2026-11-14 |
 
 > Filed as AlUmmahNow#687 ("a new epic", no number) right after D2 was decided, 2026-11-10. Side-by-side delivery live in every environment since 2026-11-12; viewers move only when an admin changes the delivery switch. How it works: [Video delivery](../guides/video-delivery.md).
 

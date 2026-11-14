@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-CAPTIONS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (later AlUmmahNowCMS for the shared provider layer, and the native Studio apps) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-11 (v2) |
+| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. Translation and inline translation are not built |
+| **Last updated** | 2026-11-14 |
 
 > v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
 
