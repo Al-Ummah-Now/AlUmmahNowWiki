@@ -45,7 +45,7 @@ Owner (AD6): **every user can sign in with a passkey everywhere**, on every site
 - **RP name:** "Al Ummah Now" (QA/stage: "Al Ummah Now QA" / "Al Ummah Now Stage" so the passkey manager shows which one is which).
 - **Options:** resident key **required** (discoverable), user verification **required**, attestation `none`, algorithms ES256 and RS256, timeout 5 minutes. Library: `@simplewebauthn/server` (WebCrypto; runs on Workers).
 
-### Data model (Auth D1, migration `0036_webauthn_credentials`)
+### Data model (Auth D1, migration `0038_webauthn_credentials`)
 
 ```sql
 CREATE TABLE webauthn_credentials (
@@ -171,6 +171,8 @@ New **Passkeys** section on `profile.auth.…`: each passkey with its name, "Syn
 1. Ship the code with enforcement **off** everywhere. Anyone can add a passkey; tokens carry `amr`; nothing is blocked.
 2. **QA:** a Super Admin adds a passkey, then switches enforcement on in the auth admin (the switch refuses unless the admin switching it has a passkey). Check admin-web, CMS admin and auth admin with a staff account with and without a passkey.
 3. **Production, staff:** the owner registers a passkey on `auth.alummahnow.net` from the account hub, then switches enforcement on. Existing staff get 7 days and a banner; new staff need one at once. **Waiting for the owner.**
+
+   Before step 2 on QA/stage: E2E-created admins count as new staff and would be blocked at once ([AlUmmahNowAuth#367](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/367)). Enforcement stays off on QA and stage until that is decided.
 4. **Everyone:** the after-sign-in card is on from step 1 (PK1); nothing is enforced for non-staff.
 
 ## Native apps: native passkey sign-in (owner decision 2026-11-13)
@@ -311,10 +313,16 @@ Two to three D1 reads and one write per passkey sign-in, no external service. Un
 
 | Piece | PR | State |
 |---|---|---|
-| Spec v2 | this page | merged |
-| openauth: `amr`, passkey provider, sign-in page | — | building |
-| Auth: migration, issuer, card, hub, admin, policy | — | building |
-| admin-api / admin-web | — | building |
-| CMS admin | — | building |
-| Enforcement on QA | — | after the above |
-| Enforcement on production | — | **owner registers a passkey first** |
+| Spec v2 | [Wiki#52](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/52) | merged |
+| openauth: `amr`, embedded `PasskeyProvider`, sign-in button and autofill, `ttl.code` | [openauth#44](https://github.com/Al-Ummah-Now/openauth/pull/44) | merged, published 1.0.50 |
+| openauth: one passkey ceremony per sign-in page (autofill/button race found by the E2E) | [openauth#45](https://github.com/Al-Ummah-Now/openauth/pull/45) | merged, published 1.0.51 |
+| Auth: migration, issuer, card, setup page, hub, auth admin, staff policy, export/erase, break-glass script, E2E | [AlUmmahNowAuth#366](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/366) | merged, released to production |
+| admin-api / admin-web: passkey gate, "Passkey needed" page, grace banner, step-up | [AlUmmahNow#1289](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1289) | merged; ships with the next AlUmmahNow release tag |
+| CMS admin: staff passkeys at the CMS sign-in | [AlUmmahNowCMS#124](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/124) | merged |
+| Fix: hub Passkeys card error on sessions from before 15-minute tokens, card spacing, accurate copy (device, password manager, phone, security key), card E2E | [AlUmmahNowAuth#370](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/370) | in review |
+| Copy: admin passkey screens and help guide | [AlUmmahNow#1316](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1316) | in review |
+| Copy: CMS passkey-needed page | [AlUmmahNowCMS#127](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/127) | in review |
+| Enforcement on QA/stage | — | off; waits on [AlUmmahNowAuth#367](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/367) |
+| Enforcement on production | — | off; **waiting for the owner** to register a passkey on `auth.alummahnow.net` (account hub → Passkeys → Add a passkey), then switch it on in the auth admin → Security |
+
+**Owner break-glass:** `node --experimental-strip-types scripts/passkeys/setup-link.ts <email> --env <qa|stage|production>` (AlUmmahNowAuth) prints a single-use 24-hour setup link.
