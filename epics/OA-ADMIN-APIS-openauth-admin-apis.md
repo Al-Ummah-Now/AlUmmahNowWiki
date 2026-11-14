@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `OA-ADMIN-APIS` |
 | **Owning repos** | [openauth](../repos/openauth.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2025-12-14 |
+| **Status** | **shipped** (Phase 4 and the Phase 6 middleware are in openauth but Auth doesn't mount them) |
+| **Last updated** | 2026-11-14 |
 
-> Code for M2M, users, clients, dynamic providers and middleware exists in `packages/openauth/src` with tests, but every task checklist is unticked.
+> Checked against openauth `master` and AlUmmahNowAuth `main` on 2026-11-14. Every file the six task plans list exists in `packages/openauth/src` (two were renamed: `client/d1-adapter.ts` is `client/client-d1-adapter.ts`, and the `rbac/api-types.ts` types live in `rbac/types.ts`). Auth mounts the user, RBAC and client admin APIs behind M2M tokens with an admin scope.
 
 ## Goal
 
@@ -19,12 +19,12 @@ Tenant-scoped M2M, user, RBAC, identity-provider, client and scope admin REST AP
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| Phase 1 | M2M authentication |  |
-| Phase 2 | User management |  |
-| Phase 3 | RBAC REST APIs |  |
-| Phase 4 | Dynamic identity providers |  |
-| Phase 5 | Scope authorization / client management | See conflict |
-| Phase 6 | Security & audit / scope authorization | See conflict |
+| Phase 1 | M2M authentication | ✅ Done. `client_credentials` grant in `issuer.ts`, [`m2m/`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/m2m) with tests. Auth's admin APIs require an M2M token with an admin scope ([Auth#378](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/378)) |
+| Phase 2 | User management | ✅ Done. [`user/`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/user) (D1 adapter, service, API) with tests. Auth mounts `userApiRoutes` on its admin users API |
+| Phase 3 | RBAC REST APIs | ✅ Done. [`rbac/admin-endpoints.ts`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/rbac/admin-endpoints.ts), service and D1 adapter. Auth mounts `rbacAdminEndpoints` |
+| Phase 4 | Dynamic identity providers | ✅ Built in openauth: [`dynamic-provider/`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/dynamic-provider) (encryption, cache, loader, API) with tests. Auth doesn't mount it; Auth configures its providers in code |
+| Phase 5 | Scope authorization / client management | ✅ Done (client management). [`client/`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/client) (secret generator, validation, D1 adapter, API) with tests. Auth mounts `clientAdminRoutes` |
+| Phase 6 | Security & audit / scope authorization | ✅ Built in openauth: [`middleware/`](https://github.com/Al-Ummah-Now/openauth/tree/master/packages/openauth/src/middleware) (bearer auth, require-scope, tenant isolation, rate limit) with tests. Auth uses its own `requireAdmin` (`apps/auth/src/middleware/admin-auth.ts`) instead |
 
 ## Decisions and constraints
 
@@ -38,7 +38,8 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- None found on GitHub or in the repos.
+- openauth `master`: `packages/openauth/src/{m2m,user,rbac,dynamic-provider,client,middleware}` with tests.
+- AlUmmahNowAuth `main`: `apps/auth/src/index.ts` mounts `userApiRoutes`, `rbacAdminEndpoints` and `clientAdminRoutes` behind `requireAdmin()`; [Auth#378](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/378).
 
 ## Open questions
 
@@ -46,7 +47,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Conflicts between sources
 
-- Phases 5 and 6 differ: IMPLEMENTATION_PLAN says 5 = scope auth, 6 = security & audit; `tasks/README` says 5 = client management, 6 = scope authorization. Totals ~15 vs 17 days.
+- Phases 5 and 6 differ: IMPLEMENTATION_PLAN says 5 = scope auth, 6 = security & audit; `tasks/README` says 5 = client management, 6 = scope authorization. Both versions are built, so the difference no longer matters.
 
 ## Sources
 

@@ -75,7 +75,7 @@ Merged since 2026-11-09:
 | [Legacy roadmap 1.3: SSO authentication service](../epics/LR-1.3-legacy-sso.md) | shipped |
 | [Identity platform: SSO provider, Lanes 1–7](../epics/AUTH-IDP-identity-platform.md) | shipped |
 | [OpenAuth fork: enterprise features](../epics/AUTH-ENTERPRISE-openauth-enterprise-features.md) | shipped |
-| [OpenAuth enterprise admin APIs](../epics/OA-ADMIN-APIS-openauth-admin-apis.md) | in progress |
+| [OpenAuth enterprise admin APIs](../epics/OA-ADMIN-APIS-openauth-admin-apis.md) | shipped |
 | [OpenAuth theme unification for the multi-tenant issuer](../epics/OA-THEME-openauth-theme-unification.md) | in progress |
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
 | [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
