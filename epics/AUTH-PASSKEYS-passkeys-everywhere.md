@@ -289,13 +289,17 @@ Served by the **`al-ummah-now-www`** Worker (repo **AlUmmahNowUI**, `src/worker.
 
 Known now: the CI **pre-release** key (GitHub pre-release APKs, both flavours) `5A:1B:3D:2B:57:6E:9A:2D:F0:BF:1B:E3:F1:8C:40:20:13:F9:5C:09:EA:EE:7C:F7:31:10:C4:2F:B5:69:DD:C0`: set for Studio only (QA `net.alummahnow.studio.qa`; stage/prod `net.alummahnow.studio`). Admin is never signed with it (Play internal testing only, no CI APK), so Admin has no fingerprint until Play App Signing exists; a developer testing Admin QA from a local build adds their debug key's SHA-256 to the QA value. **Owner values still needed:** the Apple Team ID; for each Android app on Play, the **Play app signing key** SHA-256 (Play Console → Test and release → App integrity) and the **upload key** SHA-256, per package (`net.alummahnow.studio`, `net.alummahnow.admin`, and the `.qa` packages if they go to Play).
 
+**QA client secrets:** QA deploys run `openauth bootstrap-secrets`, which until openauth 1.0.54 gave every client without a secret one nobody holds, the public native clients included. The native passkey routes admit only public native clients, so they answered `invalid_client` on QA. 1.0.54 leaves `metadata.type: "native"` clients out, and `migrations-qa/0042_native_clients_public.sql` clears the hashes already written. Stage and production never run it.
+
 ### Build status (native)
 
 | Piece | Repo | State |
 |---|---|---|
-| Native sign-in routes in the issuer (`nativePasskey` option) | openauth | building |
-| Native routes config, register routes, clients, origins, rate limit | AlUmmahNowAuth | building |
-| Domain association files + QA/stage RP-ID hosts | AlUmmahNowUI | building |
+| Native sign-in routes in the issuer (`nativePasskey` option) | openauth | [openauth#47](https://github.com/Al-Ummah-Now/openauth/pull/47) merged, published 1.0.53 |
+| `bootstrap-secrets` never gives a native (public) client a secret | openauth | [openauth#48](https://github.com/Al-Ummah-Now/openauth/pull/48) merged, published 1.0.54 |
+| Native routes config, register routes, clients, origins, rate limit | AlUmmahNowAuth | [AlUmmahNowAuth#372](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/372) merged (4917494); live on QA and stage; production with the next Auth release (the 4917494 release skipped production because main had moved on) |
+| QA native clients public again (migrations-qa/0042), openauth 1.0.54, native E2E on deployed envs (stage runs it every release) | AlUmmahNowAuth | [AlUmmahNowAuth#376](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/376) in review |
+| Domain association files + QA/stage RP-ID hosts | AlUmmahNowUI | [AlUmmahNowUI#100](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/100) merged; live on `qa.alummahnow.net`; stage and production with the next www release tag |
 | Apple / Android / Windows clients | AlUmmahNowApple / AlUmmahNowAndroid / AlUmmahNowDesktop | building (separate agents) |
 
 ## Tests
