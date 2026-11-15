@@ -213,6 +213,24 @@
       ]
     },
     {
+      "id": "admin-managed-categories",
+      "name": {
+        "en": "Admin-managed video categories",
+        "ar": "إدارة تصنيفات المرئيات"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-VIDEO-CATEGORIES-admin-managed-categories.md",
+      "prs": [
+        "AlUmmahNow#1423"
+      ],
+      "note": "Admins add, rename (English and Arabic), reorder, retire and restore video categories; values never change, so videos keep theirs."
+    },
+    {
       "id": "unlisted-videos",
       "name": {
         "en": "Unlisted videos and playlists",
