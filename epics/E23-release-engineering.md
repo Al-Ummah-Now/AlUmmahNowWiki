@@ -23,11 +23,11 @@ CI/CD, signing, betas, staged rollouts, store listings and monitoring for every 
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 23.1 | CI/CD per platform |  |
+| 23.1 | CI/CD per platform | Android: tag → signed bundles, Play internal track per app and Amazon Appstore edit, each skipped with a notice until the owner adds its secrets and IDs (AlUmmahNowAndroid#24, `docs/RELEASE.md`) |
 | 23.2 | Signing & store accounts (needs D-U-N-S) |  |
 | 23.3 | Beta channels |  |
 | 23.4 | Staged rollouts + kill switches |  |
-| 23.5 | Store listings en/ar |  |
+| 23.5 | Store listings en/ar | Android: listings in en/ar for viewer, TV and Studio, checked in CI; data safety answers from the code; store screenshots generated from the app screens (AlUmmahNowAndroid#24) |
 | 23.6 | Monitoring (Sentry, QoE gates) |  |
 | 23.7 | Accessibility & RTL QA matrix |  |
 
