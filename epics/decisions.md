@@ -48,7 +48,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [SM-3](decisions.md#sm-3-default-for-auto-posts) | Default for auto-posts | **decided** | 2026-11-09 | Social media management |
 | [SM-4](decisions.md#sm-4-legal-entity) | Legal entity | **decided** | 2026-11-09 | Social media management |
 | [SM-5](decisions.md#sm-5-async-work-and-errors-standing-rule) | Async work and errors (standing rule) | **decided** | 2026-11-09 | Social media management |
-| [SM-6](decisions.md#sm-6-register-a-business-for-meta) | Register a business for Meta? | **open** | 2026-11-09 | Social media management |
+| [SM-6](decisions.md#sm-6-register-a-business-for-meta) | Register a business for Meta? | **decided** | 2026-11-14 | Social media management |
 | [O1](decisions.md#o1-whole-platform-cost-cap) | Whole-platform cost cap | **decided** | 2026-11-07 | D2, every epic's infrastructure |
 | [O2](decisions.md#o2-native-apps-viewer-and-studio) | Native apps, viewer and Studio | **decided** | 2026-11-07 | Epics 9–24 |
 | [O3](decisions.md#o3-embeds-comments-widget-everything-tiered) | Embeds, comments widget, everything tiered | **decided** | 2026-11-07 | Epics 25–27 |
@@ -471,9 +471,13 @@ Always async: queues, retry, DLQ; failures flag the admin Errors page.
 
 ### SM-6: Register a business for Meta?
 
-**Status:** open · **Date:** 2026-11-09
+**Status:** decided · **Date:** 2026-11-14
 
-Open: Business Verification would unlock Facebook/Instagram/Threads for every channel.
+No. The owner: *"no auto post to meta"*. No Facebook, Instagram or Threads auto-posting and no Meta Business Verification. Auto-post covers X, Telegram, Bluesky and Mastodon.
+
+For creators who use a scheduler, the owner: *"if someone uses hootsuite or similar we need to be able help them somehow"*. So every channel gets RSS feeds, link previews (Open Graph, Twitter cards, oEmbed), signed webhooks and a Studio share kit, with a help page for Hootsuite and Buffer. A scheduler can then post to Meta networks for the creator.
+
+(Recommendation before the decision: Business Verification would unlock Facebook/Instagram/Threads for every channel.)
 
 **Blocks / affects:** Social media management
 
