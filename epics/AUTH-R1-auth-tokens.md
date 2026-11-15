@@ -7,7 +7,7 @@
 | **ID** | `AUTH-R1` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2024-12-01 |
+| **Last updated** | 2026-11-15 |
 
 > JWT phases 0–4 complete, refresh rotation, sessions and audit logging exist; MFA not built. The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 
@@ -37,7 +37,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- None found on GitHub or in the repos.
+- 2026-11-15, AUTH-1: signing-key rotation with a published-before-use overlap, scheduled and from the admin, audited ([Auth#388](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/388), [Auth#389](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/389), [Auth#390](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/390)); verifiers refetch JWKS on an unknown `kid` ([AlUmmahNow#1394](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1394)); per-device sign-out by `sid` ([Auth#386](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/386), [AlUmmahNow#1408](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1408)); sign-in logs without PII ([Auth#385](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/385)); critical Dependabot alerts cleared and pnpm as the only lockfile ([Auth#393](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/393), [Auth#397](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/397)). See [Authentication](../guides/authentication.md#tokens).
 
 ## Open questions
 
