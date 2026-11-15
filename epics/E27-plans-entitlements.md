@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `E27` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **superseded**: creator tiers stay the only plans model; payments are built under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
+| **Last updated** | 2026-11-15 |
 
-> Plumbing plan approved 2026-11-08 (payments deferred per D4). Branches `feat/epic27-*` exist; #262 still open.
+> Plumbing plan approved 2026-11-08 (payments deferred per D4). On 2026-11-14 the plans PRs (#390, #391, #427, #428, #429) were closed as superseded: creator tiers are the plans, and payments for them are built in [AUN-SUBS](AUN-SUBS-subscriptions-plan.md).
 
 ## Goal
 

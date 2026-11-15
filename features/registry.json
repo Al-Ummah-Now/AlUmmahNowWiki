@@ -320,6 +320,26 @@
       "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier. Held for the owner's screenshot review."
     },
     {
+      "id": "payments",
+      "name": {
+        "en": "Payments for creator tiers",
+        "ar": "الدفع لمستويات صنّاع المحتوى"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-SUBS-subscriptions-plan.md",
+      "prs": [
+        "AlUmmahNow#1415",
+        "AlUmmahNow#1418",
+        "AlUmmahNow#1419"
+      ],
+      "note": "Off by default: /upgrade stays the request page until an admin enables a payment provider and prices a tier. Then that tier's card shows the price and Subscribe, and the provider's webhook assigns the tier. Paddle and PayGood adapters (never Stripe); users see billing history in Settings › Billing; admins manage providers, prices, tax, subscriptions, refunds and complimentary tiers on the videos admin Payments page. Held for the owner's screenshot review."
+    },
+    {
       "id": "creator-studio",
       "name": {
         "en": "Web Creator Studio",
