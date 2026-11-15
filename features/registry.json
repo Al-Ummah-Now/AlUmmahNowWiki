@@ -1399,6 +1399,75 @@
         "AlUmmahNow#1385"
       ],
       "note": "A public page at /u/@handle with the user's name, picture, bio and public channels, plus playlists, subscriptions and liked videos when the user turns them on. Held for the owner's screenshot review."
+    },
+    {
+      "id": "www-continue-watching",
+      "name": {
+        "en": "Continue watching on www",
+        "ar": "متابعة المشاهدة في الموقع"
+      },
+      "status": "building",
+      "apps": [
+        "www",
+        "api"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "prs": [
+        "AlUmmahNowUI#115"
+      ],
+      "note": "A row under the home hero for signed-in viewers; the home HTML stays edge-cacheable."
+    },
+    {
+      "id": "www-video-search",
+      "name": {
+        "en": "Videos in www search",
+        "ar": "المرئيات في بحث الموقع"
+      },
+      "status": "building",
+      "apps": [
+        "www",
+        "api"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "prs": [
+        "AlUmmahNowUI#114"
+      ]
+    },
+    {
+      "id": "newsletter",
+      "name": {
+        "en": "Newsletter",
+        "ar": "النشرة البريدية"
+      },
+      "status": "building",
+      "apps": [
+        "www",
+        "videos-admin"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "prs": [
+        "AlUmmahNow#1384",
+        "AlUmmahNowUI#117"
+      ],
+      "note": "Double opt-in sign-up on www, issues in English and Arabic sent from the videos admin through Resend."
+    },
+    {
+      "id": "scholar-links",
+      "name": {
+        "en": "Scholar menu link and byline links",
+        "ar": "رابط العلماء في القائمة وروابط أسماء الكتّاب"
+      },
+      "status": "building",
+      "apps": [
+        "www",
+        "cms"
+      ],
+      "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
+      "prs": [
+        "AlUmmahNowUI#113",
+        "AlUmmahNowCMS#137"
+      ],
+      "note": "Also keeps scholar pages up from the last-known-good copy when the CMS is down."
     }
   ]
 }
