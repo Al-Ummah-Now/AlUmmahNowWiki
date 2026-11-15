@@ -113,6 +113,23 @@
       ]
     },
     {
+      "id": "community-posts-editing-scheduling",
+      "name": {
+        "en": "Edit, delete and schedule community posts",
+        "ar": "تعديل منشورات المجتمع وحذفها وجدولتها"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/E29-core-web-experience.md",
+      "prs": [
+        "AlUmmahNow#1379"
+      ],
+      "note": "Channel owners edit or delete a post from its card, schedule it for later (or publish a scheduled one now), and subscribers get a notification when a post goes live (per-channel bell and a Posts notification category)."
+    },
+    {
       "id": "browser-notifications",
       "name": {
         "en": "Browser notifications",
