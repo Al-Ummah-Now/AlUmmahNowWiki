@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-14: status page subscriptions
+
+- **Email and webhook updates from the status page:** people sign up at `/subscribe` in English or Arabic and confirm by email (double opt-in). Each email has one-click unsubscribe. Admins add signed webhooks on the videos admin **Status** page. A new incident or maintenance, each update and its resolution are sent from a queue with retries; failures land on the Errors page with **Retry**. Internal-only incidents are never sent ([#1380](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1380), [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md#subscriptions).
+
 ## 2026-11-13: every local E2E suite cleans up fully
 
 - **Leftover checks gate everywhere:** the web and release suites' leftover checks were report-only; they now fail the job like the admin suite's, so a run that leaves anything of its own behind is red. The suites gained a teardown that erases accounts that signed up on the web page and runs the purges the deployed crons run ([#1256](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1256)). See [Testing and E2E](testing.md#cleanup-and-leftover-checks).

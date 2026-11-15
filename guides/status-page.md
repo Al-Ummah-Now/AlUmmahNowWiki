@@ -29,7 +29,36 @@ Admins and super admins post them on the videos admin **Status** page (Operation
 - **Public or not:** an incident appears publicly only with its public components. One that affects only admin-only components (say, the CMS) stays on the admin Status page.
 - **Delete** hides it from the page and feeds. It can be restored for 30 days, then it is purged ([Deletion, erasure and cleanup](data-lifecycle.md)).
 
-People can follow incidents with the Atom and RSS feeds (`/feed.atom`, `/feed.rss`, `/ar/…`) or `/api/status.json`. Email and webhook subscriptions are not built yet ([#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)).
+People can follow incidents with the Atom and RSS feeds (`/feed.atom`, `/feed.rss`, `/ar/…`), `/api/status.json`, email, or a webhook (below).
+
+## Subscriptions
+
+Built in [#1380](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1380) (issue [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)); on QA once merged, in production with the next release.
+
+**What is sent:** a new incident or maintenance, each update posted to it, and its resolution, within a minute or two. Only incidents with a public component are sent, and only their public components are named. Internal-only incidents are never sent. Editing an update's text does not send it again.
+
+**Email:**
+- **Sign-up:** anyone signs up at `/subscribe` (`/ar/subscribe`) and chooses English or Arabic emails. The main page links there ("Get email updates") and so does the footer ("Email updates").
+- **Double opt-in:** nothing is sent until the address is confirmed. The confirmation email links to a page whose button confirms; opening the link alone changes nothing. Unconfirmed addresses are deleted after 7 days.
+- **Unsubscribe:** every email has an unsubscribe link and the `List-Unsubscribe` headers, so mail clients offer one-click unsubscribe. Unsubscribing deletes the address.
+- **Abuse limits:** a few sign-ups per network per hour (no IP address is stored), a hidden honeypot field, a 10-minute wait before a confirmation email is sent again, and form posts from other sites are refused.
+- **Delivery:** emails go out through Resend, the same sender as the rest of the platform.
+
+**Webhooks:** only admins add them, on the videos admin **Status** page (up to 20, https and a public host name).
+- **Format:** each update is posted as JSON.
+- **Signature:** `x-aun-signature: sha256=<hex>` is an HMAC-SHA256 of `<x-aun-timestamp>.<body>` with the webhook's signing secret. The secret is shown once, when the webhook is added. The other headers are `x-aun-event` (`incident.created`, `incident.updated`, `incident.resolved`) and `x-aun-delivery` (a delivery id; a receiver can use it to drop repeats).
+- **Responses:** redirects are not followed. A 4xx answer is final; 408, 429, 5xx and timeouts are retried.
+
+**Admin:** the **Subscriptions** card on the **Status** page shows confirmed and waiting counts (never the addresses). From the card an admin:
+- adds or deletes webhooks, and sees each one's last delivery
+- removes an address on request
+- sees the last 20 notifications with recipients, delivered and failed counts, and **Send failed again**
+
+Every action is audited.
+
+**Retries and errors:** everything is sent from a queue (`al-ummah-now-status-notify`, consumed by the admin API). Each delivery is recorded, so a retry never sends twice. Failures are retried with backoff (30 seconds, doubling up to 15 minutes, 6 tries in all), then go to the dead-letter queue and open an item on the admin **Errors** page with a **Retry** action.
+
+**Cost:** one Resend email per subscriber per update. Queue and database use stays inside the included usage, and nothing runs while idle.
 
 ## Alerts
 
