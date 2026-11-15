@@ -40,9 +40,13 @@
       "prs": [
         "AlUmmahNow#867",
         "AlUmmahNow#871",
-        "AlUmmahNow#872"
+        "AlUmmahNow#872",
+        "AlUmmahNow#1367",
+        "AlUmmahNow#1372",
+        "AlUmmahNow#1373",
+        "AlUmmahNow#1387"
       ],
-      "note": "Built and in production releases since v2026.11.12.9 (Studio Live, Go live, the live watch page, the admin Live streaming page), but production cannot take a stream yet: Bunny Stream Live returns 403 for the production library until preview access is granted (AlUmmahNow#874), and the self-hosted edge has no production host attached (live.alummahnow.net is not a route of the production worker) and takes HTTPS HLS push only, no RTMP/SRT (AlUmmahNow#875). No real stream has run on production; the release E2E creates and ends a stream without sending video."
+      "note": "In production releases since v2026.11.12.9 but not usable there yet. Bunny Stream Live needs preview access (owner step, AlUmmahNow#874). The production live host is attached by the release from AlUmmahNow#1367, which awaits a tag. Self-hosted ingest is HTTPS HLS push (ffmpeg, or OBS Custom Output); plain RTMP/SRT needs Cloudflare Spectrum (vendor step, AlUmmahNow#875). Works end to end on QA with real video (release E2E AlUmmahNow#1372). Creator tiers decide who may go live and for how long (AlUmmahNow#1373). Viewers see how many people are watching (AlUmmahNow#1387)."
     },
     {
       "id": "posts-playlists-sections",
@@ -292,9 +296,10 @@
         "AlUmmahNow#630",
         "AlUmmahNow#660",
         "AlUmmahNow#715",
-        "AlUmmahNow#1363"
+        "AlUmmahNow#1363",
+        "AlUmmahNow#1373"
       ],
-      "note": "A Tiers item in the admin menu (AlUmmahNow#1363) is in review."
+      "note": "A Tiers item in the admin menu (AlUmmahNow#1363) is in review. Live streaming per tier (allowed, hours a month, streams at once, longest stream) is in review in AlUmmahNow#1373."
     },
     {
       "id": "creator-studio",
