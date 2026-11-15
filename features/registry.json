@@ -1845,7 +1845,7 @@
         "AlUmmahNow#1395",
         "AlUmmahNow#1399"
       ],
-      "note": "Admins pick a scope, see the estimated cost from real sizes, then start a queued, resumable copy, transcode and verify per video with a budget cap. Verified videos can play from R2 first (per video, channel or everywhere), and a legacy Bunny library can be retired after a grace period. The page is held for the owner's screenshot review."
+      "note": "Admins pick a scope, see the estimated cost from real sizes, then start a queued, resumable copy, transcode and verify per video with a budget cap. Verified videos can play from R2 first (per video, channel or everywhere), and a legacy Bunny library can be retired after a grace period. The engine is merged and waits for a release tag; the admin page is held for the owner's screenshot review."
     },
     {
       "id": "native-store-release",
