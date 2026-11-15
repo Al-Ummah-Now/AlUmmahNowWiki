@@ -907,6 +907,22 @@
       "note": "A Light/Dark toggle and links back to www and the videos site (AlUmmahNow#1357) are in review."
     },
     {
+      "id": "status-subscriptions",
+      "name": {
+        "en": "Status page email and webhook updates",
+        "ar": "تحديثات صفحة الحالة بالبريد وخطافات الويب"
+      },
+      "status": "building",
+      "apps": [
+        "status",
+        "videos-admin"
+      ],
+      "wiki": "guides/status-page.md",
+      "prs": [
+        "AlUmmahNow#1380"
+      ]
+    },
+    {
       "id": "seo",
       "name": {
         "en": "Search visibility (SEO)",
