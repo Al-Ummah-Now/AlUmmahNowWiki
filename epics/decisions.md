@@ -818,6 +818,16 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 
 **Sources:** [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)
 
+### O34: Pages are built from typed blocks, never HTML
+
+**Status:** decided · **Date:** 2026-11-14
+
+"there should be a way to add elements like squarespace, not pure html". CMS pages are ordered lists of typed blocks with a few theme-token style options (alignment, width, tone, spacing), edited in a picker-and-preview builder; no HTML or CSS input anywhere. One renderer and one stylesheet (canonical in AlUmmahNow `packages/shared-types`, vendored byte for byte by the CMS and UI) draw them in the editor preview, on www, on scholar sites and on the videos site.
+
+**Blocks / affects:** [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md), [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md)
+
+**Sources:** owner in chat, 2026-11-14; [AlUmmahNowCMS#136](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/136)
+
 ### LIC: Repo licence for Core and the app repos
 
 **Status:** open · **Date:** 2026-11-08

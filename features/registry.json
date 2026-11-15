@@ -963,6 +963,27 @@
       ]
     },
     {
+      "id": "page-builder",
+      "name": {
+        "en": "Page builder",
+        "ar": "منشئ الصفحات"
+      },
+      "status": "building",
+      "apps": [
+        "cms",
+        "www",
+        "sites",
+        "videos"
+      ],
+      "wiki": "epics/AUN-CMS-PAGE-BUILDER-cms-page-builder.md",
+      "prs": [
+        "AlUmmahNow#1368",
+        "AlUmmahNowCMS#136",
+        "AlUmmahNowUI#112"
+      ],
+      "note": "Open PRs held for the owner's screenshot review."
+    },
+    {
       "id": "articles-search",
       "name": {
         "en": "Articles and site search",
