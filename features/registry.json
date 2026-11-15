@@ -714,6 +714,75 @@
       ]
     },
     {
+      "id": "purge-completeness",
+      "name": {
+        "en": "Purge erases every copy",
+        "ar": "الحذف النهائي يمحو كل نسخة"
+      },
+      "status": "rolling",
+      "apps": [
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/CHAT-ADMIN-CONTENT-admin-content-management.md",
+      "prs": [
+        "AlUmmahNow#1370",
+        "AlUmmahNow#1413"
+      ],
+      "note": "Merged 2026-11-14, not in a production release yet: thumbnails folder, caption jobs and files, channel sections and playlists, subtitles, post images; notifications of deleted content hidden; a revoked invite's videos data erased at its purge, with moved channels given back first."
+    },
+    {
+      "id": "admin-audit-log",
+      "name": {
+        "en": "Admin audit log, with names instead of ids",
+        "ar": "سجل إجراءات الإدارة بالأسماء بدل المعرّفات"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/CHAT-ADMIN-CONTENT-admin-content-management.md",
+      "prs": [
+        "AlUmmahNow#1403"
+      ],
+      "note": "Every admin action on one page, filtered by admin and item (autocomplete), area, action and dates; history cards name people and items."
+    },
+    {
+      "id": "channel-transfer-picker",
+      "name": {
+        "en": "Channel transfer with people search",
+        "ar": "نقل ملكية القناة مع البحث عن الأشخاص"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/CHAT-ADMIN-CONTENT-admin-content-management.md",
+      "prs": [
+        "AlUmmahNow#1405"
+      ],
+      "note": "The new owner is picked by name, @handle or email with the shared autocomplete; team members first, banned accounts cannot be picked."
+    },
+    {
+      "id": "remote-config-editor",
+      "name": {
+        "en": "Remote config and feature flags for the apps",
+        "ar": "الإعدادات عن بُعد ومفاتيح الميزات للتطبيقات"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E09-native-platform-foundations.md",
+      "prs": [
+        "AlUmmahNow#416",
+        "AlUmmahNow#1410"
+      ],
+      "note": "Flags, config values and update policies per platform, app, version, language and rollout, edited in the videos admin with a dry run and audited saves; #1410 also binds the APP_CONFIG namespaces the apps read."
+    },
+    {
       "id": "www-and-sites",
       "name": {
         "en": "Public site (www)",
