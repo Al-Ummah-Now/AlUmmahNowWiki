@@ -806,6 +806,16 @@ Keep Bunny and the new R2 + CDN delivery running at the same time to compare spe
 
 **Sources:** [AlUmmahNow#687 comment](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687#issuecomment-6774105975); [AlUmmahNow#892](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/892)
 
+### O33: Tiers by request during the beta
+
+**Status:** decided · **Date:** 2026-11-14
+
+An "upgrade subscription" page like other sites', except users *request* a tier instead of paying: every available tier shown, a short form (name, "tell us about yourself"), and a notice that during the beta access is granted on an acceptance basis and paid subscriptions open later. The normal user tier is a real tier (Member) so the owner can later choose whether normal users may create pages.
+
+**Blocks / affects:** Creator tiers, AUN-SUBS, Epic 27
+
+**Sources:** [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)
+
 ### LIC: Repo licence for Core and the app repos
 
 **Status:** open · **Date:** 2026-11-08
