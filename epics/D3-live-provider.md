@@ -49,7 +49,7 @@ Production also could not take a stream:
 
 QA run 43655762702: live in about 4 s, VOD with 22 segments. The old `live-go-live.spec.ts` never sent video.
 
-**Creator tiers** ([#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373), search migration 0040)
+**Creator tiers** ([#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373), search migration 0054)
 - Each tier has *Live streaming: allowed* plus hours a month, streams at once and longest stream.
 - Defaults: None off; Creator 20 h / 1 / 240 min; Unlimited and super admins without limits.
 - api-videos enforces the channel **owner's** tier: create and ingest 403 `live_not_in_tier`; start 402 `live_hours_used` or 403 `live_concurrent_limit`.
