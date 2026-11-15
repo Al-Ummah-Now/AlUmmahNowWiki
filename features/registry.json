@@ -1790,6 +1790,23 @@
       "note": "Trim, cut and join on Core's edit list, with undo and export."
     },
     {
+      "id": "studio-desktop-titles",
+      "name": {
+        "en": "Desktop Studio: titles and lower thirds",
+        "ar": "الاستوديو المكتبي: العناوين والأشرطة السفلية"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNowCore#46",
+        "AlUmmahNowDesktop#48"
+      ],
+      "note": "Centred titles and bilingual lower thirds in the brand kit's colours, template and logo, previewed over the picture and drawn into the export on Linux and Windows. Arabic shapes right to left inside the title; the timeline still runs left to right."
+    },
+    {
       "id": "studio-desktop-analytics",
       "name": {
         "en": "Desktop Studio: analytics deep dive",
