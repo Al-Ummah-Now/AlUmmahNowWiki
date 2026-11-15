@@ -7,7 +7,7 @@
 | **ID** | `E29` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-14 |
 
 > All P0 stories built (Sprint A, merged through #163) and verified on QA 2026-11-08; P1/P2 stories mostly open (#370–#378).
 
@@ -30,7 +30,7 @@ Channels, posting, commenting, profiles, reactions, subscriptions, search and br
 | 29.1 | `@handle` URLs, channel About | Built (P0). Lookalike handles #276. |
 | 29.2 | Comments completion | Built; signed-out live delivery fixed (#361); #379. |
 | 29.3 | Creator comment moderation | P1; owned by Epic 6/28. |
-| 29.4 | Community posts completion | Partial (#370). |
+| 29.4 | Community posts completion | Built in AlUmmahNow#1379, held for owner screenshots: owner Edit/Delete menu on post cards and the permalink (in-app delete dialog), post editor at `/settings/channel/<id>/community/<postId>/edit`, a Publish now / Schedule for later picker in the composer (5 minutes to a year ahead, viewer's time zone; `posts.scheduled` entitlement, 402 when a plan says no), Studio Scheduled tab with Publish now and Change time, and a `newPost` notification to subscribers (bell all/highlights, new `posts` category) queued by the processor as a `new_post` fan-out (retry, DLQ, admin Errors). Post detail URL was #1203. |
 | 29.5 | Public profile + privacy toggles | Not built (#371). |
 | 29.6 | Library hub, Watch later, Liked | Built (P0). |
 | 29.7 | Explore page | Built (P0). |
