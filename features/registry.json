@@ -751,8 +751,8 @@
     {
       "id": "transcode-concurrency-limit",
       "name": {
-        "en": "Max concurrent R2 transcodes: R2 provider setting (Video providers → Cloudflare R2 settings) under the container ceiling; Delivery shows N of it",
-        "ar": "أقصى عدد من عمليات التحويل إلى R2 في وقت واحد: إعداد لمزوّد R2 (مزوّدو المرئيات ← إعدادات Cloudflare R2) تحت الحد الأعلى للحاويات، وتعرض صفحة التوصيل العدد منه"
+        "en": "Concurrent R2 transcodes as an autoscaling min–max range (Video providers → Cloudflare R2 settings) under the container ceiling; Delivery shows N running · M waiting · range",
+        "ar": "عمليات التحويل إلى R2 في وقت واحد كمدى متدرّج من الحد الأدنى إلى الأقصى (مزوّدو المرئيات ← إعدادات Cloudflare R2) تحت الحد الأعلى للحاويات، وتعرض صفحة التوصيل العدد الجاري والمنتظر والمدى"
       },
       "status": "building",
       "apps": [
@@ -763,7 +763,7 @@
       "prs": [
         "AlUmmahNow#1439"
       ],
-      "note": "Default 4; ceiling = max_instances (production 10, stage and QA 2). Admins change it; moderators see the Delivery figure. Stacked on AlUmmahNow#1414."
+      "note": "Default 4–4; ceiling = max_instances (production 10, stage and QA 2). min is a concurrency floor, not warm instances. Admins change it; moderators see the Delivery figure. Stacked on AlUmmahNow#1414."
     },
     {
       "id": "videos-site",
