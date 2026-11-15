@@ -7,7 +7,7 @@
 | **ID** | `E09` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [openauth](../repos/openauth.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-14 |
 
 > 9.1, 9.2, 9.3, 9.4 (part), 9.5, 9.9 merged; 9.6, 9.7, 9.8 still in open PRs (#434, #433, #432) on 2026-11-12. Native Studio sign-in now works on Apple, Android and Desktop with the registered native clients.
 
@@ -26,7 +26,7 @@ Make the backend safe and complete for public native clients on every platform.
 | 9.1 | Native public OAuth clients (PKCE S256, custom schemes, universal links, refresh rotation) | Merged in openauth#18, AlUmmahNowAuth#228/#229; follow-up AlUmmahNowAuth#239. |
 | 9.2 | Device authorization grant (RFC 8628) + activate page; codes expire in 10 min | Merged in openauth#19, AlUmmahNowAuth#231. |
 | 9.3 | Versioned API `/api/v1`, OpenAPI contract, `/api/app-config` | Merged (#369, #416); follow-ups #409, #415. |
-| 9.4 | Push fan-out to APNs, FCM, WNS, web push; device registration; per-category prefs | 9.4a/9.4b merged (#421, #422); provider credentials needed (#414, #443). |
+| 9.4 | Push fan-out to APNs, FCM, WNS, web push; device registration; per-category prefs | 9.4a/9.4b merged (#421, #422). APNs/FCM/WNS senders merged (#1286) and wait for their credentials. Web Push sender and queued retries in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371), browser opt-in in [#1375](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1375), VAPID bindings in [#1376](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1376), which waits for the Secrets Store keys. |
 | 9.5 | Remote config & feature flags (KV) by platform, version, locale | Merged (#369, #416); admin UI queued (#413). |
 | 9.6 | Playback authorization: signed expiring playback/download URLs, device-bound entitlements | Open PR #434. Was blocked on D2; D2 decided 2026-11-10 (R2 + Cloudflare CDN), so the R2 adapter can now be written. |
 | 9.7 | In-app account deletion & data export (Apple 5.1.1(v), Play policy) | openauth#20, AlUmmahNowAuth#233 merged; monorepo PR #433 open; #437. |
