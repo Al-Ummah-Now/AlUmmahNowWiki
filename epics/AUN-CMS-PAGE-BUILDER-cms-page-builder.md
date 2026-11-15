@@ -72,6 +72,7 @@ Full description: [AlUmmahNowCMS/docs/ADMIN_UI_SPEC.md](https://github.com/Al-Um
 - **The builder workspace** (*Open the page builder*). A full-screen view with the block list beside a live preview in a sandboxed frame, drawn by the sites' own renderer and stylesheet.
   - Toolbar: Desktop (scaled to fit) or Phone (390 px), this language or the other one, Light or Dark, and a preview-only theme. The site's active theme never changes here.
   - Clicking a section in the preview opens its block.
+  - On a phone-sized screen the preview sits under the block list and opens on Phone. Whenever the list is narrow, a block's buttons go on a row under its name, so the name stays readable.
 - **Media and content.** Images come from the media library chooser or a new upload; generated names mean an upload never replaces a file. Posts are picked from a search in the page's language. Videos use the existing picker and are snapshotted server-side.
 - **Drafts, publish, revisions.** These are the CMS's existing page workflow. A page stays a draft until it is published. Every save is a revision, and History shows each block's words plus its style changes.
 - **English and Arabic.** Each language is its own page, linked by translation key. *Copy from {other language}* replaces the blocks with the other page's (images and layout included) as a starting point for translation, with Undo in the toast. Prose fields are spell-checked in the page's language.
