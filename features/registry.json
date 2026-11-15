@@ -749,6 +749,23 @@
       "note": "Containers, queues and logs need a read-only Cloudflare token set by a super admin; builds on AlUmmahNow#1409."
     },
     {
+      "id": "transcode-concurrency-limit",
+      "name": {
+        "en": "Max concurrent R2 transcodes: admin setting on Delivery under the container ceiling",
+        "ar": "أقصى عدد من عمليات التحويل إلى R2 في وقت واحد: إعداد للمسؤول في صفحة التوصيل تحت الحد الأعلى للحاويات"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/D2-video-delivery.md",
+      "prs": [
+        "AlUmmahNow#1439"
+      ],
+      "note": "Default 4; ceiling = max_instances (production 10, stage and QA 2). Moderators read only. Stacked on AlUmmahNow#1414."
+    },
+    {
       "id": "videos-site",
       "name": {
         "en": "Videos site",
