@@ -175,7 +175,7 @@ Cross-checks: the Turnstile widget's own page in the Cloudflare dashboard (solve
 - [ ] **Native User-Agents pass** the scripted-client refusal (production, `enforce`): Core `aun-core/…` with the app prefix, Apple URLSession (Studio TUS uploads), Android OkHttp and Dalvik (TUS), the Windows and Linux apps, or none. Pinned by the same test; a native client never ships a library default such as curl, python-requests, Go-http-client or `Java/…`.
 - [ ] **A new native client** (the native admin app, AUN-ADMIN-NATIVE) is registered in Auth, added to `NATIVE_CLIENT_IDS` and the test, and sends a named User-Agent (`AlUmmahNow-Admin-<platform>/<version>`), before it ships.
 - [ ] A Studio upload from iOS, Android and Windows on stage succeeds after the switch (TUS create, PATCH, finish).
-- [ ] Stronger native proof (App Attest / Play Integrity, [#1274](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1274)) is not required for `enforce`; it replaces the signed-client exemption later.
+- [ ] Stronger native proof (App Attest / Play Integrity, [#1274](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1274)) is not required for `enforce`. It is built and off until configured: videos admin → Mobile apps turns each check on, and "Require a proof from these clients" makes listed native clients send `X-AUN-Native-Proof` on writes (403 `native_proof_required` otherwise). Endpoints under `/api/apps/attestation` on api-videos; setup in the [store release checklist](store-release-checklist.md).
 
 ### When
 

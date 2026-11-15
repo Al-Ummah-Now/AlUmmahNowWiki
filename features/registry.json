@@ -1577,6 +1577,29 @@
         "AlUmmahNowApple#36"
       ],
       "note": "One brand kit and one shared asset library per account, used by all its channels and their teams."
+    },
+    {
+      "id": "app-links-and-attestation",
+      "name": {
+        "en": "App links and app attestation",
+        "ar": "روابط التطبيقات والتحقق من أصالتها"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "www",
+        "native"
+      ],
+      "wiki": "guides/store-release-checklist.md",
+      "prs": [
+        "AlUmmahNow#1383",
+        "AlUmmahNow#1393",
+        "AlUmmahNowUI#116",
+        "AlUmmahNowAndroid#24"
+      ],
+      "note": "Videos admin → Mobile apps holds the Apple Team ID, bundle ids and Android fingerprints; the videos site serves apple-app-site-association and assetlinks.json from them (nothing until they are filled in), and the passkey files on alummahnow.net merge them. App Attest and Play Integrity checks are built and off until configured; Android Studio and Admin send the proof."
     }
   ]
 }
