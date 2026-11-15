@@ -39,8 +39,8 @@ Full story text and acceptance criteria are in the source spec. Bilingual (en/ar
 
 - [D3](decisions.md#d3-live-provider): Live provider (pending), see the [D3 page](D3-live-provider.md)
 - [D9](decisions.md#d9-linux-ui-toolkit-for-c): Linux UI toolkit for C# (decided)
-- [D10](decisions.md#d10-transcription-location): Transcription location (open)
-- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (open)
+- [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
+- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (decided 2026-11-14: server by default, optional desktop pre-encode verified server-side)
 - [D1](decisions.md#d1-app-stack): App stack (decided)
 
 Platform-wide constraints that apply to every epic:

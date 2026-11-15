@@ -93,5 +93,5 @@ Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) 
 ## Decisions and constraints
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
-- [D10](decisions.md#d10-transcription-location): Transcription location (open; measurements added 2026-11-11)
+- [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
 - The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: QF permission email sent 2026-11-11, awaiting reply**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.

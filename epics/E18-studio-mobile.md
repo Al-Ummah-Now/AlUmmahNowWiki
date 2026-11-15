@@ -38,7 +38,7 @@ Full story text and acceptance criteria are in the source spec. Bilingual (en/ar
 ## Decisions and constraints
 
 - [D3](decisions.md#d3-live-provider): Live provider (pending), see the [D3 page](D3-live-provider.md)
-- [D10](decisions.md#d10-transcription-location): Transcription location (open)
+- [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
 
 Platform-wide constraints that apply to every epic:
 
