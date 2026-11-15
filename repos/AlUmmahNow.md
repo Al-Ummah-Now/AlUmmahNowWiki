@@ -235,7 +235,7 @@ Open: R2 backfill of existing videos (waiting for a cost report), and the remain
 | [Live streaming plan, Phases 1–3 (`[Phase 2] Task 2.N` issues)](../epics/LIVE-PHASES-live-streaming-phases.md) | in progress |
 | [Production video player (themed, token-driven)](../epics/AUN-VIDEO-PLAYER-production-video-player.md) | in progress |
 | [Channel sections (Home tab)](../epics/AUN-CHANNEL-SECTIONS-channel-sections.md) | shipped |
-| [Social media management for channels](../epics/AUN-SOCIAL-social-media-management.md) | planned |
+| [Social media management for channels](../epics/AUN-SOCIAL-social-media-management.md) | in progress |
 | [Web Creator Studio](../epics/AUN-CREATOR-STUDIO-web-creator-studio.md) | shipped |
 | [Per-channel roles](../epics/AUN-CHANNEL-ROLES-channel-roles.md) | in progress |
 | [Channel claim, transfer and self-service account move](../epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md) | planned |

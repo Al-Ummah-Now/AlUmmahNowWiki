@@ -1600,6 +1600,43 @@
         "AlUmmahNowAndroid#24"
       ],
       "note": "Videos admin → Mobile apps holds the Apple Team ID, bundle ids and Android fingerprints; the videos site serves apple-app-site-association and assetlinks.json from them (nothing until they are filled in), and the passkey files on alummahnow.net merge them. App Attest and Play Integrity checks are built and off until configured; Android Studio and Admin send the proof."
+    },
+    {
+      "id": "social-auto-post",
+      "name": {
+        "en": "Auto-post to X, Telegram, Bluesky and Mastodon",
+        "ar": "النشر التلقائي على X وتيليجرام وBluesky وماستودون"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-SOCIAL-social-media-management.md",
+      "prs": [
+        "AlUmmahNow#1396",
+        "AlUmmahNow#1402"
+      ],
+      "note": "Channels connect accounts in Studio → Social and choose what to post (videos, Shorts, live, community posts) in English or Arabic. Delivery is queued with retry, failures show in Studio and on the admin Errors page. Admins set the X spend cap (default $0). No Meta networks (SM-6)."
+    },
+    {
+      "id": "social-scheduler-tools",
+      "name": {
+        "en": "Feeds, link previews, webhooks and share kit for scheduler tools",
+        "ar": "خلاصات ومعاينات روابط وWebhooks وحزمة مشاركة لأدوات الجدولة"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/AUN-SOCIAL-social-media-management.md",
+      "prs": [
+        "AlUmmahNow#1396",
+        "AlUmmahNow#1402"
+      ],
+      "note": "RSS feeds per channel, oEmbed for videos and channels, signed webhooks, a Studio share kit and a help page for Hootsuite, Buffer, Zapier, Make and IFTTT."
     }
   ]
 }
