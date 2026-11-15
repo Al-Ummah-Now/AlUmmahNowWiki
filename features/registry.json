@@ -113,6 +113,25 @@
       ]
     },
     {
+      "id": "browser-notifications",
+      "name": {
+        "en": "Browser notifications",
+        "ar": "إشعارات المتصفح"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/E09-native-platform-foundations.md",
+      "prs": [
+        "AlUmmahNow#1371",
+        "AlUmmahNow#1375",
+        "AlUmmahNow#1376"
+      ],
+      "note": "Web Push: notifications on the device even when the site is closed, turned on per browser in notification settings. Waits for the VAPID key pair in Secrets Store for each environment."
+    },
+    {
       "id": "embeds",
       "name": {
         "en": "Embeddable player and share dialog",
