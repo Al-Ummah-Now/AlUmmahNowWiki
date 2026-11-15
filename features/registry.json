@@ -302,6 +302,24 @@
       "note": "A Tiers item in the admin menu (AlUmmahNow#1363) is in review. Live streaming per tier (allowed, hours a month, streams at once, longest stream) is in review in AlUmmahNow#1373."
     },
     {
+      "id": "tier-requests",
+      "name": {
+        "en": "Tier requests: the upgrade page",
+        "ar": "طلب المستويات: صفحة الترقية"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-TIER-REQUESTS-tier-requests.md",
+      "prs": [
+        "AlUmmahNow#1415"
+      ],
+      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier. Held for the owner's screenshot review."
+    },
+    {
       "id": "creator-studio",
       "name": {
         "en": "Web Creator Studio",

@@ -19,7 +19,7 @@ Each feature was inventing its own tiers: creator tiers, the [Epic 27](E27-plans
 
 - **One plans system.** [Creator tiers](CHAT-CREATOR-TIERS-creator-tiers.md) fold into Epic 27 plans, and every limit is an entitlement key. The default plan is renamed **Member** and grants no creator allowances.
 - **Watching is never gated.** Plans gate making, storing, processing and AI.
-- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). The recommendation is **B at launch, with C added once a payment provider is chosen ([P1](decisions.md#p1-first-paid-providers))**. There is no public free creator tier.
+- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). Option B now has a request page in front of it: [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (the Member tier, `/upgrade`, the admin queue). The recommendation is **B at launch, with C added once a payment provider is chosen ([P1](decisions.md#p1-first-paid-providers))**. There is no public free creator tier.
 - **Ladder (seeds):** Member, Creator, Creator Plus, Creator Pro, Institution, Staff. A viewer Supporter plan stays deferred ([D4](decisions.md#d4-monetisation)). Scholars hold a role, not a plan; they get a sponsored Creator Plus grant.
 - **Add-ons** are additive grants: caption minutes, storage, upload hours, live hours, X posts.
 - **Payments:** never Stripe. Candidates are listed but not decided. Lemon Squeezy, Gumroad and Polar are excluded because they run on Stripe.

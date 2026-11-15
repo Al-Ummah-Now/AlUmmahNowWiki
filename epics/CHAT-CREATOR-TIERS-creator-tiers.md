@@ -16,6 +16,8 @@
 
 Normal users can't upload or create channels until subscriptions exist; admins assign None / Creator / Unlimited; super admins hold Unlimited.
 
+> Since [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (2026-11-14), "None" is a real tier, **Member**, with capability flags (uploads, channels, pages, requestable), and users can request a tier on `/upgrade`; admins decide in the videos admin's Tier requests queue.
+
 ## Decisions and constraints
 
 - [O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers): Invite-only uploads with admin-assigned creator tiers (decided)
