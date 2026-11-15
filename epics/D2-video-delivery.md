@@ -37,7 +37,7 @@ Cloudflare Support confirmed in writing that the setup is allowed. HLS stored in
 - [D3](D3-live-provider.md), the live provider. Decided 2026-11-11: both providers, round-robin.
 - [Epic 9](E09-native-platform-foundations.md) story 9.6, playback authorization: the R2 signed-URL adapter can now be written.
 - [Epic 14](E14-offline-listen.md), offline downloads: download URLs and licences can be built on R2.
-- [D11](decisions.md#d11-who-encodes-renditions), who encodes renditions. Its recommendation was waiting for D2.
+- [D11](decisions.md#d11-who-encodes-renditions), who encodes renditions: decided 2026-11-14 (server by default, optional desktop pre-encode verified server-side).
 - [E4](decisions.md#e4-delivery-cost-for-embeds), the delivery cost of embeds ([Epic 25](E25-sharing-embeds.md) story 25.9).
 - [M4](decisions.md#m4-csam-coverage-for-r2-served-media): CSAM Scanning Tool coverage for media served from R2 now matters for video too.
 

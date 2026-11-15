@@ -17,8 +17,8 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [D7](decisions.md#d7-prayer-time-data) | Prayer-time data | **open** | 2026-11-08 | 21.1 |
 | [D8](decisions.md#d8-brand-naming) | Brand naming | **open** | 2026-11-08 | Epics 10, 12, 15, 20 |
 | [D9](decisions.md#d9-linux-ui-toolkit-for-c) | Linux UI toolkit for C# | **decided** | 2026-11-08 | Epics 16, 19 (Linux) |
-| [D10](decisions.md#d10-transcription-location) | Transcription location | **open** | 2026-11-08 | 18.9, 19.4, 30.4, 28.7 |
-| [D11](decisions.md#d11-who-encodes-renditions) | Who encodes renditions | **open** | 2026-11-08 | 19.3 |
+| [D10](decisions.md#d10-transcription-location) | Transcription location | **decided** | 2026-11-14 | 18.9, 19.4, 30.4, 28.7 |
+| [D11](decisions.md#d11-who-encodes-renditions) | Who encodes renditions | **decided** | 2026-11-14 | 19.3 |
 | [T1](decisions.md#t1-plans-are-admin-managed) | Plans are admin-managed | **decided** | 2026-11-07 | Epic 27, every tiered feature |
 | [T2](decisions.md#t2-billing-provider) | Billing provider | **decided** | 2026-11-07 | 27.7, Epic 24 |
 | [P1](decisions.md#p1-first-paid-providers) | First paid providers | **open** | 2026-11-07 | 27.7 |
@@ -176,9 +176,11 @@ GTK 4 + libadwaita via Gir.Core 0.8.1, not Avalonia: the Desktop CI spike found 
 
 ### D10: Transcription location
 
-**Status:** open · **Date:** 2026-11-08
+**Status:** decided · **Date:** 2026-11-14
 
-Recommendation: hybrid (on-device desktop and short mobile clips; server-side Workers AI for long uploads and web).
+**Decision (owner, 2026-11-14: "desktop decisions we do it", accepting the recommendation):** transcription runs on the server by default (Workers AI Whisper turbo plus the Quran layer). The desktop Studio also offers free on-device transcription (Core's whisper.cpp) as an option. Both produce the same caption draft, which the creator edits and publishes.
+
+Earlier recommendation (2026-11-08): hybrid (on-device desktop and short mobile clips; server-side Workers AI for long uploads and web).
 
 Evidence (2026-11-11, [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md)):
 - **Server:** Workers AI Whisper turbo costs $0.00051 per minute. Raw WER was 6% on Quran recitation and 13% on English.
@@ -191,9 +193,11 @@ Evidence (2026-11-11, [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md))
 
 ### D11: Who encodes renditions
 
-**Status:** open · **Date:** 2026-11-08
+**Status:** decided · **Date:** 2026-11-14
 
-Recommendation: server by default; desktop pre-encode as an option once D2 settles. D2 is now settled.
+**Decision (owner, 2026-11-14: "desktop decisions we do it", accepting the recommendation):** the server encodes renditions by default. The desktop Studio can pre-encode renditions locally as an option; the server verifies them before use and falls back to its own encode when they fail verification.
+
+Earlier recommendation (2026-11-08): server by default; desktop pre-encode as an option once D2 settles. D2 is now settled.
 
 **Blocks / affects:** 19.3
 

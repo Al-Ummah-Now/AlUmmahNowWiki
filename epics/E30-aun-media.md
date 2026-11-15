@@ -36,8 +36,8 @@ Full story text and acceptance criteria are in the source spec. Bilingual (en/ar
 ## Decisions and constraints
 
 - [D6](decisions.md#d6-fonts): Fonts (open)
-- [D10](decisions.md#d10-transcription-location): Transcription location (open)
-- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (open)
+- [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
+- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (decided 2026-11-14: server by default, optional desktop pre-encode verified server-side)
 
 Platform-wide constraints that apply to every epic:
 

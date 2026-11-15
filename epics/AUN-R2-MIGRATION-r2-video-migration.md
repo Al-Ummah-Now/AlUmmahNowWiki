@@ -30,7 +30,7 @@ Infrastructure, transcoding into R2 and migration off Bunny, including the legac
 
 - [D2](decisions.md#d2-video-delivery): Video delivery (decided), see the [D2 page](D2-video-delivery.md)
 - [D3](decisions.md#d3-live-provider): Live provider (decided 2026-11-11: both, round-robin), see the [D3 page](D3-live-provider.md)
-- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (open)
+- [D11](decisions.md#d11-who-encodes-renditions): Who encodes renditions (decided 2026-11-14: server by default, optional desktop pre-encode verified server-side)
 
 Platform-wide constraints that apply to every epic:
 
