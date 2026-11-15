@@ -25,11 +25,11 @@ CI/CD, signing, betas, staged rollouts, store listings and monitoring for every 
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 23.1 | CI/CD per platform | Android: tag → signed bundles, Play internal track per app and Amazon Appstore edit, each skipped with a notice until the owner adds its secrets and IDs (AlUmmahNowAndroid#24, `docs/RELEASE.md`). Apple (all apps) and Desktop (MSIX, Microsoft Store): NAT-REL in progress |
+| 23.1 | CI/CD per platform | Android: tag → signed bundles, Play internal track per app and Amazon Appstore edit, each skipped with a notice until the owner adds its secrets and IDs (AlUmmahNowAndroid#24, `docs/RELEASE.md`). Apple: all five apps (Viewer iPhone/iPad, Apple TV, Mac; Studio iPhone/iPad, Mac) signed from secrets with version and build from the tag, TestFlight and optional listing upload (AlUmmahNowApple#38). Desktop: MSIX for the Windows viewer and Studio (vX.Y.Z → X.Y.Z.0), Microsoft Store draft submission, Samsung TPK (AlUmmahNowDesktop#44) |
 | 23.2 | Signing & store accounts (needs D-U-N-S) | Waits on the owner: [store release checklist](../guides/store-release-checklist.md). Universal links, App Links and attestation are set in videos admin → Mobile apps |
-| 23.3 | Beta channels | Android: Play internal track (AlUmmahNowAndroid#24). Apple: TestFlight for Studio. Each skips until its account exists |
+| 23.3 | Beta channels | Android: Play internal track (AlUmmahNowAndroid#24). Apple: TestFlight for every iPhone, iPad and Apple TV app (AlUmmahNowApple#38). Microsoft Store: draft submissions (AlUmmahNowDesktop#44). Each skips until its account exists |
 | 23.4 | Staged rollouts + kill switches |  |
-| 23.5 | Store listings en/ar | Android: listings in en/ar for viewer, TV and Studio, checked in CI; data safety answers from the code; store screenshots generated from the app screens (AlUmmahNowAndroid#24). Apple and Desktop: NAT-REL in progress |
+| 23.5 | Store listings en/ar | Android: listings in en/ar for viewer, TV and Studio, checked in CI; data safety answers from the code; store screenshots generated from the app screens (AlUmmahNowAndroid#24). Apple: fastlane listings en-US/ar-SA, App Privacy answers from the code, XCUITest screenshots (AlUmmahNowApple#38). Desktop: Microsoft Store listings en-us/ar-sa, privacy answers from the code, screenshots from the apps in demo mode (AlUmmahNowDesktop#44) |
 | 23.6 | Monitoring (Sentry, QoE gates) |  |
 | 23.7 | Accessibility & RTL QA matrix |  |
 

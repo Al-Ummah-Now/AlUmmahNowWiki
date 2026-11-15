@@ -78,13 +78,20 @@ Play Console, once per app (`net.alummahnow.app`, `net.alummahnow.tv`, `net.alum
 
 ### AlUmmahNowDesktop
 
-| Secret | Where to get it | Used for |
+Full steps: [docs/RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/blob/main/docs/RELEASE.md). Every value is optional; a missing one skips its step with a notice.
+
+| Secret / variable | Where to get it | Used for |
 |---|---|---|
-| Partner Center publisher id and package identity | Partner Center → the product → Product identity (`Package/Identity/Name`, `Publisher`) | Store-signed MSIX for the Microsoft Store (no certificate needed for Store builds) |
-| Code-signing certificate for direct downloads | Azure Trusted Signing (tenant id, client id, secret) or an OV/EV certificate in a cloud HSM | Signed MSI and exe outside the Store |
+| Variables `WINDOWS_PUBLISHER`, `WINDOWS_VIEWER_PACKAGE_NAME`, `WINDOWS_STUDIO_PACKAGE_NAME` (and `WINDOWS_PUBLISHER_DISPLAY_NAME` only if it is not "Al Ummah Now") | Partner Center: reserve **Al Ummah Now** and **Al Ummah Now Studio** (New product → MSIX or PWA app), then each app's Product management → Product identity: `Package/Identity/Publisher` (`CN=…`) and `Package/Identity/Name` | The MSIX identity (a placeholder until set) |
+| Variables `MSSTORE_VIEWER_PRODUCT_ID`, `MSSTORE_STUDIO_PRODUCT_ID` | The Store ID (`9N…`) of each app | Which product the draft submission goes to |
+| `MSSTORE_TENANT_ID`, `MSSTORE_SELLER_ID`, `MSSTORE_CLIENT_ID`, `MSSTORE_CLIENT_SECRET` | Partner Center → Account settings → User management → Microsoft Entra applications → add one with the Manager role → Add new key (tenant id, client id, the key's value, shown once, up to 2 years). Seller ID: Legal info → Developer | Each full release tag puts the MSIX and listing into a **draft** submission |
+| Variable `MSSTORE_PRIVACY_POLICY_URL` | The public privacy policy page | Required by the Store, because both apps send personal information |
+| Variable `MSSTORE_COMMIT` (optional) | `true` | Submit the draft for certification automatically instead of leaving it for you |
+| `WINDOWS_CERT_PFX_BASE64`, `WINDOWS_CERT_PASSWORD` (optional) | An OV code-signing certificate exported as a password-protected PFX, `base64 -i codesign.pfx` | Signed MSIX in the GitHub release (the Store copy needs none) |
+| `TIZEN_AUTHOR_P12_BASE64`, `TIZEN_AUTHOR_PASSWORD`, `TIZEN_DISTRIBUTOR_P12_BASE64`, `TIZEN_DISTRIBUTOR_PASSWORD` | Samsung Seller Office account; Tizen Studio Certificate Manager → Samsung TV profile (distributor Partner or Public) with your test TV's DUID; `base64 -i` each `.p12` | A Samsung-signed TPK. Seller Office has no upload API, so the TPK is uploaded by hand |
 | `ADMIN_WINDOWS_CERT_PFX_BASE64`, `ADMIN_WINDOWS_CERT_PASSWORD`, `ADMIN_WINDOWS_PUBLISHER`, `ADMIN_WINDOWS_PACKAGE_NAME`, `ADMIN_RELEASE_BUCKET` | Internal Admin app's private MSIX channel ([ADMIN_WINDOWS](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/blob/main/docs/ADMIN_WINDOWS.md)) | Admin for Windows |
 
-The exact secret names for the Store upload steps are listed in each repo's release doc.
+The first Microsoft Store submission of each app is made by hand in Partner Center (pricing Free and markets; category Photo & video; privacy and IARC answers and the `runFullTrust` justification from `store/microsoft/privacy.md`; the MSIX from the run's `msix-*` artifact; en-us and ar-sa listings from the repo and screenshots from the Store screenshots workflow). After that CI uploads each release. Flathub, Snap and winget are documented, not automated.
 
 ## 5. Cloudflare: one worker secret
 

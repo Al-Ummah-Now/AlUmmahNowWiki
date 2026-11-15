@@ -1694,6 +1694,26 @@
         "AlUmmahNow#1399"
       ],
       "note": "Admins pick a scope, see the estimated cost from real sizes, then start a queued, resumable copy, transcode and verify per video with a budget cap. Verified videos can play from R2 first (per video, channel or everywhere), and a legacy Bunny library can be retired after a grace period. The page is held for the owner's screenshot review."
+    },
+    {
+      "id": "native-store-release",
+      "name": {
+        "en": "Store releases for the native apps",
+        "ar": "إصدارات التطبيقات في المتاجر"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "guides/store-release-checklist.md",
+      "prs": [
+        "AlUmmahNowApple#38",
+        "AlUmmahNowApple#40",
+        "AlUmmahNowApple#41",
+        "AlUmmahNowAndroid#24",
+        "AlUmmahNowDesktop#44"
+      ],
+      "note": "Release pipelines, en/ar store listings, privacy answers and store screenshots for iPhone, iPad, Apple TV, Mac, Android, Android TV, Fire TV, Windows and Samsung TV are built. Nothing is in a store yet: each upload waits for the owner's accounts and secrets (see the store release checklist)."
     }
   ]
 }
