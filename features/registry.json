@@ -1695,7 +1695,13 @@
       "prs": [
         "AlUmmahNow#1386",
         "AlUmmahNowCore#43",
-        "AlUmmahNowApple#36"
+        "AlUmmahNowApple#36",
+        "AlUmmahNowCore#44",
+        "AlUmmahNowApple#42",
+        "AlUmmahNowApple#43",
+        "AlUmmahNowDesktop#43",
+        "AlUmmahNowDesktop#45",
+        "AlUmmahNowDesktop#46"
       ],
       "note": "Optional (D11): Studio encodes the server's ladder locally and uploads it; the server checks every rung against the source and encodes itself when anything is off."
     },
@@ -1714,7 +1720,13 @@
       "prs": [
         "AlUmmahNow#1386",
         "AlUmmahNowCore#43",
-        "AlUmmahNowApple#36"
+        "AlUmmahNowApple#36",
+        "AlUmmahNowCore#44",
+        "AlUmmahNowApple#37",
+        "AlUmmahNowApple#42",
+        "AlUmmahNowDesktop#43",
+        "AlUmmahNowDesktop#45",
+        "AlUmmahNowDesktop#46"
       ],
       "note": "Server transcription by default; free on-device whisper.cpp as an option (D10). On-device drafts go through the Quran layer and spend no caption minutes."
     },
@@ -1731,7 +1743,11 @@
       "wiki": "epics/E19-studio-desktop.md",
       "prs": [
         "AlUmmahNowCore#43",
-        "AlUmmahNowApple#36"
+        "AlUmmahNowApple#36",
+        "AlUmmahNowCore#44",
+        "AlUmmahNowApple#42",
+        "AlUmmahNowApple#43",
+        "AlUmmahNowDesktop#46"
       ],
       "note": "Trim, cut and join on Core's edit list, with undo and export."
     },
@@ -1747,7 +1763,10 @@
       ],
       "wiki": "epics/E19-studio-desktop.md",
       "prs": [
-        "AlUmmahNowApple#36"
+        "AlUmmahNowApple#36",
+        "AlUmmahNowApple#39",
+        "AlUmmahNowDesktop#43",
+        "AlUmmahNowDesktop#45"
       ],
       "note": "Daily metrics over any range, retention curve and CSV export."
     },
@@ -1765,7 +1784,10 @@
       "wiki": "epics/E19-studio-desktop.md",
       "prs": [
         "AlUmmahNow#1386",
-        "AlUmmahNowApple#36"
+        "AlUmmahNowApple#36",
+        "AlUmmahNowApple#39",
+        "AlUmmahNowDesktop#43",
+        "AlUmmahNowDesktop#45"
       ],
       "note": "One brand kit and one shared asset library per account, used by all its channels and their teams."
     },
