@@ -7,7 +7,7 @@
 | **ID** | `AUTH-R2` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2024-12-01 |
+| **Last updated** | 2026-11-15 |
 
 > PKCE, client management, introspection, native clients (9.1), device flow (9.2) shipped; SAML/LDAP not built. The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 
@@ -37,7 +37,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- None found on GitHub or in the repos.
+- 2026-11-15, AUTH-1: public clients must send PKCE on `/authorize` ([Auth#392](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/392)); confidential clients authenticate with their secret on the code and refresh grants ([openauth#52](https://github.com/Al-Ummah-Now/openauth/pull/52), [Auth#394](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/394), [Auth#395](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/395)); `/select-account` finds the client by id ([Auth#391](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/391)); `/password/change` is no longer an open redirect ([Auth#384](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/384)). See [Authentication](../guides/authentication.md#signing-in).
 
 ## Open questions
 

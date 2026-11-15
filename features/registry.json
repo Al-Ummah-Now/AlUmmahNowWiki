@@ -1349,9 +1349,58 @@
       "prs": [
         "AlUmmahNowAuth#378",
         "AlUmmahNow#1361",
-        "AlUmmahNowCMS#129"
+        "AlUmmahNowCMS#129",
+        "AlUmmahNowAuth#384",
+        "AlUmmahNowAuth#385",
+        "AlUmmahNowAuth#391",
+        "AlUmmahNowAuth#392",
+        "AlUmmahNowAuth#394",
+        "AlUmmahNowAuth#395",
+        "openauth#52"
       ],
-      "note": "The Auth side (admin scope for machine calls, no fallback session key) is live since Auth run 43646468455, and the CMS ES256 pin since CMS v2026.11.14. The videos API and admin fixes (AlUmmahNow#1361) are merged and wait for a release tag."
+      "note": "The Auth side (admin scope for machine calls, no fallback session key) is live since Auth run 43646468455, and the CMS ES256 pin since CMS v2026.11.14. The videos API and admin fixes (AlUmmahNow#1361) are merged and wait for a release tag. AUTH-1 (2026-11-15): PKCE for public clients, the auth admin as a confidential client (its secret is required once Auth#395 ships), no open redirect on /password/change, no PII in sign-in logs; these ride the next Auth production release."
+    },
+    {
+      "id": "signing-key-rotation",
+      "name": {
+        "en": "Signing-key rotation without signing anyone out",
+        "ar": "تدوير مفاتيح التوقيع دون إخراج أي أحد"
+      },
+      "status": "rolling",
+      "apps": [
+        "auth",
+        "auth-admin",
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "guides/authentication.md",
+      "prs": [
+        "AlUmmahNowAuth#388",
+        "AlUmmahNowAuth#389",
+        "AlUmmahNowAuth#390",
+        "AlUmmahNow#1394"
+      ],
+      "note": "Rotation is merged in Auth; the Admin > Signing keys page (Auth#390) waits for the owner's screenshots. The 90-day schedule is on for dev and QA; stage and production turn it on after the AlUmmahNow release with AlUmmahNow#1394 (verifiers refetch JWKS on an unknown key)."
+    },
+    {
+      "id": "device-sign-out",
+      "name": {
+        "en": "Sign out one device",
+        "ar": "الخروج من جهاز واحد"
+      },
+      "status": "rolling",
+      "apps": [
+        "auth",
+        "auth-admin",
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "guides/authentication.md",
+      "prs": [
+        "AlUmmahNowAuth#386",
+        "AlUmmahNow#1408"
+      ],
+      "note": "Auth revokes one session or native install (Auth#386). The videos services checking the per-sign-in entry, and the staff device sign-out calling Auth, wait for an AlUmmahNow release."
     },
     {
       "id": "passkeys",
