@@ -7,7 +7,7 @@
 | **ID** | `E10` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-14 |
 
 > 10.1 tokens done, and since 2026-11-09 extended with four themes and theme packages (see [Themes](AUN-THEMES-themes.md)); 10.2 done except the font choice (D6); 10.3/10.4/10.7 components not started; 10.5 needs a designer; 10.6 web favicons now use the owner's art, while store art and native app icons still need a designer.
 
@@ -32,6 +32,92 @@ One design language implemented natively per platform plus web.
 | 10.7 | Component catalogues | Not started. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
+
+## Header (every app)
+
+The one header spec. Change it here and in the code together, never in one app.
+
+One header in every app: videos web, videos admin, www, the developer site (alummahnow.dev),
+scholar sites, status, CMS admin, auth
+admin, profile and the sign-in pages (owner, 2026-11-14: "UNIFY"; every difference between apps is
+a bug). Based on www and the videos web, which the owner reviewed. The repo copy is AlUmmahNow
+`docs/design/NAV.md` ("Header"); the two say the same thing.
+
+**Shared code.** AlUmmahNow `packages/fanous-tokens/nav/aun-nav.css` styles it and `nav/header.js` builds the markup (brand,
+environment badge, app links, language, light/dark, Sign in). Worker, Hono and Astro apps render
+the builders, or a byte-identical copy checked by the repo's Fanous sync check. React apps render
+the same elements as JSX and their tests compare the result with the builders.
+
+**Bar** (`.aun-header`, `.aun-header-row` inside it when centred in a max width):
+- 4rem (64px) tall; 3.5rem (56px) below 640px. Sticky at the top.
+- Background `--aun-header-bg` (an app's header material) else `--fanous-c-nav-bg`; 1px bottom
+  border `--fanous-c-nav-border`; text `--fanous-c-nav-text`.
+- Padding-inline 16px (12px below 640px). Gap between groups 16px, 12px below 1024px, 8px below
+  640px. Inside the tools group 8px (4px below 640px).
+
+**Order** (reading order; it mirrors in Arabic):
+
+| # | Slot | Class | Notes |
+|---|---|---|---|
+| 1 | Drawer toggle | `.aun-icon-btn` | Only apps with a side rail or drawer. 40×40. |
+| 2 | Brand | `.aun-brand` | Logo, wordmark, app name (below). Links to the app's own home. |
+| 3 | Environment badge | `.aun-env` | "QA" / "STAGE" right after the brand; never in production. |
+| 4 | The app's own links or search | `.aun-header-primary` | www links, the videos/CMS search, the admin ⌘K search. Takes the free space. |
+| 5 | App actions | in `.aun-header-tools` | Upload, notifications, Create/New. 2.5rem tall pills. |
+| 6 | App links | `.aun-apps` › `.aun-app` | Website and Videos: the public sites other than this one. |
+| 7 | Language | `.aun-lang` | The other language's own name. |
+| 8 | Light/dark | `.aun-icon-btn.aun-mode` | Sun in dark mode, moon in light. |
+| 9 | Account | `.aun-acct-btn`, or `.aun-signin` | Signed out: a solid "Sign in", never hidden in a menu. |
+
+**Order of language and light/dark (settled 2026-11-14):** language first, then sun/moon, in every app (www, the dev site and every other header). This matches the owner's ask, a language button "next to the sun/moon button", and NAV.md; www and the dev site, which had sun/moon first, change to match.
+
+Language and light/dark sit in the header in every app, next to each other in this order. They are
+no longer at the foot of a side rail. There is no language dropdown or select anywhere: two
+languages, one button.
+
+**Controls.** Every control is 2.5rem (40px) tall, fully round, 1px `--fanous-c-nav-search-border`,
+transparent, text 15px/500 `--fanous-c-nav-text`, hover `--fanous-c-nav-hover`. Icons are 18px.
+Focus everywhere is a 2px outline in `--fanous-c-nav-active-text`, offset 2px.
+- **Brand.** The owner's logo (`/brand/logo-64.webp`), round, 36px (32px below 640px); 10px to the
+  text. Wordmark "Al Ummah Now" / "الأمة الآن", 16px/700 (Arabic 18px). Every app but www adds a
+  second line with its name, 12px/500 `--fanous-c-nav-icon`: Videos, Admin, Status, Content, Accounts
+  admin, Account. Hover `--fanous-c-nav-hover`, radius 10px. Below 400px the text is hidden and the
+  logo stays (the text stays the link's name).
+- **Environment badge.** 20px tall pill, 11px/700, letter-spacing 0.06em, `--fanous-c-nav-active-text`
+  background with `--fanous-c-nav-bg` text. Its name is "QA environment" / "بيئة الاختبار QA".
+- **App links.** The app icon (`/aun-nav/icons/<id>.webp`, 22px round) and the name ("Website" /
+  "الموقع", "Videos" / "المرئيات"). Below 1280px the icon alone, at 40×40; the name stays the
+  accessible name. Below 640px they leave the bar; on phones they are in the account menu's "Al Ummah
+  Now apps", the drawer, or (apps with neither) the page footer.
+- **Language** (`.aun-lang`). Shows the other language's own name in its own `lang`
+  (`<span lang="ar">العربية</span>`), `hreflang` on the link. Its name starts with the action in the
+  page's language and contains the visible label: "Switch to Arabic: العربية" /
+  "التبديل إلى الإنجليزية: English". No aria-label on the language button: an aria-label without the visible
+  label fails WCAG 2.5.3 (axe `label-content-name-mismatch`, the status page's Arabic bug). Every
+  app's header axe check runs in English and Arabic with that rule turned on (it is off by default). It keeps the current page and query, each app's way of storing
+  the choice (URL prefix, `?lang=`, cookie) and the RTL flip; hreflang alternates are not touched.
+- **Light/dark** (`.aun-icon-btn.aun-mode`). One button, no menu and no "System" option (owner
+  decision 2026-11-13): Lucide 0.487's sun and moon from `nav/mode-toggle.js`, the moon in light mode
+  and the sun in dark. The name is the action ("Switch to light mode" / "التبديل إلى الوضع الفاتح"),
+  repeated in `title`, no aria-pressed.
+- **Account** (`.aun-acct-btn`). See "Account button". The name is hidden below 768px.
+- **Sign in** (`.aun-signin`). Solid pill, `--fanous-c-nav-active-text` background, `--fanous-c-nav-bg`
+  text, 15px/600, padding-inline 16px.
+
+**Phone** (below 640px): 56px bar, the app links leave the bar, the account name is hidden (from
+768px), the brand logo shrinks to 32px; below 400px only the logo shows. Apps with a long primary
+area (www links, search) move it to its own row or an icon that opens a sheet; the tools group never
+wraps or hides the language, light/dark or account controls.
+
+There is one sign-out entry, inside the account menu. The header has no separate "Log out" button.
+
+
+**Drift checks.** Every repo outside AlUmmahNow vendors the shared files (`aun-nav.css`, `header.js`,
+`mode-toggle.js` and their types) byte for byte at a pinned commit, with a hash per file in a lock,
+and CI fails when a copy differs: www, the dev site and scholar sites `npm run check:fanous`
+(AlUmmahNowUI), the CMS `npm run check:fanous`, Auth `pnpm nav:check`. React headers (videos web,
+videos admin, Auth admin) have unit tests that render the header pieces and compare them with
+`nav/header.js`. Every app's header axe check runs in English and Arabic.
 
 ## Decisions and constraints
 
