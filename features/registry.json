@@ -1802,9 +1802,10 @@
       "wiki": "epics/E19-studio-desktop.md",
       "prs": [
         "AlUmmahNowCore#46",
-        "AlUmmahNowDesktop#48"
+        "AlUmmahNowDesktop#48",
+        "AlUmmahNowApple#44"
       ],
-      "note": "Centred titles and bilingual lower thirds in the brand kit's colours, template and logo, previewed over the picture and drawn into the export on Linux and Windows. Arabic shapes right to left inside the title; the timeline still runs left to right."
+      "note": "Centred titles and bilingual lower thirds in the brand kit's colours, template and logo, previewed over the picture and drawn into the export on Linux, Windows and Mac. Arabic shapes right to left inside the title; the timeline still runs left to right."
     },
     {
       "id": "studio-desktop-analytics",
