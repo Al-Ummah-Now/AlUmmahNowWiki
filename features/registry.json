@@ -1029,6 +1029,22 @@
       ]
     },
     {
+      "id": "cost-dashboard-alerts",
+      "name": {
+        "en": "Costs page with budget and spend alerts",
+        "ar": "صفحة التكاليف وتنبيهات الميزانية والإنفاق"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-COST-cost-monitoring.md",
+      "prs": [
+        "AlUmmahNow#1400"
+      ],
+      "note": "Videos admin → Costs: month to date against the budget, forecast, per product and per environment, top movers; budget, spike and weekly digest alerts by email (opt-in) and on the Errors page; super admins set a read-only Cloudflare token and optional Bunny and Resend keys there (encrypted, only the last 4 shown). Works with no token. Estimates at list prices."
+    },
+    {
       "id": "dev-site",
       "name": {
         "en": "alummahnow.dev, this site",
