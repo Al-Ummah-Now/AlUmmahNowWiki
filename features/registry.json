@@ -321,6 +321,25 @@
       ]
     },
     {
+      "id": "studio-comments-and-channel-pages",
+      "name": {
+        "en": "Studio Comments, channel pages in Studio and scholar articles",
+        "ar": "التعليقات في الاستوديو وصفحات القناة فيه ومقالات العلماء"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/AUN-CREATOR-STUDIO-web-creator-studio.md",
+      "prs": [
+        "AlUmmahNow#1382",
+        "AlUmmahNow#1388",
+        "AlUmmahNow#1369"
+      ],
+      "note": "One Comments inbox for a channel's video and post comments (Inbox, Held, Removed for 90 days; bulk approve, remove, restore, pin, heart; reply as the channel; per-channel blocks), moderated by channel role. Posts, Playlists, Customisation and Settings move into Studio with 301s from /settings/channel. Scholars get Write article and My articles. Channel editors and managers without a tier upload under the owner's tier."
+    },
+    {
       "id": "upload-resilience",
       "name": {
         "en": "Uploads that survive deploys, with rate limits",

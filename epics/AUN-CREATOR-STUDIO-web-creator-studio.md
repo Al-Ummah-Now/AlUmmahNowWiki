@@ -7,9 +7,9 @@
 | **ID** | `AUN-CREATOR-STUDIO` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-14 |
 
-> Spec merged ([#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476)); the Studio stack #478–#498 merged 2026-11-11 as [#498](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/498). Since then: bulk rename and edit ([#765](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/765), [#809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/809), [#812](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/812)), creator trash ([#764](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/764)), Studio Live ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)), and the Videos list from cache ([#794](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/794)). The native Studio apps are tracked in [Epic 18](E18-studio-mobile.md) and [Epic 19](E19-studio-desktop.md).
+> Spec merged ([#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476)); the Studio stack #478–#498 merged 2026-11-11 as [#498](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/498). Since then: bulk rename and edit ([#765](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/765), [#809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/809), [#812](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/812)), creator trash ([#764](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/764)), Studio Live ([#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872)), and the Videos list from cache ([#794](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/794)). In review (WEB-6, 2026-11-14): Studio **Comments** ([#771](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/771)): one inbox for a channel's video and post comments with Inbox, Held and Removed (kept 90 days), search and filters, bulk approve, remove, restore, pin and heart, replies as the channel and per-channel blocks, all by channel role (`comment.moderate`), backend [#1388](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1388); Posts, Playlists, Customisation and Settings moved into Studio with 301s from `/settings/channel/*` ([#772](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/772)) and the scholar Write article / My articles links ([#744](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/744)), [#1382](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1382), held for owner screenshots; channel editors and managers without a tier of their own upload under the owner's tier ([#759](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/759), [#1369](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1369)). The native Studio apps are tracked in [Epic 18](E18-studio-mobile.md) and [Epic 19](E19-studio-desktop.md).
 
 ## Goal
 
@@ -27,7 +27,8 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- Open PRs [AlUmmahNow#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476), [AlUmmahNow#482](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/482)
+- Merged: [AlUmmahNow#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476) (spec), [AlUmmahNow#498](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/498) (Studio stack)
+- Open (WEB-6): [AlUmmahNow#1382](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1382), [AlUmmahNow#1388](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1388), [AlUmmahNow#1369](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1369)
 
 ## Open questions
 
