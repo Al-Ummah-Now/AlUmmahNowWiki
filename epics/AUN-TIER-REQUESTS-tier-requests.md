@@ -49,8 +49,8 @@ everyone.
   - An invite stores the tier picked on the invite form. The picker starts on the current default; picking another tier needs creators:manage.
   - Otherwise sign-up writes the current default to the account (`POST /api/profiles`, `writeSignupTier`).
   - An account somehow without a row works as Free until the backfill writes it.
-- **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `creator_tier_settings.default_tier_id` (migration `0051`).
-- **Free («مجاني») is the one minimum tier.** Member (#1415) was renamed Free, keeping the id `member` so existing assignments carry over.
+- **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `creator_tier_settings.default_tier_id` (migration `0053`).
+- **Free («مجاني») is the one minimum tier.** Member (#1415) was renamed Free (migration `0053`), keeping the id `member` so existing assignments carry over.
   - Free is shipped, cannot be deleted, is not requestable (nobody requests the bottom tier) and is the default out of the box.
   - It is seeded with today's no-tier rights: no uploads, no channels, no pages, 0 caption minutes. Every limit stays editable.
   - The old "None" is gone (400 `invalid_default`); a stored `none` reads as Free.
@@ -60,7 +60,7 @@ everyone.
   - pending invites carry it: `tier_has_invites` with `invites`, counted by admin-api on `idx_creator_invites_tier` (migration `0030`);
   - it is the default: `tier_is_default`.
   The purge checks all three again.
-- **Rank.** The tier's rank (its "Rank" field; Unlimited is always on top) orders the Upgrade page and every tier picker. An upgrade is a tier ranked above the user's current one: `/upgrade` shows the current tier and the requestable tiers above it, and a request for a tier at or below it is refused.
+- **Rank.** Admins reorder the tiers on the Tiers page's Rank list (drag, or Move up / Move down from the keyboard). Each move saves at once, is audited (`creator-tier:order`) and has Undo. Free ships lowest, Creator in between and Unlimited on top; a new tier goes just below the top one. The rank orders the Upgrade page and every tier picker (admin, invites). An upgrade is a tier ranked above the user's current one: `/upgrade` shows the current tier and the requestable tiers above it, and a request for a tier at or below it is refused.
 - **Where it shows.** Users show their tier's name only. "Default" marks only the default tier on the Tiers list. The tier shows on the user's admin page, not in the channel view.
 - **Backfill.** After the release, `scripts/data/backfill-free-tier.ts --env qa|stage|production` writes Free to every account without a stored tier: dry run with counts first, then `--apply`. It walks the search D1 only, in keyset batches on indexed columns, never the Auth D1. It is idempotent.
 
@@ -86,6 +86,8 @@ everyone.
 7. `/upgrade` is `noindex`.
 
 ## Admin flow (videos admin → People → **Tier requests**)
+
+- **Allow tier requests** ([O35](decisions.md#o35-the-upgrade-page-mode-has-two-inputs)) sits at the top of the page. With no payment provider enabled it chooses between the request form and "Upgrades aren't available right now"; with one enabled the page sells whatever it says. The switch acts at once, is audited and has Undo.
 
 - **Nav and filters.** The nav item has a pending-count badge. Tabs: Pending (oldest first), Approved, Declined and All (newest first). "Show more" pages with a keyset cursor.
 - **Each card shows:**
