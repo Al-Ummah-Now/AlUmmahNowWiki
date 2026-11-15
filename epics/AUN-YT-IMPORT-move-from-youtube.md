@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-YT-IMPORT` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, web Studio, admin-web, admin-api, shared-types) |
-| **Status** | **building**: API, queue jobs, admin-api settings and the local-stack fake Google merged ([AlUmmahNow#1390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1390), not yet released); the Studio wizard ([#1391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1391)) and the admin settings page ([#1381](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1381)) are held for the owner's screenshots |
+| **Status** | **building**: API, queue jobs, admin-api settings and the local-stack fake Google merged ([AlUmmahNow#1390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1390), made-for-kids comments off in [#1417](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1417); not yet released); the Studio wizard ([#1391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1391)) and the admin settings page with the write-only client secret ([#1381](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1381)) are held for the owner's screenshots |
 | **Last updated** | 2026-11-14 |
 | **Origin** | Owner, 2026-11-14: "if creator want to switch from youtube to us they should be able, spec, design, build" |
 
@@ -107,7 +107,7 @@ Google returns to our API (`/api/youtube-import/oauth/callback`), which never fi
 
 ## Admin
 
-- **Videos admin → Platform settings → YouTube import** (`media:manage`): on/off, the Google OAuth **client ID**, whether the **client secret** is present in Secrets Store (`google-oauth-client-secret[-qa|-stage]`; never shown), the **redirect URI** to register in Google Cloud, the scopes, and the setup steps (Google Cloud project, YouTube Data API v3 enabled, OAuth consent screen, verification, quota). Every change is audited (`site_settings_log`, key `youtube-import:settings`).
+- **Videos admin → Platform settings → YouTube import** (`media:manage`): on/off, the Google OAuth **client ID**, the **client secret** (write only: "Add client secret" / "Replace" takes it once, it is never shown again; the page says Present or Missing, set here by whom and when, or read from the Secrets Store fallback; replacing it disconnects imports connected at that moment, whose refresh tokens are sealed under it), the **redirect URI** to register in Google Cloud, the scopes, and the setup steps (Google Cloud project, YouTube Data API v3 enabled, OAuth consent screen, verification, quota). Every change is audited (`site_settings_log`, keys `youtube-import:settings` and `youtube-import:client-secret`; the second records only present/missing and the source, never the value).
 - **Creators → tier:** "YouTube imports count against upload limits".
 - **Errors page:** a video whose import step failed after its retries (thumbnail, captions, playlist, metadata read) is a needs-action item (`youtube-import:item:{id}` / `youtube-import:{id}`) with **Retry**. Upload and transcode failures are flagged by the upload pipeline as for any upload.
 
@@ -127,7 +127,7 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 
 - **Queue** `al-ummah-now-yt-import[-qa|-stage]`, consumer in api-videos (batch 1, 5 retries with backoff, the shared DLQ `al-ummah-now-dlq[-env]`, whose dead letters the processor stores). Every step is idempotent (upserts keyed by import and YouTube id; a playlist is created once and remembered; a thumbnail or caption already applied is skipped), and resumable (listing walks one page per message and queues the next).
 - **Tables** (SEARCH_DB, migration `0041_youtube_import.sql`): imports, items, OAuth consent states and staged captions; `creator_tiers.import_counts_limits`.
-- **Settings** in `global_settings` `youtube-import/settings.json`; the client secret only through the Secrets Store binding `GOOGLE_OAUTH_CLIENT_SECRET`.
+- **Settings** in `global_settings` `youtube-import/settings.json`. The client secret set on the admin page is sealed like the cost dashboard's keys (COST-1): AES-256-GCM under a key derived (HKDF-SHA256) from `INTERNAL_API_KEY`, in `global_settings` `youtube-import/client-secret.json`, opened only by api-videos. Without one, the Secrets Store binding `GOOGLE_OAUTH_CLIENT_SECRET` is read (the placeholder `unset` counts as none).
 - **Running cost:** none when idle (a queue with no messages, no cron). Per import: a few hundred queue messages and the uploads' normal cost (originals and transcodes, as any upload). Within the [$500/month cap](decisions.md#o1-whole-platform-cost-cap).
 
 ## Tests
@@ -145,7 +145,7 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 ## Needs from the owner (outside the code)
 
 - A Google Cloud project with the YouTube Data API v3 enabled, an OAuth consent screen (sensitive scopes `youtube.readonly`, `youtube.force-ssl`) and a Web OAuth client whose redirect URIs are the ones the admin page lists per environment.
-- The client secret in Secrets Store as `google-oauth-client-secret` (production), `-qa` and `-stage`. The release creates each one with the placeholder value `unset` so deploys never fail; the feature stays off until the real secret replaces it. Then the client ID on the admin page and the switch on.
+- The client ID and client secret entered on the admin page (per environment), then the switch on. Nothing to paste in Cloudflare: the Secrets Store entries `google-oauth-client-secret[-qa|-stage]` exist only as a fallback, created by the release with the placeholder `unset`.
 - Google's OAuth verification of the consent screen before creators outside the test-user list can connect.
 
 ## Sources
