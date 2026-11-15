@@ -1714,6 +1714,25 @@
         "AlUmmahNowDesktop#44"
       ],
       "note": "Release pipelines, en/ar store listings, privacy answers and store screenshots for iPhone, iPad, Apple TV, Mac, Android, Android TV, Fire TV, Windows and Samsung TV are built. Nothing is in a store yet: each upload waits for the owner's accounts and secrets (see the store release checklist)."
+    },
+    {
+      "id": "multi-audio",
+      "name": {
+        "en": "Multiple audio tracks per video",
+        "ar": "عدة مسارات صوتية للمرئي الواحد"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-MULTI-AUDIO-multiple-audio-tracks.md",
+      "prs": [
+        "AlUmmahNow#1397",
+        "AlUmmahNow#1412"
+      ],
+      "note": "Creators add dubs, commentary or audio description in Studio (upload or a track already in the file); viewers pick one in the player's Audio menu, which starts on the site's language and remembers the choice. Tracks per video are set per creator tier; each track goes through review like uploads."
     }
   ]
 }
