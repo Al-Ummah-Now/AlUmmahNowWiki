@@ -429,6 +429,23 @@
       "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review."
     },
     {
+      "id": "transcript-search",
+      "name": {
+        "en": "Transcript search",
+        "ar": "البحث في نصوص المرئيات"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/AUN-CAPTIONS-transcription-translation.md",
+      "prs": [
+        "AlUmmahNow#1401"
+      ],
+      "note": "Search finds where a video says something in its published captions and opens it at that time; Quran recitation is never indexed."
+    },
+    {
       "id": "community-rules",
       "name": {
         "en": "Published community rules",
