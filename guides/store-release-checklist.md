@@ -22,7 +22,7 @@ Store submission for review stays a person's click in each console. The pipeline
 
 | App | Apple bundle id | Android package |
 |---|---|---|
-| Viewer | `net.alummahnow.viewer` (Mac `net.alummahnow.viewer.mac`) | `net.alummahnow.app` (TV and Fire TV: `net.alummahnow.tv`) |
+| Viewer | `net.alummahnow.viewer` (Mac `net.alummahnow.viewer.mac`, Apple TV `net.alummahnow.viewer.tv`) | `net.alummahnow.app` (TV and Fire TV: `net.alummahnow.tv`) |
 | Studio | `net.alummahnow.studio` (Mac `net.alummahnow.studio.mac`) | `net.alummahnow.studio` |
 | Admin (internal) | `net.alummahnow.admin` (Mac `net.alummahnow.admin.mac`) | `net.alummahnow.admin` |
 
@@ -47,11 +47,20 @@ The page's "What the videos site serves" card shows the exact files a save produ
 
 ### AlUmmahNowApple
 
-| Secret | Where to get it | Used for |
+Full steps: [docs/OWNER_INPUTS.md](https://github.com/Al-Ummah-Now/AlUmmahNowApple/blob/main/docs/OWNER_INPUTS.md) and [docs/RELEASING.md](https://github.com/Al-Ummah-Now/AlUmmahNowApple/blob/main/docs/RELEASING.md). Until these exist a tag builds every app unsigned; each one turns its step on at the next tag.
+
+| Secret / variable | Where to get it | Used for |
 |---|---|---|
-| `APPLE_TEAM_ID` | Same Team ID as §3 | Signing, export options |
-| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | App Store Connect → Users and Access → Integrations → App Store Connect API → generate a key with the App Manager role. Paste the whole `.p8` file text into `ASC_KEY_P8` (it downloads once) | Automatic signing in CI and the TestFlight upload |
-| `DEVELOPER_ID_P12`, `DEVELOPER_ID_P12_PASSWORD` | Xcode → Settings → Accounts → Manage Certificates → + Developer ID Application, then export it from Keychain Access as `.p12`; base64 the file into `DEVELOPER_ID_P12` | Signed and notarized Mac `.dmg` / `.zip` downloads |
+| `APPLE_TEAM_ID` | Same Team ID as §3 | Signing |
+| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | App Store Connect → Users and Access → Integrations → App Store Connect API → **Team Keys** → Generate API Key with **Admin** access. Key ID, the Issuer ID above the list, and the whole `.p8` file including its BEGIN and END lines (it downloads once) | Signing in CI, creating the identifiers on the first signed build, TestFlight uploads |
+| `DEVELOPER_ID_P12`, `DEVELOPER_ID_P12_PASSWORD` (optional) | A **Developer ID Application** certificate exported from Keychain Access as `.p12`, `base64 -i developer-id.p12`, and its export password. Only needed when the API key cannot use cloud-managed Developer ID signing | Signed and notarized Studio for Mac downloads |
+| Variable `APPLE_LISTINGS` (optional) | `viewer-ios,viewer-tv,viewer-mac,studio-ios` | From the next tag, CI uploads those apps' store texts and screenshots. Submitting for review stays a button in App Store Connect |
+
+Identifiers (Xcode creates them through the API key; otherwise developer portal → Identifiers), each with a `.qa` twin with the same capabilities: `net.alummahnow.viewer` and `net.alummahnow.viewer.mac` (Associated Domains), `net.alummahnow.viewer.tv` (none), `net.alummahnow.studio` (Associated Domains and **App Attest**), `net.alummahnow.studio.mac` (Associated Domains).
+
+App Store Connect records (Apps → + → New App, primary language English (U.S.), add Arabic): Al Ummah Now (iOS, `net.alummahnow.viewer`), Al Ummah Now TV (tvOS, `net.alummahnow.viewer.tv`), Al Ummah Now for Mac (macOS, `net.alummahnow.viewer.mac`), Al Ummah Now Studio (iOS, `net.alummahnow.studio`), and the same four with "QA" and the `.qa` ids. Studio for Mac ships by Developer ID and needs no record. Then for each production record: a TestFlight internal group; App Privacy from `store/apple/app-privacy.md` (viewer apps: Data Not Collected; Studio: Email Address, Name, User ID, Photos or Videos, Other User Content, plus Device ID on iPhone and iPad, all App Functionality, no tracking); category Photo & Video, content rights, age rating; a dedicated reviewer account with creator access, never yours.
+
+Enforcing proofs later (§3 "Require a proof"): Studio iOS client ids `6f8073c6-754b-4d63-bf80-0546214e0d62` (production) and `45364a42-21f4-4359-a76c-0a1e6615fd7b` (QA).
 
 ### AlUmmahNowAndroid
 
