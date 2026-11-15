@@ -44,7 +44,7 @@ Platform-wide constraints that apply to every epic:
 - Issue [AlUmmahNow#687](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687)
 - Decision PR [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 - Live in stage and production with release `v2026.11.12.3` ([#948](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/948))
-- [R2 backfill design](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/BACKFILL.md) (lands with #1395)
+- R2 backfill design: `docs/media-delivery/BACKFILL.md` in [AlUmmahNow#1395](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1395)
 - [Media delivery runbook](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/RUNBOOK.md), [R2 delivery plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/R2-DELIVERY-PLAN.md)
 
 ## Open questions
