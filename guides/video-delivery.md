@@ -77,4 +77,4 @@ Each R2 rendition also has one progressive MP4, `pub/<id>/<rev>/video.mp4` (a st
 
 ## Costs
 
-Container seconds per job, R2 storage and operations, and media-host requests and cache status all show on the admin Delivery page. The whole platform must stay under **$500/month** ([O1](../epics/decisions.md#o1-whole-platform-cost-cap)). Backfilling existing videos into R2 waits for the owner to approve a cost report.
+Container seconds per job, R2 storage and operations, and media-host requests and cache status all show on the admin Delivery page. The whole platform must stay under **$500/month** ([O1](../epics/decisions.md#o1-whole-platform-cost-cap)). Existing videos are backfilled into R2 by an admin from the videos admin **R2 backfill** page, which shows the estimated cost before anything runs and stops at a budget cap ([#1395](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1395), [#1399](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1399), in review). It costs nothing while no backfill runs.
