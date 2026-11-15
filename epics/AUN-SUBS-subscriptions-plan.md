@@ -29,7 +29,7 @@ The owner, 2026-11-14: *"build the framework, no need to enable now, this is for
   - subscriptions, cancel, refunds and complimentary tiers
 
   Every change is audited. Refunds and provider settings are for super admins only. Sensitive actions need a step-up.
-- **Going live** needs a Cloudflare token for Secrets Store writes (`payments-secrets-token`), then the provider credentials and their api-videos bindings. Steps are in [`docs/features/payments.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/feat/tier-requests/docs/features/payments.md).
+- **Going live** needs a Cloudflare token for Secrets Store writes (`payments-secrets-token`), then the provider credentials and their api-videos bindings. Steps are in `docs/features/payments.md` ([#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415)).
 - **Cost:** no new Workers, queues or databases. Provider fees are per transaction.
 
 ## Why
