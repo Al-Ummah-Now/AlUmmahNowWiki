@@ -677,6 +677,22 @@
       ]
     },
     {
+      "id": "transcode-troubleshooting",
+      "name": {
+        "en": "Transcode troubleshooting on Delivery: jobs, containers, queues, logs, Retry now and Cancel",
+        "ar": "تشخيص التحويل في صفحة التوصيل: المهام والحاويات والطوابير والسجل وإعادة المحاولة والإلغاء"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/D2-video-delivery.md",
+      "prs": [
+        "AlUmmahNow#1414"
+      ],
+      "note": "Containers, queues and logs need a read-only Cloudflare token set by a super admin; builds on AlUmmahNow#1409."
+    },
+    {
       "id": "videos-site",
       "name": {
         "en": "Videos site",
