@@ -763,7 +763,7 @@
       "prs": [
         "AlUmmahNow#1439"
       ],
-      "note": "Default 4–4; ceiling = max_instances (production 10, stage and QA 2). min is a concurrency floor, not warm instances. Admins change it; moderators see the Delivery figure. Stacked on AlUmmahNow#1414."
+      "note": "Default 4–4; up to Cloudflare's limit (production 3,750 standard-4 = the account's 15,000 vCPU; stage and QA 2, the limit is shared). min is a concurrency floor, not warm instances. Admins change it; moderators see the Delivery figure. Stacked on AlUmmahNow#1414."
     },
     {
       "id": "videos-site",
