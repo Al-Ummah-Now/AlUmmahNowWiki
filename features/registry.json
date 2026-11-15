@@ -1398,7 +1398,7 @@
       "prs": [
         "AlUmmahNow#1385"
       ],
-      "note": "A public page at /u/@handle with the user's name, picture, bio and public channels, plus playlists, subscriptions and liked videos when the user turns them on. Held for the owner's screenshot review."
+      "note": "A page at /u/@handle with the user's name, picture, bio and public channels, plus playlists and subscriptions when the user turns them on. Liked videos are never public. Reached only from the user's name or avatar on their video and post comments; never in site search, noindex, nofollow. Held for the owner's screenshot review."
     },
     {
       "id": "www-continue-watching",
