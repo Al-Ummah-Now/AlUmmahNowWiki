@@ -7,9 +7,11 @@
 | **ID** | `E23` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-14 |
 
 > Release pipelines exist (Fastlane/TestFlight in Apple, Gradle Play Publisher internal track in Android, tag-triggered `release.yml` in Desktop) but store signing waits on owner accounts.
+>
+> **NAT-REL (2026-11-14): store release infrastructure is built and waits only for the owner's ids** ("app store not now, build infra, dont be the blocker"). Every store step skips with a notice when its secrets are missing; universal-link / App Links files are served from videos admin → Mobile apps (empty means not served, every change audited); App Attest and Play Integrity hooks are off until configured. What to paste where: [store release checklist](../guides/store-release-checklist.md).
 
 ## Goal
 
@@ -23,11 +25,11 @@ CI/CD, signing, betas, staged rollouts, store listings and monitoring for every 
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 23.1 | CI/CD per platform | Android: tag → signed bundles, Play internal track per app and Amazon Appstore edit, each skipped with a notice until the owner adds its secrets and IDs (AlUmmahNowAndroid#24, `docs/RELEASE.md`) |
-| 23.2 | Signing & store accounts (needs D-U-N-S) |  |
-| 23.3 | Beta channels |  |
+| 23.1 | CI/CD per platform | Android: tag → signed bundles, Play internal track per app and Amazon Appstore edit, each skipped with a notice until the owner adds its secrets and IDs (AlUmmahNowAndroid#24, `docs/RELEASE.md`). Apple (all apps) and Desktop (MSIX, Microsoft Store): NAT-REL in progress |
+| 23.2 | Signing & store accounts (needs D-U-N-S) | Waits on the owner: [store release checklist](../guides/store-release-checklist.md). Universal links, App Links and attestation are set in videos admin → Mobile apps |
+| 23.3 | Beta channels | Android: Play internal track (AlUmmahNowAndroid#24). Apple: TestFlight for Studio. Each skips until its account exists |
 | 23.4 | Staged rollouts + kill switches |  |
-| 23.5 | Store listings en/ar | Android: listings in en/ar for viewer, TV and Studio, checked in CI; data safety answers from the code; store screenshots generated from the app screens (AlUmmahNowAndroid#24) |
+| 23.5 | Store listings en/ar | Android: listings in en/ar for viewer, TV and Studio, checked in CI; data safety answers from the code; store screenshots generated from the app screens (AlUmmahNowAndroid#24). Apple and Desktop: NAT-REL in progress |
 | 23.6 | Monitoring (Sentry, QoE gates) |  |
 | 23.7 | Accessibility & RTL QA matrix |  |
 
