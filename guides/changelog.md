@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-15: R2 transcodes start reliably and a broken transcoder fails the release
+
+- **Why:** a transcoder image built without one of its files crashed at every start from 2026-11-13 until release `v2026.11.14.6`. Stage transcodes never ran, and two production jobs waited 4 to 7 minutes. Retry delays that grew to 15 minutes kept them waiting after the fixed image was live, and the release test skipped the stuck transcode as "slow".
+- **Now:** a job that can't start is tried again within seconds (15 s, 30 s, 1 min, 2 min, then every 5 min). After about 24 minutes it is marked failed on the Errors page with **Transcode again**. Deploys let running transcodes finish, and a job cut off by a deploy doesn't use up an attempt. The release smoke starts a real transcoder container after every media deploy, and the stage E2E fails a transcode that doesn't start within 2 minutes ([#1409](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1409)). See [Video delivery](video-delivery.md).
+
 ## 2026-11-14: status page subscriptions
 
 - **Email and webhook updates from the status page:** people sign up at `/subscribe` in English or Arabic and confirm by email (double opt-in). Each email has one-click unsubscribe. Admins add signed webhooks on the videos admin **Status** page. A new incident or maintenance, each update and its resolution are sent from a queue with retries; failures land on the Errors page with **Retry**. Internal-only incidents are never sent ([#1380](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1380), [#1193](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1193)). See [Status page](status-page.md#subscriptions).
