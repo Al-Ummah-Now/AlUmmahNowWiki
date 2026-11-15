@@ -416,11 +416,17 @@
         "en": "Caption translation and inline translation",
         "ar": "ترجمة النصوص والترجمة المضمّنة"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
-        "videos"
+        "videos",
+        "videos-admin",
+        "api"
       ],
-      "wiki": "epics/AUN-CAPTIONS-transcription-translation.md"
+      "wiki": "epics/AUN-CAPTIONS-transcription-translation.md",
+      "prs": [
+        "AlUmmahNow#1398"
+      ],
+      "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review."
     },
     {
       "id": "community-rules",
