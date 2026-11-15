@@ -80,6 +80,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O28](decisions.md#o28-home-timeline-in-weekly-kv-buckets) | Home timeline in weekly KV buckets | **decided** | 2026-11-10 | www home timeline |
 | [O29](decisions.md#o29-keep-the-openauth-fork) | Keep the openauth fork | **decided** | 2026-11-07 | Auth |
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
+| [O34](decisions.md#o34-admins-pick-the-default-tier) | Admins pick the default tier (one tier, or None) | **decided** | 2026-11-15 | Creator tiers, AUN-TIER-REQUESTS |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -817,6 +818,16 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 **Blocks / affects:** Creator tiers, AUN-SUBS, Epic 27
 
 **Sources:** [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)
+
+### O34: Admins pick the default tier
+
+**Status:** decided · **Date:** 2026-11-15
+
+Admins mark exactly one tier as the default on Admin › Tiers, or None. The default applies to every account without an assigned tier and is effective, not copied: changing it changes everyone on it. User and channel views show "Default (Tier X)", and `/upload` and `/upgrade` show the effective tier. The change is audited and has Undo. A deleted or retired tier cannot be the default.
+
+**Blocks / affects:** Creator tiers, AUN-TIER-REQUESTS, AUN-SUBS
+
+**Sources:** [AUN-TIER-REQUESTS › Default tier](AUN-TIER-REQUESTS-tier-requests.md#default-tier), [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443)
 
 ### LIC: Repo licence for Core and the app repos
 
