@@ -64,6 +64,15 @@ flowchart LR
 - Thumbnails keep the video's real aspect, and a daily check flags wrong-shape ones ([#614](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/614), [#654](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/654)).
 - The admin video page's **Processing** card shows Bunny and R2 side by side, with per-rendition R2 progress and "Transcode again" ([#970](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/970), [#1011](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1011)). The owner also sees the R2 state ([#961](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/961)).
 
+- **Why a transcode waits or fails** shows on the videos admin **Delivery** page, without Cloudflare access ([#1414](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1414), in review):
+  - each job's state, attempt n of max, times, the reason in plain words, the raw error and its container;
+  - containers in use and their health, and the transcode queue and its dead-letter backlog;
+  - the media Worker's and the transcoder container's log lines, filtered by video or job id;
+  - Retry now and Cancel, both audited and queued;
+  - Errors page items for stalled jobs, with Retry now.
+
+  Containers, queues and logs need a read-only Cloudflare token that a super admin sets in the panel. Without one, the panel shows the jobs from our own records and says the token is missing. It adds no running cost.
+
 ## Embeds
 
 - Embeds play the `playUrl` the API chose, like every other player ([#1013](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1013)).
