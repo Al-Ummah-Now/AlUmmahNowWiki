@@ -1963,6 +1963,26 @@
         "AlUmmahNow#1412"
       ],
       "note": "Creators add dubs, commentary or audio description in Studio (upload or a track already in the file); viewers pick one in the player's Audio menu, which starts on the site's language and remembers the choice. Tracks per video are set per creator tier; each track goes through review like uploads."
+    },
+    {
+      "id": "move-from-youtube",
+      "name": {
+        "en": "Move from YouTube",
+        "ar": "الانتقال من يوتيوب"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-YT-IMPORT-move-from-youtube.md",
+      "prs": [
+        "AlUmmahNow#1390",
+        "AlUmmahNow#1391",
+        "AlUmmahNow#1381"
+      ],
+      "note": "API, queue jobs and admin-api settings merged (not yet released); the Studio wizard and the admin settings page are held for the owner's screenshots. Needs the owner's Google OAuth client and verification."
     }
   ]
 }
