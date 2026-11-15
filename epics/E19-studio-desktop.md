@@ -7,9 +7,9 @@
 | **ID** | `E19` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-14 |
 
-> Studio MVP shipped on Mac, Windows and Linux (2026-11-11 to 11-12): sign-in with several accounts, channel picker, upload of files or a folder with set-for-all values, manage videos, bulk edit, analytics. Mac downloads, MSI, portable zip, `.deb` and Flatpak come from tag-driven release workflows (Desktop pre-release `v0.1.0-preview.1`; no Apple release cut yet). Local encoding, transcription, the editor and the live control room are still to do; 19.7 waits on D3.
+> Studio MVP shipped on Mac, Windows and Linux (2026-11-11 to 11-12): sign-in with several accounts, channel picker, upload of files or a folder with set-for-all values, manage videos, bulk edit, analytics. Mac downloads, MSI, portable zip, `.deb` and Flatpak come from tag-driven release workflows (Desktop pre-release `v0.1.0-preview.1`; no Apple release cut yet). NAT-S2 (2026-11-14, D10/D11 decided): the server contracts for on-device captions, pre-encoded renditions and institution mode ([AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386)), the Core media calls behind local encoding, captions and the editor ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43)) and the Mac Studio services ([AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36)) are in review. The Studio screens for them follow the owner's screenshot review. 19.7 waits on D3.
 
 ## Goal
 
@@ -24,16 +24,34 @@ Encoding, transcription, batch upload and video editing on the desktop.
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 19.1 | Content library, bulk edit | Shipped: manage videos, live search, single and bulk edit ([AlUmmahNowApple#18](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/18), [AlUmmahNowDesktop#26](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/26)). |
-| 19.2 | Batch upload & bulk import (absorbs AlUmmahNowTools) | Batch and folder upload shipped ([AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowDesktop#25](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/25)); AlUmmahNowTools not yet retired. |
-| 19.3 | Local encoding (hardware encoders) |  |
-| 19.4 | Transcription & caption editor |  |
-| 19.5 | Video editor |  |
-| 19.6 | Analytics deep dive | Basic charts shipped ([AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25), [AlUmmahNowDesktop#32](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/32)); deep dive not started. |
+| 19.2 | Batch upload & bulk import (absorbs AlUmmahNowTools) | Batch and folder upload shipped ([AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowDesktop#25](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/25)); AlUmmahNowTools retires per the plan below. |
+| 19.3 | Local encoding (hardware encoders) | Building (D11). Studio can encode the server's own ladder on the creator's computer and upload the rungs before the server transcodes. The server checks every rung (ladder, codecs, segments, every segment decoded, picture and sound matched against the source) and encodes itself when anything is off. Server contract: [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386). Core ladder (matches the server across 30 sizes) and HLS packaging: [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Mac uploader: [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36). Server encoding stays the default. |
+| 19.4 | Transcription & caption editor | Building (D10). Captions are transcribed on the server by default, or free on the creator's computer with whisper.cpp; on-device drafts go through the same Quran layer and spend no caption minutes. The editor splits, merges, nudges and deletes cues and keeps Quran segments as the server sent them. [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) (on-device transcript route), [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43) (whisper in the desktop builds, caption segmenting), [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36) (caption clients, cue editing). |
+| 19.5 | Video editor | Building. Trim, cut, join, move and append on Core's EDL as atomic edits with undo/redo, flattened for playback and export ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43); Mac composition and export in [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36)). |
+| 19.6 | Analytics deep dive | Basic charts shipped ([AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25), [AlUmmahNowDesktop#32](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/32)); deep dive building: summary, daily metrics over any range, retention curve and CSV export (UTF-8 with BOM so Excel opens Arabic) in [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36). |
 | 19.7 | Live control room (D3) | Waits on D3 (unblocked 2026-11-10). |
 | 19.8 | Teams & roles | Channel roles spec (PR #462) supersedes "uses auth RBAC". |
-| 19.9 | Institution mode |  |
+| 19.9 | Institution mode | Building. Until organisations exist (AUN-SUBS S10), each account has one brand kit and one shared asset library (50 assets, 1 GB) used by all its channels and their teams; only the owner changes them; both are in the data export and erased with the account. [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386), [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36). |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
+
+## AlUmmahNowTools retirement plan
+
+Tools writes straight to Bunny and R2 with operator keys. Studio uploads through api-videos, so the server owns delivery, moderation and quotas. Tools retires once Studio covers what operators still use it for.
+
+| Tools feature | Studio replacement | State |
+|---|---|---|
+| Folder scan and bulk import with shared values | Batch and folder upload with set-for-all values (19.2) | Shipped |
+| Resume interrupted uploads | Core resumable TUS upload ([AlUmmahNowCore#15](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/15), [#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29)) | Shipped |
+| Multi-channel organisation | Several accounts and the channel picker | Shipped |
+| Filter presets, bulk metadata edits | Content library search and bulk edit (19.1) | Shipped |
+| Thumbnails with the video's shape | Server thumbnails and the owner's legacy thumbnails | Shipped |
+| Watch a folder, approve each file | Core folder watch (`aun-upload/watch`) with an approve queue in Studio | Next Studio step |
+| Duplicate detection (SHA-256) | Hash before upload and skip files the channel already has | Next Studio step |
+| DeepL title translation | Inline title translation (AUN-CAPTIONS P1) | Planned |
+| Direct Bunny / R2 writes | None: uploads go through api-videos | Retired by design |
+
+Retirement steps: Studio gets the watch-and-approve queue and duplicate check; the owner runs the last Tools import; the repo is archived read-only and the operator Bunny and R2 keys it used are revoked.
 
 ## Decisions and constraints
 
@@ -56,6 +74,7 @@ Platform-wide constraints that apply to every epic:
 
 - Studio MVP, Desktop: [AlUmmahNowDesktop#24](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/24), [AlUmmahNowDesktop#25](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/25), [AlUmmahNowDesktop#26](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/26), [AlUmmahNowDesktop#27](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/27) (release packages), [AlUmmahNowDesktop#32](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/32) (merged 2026-11-11)
 - Studio MVP, Mac: [AlUmmahNowApple#16](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/16) to [AlUmmahNowApple#19](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/19) (notarized downloads on a tag), [AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25) (merged 2026-11-12)
+- NAT-S2 (2026-11-14): [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386), [AlUmmahNow#1378](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1378) (media container build fix), [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43), [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36)
 - Core: loopback sign-in for desktop and upload resume fix, [AlUmmahNowCore#27](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/27), [AlUmmahNowCore#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29), released as `v0.3.0-rc.1` ([AlUmmahNowCore#30](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/30))
 
 GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):

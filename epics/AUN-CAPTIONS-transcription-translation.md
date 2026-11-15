@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-CAPTIONS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (later AlUmmahNowCMS for the shared provider layer, and the native Studio apps) |
-| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. Translation and inline translation are not built |
+| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. On-device desktop transcription (D10) is in review in [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) and [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Translation and inline translation are not built |
 | **Last updated** | 2026-11-14 |
 
 > v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
@@ -86,7 +86,7 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 | P2 | On-demand transcription: jobs, queue, audio-extraction container, editor, publish, metering with refunds, budget stop | planned |
 | P3 | Transcript translation with official Quran translations; bulk actions; upload flag; admin grants | planned |
 | P4 | ElevenLabs/DeepL adapters, viewer-side translated titles (owner decision) | planned |
-| P5 | Transcript search; native Studio Subtitles tab; on-device desktop transcription | planned |
+| P5 | Transcript search; native Studio Subtitles tab; on-device desktop transcription | On-device transcription building: Studio uploads whisper.cpp segments, the server runs the Quran layer and writes an `on_device` draft with no caption minutes spent ([AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386), [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43), [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36)). Search and the native Subtitles tab planned. |
 
 Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) (moderation still uses m2m100), [#814](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/814) (purge leaves subtitle files).
 

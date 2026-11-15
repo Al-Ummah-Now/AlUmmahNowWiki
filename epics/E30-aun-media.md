@@ -7,9 +7,9 @@
 | **ID** | `E30` |
 | **Owning repos** | [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-14 |
 
-> `aun-media` shipped in Core 0.2.0 (probe, job graph, proxies, whisper transcription, EDL v1 schema, HarfBuzz shaping, upload handoff). Apps still use interim edit models.
+> `aun-media` shipped in Core 0.2.0 (probe, job graph, proxies, whisper transcription, EDL v1 schema, HarfBuzz shaping, upload handoff). Apps still use interim edit models. NAT-S2 ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43)) adds EDL edit operations, the server's HLS ladder and fMP4 packaging for pre-encoded renditions (D11), caption segmenting, and whisper.cpp in the desktop builds (D10), all exported over FFI.
 
 ## Goal
 
@@ -24,10 +24,10 @@ One media engine behind Studio desktop and mobile: probe, encode plans, proxies,
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 30.1 | Probe & analyse |  |
-| 30.2 | Encode job graph |  |
+| 30.2 | Encode job graph | Server ladder mirrored in Core (fixture from `ladder.mjs`, 30 sizes) and fMP4 HLS packaging of each encoded rung ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43)). |
 | 30.3 | Proxies & thumbnails |  |
-| 30.4 | Transcription (whisper.cpp) |  |
-| 30.5 | Edit model (EDL) |  |
+| 30.4 | Transcription (whisper.cpp) | Shipped in Core 0.2.0; desktop builds (macOS, Windows, Linux) turn it on and caption segmenting is exported in [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). |
+| 30.5 | Edit model (EDL) | EDL v1 in Core 0.2.0; trim, cut, join, move and append as atomic edits plus a flattened timeline in [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). |
 | 30.6 | Text rendering (HarfBuzz, bidi) |  |
 | 30.7 | Upload handoff |  |
 

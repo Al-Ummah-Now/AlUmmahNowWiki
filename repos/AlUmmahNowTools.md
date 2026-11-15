@@ -8,6 +8,8 @@
 
 .NET tools for managing video content in bulk: scanning files, importing them, and uploading to Bunny.net and Cloudflare R2. It has a command-line client, a cross-platform GUI and a background scanning service.
 
+Studio desktop is taking over these jobs; see the [retirement plan](../epics/E19-studio-desktop.md#alummahnowtools-retirement-plan).
+
 ## Tech stack
 
 .NET 8 for libraries and services, .NET 9 for the Uno Platform GUI. SignalR for realtime updates. Bunny.net, Cloudflare R2 and DeepL integrations.
