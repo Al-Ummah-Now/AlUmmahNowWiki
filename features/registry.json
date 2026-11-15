@@ -1273,7 +1273,7 @@
         "AlUmmahNowAuth#395",
         "openauth#52"
       ],
-      "note": "The Auth side (admin scope for machine calls, no fallback session key) is live since Auth run 43646468455, and the CMS ES256 pin since CMS v2026.11.14. The videos API and admin fixes (AlUmmahNow#1361) are merged and wait for a release tag. AUTH-1 (2026-11-15): PKCE for public clients, the auth admin as a confidential client (its secret is required once Auth#395 ships), no open redirect on /password/change, no PII in sign-in logs; these ride the next Auth production release."
+      "note": "The Auth side (admin scope for machine calls, no fallback session key) is live since Auth run 43646468455, and the CMS ES256 pin since CMS v2026.11.14. The videos API and admin fixes (AlUmmahNow#1361) are merged and wait for a release tag. AUTH-1 (2026-11-15): PKCE for public clients, the auth admin as a confidential client whose secret is required, no open redirect on /password/change and no PII in sign-in logs are live since Auth run 43671457178."
     },
     {
       "id": "signing-key-rotation",
