@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-R2-MIGRATION` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
-| **Status** | **in progress**: Bunny and R2 run side by side behind the admin switch (v2026.11.12); providers v2 with per-video pins and player fallback shipped in v2026.11.14.3 (AlUmmahNow #1331, #1335, #1340, #1341, #1342). Production still plays Bunny first. The providers page that leaves Delivery as analytics only is in review (#1358) |
+| **Status** | **in progress**: Bunny and R2 run side by side behind the admin switch (v2026.11.12); providers v2 with per-video pins and player fallback shipped in v2026.11.14.3 (AlUmmahNow #1331, #1335, #1340, #1341, #1342). Production still plays Bunny first. The admin R2 backfill (estimate, queued copy → transcode → verify, R2-first flips, Bunny library retirement) is in review (AlUmmahNow #1395, page #1399, held for owner screenshots) |
 | **Last updated** | 2026-11-14 |
 
 > Filed as AlUmmahNow#687 ("a new epic", no number) right after D2 was decided, 2026-11-10. Side-by-side delivery live in every environment since 2026-11-12; viewers move only when an admin changes the delivery switch. How it works: [Video delivery](../guides/video-delivery.md).
@@ -23,8 +23,8 @@ Infrastructure, transcoding into R2 and migration off Bunny, including the legac
 - Keep our own originals; transcodes start at upload: **done** ([#972](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/972))
 - API picks the source and returns one URL: **done** ([#1013](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1013))
 - Release gate for R2 delivery: **done** ([#1016](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1016))
-- Backfill of existing videos into R2: **waiting** for the owner to approve a cost report
-- Moving viewers off Bunny and retiring the legacy library: **not started**
+- Backfill of existing videos into R2, run by an admin from the videos admin **R2 backfill** page (owner 2026-11-14: "build backfill infra, admin does it, dont do scripts"): **in review** ([#1395](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1395), page [#1399](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1399)). Scope (all, channel, dates, video list, only missing), a cost estimate from real sizes, then Start; queued, resumable copy → transcode → verify per video with throttle, pause/resume/cancel, Retry, DLQ, Errors page and a budget cap. Videos under a hold are never copied or deleted
+- Moving viewers off Bunny and retiring the legacy library: **in review** on the same page: Play R2 first per verified video, per channel or everywhere, through the provider settings; retiring a Bunny library deletes only verified videos after a grace period, with a typed confirmation and step-up, and never changes the library's "Block Direct Url File Access"
 
 ## Decisions and constraints
 
@@ -44,6 +44,7 @@ Platform-wide constraints that apply to every epic:
 - Issue [AlUmmahNow#687](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/687)
 - Decision PR [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686) (merged 2026-11-10 as `f4cca7db`)
 - Live in stage and production with release `v2026.11.12.3` ([#948](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/948))
+- [R2 backfill design](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/BACKFILL.md) (lands with #1395)
 - [Media delivery runbook](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/RUNBOOK.md), [R2 delivery plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/R2-DELIVERY-PLAN.md)
 
 ## Open questions
