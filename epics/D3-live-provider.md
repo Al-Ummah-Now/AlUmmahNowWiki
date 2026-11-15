@@ -28,13 +28,41 @@ The earlier recommendation was "follows D2", then the self-hosted option. On 202
 
 ## Production status (checked 2026-11-14)
 
-**Built, rolling out, not live.** The code is in every production release since v2026.11.12.9, but production cannot take a stream yet:
+**Built, rolling out, not live yet.** The code has been in every production release since v2026.11.12.9.
 
-- **Bunny Stream Live**: the live API returns 403 for the production library (400189) until Bunny grants closed-preview access, an owner action ([#874](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/874)). The router sends every stream to self-hosted meanwhile.
-- **Self-hosted**: the production worker's config has no `live.alummahnow.net` route (stage has `live.stage.alummahnow.net`), and no release step attaches it. The edge takes HTTPS HLS push only; RTMP/SRT needs Spectrum into a Worker's `connect()` ([#875](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/875)).
-- **Tests**: the release E2E (`apps/web/e2e/release/live-go-live.spec.ts`) creates a stream, shows the encoder settings, goes live and ends it, but never sends video. No real stream has run on production.
+**Why the owner saw nothing in prod Studio.** Live was only the second sub-tab of Studio → **Content** (Content opens on Videos), with no rail item and no dashboard link. It was not a permission (the channel owner holds `live.manage`/`live.moderate`), not a missing translation, and not a tier: no live tier gate existed until [#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373). Checked on QA as a seeded creator: rail Dashboard, Content, Analytics, Playlists, Customisation, Settings; quick links Upload, New post, Customise; tabs Videos | Live | Posts. [#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373) adds **Go live** to the rail and to the dashboard quick links.
 
-The feature registry lists `live-streams` as `rolling` until a production release carries a working ingest path and a stream has played there.
+Production also could not take a stream:
+
+- **Bunny Stream Live**: the live API returns 403 for the production library (400189) until Bunny grants closed-preview access. This is an **owner/vendor step** ([#874](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/874)). Meanwhile the router sends every stream to self-hosted, which works on its own.
+- **Self-hosted host**: the production worker declared no `live.alummahnow.net` route, and no release step attached one. [#1367](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1367) makes the release attach `live.alummahnow.net` (and `live.stage.alummahnow.net`) to api-videos when it is missing. It also adds a release smoke check that the live edge answers `/time`. This **needs a release tag** to reach production.
+- **Ingest protocol**: the self-hosted edge takes **HTTPS HLS push**: ffmpeg directly, or OBS through *Custom Output (FFmpeg) → Output to URL* with `method=PUT`. Studio's help text explains this.
+  - Plain RTMP/SRT (OBS's default) cannot be built self-serve on Cloudflare. Inbound TCP to a Worker or Container needs **Spectrum** in front of a Worker's `connect()` (Enterprise or beta), so it is a vendor step like Bunny ([#875](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/875)).
+  - Idle cost stays at zero: the edge is the api-videos Worker plus R2, with no always-on server.
+
+**Proven end to end on QA.** [#1372](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1372) adds `apps/web/e2e/release/live-stream.player.spec.ts`:
+
+1. Create a stream in Studio and read the server and key from Go live.
+2. ffmpeg pushes real video (HLS fMP4 over HTTPS PUT).
+3. Studio flips to "You're live", and a viewer's `/live/{id}` plays.
+4. End the stream; the recording becomes a VOD and plays.
+
+QA run 43655762702: live in about 4 s, VOD with 22 segments. The old `live-go-live.spec.ts` never sent video.
+
+**Creator tiers** ([#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373), search migration 0040)
+- Each tier has *Live streaming: allowed* plus hours a month, streams at once and longest stream.
+- Defaults: None off; Creator 20 h / 1 / 240 min; Unlimited and super admins without limits.
+- api-videos enforces the channel **owner's** tier: create and ingest 403 `live_not_in_tier`; start 402 `live_hours_used` or 403 `live_concurrent_limit`.
+- The 5-minute live sweep ends a session past its limit. It also ends, per owner, streams over the at-once cap and every stream once the month is used, because the self-hosted edge goes live on the first segment even without Go live.
+- Studio shows the month's usage, or why the owner can't go live with **Request access** → `/{lang}/upgrade`.
+
+**Viewer count** ([#1387](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1387), AlUmmahNow#30)
+- The watch page beats every 20 s with a random per-tab id, through api-videos, to a memory-only `liveviewers:<streamId>` object in the realtime worker. No D1, KV or storage writes.
+- A viewer counts while beating (75 s time to live, for background tabs) and is counted out at once on `pagehide`.
+- Abuse is bounded by a 60-beats-a-minute edge limit per IP and 50 counted viewers per network.
+- The count shows on `/live/{id}` ("Watching now: N") and on Studio's Go live page.
+
+The feature registry keeps `live-streams` as `rolling` until a production release carries the live host and a stream has played there.
 
 ## Blocks
 

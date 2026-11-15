@@ -7,9 +7,14 @@
 | **ID** | `LIVE-PHASES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2025-11-06 |
+| **Last updated** | 2026-11-14 |
 
-> Phase 1 (browse: `/live` list, status, viewer count) exists; Phase 2 go-live wizard issues #126–#140 are open; real provider waits on D3 (unblocked 2026-11-10, owner decision pending).
+> **Superseded by D3's live layer for Phase 2.** Studio Live / Go live / the watch page replace the go-live wizard (#126–#140). Phase 1 browse exists.
+> - **Working on QA end to end with real video** ([#1372](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1372)).
+> - **Creator-tier limits** ([#1373](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1373)).
+> - **Real-time viewer count**, task 2.11 / #136, AlUmmahNow#30 ([#1387](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1387)).
+>
+> Not live on production until the live host release step ships ([#1367](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1367)); see [D3](D3-live-provider.md#production-status-checked-2026-11-14).
 
 ## Goal
 

@@ -7,9 +7,9 @@
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **planned** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-14 |
 
-> Blocked on D3 (live provider). D3 was unblocked on 2026-11-10 when D2 was decided; recommendation is self-hosted RTMP/SRT → HLS in the same R2 bucket; owner decision pending.
+> **Unblocked on the web side, apps not started.** D3 was decided on 2026-11-11: both providers, round-robin. The web live layer works end to end on QA with real video (self-hosted HTTPS HLS push; [#1372](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1372)). Production needs the live host release step ([#1367](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1367), awaiting a tag) and, for Bunny, preview access ([#874](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/874)). The apps can use the same `/api/live-streams` calls: `state` for playback and the viewer count, and `viewers` for the watching heartbeat. See [D3 production status](D3-live-provider.md#production-status-checked-2026-11-14).
 
 ## Goal
 
