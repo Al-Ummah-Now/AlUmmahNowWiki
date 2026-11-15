@@ -142,7 +142,10 @@ None. Validation, serving and rendering run synchronously in the request; video 
   - www `tests/blocks.test.ts`;
   - www `e2e/page-builder.spec.ts`: the sample page, every type, en/ar × dark/light, desktop and phones, axe, no sideways overflow;
   - sites `e2e/sites.spec.ts`: a Studio page with every Studio type, en and ar.
-- **AlUmmahNow:** `apps/web` jest covers the About blocks, the route and `toCmsPage`. A local Next run against a stub CMS serving the sample page checks dark mode on desktop and Pixel 7 in en and ar, plus light mode, with axe.
+- **AlUmmahNow:**
+  - `apps/web` jest covers the About blocks, the route and `toCmsPage`. A local Next run against a stub CMS serving the sample page checks dark mode on desktop and Pixel 7 in en and ar, plus light mode, with axe.
+  - Cross-app, `apps/web/e2e/79-page-builder-cross-app.spec.ts` on the local stack: a staff user signed in through the local Auth builds the About page in the CMS editor and publishes it in English, then in Arabic (*Copy from English*, translated). The page then shows on www and on the videos About page in both languages. It skips until the released CMS and www carry the page builder.
+  - `scripts/local-stack/sibling-build.ts` runs the CMS or www on the local stack from a branch or a local checkout, so cross-app changes are tested before the sibling repo releases them.
 
 ## Decisions and constraints
 
