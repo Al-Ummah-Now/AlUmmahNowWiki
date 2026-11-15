@@ -13,7 +13,7 @@ Nothing on this page is committed to a repo. GitHub secrets go in **repo → Set
 | D-U-N-S number for the organisation | [Dun & Bradstreet D-U-N-S lookup for Apple developers](https://developer.apple.com/enroll/duns-lookup/) (free) | Apple and Google both need it to open an **organisation** account, so the store shows the organisation, not a person, as the seller |
 | Apple Developer Program, organisation | [developer.apple.com/programs/enroll](https://developer.apple.com/programs/enroll/) | Team ID, signing, TestFlight, App Store |
 | Google Play Console, organisation | [play.google.com/console/signup](https://play.google.com/console/signup) | Play internal track, Play App Signing, Play Integrity |
-| Microsoft Partner Center, company | [partner.microsoft.com → Windows and Xbox](https://partner.microsoft.com/dashboard/registration) | Microsoft Store listing and Store-signed MSIX |
+| Microsoft Partner Center, company | [Open a Microsoft Store developer account](https://learn.microsoft.com/en-us/windows/apps/publish/partner-center/open-a-developer-account) | Microsoft Store listing and Store-signed MSIX |
 | App records | App Store Connect → Apps → New App (one per bundle id below); Play Console → Create app (one per package); Partner Center → New product → MSIX app (reserve the name) | The pipelines upload into these records; they never create them |
 
 Store submission for review stays a person's click in each console. The pipelines stop at TestFlight, the Play internal track and a Partner Center draft.
