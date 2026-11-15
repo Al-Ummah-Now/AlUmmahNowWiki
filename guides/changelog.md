@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-15: "Acting as" names you, tagged Personal (held for owner OK)
+
+- **Acting as** follows the YouTube/Facebook pattern. You appear with your own picture and name, tagged **Personal** / «حساب شخصي». Each channel appears with its logo and name, tagged **Channel** / «قناة». "Use without a channel" and "Yourself (no channel)" are gone from the videos site, the Help guide and the tour; the admin Playlists list says "Personal" ([#1465](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1465)). See [Help and the identity tour](help-and-tour.md). The native apps follow in their own PRs.
+
 ## 2026-11-15: identity is chosen only in the header
 
 - **One place to choose who you act as:** the header's **Acting as** menu. Comments, replies, posts, likes, subscriptions and playlists always use the current acting identity. Comment, reply and post boxes show only that identity's avatar (your photo or the channel's logo), with no "Commenting as" text and no Switch link. The avatar is named after the identity for screen readers. The reply box used to show the avatar of the person you were replying to; it now shows yours ([#1474](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1474)). 

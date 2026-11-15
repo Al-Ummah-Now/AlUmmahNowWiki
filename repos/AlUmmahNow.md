@@ -137,7 +137,7 @@ Playlists belong to the account when no channel is active ([#1183](https://githu
   - The `channelId` header is optional on `POST/PATCH/DELETE /api/playlists[/:id]` and `POST/DELETE /api/playlists/:id/videos[/:videoId]`.
   - `GET /api/playlists?mine=true` lists the caller's personal playlists, private and unlisted included.
   - `visibility: public | unlisted | private` on create and update wins over `isPublic`. Responses carry `visibility`.
-- **Moderation and privacy.** The admin Playlists list marks "Personal (no channel)" and "Unlisted". Export, erasure and privacy footprints key on the owner, so personal playlists are covered.
+- **Moderation and privacy.** The admin Playlists list marks "Personal" (in the Channel column) and "Unlisted". Export, erasure and privacy footprints key on the owner, so personal playlists are covered.
 - **Native apps.** Playlists exist only in Studio (channel playlists). Viewer playlists are tracked in [Core#39](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/39), [Android#19](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/19), [Apple#30](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/30) and [Desktop#38](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/38).
 
 ## Site visits (admin)
