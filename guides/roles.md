@@ -12,7 +12,7 @@ Al Ummah Now has two permission systems. They are separate, and neither grants t
 | In tokens | Yes (`roles`) | **Never** |
 | Status | Live | Live since 2026-11-10 |
 
-The rules below come from the [channel roles spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/91b5e794734f6c6c31fbb882a7d494507f534bad/docs/specs/CHANNEL-ROLES.md) (draft in [PR #462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)). The code is the source of truth: [`channel-roles.ts`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/packages/shared-types/src/channel-roles.ts).
+The rules below come from the [channel roles spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/CHANNEL-ROLES.md) (merged in [PR #462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)). The code is the source of truth: [`channel-roles.ts`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/packages/shared-types/src/channel-roles.ts).
 
 ## Site roles
 
@@ -26,7 +26,11 @@ Billing roles are proposed in [AlUmmahNowAuth #227](https://github.com/Al-Ummah-
 
 ## Channel roles
 
-Each channel has one owner, stored as `channel.userId` on the videos side. The owner can add other accounts as channel **admin**, **editor** or **moderator**. A channel admin can add and remove members too, but can't manage other admins. Members are stored in `channel.members` on the R2 channel record, up to 50 per channel. The draft spec said `api-videos` D1; the code uses R2.
+Each channel has one owner, stored as `channel.userId` on the videos side. The owner can add other accounts as channel **admin**, **editor** or **moderator**. A channel admin can add and remove members too, but can't manage other admins. Members are stored in `channel.members` on the R2 channel record, up to 50 per channel (members plus pending invitations). Invitations and the team activity log are in the search D1 (`channel_invites`, `channel_audit`).
+
+What each role may do is one matrix, `can(role, capability)` in `channel-roles.ts`, and `api-videos` checks it on every write a member may make ([AlUmmahNow#1374](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1374)). An editor uploads, edits and schedules videos and manages posts and playlists, but deletes only their own uploads. A channel moderator moderates comments on videos and posts.
+
+Nobody is added directly. The owner or a channel admin invites by email or @handle, and the role is given only when the person accepts on **Channel invitations** (account menu). Invitations last 14 days. Every team change shows in the Team page's **Activity** tab ([AlUmmahNow#1389](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1389), in review).
 
 The members API is in [`channelMembers.ts`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/apps/api-videos/src/endpoints/channel/channelMembers.ts). "My channels" in the account menu lists every channel a user owns or holds a role on ([AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625)).
 
@@ -49,4 +53,4 @@ This is specified in the [channel claim and transfer spec](https://github.com/Al
 Only two cross-overs are specified:
 
 1. A super admin (site role) can transfer channel ownership.
-2. Auth's `account.deleted` event removes the deleted account's channel memberships. This event doesn't exist yet: auth has no way to tell apps that a user was purged ([Auth#291](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/291)).
+2. Auth's `account.deleted` event removes the deleted account's channel memberships. This event doesn't exist yet: auth has no way to tell apps that a user was purged ([Auth#291](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/291)). Erasing an account on the videos side already removes its memberships, cancels its invitations and anonymizes its activity rows.

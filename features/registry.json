@@ -1468,6 +1468,26 @@
         "AlUmmahNowCMS#137"
       ],
       "note": "Also keeps scholar pages up from the last-known-good copy when the CMS is down."
+    },
+    {
+      "id": "channel-roles",
+      "name": {
+        "en": "Channel teams and roles",
+        "ar": "فرق القنوات وأدوارها"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/AUN-CHANNEL-ROLES-channel-roles.md",
+      "prs": [
+        "AlUmmahNow#462",
+        "AlUmmahNow#625",
+        "AlUmmahNow#1374",
+        "AlUmmahNow#1389"
+      ],
+      "note": "Roles per action are merged (on QA, not yet released). Invitations, the team Activity log and team notifications are in review."
     }
   ]
 }
