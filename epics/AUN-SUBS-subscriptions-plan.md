@@ -6,10 +6,31 @@
 |---|---|
 | **ID** | `AUN-SUBS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (plans live in admin-api D1). It also touches [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) and [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **planned**: a proposal waiting on the owner |
-| **Last updated** | 2026-11-11 |
+| **Status** | **building**: the payments framework is in review, off by default ([#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418), [#1419](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1419)); the rest of the proposal waits on the owner |
+| **Last updated** | 2026-11-15 |
 
 > Full proposal: [`docs/plans/SUBSCRIPTIONS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/3c0327b4735c8c82840b66af36411222baadfc5e/docs/plans/SUBSCRIPTIONS.md) (merged in [#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)).
+
+## Payments framework (building)
+
+The owner, 2026-11-14: *"build the framework, no need to enable now, this is for payment, as i said, now its request. if a provider is enabled in admin it switches to pay flow and so on"*.
+
+- **Plans stay creator tiers.** The creator tiers ([CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), with the Member tier from [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)) are the only plans model. The separate [Epic 27](E27-plans-entitlements.md) plans PRs ([#390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/390), [#391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/391), [#427](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/427), [#428](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/428), [#429](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/429)) were closed as superseded.
+- **Off by default.** `/upgrade` stays the request page while no provider is enabled. Once an admin enables one and prices a tier, that tier's card shows the price and Subscribe. A tier set to "By request only" is never sold.
+- **Providers.** One interface (checkout, webhook check, status, cancel, refund, portal, price sync) with Paddle (merchant of record) and PayGood adapters, a test provider for QA and the local stack only, and `manual` for complimentary tiers. Never Stripe ([T2](decisions.md#t2-billing-provider)). Which provider goes live first stays open ([P1](decisions.md#p1-first-paid-providers)).
+- **Webhooks.** The signature is checked on the raw body, then the event is stored once (idempotent) and handled by a queued job with retry, backoff and a DLQ. Events that match nobody are flagged on the admin Errors page with Retry.
+- **Entitlement.** An active subscription assigns its tier. A higher tier an admin set is kept, and a lower one comes back when the subscription ends. Sweeps end comps and paid periods even if the provider's last event is lost.
+- **Users.** Settings › Billing shows subscriptions, cancel at period end, the provider's portal, and payment history with receipts.
+- **Admins.** The videos admin Payments page covers:
+  - providers, with credentials written to Cloudflare Secrets Store and never shown back
+  - test/live mode and enable
+  - prices per tier, period and currency
+  - tax details
+  - subscriptions, cancel, refunds and complimentary tiers
+
+  Every change is audited. Refunds and provider settings are for super admins only. Sensitive actions need a step-up.
+- **Going live** needs a Cloudflare token for Secrets Store writes (`payments-secrets-token`), then the provider credentials and their api-videos bindings. Steps are in [`docs/features/payments.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/feat/tier-requests/docs/features/payments.md).
+- **Cost:** no new Workers, queues or databases. Provider fees are per transaction.
 
 ## Why
 
@@ -59,5 +80,6 @@ Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from sto
 
 ## Status evidence
 
+- Payments framework: [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415) (backend, with tier requests), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418) (`/upgrade` pay flow, Settings › Billing), [#1419](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1419) (admin Payments pages)
 - PR [AlUmmahNow#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834) (proposal)
 - Findings: [#827](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/827), [#828](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/828), [#829](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/829), [#830](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/830), [#831](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/831), [#832](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/832), [AlUmmahNowApple#20](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/20), [AlUmmahNowDesktop#30](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/30)

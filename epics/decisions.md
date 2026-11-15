@@ -222,6 +222,8 @@ Plans are custom and fully admin-managed in admin-web (create, version, price, p
 
 Pluggable `PaymentProvider` interface; manual provider always present; app-store adapters for IAP. **Never Stripe.**
 
+Built 2026-11-14 under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md), off by default: Paddle and PayGood adapters behind one interface, a `manual` provider for complimentary tiers, and a test provider for QA and local only. The build brief suggested Stripe, but this decision stands, so Stripe is not used. Creator tiers are the plans (no separate Epic 27 plans). Which provider goes live first is still [P1](#p1-first-paid-providers).
+
 **Blocks / affects:** 27.7, Epic 24
 
 **Sources:** [docs/specs/EMBEDS-COMMENTS-TIERS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/EMBEDS-COMMENTS-TIERS.md)
