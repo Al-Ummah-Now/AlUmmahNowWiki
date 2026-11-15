@@ -1488,6 +1488,95 @@
         "AlUmmahNow#1389"
       ],
       "note": "Roles per action are merged (on QA, not yet released). Invitations, the team Activity log and team notifications are in review."
+    },
+    {
+      "id": "studio-desktop-local-encoding",
+      "name": {
+        "en": "Desktop Studio: encode on your computer",
+        "ar": "الاستوديو المكتبي: الترميز على جهازك"
+      },
+      "status": "building",
+      "apps": [
+        "native",
+        "api"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNow#1386",
+        "AlUmmahNowCore#43",
+        "AlUmmahNowApple#36"
+      ],
+      "note": "Optional (D11): Studio encodes the server's ladder locally and uploads it; the server checks every rung against the source and encodes itself when anything is off."
+    },
+    {
+      "id": "studio-desktop-captions",
+      "name": {
+        "en": "Desktop Studio: on-device captions and caption editor",
+        "ar": "الاستوديو المكتبي: نصوص على الجهاز ومحرر النصوص"
+      },
+      "status": "building",
+      "apps": [
+        "native",
+        "api"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNow#1386",
+        "AlUmmahNowCore#43",
+        "AlUmmahNowApple#36"
+      ],
+      "note": "Server transcription by default; free on-device whisper.cpp as an option (D10). On-device drafts go through the Quran layer and spend no caption minutes."
+    },
+    {
+      "id": "studio-desktop-editor",
+      "name": {
+        "en": "Desktop Studio: video editor",
+        "ar": "الاستوديو المكتبي: محرر المرئيات"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNowCore#43",
+        "AlUmmahNowApple#36"
+      ],
+      "note": "Trim, cut and join on Core's edit list, with undo and export."
+    },
+    {
+      "id": "studio-desktop-analytics",
+      "name": {
+        "en": "Desktop Studio: analytics deep dive",
+        "ar": "الاستوديو المكتبي: تحليلات مفصّلة"
+      },
+      "status": "building",
+      "apps": [
+        "native"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNowApple#36"
+      ],
+      "note": "Daily metrics over any range, retention curve and CSV export."
+    },
+    {
+      "id": "studio-institution-mode",
+      "name": {
+        "en": "Institution mode: brand kit and shared assets",
+        "ar": "وضع المؤسسات: هوية العلامة والملفات المشتركة"
+      },
+      "status": "building",
+      "apps": [
+        "native",
+        "api"
+      ],
+      "wiki": "epics/E19-studio-desktop.md",
+      "prs": [
+        "AlUmmahNow#1386",
+        "AlUmmahNowApple#36"
+      ],
+      "note": "One brand kit and one shared asset library per account, used by all its channels and their teams."
     }
   ]
 }
