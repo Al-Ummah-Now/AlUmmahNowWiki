@@ -7,9 +7,19 @@
 | **ID** | `AUN-CHANNEL-ROLES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-14 |
 
-> Spec PR #462 open; "My channels with channel roles" merged (#625).
+> Spec merged ([AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)). Roles enforced per action across videos, posts, comments and live, merged ([AlUmmahNow#1374](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1374), on QA, not yet released). Invitations, the team Activity log and team notifications are in review ([AlUmmahNow#1389](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1389)).
+
+## What is built
+
+- **Roles:** owner, channel admin, editor and channel moderator, with the capability matrix in [`channel-roles.ts`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/packages/shared-types/src/channel-roles.ts). `api-videos` checks it on every write a member may make; any write not on the allow-list stays owner-only.
+- **Team page** (Studio, `/settings/channel/{id}/team`): Team and Activity tabs. Invite by email or @handle, change a role, remove someone, cancel a pending invitation. Each person sees only the actions their role allows.
+- **Invitations** ([AlUmmahNow#1389](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1389)): a role is given only when the person accepts on `/settings/channel-invites`, which the account menu links to with a count. An invitation lasts 14 days. An email invitation never tells the inviter which account owns the address. A cancel, a demotion of the inviter or an account erasure during an accept always wins.
+- **Activity log**: every team change is logged, newest first, and kept for a year. It never stores email addresses.
+- **Losing a role** cancels the invitations that person sent and, if they could manage live, gives the channel a new stream key.
+- **Ownership** is never transferred here: only a super admin can, from the videos admin ([O16](decisions.md#o16-channel-roles-separate-from-site-roles-only-super-admins-transfer-ownership)).
+- No new paid resources: invitations and the log are two tables in the existing search D1, swept by the existing daily cron.
 
 ## Goal
 
@@ -28,11 +38,11 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- Open [AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462); merged [AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625)
+- Merged [AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462) (spec), [AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625) (My channels), [AlUmmahNow#1374](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1374) (roles enforced per action); open [AlUmmahNow#1389](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1389) (invitations, Activity, notifications)
 
 ## Open questions
 
-- None recorded in the sources.
+- Auth's `account.deleted` event, which would remove a purged account's memberships, doesn't exist yet ([Auth#291](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/291)). Erasing an account on the videos side already removes its memberships and cancels its invitations.
 
 ## Conflicts between sources
 
@@ -40,6 +50,6 @@ Platform-wide constraints that apply to every epic:
 
 ## Sources
 
-- [CHANNEL-ROLES.md (PR #462)](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462)
+- [CHANNEL-ROLES.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/CHANNEL-ROLES.md) · [plan](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/CHANNEL-ROLES-PLAN.md)
 - [Site roles and channel roles](../guides/roles.md)
-- [AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462), [AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625)
+- [AlUmmahNow#462](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/462), [AlUmmahNow#625](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/625), [AlUmmahNow#1374](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1374), [AlUmmahNow#1389](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1389)
