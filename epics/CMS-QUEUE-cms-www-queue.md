@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `CMS-QUEUE` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
-| **Status** | **in progress**: draft preview, scheduled publishing, revisions, responsive images, Articles and search are live (CMS v2026.11.10.3 to v2026.11.10.5, UI v2026.11.10.2 to v2026.11.10.4). The About page managed in the CMS (CMS #130, UI #109) is merged, not yet in a production release |
+| **Status** | **in progress**: draft preview, scheduled publishing, revisions, responsive images, Articles and search are live (CMS v2026.11.10.3 to v2026.11.10.5, UI v2026.11.10.2 to v2026.11.10.4). The About page managed in the CMS (CMS #130, UI #109) is merged, not yet in a production release. Continue watching (UI #115), videos in www search (UI #114), the newsletter (UI #117, AlUmmahNow #1384) and the scholar fallback, nav link and byline links (UI #113, CMS #137) are built, in review |
 | **Last updated** | 2026-11-14 |
 
-> Scheduled publishing (#41), revisions (#43), draft preview (CMS #38, UI #24), image variants (#42) shipped 2026-11-10. Post search shipped on www (CMS #60, UI #35), and the CMS gained a writer role for scholars (CMS #67). A general Content Editor role, embedded discussions on www (Epic 26), continue watching on www, a newsletter and retiring the old `al-ummah-now-ui` Worker are still queued.
+> Scheduled publishing (#41), revisions (#43), draft preview (CMS #38, UI #24), image variants (#42) shipped 2026-11-10. Post search shipped on www (CMS #60, UI #35), and the CMS gained a writer role for scholars (CMS #67). Continue watching, videos in www search, the newsletter and the scholar links are built and in review (package WWW-1). A general Content Editor role, embedded discussions on www (Epic 26) and retiring the old `al-ummah-now-ui` Worker are still queued.
 
 ## Goal
 
@@ -25,9 +25,10 @@ Work deferred out of CMS/www v1.
 | – | Draft preview (#9) | Shipped |
 | – | Image resizing | Shipped as AVIF/WebP variants (#42) |
 | – | Embedded discussions on www (Epic 26 consumer) | Queued ([AlUmmahNowUI#3](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/3)) |
-| – | Continue watching on www | Queued ([AlUmmahNowUI#4](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/4)) |
-| – | Search | Post search shipped: header autocomplete and a search page over live CMS posts (CMS #60, UI #35). Searching videos from www is not built. |
-| – | Newsletter | Queued ([AlUmmahNowUI#6](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/6)) |
+| – | Continue watching on www | Built, in review ([AlUmmahNowUI#115](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/115), closes #4): a row under the hero for signed-in viewers, filled in the browser from the videos API's continue-watching list so the home HTML stays edge-cacheable. www's sealed session cookie now holds the access and refresh tokens (refreshed server-side, revoked at sign-out). |
+| – | Search | Post search shipped: header autocomplete and a search page over live CMS posts (CMS #60, UI #35). Videos in www search: built, in review ([AlUmmahNowUI#114](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/114)): a Videos group in the search boxes and up to 6 videos on the search page from the videos API's search index, linking to the videos site's search for more. |
+| – | Newsletter | Built, in review ([AlUmmahNow#1384](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1384), [AlUmmahNowUI#117](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/117), closes #6). The videos admin API stores subscribers (double opt-in, only token hashes, per-IP rate limit, Turnstile where enforced) and sends through Resend via its contact mail queue (retry/backoff, DLQ, failures on the Errors page with Retry). Admins write issues in English and Arabic on the admin Newsletter page (`newsletter:manage`, audited) and erase subscribers. www has a footer form on every page and `/{l}/newsletter/`, plus confirm and unsubscribe pages (button POST; RFC 8058 one-click). $0 on Resend's free tier (3,000 emails a month). |
+| – | Scholar fallback, nav link and byline links (UI #41, #42) | Built, in review ([AlUmmahNowUI#113](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/113), [AlUmmahNowCMS#137](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/137)): scholar pages render from the KV snapshot when the CMS is down; Scholars / العلماء in the header menu (CMS) and in www's built-in nav; timeline bylines link to the scholar page with `rel=author`. |
 | – | Retire `al-ummah-now-ui` and `bknd` Workers | `al-ummah-now-ui` queued ([AlUmmahNowUI#5](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/5)). `bknd` closed: no such Worker was ever deployed ([AlUmmahNowCMS#11](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/11)). |
 | – | Contact us link on www | Shipped (UI #23) |
 
