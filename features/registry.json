@@ -1382,6 +1382,23 @@
         "AlUmmahNowAndroid#23",
         "AlUmmahNowAndroid#24"
       ]
+    },
+    {
+      "id": "public-profile",
+      "name": {
+        "en": "Public profile",
+        "ar": "الملف الشخصي العام"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "api"
+      ],
+      "wiki": "epics/E29-core-web-experience.md",
+      "prs": [
+        "AlUmmahNow#1385"
+      ],
+      "note": "A public page at /u/@handle with the user's name, picture, bio and public channels, plus playlists, subscriptions and liked videos when the user turns them on. Held for the owner's screenshot review."
     }
   ]
 }
