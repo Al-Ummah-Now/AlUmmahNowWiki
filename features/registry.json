@@ -336,7 +336,7 @@
         "AlUmmahNow#1415",
         "AlUmmahNow#1443"
       ],
-      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the default tier, which admins pick on Tiers (one tier, or None; Member as shipped, AlUmmahNow#1443). Held for the owner's screenshot review."
+      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the default tier, which admins pick on Tiers (Free «مجاني» ships as the default and cannot be deleted, AlUmmahNow#1443). Held for the owner's screenshot review."
     },
     {
       "id": "payments",

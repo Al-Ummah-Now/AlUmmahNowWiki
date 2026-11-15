@@ -37,17 +37,23 @@ everyone.
 - **Capability flags on every tier:** `uploads`, `channels`, `pages`, `requestable`. A tier also has a display order and optional Arabic name, description and Arabic description, shown on `/upgrade`.
 - **Member** allows no uploads, channels or pages, so nothing changes for users. The owner can turn `pages` on later, in the tier editor.
 - **Creator** allows uploads and channels and is requestable. **Unlimited** allows everything and is not requestable: it stays the super admins' tier.
-- **No backfill.** A user with no assignment row holds the default tier, which ships as Member, so every user without a tier is already on Member and prod (one real user) needs no data change. Since [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), assigning Member writes an explicit row (see [Default tier](#default-tier)).
+- **No backfill.** A user with no assignment row holds the default tier, which ships as **Free** (see [Default tier](#default-tier)), so prod (one real user) needs no data change. Since [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), assigning Member writes an explicit row (see [Default tier](#default-tier)).
 - **Enforcement** reads the flags: `tierAllowsUploads` and `tierAllowsChannels` in the upload limits, the channel-create gate and `/api/me/creator`, which also reports `canCreatePages` for when pages open. Channel editors still upload under the owner's tier; the upload page's channel picker and the channel settings notice read the flags too.
 - The admin's tier control offers "Use default tier" first, then every tier (Member included). The Tiers page counts users with no assignment on the default tier.
 
 ## Default tier
 
-[O34](decisions.md#o34-admins-pick-the-default-tier): admins mark **one** tier as the default, or **None**. Built in [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), stacked on #1415 and held for the owner's screenshots.
+[O34](decisions.md#o34-admins-pick-the-default-tier): admins mark **one** tier as the default. The shipped default is **Free**. Built in [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), stacked on #1415 and held for the owner's screenshots.
 
-- **What it is.** Every account without an assigned tier holds the default. It is read on every request (`creator_tier_settings.default_tier_id`, migration `0051`, seeded with `member`) and never copied into assignment rows, so changing it changes everyone on it at once. **None** means no tier at all: no uploads, no channels, no pages.
+- **What it is.** Every account without an assigned tier holds the default. It is read on every request (`creator_tier_settings.default_tier_id`, migration `0051`) and never copied into assignment rows, so changing it changes everyone on it at once. Accounts with no tier keep no row and follow the default.
+- **Free («مجاني»)** (owner decision 2026-11-15) replaced the hard-coded "None". It is shipped by migration `0051` as the default, with exactly what a user with no tier could do before: no uploads, no channel creation, no pages, 0 caption minutes. Nothing changes for anyone on deploy.
+  - Free is the minimum. Like Member, Creator and Unlimited, it cannot be deleted.
+  - Its limits are fully editable, including Unlimited. Free is not requestable.
+  - Admins can still make another tier the default.
+  - "None" can no longer be chosen (400 `invalid_default`). A stored `none`, or a missing default, reads as Free.
+  - Member (from #1415) now matches Free's capabilities; whether to keep it is the owner's call.
 - **Assignments are explicit.** Any assigned tier, Member included, is its own row and stays when the default changes. "Use default tier", the tier picker's first option, removes the row.
-- **Admin › Tiers.** A Default tier card names the current default and how many users hold it. Each tier has **Set as default**, and the card has **Make None the default**. The change applies at once with Undo (no confirm), and the audit shows it as "Default tier: default set to X" (`creator-tier:default`, previous value kept).
+- **Admin › Tiers.** A Default tier card names the current default and how many users hold it. Each tier has **Set as default**. The change applies at once with Undo (no confirm), and the audit shows it as "Default tier: default set to X" (`creator-tier:default`, previous value kept).
 - **Guards.** The default tier's Delete is disabled with the reason ("set another default first"; API 409 `tier_is_default`). A deleted tier cannot become the default (409 `default_tier_deleted`, "restore it first").
 - **Where it shows** (owner correction 2026-11-15: no "Default (Tier X)" next to users).
   - Users show their tier's **name only**, the default's name when none is assigned.
@@ -55,8 +61,8 @@ everyone.
   - On the admin user page and the Users list, the picker's first option is "Use default tier". The Users filter separates assigned users from users on the default tier.
   - The tier is shown on the user's admin page, not in the channel view.
   - `/upload` says "Your tier: Creator".
-  - `/upgrade` lights the default's card as "Your current tier". When the default is None, it says "You don't hold a tier yet".
-  - `/api/me/creator`: `via: 'default'`, or `'none'` when the default is None.
+  - `/upgrade` lights the default's card (Free as shipped) as "Your current tier".
+  - `/api/me/creator`: `via: 'default'` for users on the default.
   - Native apps show `tier.name` from `/api/me/creator` as before, so they need no change.
 - **Needs a tier.** When the default allows uploads, nobody is flagged "needs a tier".
 
