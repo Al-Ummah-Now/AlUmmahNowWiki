@@ -80,7 +80,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O28](decisions.md#o28-home-timeline-in-weekly-kv-buckets) | Home timeline in weekly KV buckets | **decided** | 2026-11-10 | www home timeline |
 | [O29](decisions.md#o29-keep-the-openauth-fork) | Keep the openauth fork | **decided** | 2026-11-07 | Auth |
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
-| [O34](decisions.md#o34-admins-pick-the-default-tier) | Admins pick the default tier (one tier, or None) | **decided** | 2026-11-15 | Creator tiers, AUN-TIER-REQUESTS |
+| [O34](decisions.md#o34-admins-pick-the-default-tier) | Admins pick the default tier; Free ships as the default | **decided** | 2026-11-15 | Creator tiers, AUN-TIER-REQUESTS |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -823,7 +823,7 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 
 **Status:** decided · **Date:** 2026-11-15
 
-Admins mark exactly one tier as the default on Admin › Tiers, or None. The default applies to every account without an assigned tier and is effective, not copied: changing it changes everyone on it. Users show only their tier's name, the default's when none is assigned. "Default" marks only the default tier on the Tiers list, and the user's tier picker starts with "Use default tier". The tier shows on the user's admin page, not in the channel view (owner correction, 2026-11-15). `/upload` and `/upgrade` show the effective tier by name. The change is audited and has Undo. A deleted or retired tier cannot be the default.
+Admins mark exactly one tier as the default on Admin › Tiers. The shipped default is **Free** («مجاني», owner decision 2026-11-15), a real tier that replaced the hard-coded "None". It is seeded with exactly what a user with no tier could do (no uploads, no channels, 0 caption minutes), it cannot be deleted, and its limits are fully editable. Accounts with no tier follow the default; no per-user rows are written. The default applies to every account without an assigned tier and is effective, not copied: changing it changes everyone on it. Users show only their tier's name, the default's when none is assigned. "Default" marks only the default tier on the Tiers list, and the user's tier picker starts with "Use default tier". The tier shows on the user's admin page, not in the channel view (owner correction, 2026-11-15). `/upload` and `/upgrade` show the effective tier by name. The change is audited and has Undo. A deleted or retired tier cannot be the default.
 
 **Blocks / affects:** Creator tiers, AUN-TIER-REQUESTS, AUN-SUBS
 
