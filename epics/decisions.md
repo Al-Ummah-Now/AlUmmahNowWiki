@@ -823,7 +823,7 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 
 **Status:** decided · **Date:** 2026-11-15
 
-Admins mark exactly one tier as the default on Admin › Tiers, or None. The default applies to every account without an assigned tier and is effective, not copied: changing it changes everyone on it. User and channel views show "Default (Tier X)", and `/upload` and `/upgrade` show the effective tier. The change is audited and has Undo. A deleted or retired tier cannot be the default.
+Admins mark exactly one tier as the default on Admin › Tiers, or None. The default applies to every account without an assigned tier and is effective, not copied: changing it changes everyone on it. Users show only their tier's name, the default's when none is assigned. "Default" marks only the default tier on the Tiers list, and the user's tier picker starts with "Use default tier". The tier shows on the user's admin page, not in the channel view (owner correction, 2026-11-15). `/upload` and `/upgrade` show the effective tier by name. The change is audited and has Undo. A deleted or retired tier cannot be the default.
 
 **Blocks / affects:** Creator tiers, AUN-TIER-REQUESTS, AUN-SUBS
 
