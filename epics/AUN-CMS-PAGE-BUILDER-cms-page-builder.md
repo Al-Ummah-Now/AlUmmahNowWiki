@@ -61,6 +61,16 @@ Limits are in the module: up to 80 blocks per page, 24 gallery images, 24 shelf 
   - logical properties only, so RTL mirrors itself;
   - container queries, not media queries, so a block lays out by the width it has and the CMS phone preview is faithful;
   - no `style` attributes, because www's CSP is `style-src 'self'`.
+- **Frosted glass** (owner, 2026-11-15). Toned panels (soft, card, accent, night) and the hero card are frosted glass with a golden glow:
+  - the theme's surface at 62% over `backdrop-filter: blur(16px) saturate(1.2)` (with `-webkit-`), so the lantern street shows through softly;
+  - a thin line and an outer glow (`0 0 32px`) in the theme's primary: Fawanees gold, other themes their own. No ornaments;
+  - 94% surface without `backdrop-filter` or with `prefers-reduced-transparency`; print drops the blur and the glow;
+  - the blur sits on static boxes only, never on a scrolling or animated layer (the street is off on the watch page, AlUmmahNow #1233).
+- **One glass for every info page.** Any host box reuses the same style with `class="pb-glass"` (`pb-glass-stack` and `pb-glass-box` give text pages their spacing and shape); hosts never copy it. Every static text or info page shows its sections in these boxes:
+  - **videos site:** About (one box per `##` section), Community Guidelines (one per section), Privacy & data, Help (the tour card and each topic section), Contact (the form and the side box);
+  - **www:** every CMS page that is only text (markdown blocks), such as Privacy, Terms, the Cookie policy and About as migrated: one box per `##` section (`packages/render/src/glass-sections.ts`). Pages built from blocks get the glass on their toned panels;
+  - **scholar sites:** About (its text, and the channel's links in a box of their own) and every site page that is only text.
+- **Contrast.** Text on the glass is measured against the darkest and the lightest pixel behind it, with the street showing through, at three scroll positions, in every theme, light and dark. The checks are AlUmmahNowUI `apps/www/e2e/page-blocks-glass.spec.ts` and AlUmmahNow `apps/web/e2e/release/static-pages-glass.spec.ts`.
 - **Escaping.** The renderer escapes every editor value, checks every URL and writes image dimensions only as whole numbers. Hosts insert its HTML as is (Astro `set:html`, React `dangerouslySetInnerHTML`, the preview iframe's `srcdoc`).
 
 ## 4. Editor (AlUmmahNowCMS)
@@ -159,6 +169,7 @@ None. Validation, serving and rendering run synchronously in the request; video 
 - AlUmmahNow [#1368](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1368): canonical module, videos About page
 - AlUmmahNowCMS [#136](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/136): editor, migration 0022, public API
 - AlUmmahNowUI [#112](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/112): www and scholar sites
+- Frosted glass on panels and every info page: AlUmmahNow [#1481](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1481), AlUmmahNowCMS [#138](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/138), AlUmmahNowUI [#122](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/122)
 
 ## Sources
 
