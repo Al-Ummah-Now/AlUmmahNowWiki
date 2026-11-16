@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-16: CI test selection, shadow mode
+
+- **AlUmmahNow:** Local E2E has a **Test selection** job. It maps a PR's changed files onto the dependency graph and reports which E2E suites it would run and skip, with the reason for each. A **CI gate** job records every job selection would have skipped that failed. Every suite still runs until the owner has reviewed the shadow data. Replayed on [#1521](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1521), it runs admin + release and skips the five web shards and Player E2E ([#1542](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1542)). See [CI test selection](ci-test-selection.md).
+
 ## 2026-11-16: Arabic shows Eastern Arabic (Hindi) numerals
 
 - **Rule ([O35](../epics/decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals)):** Arabic pages and emails show ٠–٩ for every number, date, time, duration, percentage and amount of money; English keeps 0–9. Money in Arabic reads «١٢٫٦٩ دولار أمريكي». See [Numbers and dates](numbers-and-dates.md).
