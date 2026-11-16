@@ -173,6 +173,11 @@ The header bell's badge counts what is **new since the user last opened the noti
 - **API:** `POST /api/notifications/seen` `{ ids? }`, `POST /api/notifications/unread` `{ ids }`; list and unread-count return `unseenCount` and `menuOpen` next to `unreadCount`. Native apps have no bell yet ([Core#40](https://github.com/Al-Ummah-Now/AlUmmahNowCore/issues/40)).
 - **Privacy:** the seen time is exported (`notificationState`) and erased with the account.
 
+## Dialogs and the Undo toast
+
+- **Direction.** The shared dialogs (`components/ui/dialog.tsx`, `alert-dialog.tsx`, `confirm-dialog.tsx`) render in a portal outside the page's `dir` wrapper, so each sets `dir` from the document (`hooks/useTextDirection`: `<html dir>`, or the embed's `?lang=` through `LocaleOverrideContext`; no providers needed). In Arabic a dialog is right to left: text at the start (right), actions at the end edge in mirrored order. Use logical classes in dialogs (`text-start`, `ms-`/`me-`, `start-`/`end-`, `gap-`), never `text-left`, `ml-`/`mr-` or `space-x-`.
+- **Undo over confirm.** A reversible action (a soft delete kept for 30 days) happens at once and shows the app-wide Undo toast: `showUndoToast()` from `lib/undo-toast`, rendered once by `components/common/UndoToastHost` in the locale layout so it outlives the card or page. It sits above the phone tab bar, pauses while hovered or focused, and keeps Undo on a failed restore. A confirm dialog stays only for actions that can't be undone (e.g. deleting a channel). Community posts use it (`lib/community/delete-post.ts`).
+
 ## Owners and contacts
 
 The repo doesn't name individual owners and has no CODEOWNERS file. Security reports go through private vulnerability reporting.
