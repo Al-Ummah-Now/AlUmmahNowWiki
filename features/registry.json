@@ -1714,9 +1714,11 @@
       "wiki": "epics/CMS-QUEUE-cms-www-queue.md",
       "prs": [
         "AlUmmahNow#1384",
-        "AlUmmahNowUI#117"
+        "AlUmmahNowUI#117",
+        "AlUmmahNow#1484",
+        "AlUmmahNowUI#123"
       ],
-      "note": "Double opt-in sign-up on www, issues in English and Arabic sent from the videos admin through Resend."
+      "note": "Double opt-in sign-up on www, issues in English and Arabic sent from the videos admin through Resend. Hidden entirely (no footer form, pages 404) while it can't send or www isn't configured; unsubscribe always works."
     },
     {
       "id": "scholar-links",
