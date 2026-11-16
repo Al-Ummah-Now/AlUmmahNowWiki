@@ -27,6 +27,7 @@ normal users may create pages.
 - Prices are never shown. A card offers **Request**, not Buy.
 - All background work runs through queues with retries and a dead-letter queue. A delivery that gives up flags the admin on the Errors page, with Retry ([O26](decisions.md#o26-always-async-with-admin-visible-errors)).
 - No new store: the requests live in the search D1, next to the tier assignments.
+- **Wording** (owner, 2026-11-15): request mode says **"Request tier"** / «اطلب فئة» (header pill, notices, dialog heading). A tier card's button says "Request" / «اطلب», because the card names the tier, and its accessible name is "Request tier: …". Pay mode says "Upgrade" / «ترقية». The Arabic word for tier is «فئة» everywhere: on `/upgrade`, in the emails, in Billing and in the admin.
 - Copy follows the [copy tone guide](../guides/copy-tone.md): "subscribe", never "follow"; the Arabic word for video is «مرئي».
 
 ## The Member tier
