@@ -1078,7 +1078,7 @@
         "en": "Scholar pages",
         "ar": "صفحات العلماء"
       },
-      "status": "live",
+      "status": "ready",
       "apps": [
         "videos",
         "www",
@@ -1094,7 +1094,8 @@
         "AlUmmahNow#723",
         "AlUmmahNowUI#38",
         "AlUmmahNowCMS#67"
-      ]
+      ],
+      "note": "Ready to use; production has no scholar pages yet (www /scholars says so). It moves to live when the first scholar page is published in production."
     },
     {
       "id": "scholar-sites",
@@ -1102,7 +1103,7 @@
         "en": "Scholar sites, with their own domains",
         "ar": "مواقع العلماء بنطاقاتها الخاصة"
       },
-      "status": "live",
+      "status": "ready",
       "apps": [
         "sites",
         "cms"
@@ -1122,7 +1123,7 @@
         "AlUmmahNow#1204",
         "AlUmmahNow#1272"
       ],
-      "note": "Site pages, own domains and link cards shipped in UI v2026.11.14.2."
+      "note": "Ready to use; no scholar sites in production yet (QA has one test site). Site pages, own domains and link cards shipped in UI v2026.11.14.2. It moves to live when the first production site is set up."
     },
     {
       "id": "status-page",

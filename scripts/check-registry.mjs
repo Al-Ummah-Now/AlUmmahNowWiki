@@ -11,7 +11,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const STATUSES = ['live', 'rolling', 'building', 'planned'];
+export const STATUSES = ['live', 'ready', 'rolling', 'building', 'planned'];
+/** Statuses that are in a production release, so they name it. */
+export const RELEASED = ['live', 'ready'];
 export const APPS = ['videos', 'videos-admin', 'api', 'www', 'sites', 'status', 'cms', 'auth', 'profile', 'auth-admin', 'dev', 'native'];
 export const REPOS = ['AlUmmahNow', 'AlUmmahNowUI', 'AlUmmahNowCMS', 'AlUmmahNowAuth', 'openauth', 'AlUmmahNowTools', 'AlUmmahNowCore', 'AlUmmahNowApple', 'AlUmmahNowAndroid', 'AlUmmahNowDesktop'];
 const TAG = /^v\d{4}\.\d{2}\.\d{2}(\.\d+)?$/;
@@ -49,8 +51,10 @@ export function validateRegistry(reg, root) {
       if (r.run !== undefined && (!Number.isInteger(r.run) || typeof r.sha !== 'string' || !/^[0-9a-f]{7,40}$/.test(r.sha))) errs.push(`${at}: release.run needs an integer run id and a commit sha`);
       if (r.before !== undefined && !TAG.test(r.before)) errs.push(`${at}: release.before is the repo's first tag, such as v2026.11.06`);
     }
-    if (f.status === 'live' && !r) errs.push(`${at}: live needs the release it shipped in`);
-    if (f.status !== 'live' && r) errs.push(`${at}: only live features have a release (it is the production release it shipped in)`);
+    if (RELEASED.includes(f.status) && !r) errs.push(`${at}: ${f.status} needs the release it shipped in`);
+    if (!RELEASED.includes(f.status) && r) errs.push(`${at}: only live and ready features have a release (it is the production release it shipped in)`);
+    // ready = shipped but nothing in production uses it yet; the note says what it waits for
+    if (f.status === 'ready' && !f.note?.trim?.()) errs.push(`${at}: ready needs a note saying what it waits for (such as the first site an admin adds)`);
     if ((f.status === 'rolling' || f.status === 'building') && !f.prs?.length) errs.push(`${at}: ${f.status} needs the PRs`);
   }
   return errs;
