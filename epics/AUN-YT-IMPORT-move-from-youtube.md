@@ -105,6 +105,14 @@ When everything is done: a summary (imported, left out, failed), links to the ch
 
 Google returns to our API (`/api/youtube-import/oauth/callback`), which never finishes the connection itself: it keeps Google's code against a fresh one-time **connect token** (only its SHA-256 is stored) and sends the browser back to Studio with `?connect=<token>`. Studio then calls `POST /api/youtube-import/oauth/finish` signed in; the connection is made only when the signed-in user is the one who started it and can still import into the channel. A different account gets a refusal and the consent is deleted. So a consent link sent to someone else can never attach their YouTube channel to the sender's import. Every import action re-checks the caller's channel access, and each video claims its upload once (a second attempt answers "already taken").
 
+## Hidden while off
+
+Creators never see that the feature exists until it works (owner, 2026-11-15). While the admin switch is off, or the client ID or client secret is missing:
+
+- Studio shows no **Move from YouTube** tab, and `/studio/{channel}/content/youtube` is a plain 404. The Studio layout asks `GET /api/youtube-import/available?channelId=` on the server, and the tab appears only when it answers 200: the feature is on and configured **and** the caller may import into that channel (channel role and a creator tier).
+- Every `/api/youtube-import/*` route, and an upload initiate that names an import, answers **404 `feature_off`**, with no message about it. Google's callback sends the browser to the Studio dashboard, and a wizard left open when the switch goes off leaves for the dashboard silently.
+- Readiness messages ("client secret missing", setup steps) appear only on the admin page.
+
 ## Admin
 
 - **Videos admin → Platform settings → YouTube import** (`media:manage`): on/off, the Google OAuth **client ID**, the **client secret** (write only: "Add client secret" / "Replace" takes it once, it is never shown again; the page says Present or Missing, set here by whom and when, or read from the Secrets Store fallback; replacing it disconnects imports connected at that moment, whose refresh tokens are sealed under it), the **redirect URI** to register in Google Cloud, the scopes, and the setup steps (Google Cloud project, YouTube Data API v3 enabled, OAuth consent screen, verification, quota). Every change is audited (`site_settings_log`, keys `youtube-import:settings` and `youtube-import:client-secret`; the second records only present/missing and the source, never the value).
