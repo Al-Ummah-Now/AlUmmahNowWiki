@@ -157,6 +157,33 @@ and CI fails when a copy differs: www, the dev site and scholar sites `npm run c
 videos admin, Auth admin) have unit tests that render the header pieces and compare them with
 `nav/header.js`. Every app's header axe check runs in English and Arabic.
 
+## Surfaces: frosted-glass cards, flat Material everything else
+
+Owner, 2026-11-16 ([O36](decisions.md#o36-one-frosted-glass-surface-primitive-flat-material-elsewhere)). One primitive in every app (videos site and Studio, admin, www, scholar sites, the page builder): AlUmmahNow `packages/fanous-tokens/surfaces/aun-surfaces.css`, vendored by AlUmmahNowUI (`scripts/sync-fanous.ts`).
+
+- **Cards and boxes are frosted glass with a golden edge and glow:**
+  - the theme's raised surface at 62% over `blur(16px) saturate(1.2)`;
+  - a 1px edge and a soft outer glow in the theme's primary (Fawanees gold, other themes their own).
+- **Three glasses:**
+  - `aun-glass`: cards, sections and empty states.
+  - `aun-glass-lite`: the same without the blur, for rows of long lists, post cards and video cards. A blur per row costs a compositor layer each.
+  - `aun-glass-panel`: about 88% opaque with a soft float shadow, for dialogs, menus, listboxes and popovers.
+- **Fallbacks:** near-opaque without `backdrop-filter` or with reduced transparency; print drops the glass. No blur on a scrolling or animated layer.
+- **Everything else is flat Material:**
+  - solid fills, with no gradients, inner sheen or heavy shadows;
+  - one radius scale (card 16, panel 20, menu 12, item 8, buttons full) and one spacing scale.
+  - Gradients that do work stay: scrims over media, skeleton shimmer, fade edges, the street, and the hero's own gradient option.
+- **Buttons:**
+  - filled (the theme's primary, gold in Fawanees) for the main action only;
+  - tonal or outlined for the rest, text buttons for low emphasis, danger filled;
+  - Material state layers on hover and press.
+  - Card buttons sit in a footer row at the end edge (`aun-actions`).
+- **Menus** (⋮ row menus, account and header menus, sort and filter menus, listboxes) are a flat list on the panel glass:
+  - each item has its icon at the start edge, so in Arabic it sits on the right before the label;
+  - dividers between groups, and destructive items in the theme's danger **text** colour;
+  - they stay on-screen, take the page's direction (never a stamped `dir="ltr"`) and are keyboard accessible (the shared `MenuButton` on the videos site).
+- **RTL:** components never add `flex-row-reverse` for Arabic on top of `dir="rtl"`; the double flip puts avatars, icons and actions on the wrong side.
+
 ## Decisions and constraints
 
 - [D6](decisions.md#d6-fonts): Fonts (open)

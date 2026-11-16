@@ -840,6 +840,16 @@ Arabic pages use Eastern Arabic (Hindi) numerals ٠–٩ everywhere: numbers, co
 
 **Sources:** owner decision on [AlUmmahNow#1488](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1488) and [AlUmmahNow#1496](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1496), 2026-11-15
 
+### O36: One frosted-glass surface primitive, flat Material elsewhere
+
+**Status:** decided · **Date:** 2026-11-16
+
+Every card, box, dialog panel and menu is frosted glass with a golden edge and glow, from one shared token set and class set, in every app. Everything else is flat Material: solid fills, no gradients, no inner sheen, no heavy shadows. Buttons are flat (filled primary for the main action only), and card buttons go in an end-aligned footer row. Menus are flat lists on the frosted panel, on-screen, mirrored in Arabic and keyboard accessible. Long lists and media cards use a no-blur variant for performance.
+
+**Blocks / affects:** [Epic 10](E10-fanous-design-system.md), [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md)
+
+**Sources:** owner in chat, 2026-11-16; [AlUmmahNow#1523](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1523), [AlUmmahNowUI#125](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/125)
+
 ### O37: With tier requests off and no payment provider, /upgrade is an off feature
 
 **Status:** decided · **Date:** 2026-11-19
