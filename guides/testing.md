@@ -29,6 +29,8 @@ The legacy QA suite runs once after each release tag, only for the web specs sti
 
 The `skip-qa-e2e` label ([#928](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/928)) no longer does anything: no suite runs against QA on a pull request ([#1190](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190)).
 
+Which of these suites a pull request needs is worked out from the repo's dependency graph: see [CI test selection](ci-test-selection.md). It runs in shadow mode for now, so every suite still runs.
+
 ## The local stack
 
 One Miniflare instance runs every worker of the monorepo, so queues, Durable Objects, D1, R2, KV and the Secrets Store behave as in a deployed environment ([#962](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/962)).

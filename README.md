@@ -31,6 +31,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Release process](guides/release-process.md) | How each repo reaches production |
 | [Store release checklist](guides/store-release-checklist.md) | What the owner pastes where for the App Store, Play and Microsoft Store: D-U-N-S, Team ID, fingerprints, secrets |
 | [Testing and E2E](guides/testing.md) | Local E2E stack, placement, own data, leftover checks, cleanup jobs |
+| [CI test selection](guides/ci-test-selection.md) | Which E2E suites a PR needs, from the dependency graph; shadow rollout and the CI gate |
 | [Status page](guides/status-page.md) | status.alummahnow.net: what it checks, incidents and maintenance, alerts |
 | [Bot protection](guides/bot-protection.md) | Turnstile, edge rate limits, the Abuse page, and the owner's Cloudflare dashboard steps |
 | [Video delivery](guides/video-delivery.md) | Bunny and R2 side by side, playback source, signed URLs, libraries and collections |
