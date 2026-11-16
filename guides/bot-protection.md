@@ -155,6 +155,8 @@ the widget there.
 
 QA and stage run `enforce` with Cloudflare's test keys in every Worker.
 
+Contact us keeps each message's verdict (pass, fail, missing, error, off, bypass) and shows it on the admin message page. In `monitor` mode a failed or missing check is still accepted, but the message goes straight to **Spam** and no email is sent for it, so nothing is lost and no spammer gets an acknowledgement. Spam is also filed by the message text: two different sales-pitch phrases, or three links or more ([#1480](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1480)).
+
 ### What decides `monitor` → `enforce`
 
 Read on the Abuse page (Operations → Abuse, environment production, last 7 days), per endpoint:
