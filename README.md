@@ -40,6 +40,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
 | [Copy Tone Guide](guides/copy-tone.md) | How UI text reads in English and Arabic: content sharing, not a lecture library |
+| [Localized fields](guides/localized-fields.md) | Staff-set text needs English and Arabic, with Translate; no fallback (user content exempt) |
 | [Help and the identity tour](guides/help-and-tour.md) | The videos site's Help pages, the first-run tour, acting as yourself or a channel, how the pictures are made |
 | [Specs index](guides/specs-index.md) | Every spec in the monorepo, with status |
 | [Changelog](guides/changelog.md) | What changed across the repos, by date and feature |
