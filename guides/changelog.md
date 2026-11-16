@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-15: identity is chosen only in the header
+
+- **One place to choose who you act as:** the header's **Acting as** menu. Comments, replies, posts, likes, subscriptions and playlists always use the current acting identity. Comment, reply and post boxes show only that identity's avatar (your photo or the channel's logo), with no "Commenting as" text and no Switch link. The avatar is named after the identity for screen readers. The reply box used to show the avatar of the person you were replying to; it now shows yours ([#1474](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1474)). 
+
 ## 2026-11-15: R2 transcodes start reliably and a broken transcoder fails the release
 
 - **Why:** a transcoder image built without one of its files crashed at every start from 2026-11-13 until release `v2026.11.14.6`. Stage transcodes never ran, and two production jobs waited 4 to 7 minutes. Retry delays that grew to 15 minutes kept them waiting after the fixed image was live, and the release test skipped the stuck transcode as "slow".
