@@ -57,6 +57,12 @@ In Desktop Studio (Windows and Linux, AlUmmahNowDesktop):
 - `FeaturesClient` in CoreBridge reads the answer after sign-in, on an account or channel switch, and when the window comes to the foreground (at most once a minute). A failed read keeps the last answer; with none, gated pages stay hidden;
 - `StudioPages` decides the tabs: Upload follows `upload`, and Analytics is left out when its API answers `feature_off` or 402. The window moves to Videos, then back to the startup tab once it exists.
 
+In Apple Studio (iPhone, iPad and Mac, AlUmmahNowApple):
+
+- `StudioServicing.features(channelID:)` in AUNCoreBridge reads the answer. `StudioSession` reads it after sign-in, when the app comes to the foreground, and on an account or channel switch. A failed read keeps the last answer; with none, gated entries stay hidden;
+- the Upload tab (iPhone, iPad) and the Upload section (Mac) follow `upload`. Bulk schedule follows `bulkSchedule`. When Analytics answers `feature_off`, the Analytics tab, the Mac section and the per-video stats are left out until the channel changes. A tab that disappears never stays selected;
+- a 402, `upgrade_required` or `uploads_by_invitation` refusal shows no text. An upload refused this way leaves the queue, and the app reads the features again.
+
 ### The `feature_off` convention
 
 A gated API whose feature is off for the caller answers:
