@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-16: staff-set text needs English and Arabic
+
+- **Rule:** every localizable field set by staff or the system (tiers, categories, CMS pages and blocks, templates, status page, help, settings and more) needs both English and Arabic. Forms no longer say "leave empty to use the other one". Each pair gets a **Translate** button (Workers AI, glossary, Qur'an never machine-translated), and older rows missing a language are flagged **Arabic missing**. User content is exempt. See [Localized fields](localized-fields.md). The per-repo PRs are being added here as they land.
+
 ## 2026-11-15: identity is chosen only in the header
 
 - **One place to choose who you act as:** the header's **Acting as** menu. Comments, replies, posts, likes, subscriptions and playlists always use the current acting identity. Comment, reply and post boxes show only that identity's avatar (your photo or the channel's logo), with no "Commenting as" text and no Switch link. The avatar is named after the identity for screen readers. The reply box used to show the avatar of the person you were replying to; it now shows yours ([#1474](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1474)). 
