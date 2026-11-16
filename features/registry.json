@@ -2034,7 +2034,8 @@
       "apps": [
         "videos",
         "api",
-        "status"
+        "status",
+        "native"
       ],
       "wiki": "guides/product-rules.md",
       "prs": [
@@ -2042,9 +2043,10 @@
         "AlUmmahNow#1498",
         "AlUmmahNow#1501",
         "AlUmmahNow#1509",
-        "AlUmmahNow#1510"
+        "AlUmmahNow#1510",
+        "AlUmmahNowDesktop#54"
       ],
-      "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510."
+      "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510. Desktop Studio (Windows, Linux) reads the features and hides Upload, and Analytics on feature_off, in AlUmmahNowDesktop#54."
     }
   ]
 }

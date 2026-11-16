@@ -52,6 +52,11 @@ On the web:
 - Studio passes the features into `lib/studio/nav.ts`, so a tab whose feature is off isn't listed, and its path answers 404;
 - Help blocks, table rows and whole sections can carry a `feature` tag, and they are left out of the page, "On this page" and search while that feature is off.
 
+In Desktop Studio (Windows and Linux, AlUmmahNowDesktop):
+
+- `FeaturesClient` in CoreBridge reads the answer after sign-in, on an account or channel switch, and when the window comes to the foreground (at most once a minute). A failed read keeps the last answer; with none, gated pages stay hidden;
+- `StudioPages` decides the tabs: Upload follows `upload`, and Analytics is left out when its API answers `feature_off` or 402. The window moves to Videos, then back to the startup tab once it exists.
+
 ### The `feature_off` convention
 
 A gated API whose feature is off for the caller answers:
