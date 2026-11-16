@@ -80,6 +80,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O28](decisions.md#o28-home-timeline-in-weekly-kv-buckets) | Home timeline in weekly KV buckets | **decided** | 2026-11-10 | www home timeline |
 | [O29](decisions.md#o29-keep-the-openauth-fork) | Keep the openauth fork | **decided** | 2026-11-07 | Auth |
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
+| [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -827,6 +828,16 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 **Blocks / affects:** [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md), [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md)
 
 **Sources:** owner in chat, 2026-11-14; [AlUmmahNowCMS#136](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/136)
+
+### O35: Arabic uses Eastern Arabic (Hindi) numerals
+
+**Status:** decided · **Date:** 2026-11-15
+
+Arabic pages use Eastern Arabic (Hindi) numerals ٠–٩ everywhere: numbers, counts, dates, times, durations, percentages and money, on the public site, Studio, admin, emails and native apps. English uses Arabic numerals 0–9. Formatting is deterministic: one shared formatter per repo with an explicit numbering system (`ar-u-nu-arab`), so the server and every browser render the same. Messages carry no hard-coded digits (placeholders filled by the formatter). Money in Arabic uses the currency's Arabic name, «١٢٫٦٩ دولار أمريكي», never «US$». Code, ids, URLs, slugs, versions and what people type stay as written; typed numbers accept both digit systems. This replaces the admin's pin to 0–9 (AlUmmahNow#1473).
+
+**Blocks / affects:** every app and email; [Numbers and dates](../guides/numbers-and-dates.md)
+
+**Sources:** owner decision on [AlUmmahNow#1488](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1488) and [AlUmmahNow#1496](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1496), 2026-11-15
 
 ### LIC: Repo licence for Core and the app repos
 

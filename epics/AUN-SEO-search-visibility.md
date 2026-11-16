@@ -190,7 +190,7 @@ Titles use `{page} | Al Ummah Now` in English and `{page} | الأمة الآن`
 | www / scholar-site scholar page | `{name}: articles and videos` | Bio excerpt | Avatar | `ProfilePage` + `Person` |
 | Legal and help (CMS pages) | as CMS | as CMS | default | `WebPage` + `BreadcrumbList` |
 
-**Arabic JSON-LD:** values are in the page's language (`inLanguage: "ar"`), with `alternateName` for the other-language name when there is one. Do not transliterate. Dates are ISO 8601 UTC. Numbers are Western digits in JSON-LD; Arabic-Indic digits are only for display.
+**Arabic JSON-LD:** values are in the page's language (`inLanguage: "ar"`), with `alternateName` for the other-language name when there is one. Do not transliterate. Dates are ISO 8601 UTC. Numbers are Arabic numerals 0–9 in JSON-LD (machine data); Eastern Arabic (Hindi) numerals ٠–٩ are for display ([O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals)).
 
 ### Structured data (JSON-LD)
 

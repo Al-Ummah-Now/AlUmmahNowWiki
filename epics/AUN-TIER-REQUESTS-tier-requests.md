@@ -111,7 +111,7 @@ again.
   - the current tier is the **lit lantern**: a gradient rim, the theme's glow and a flame line along the top edge;
   - the beta notice carries a small lantern mark;
   - the request form is a modal dialog with the same materials;
-  - "How requests work" is a real ordered list (Arabic-Indic numerals in Arabic).
+  - "How requests work" is a real ordered list (Eastern Arabic (Hindi) numerals in Arabic).
 
   The page works in light and dark, LTR and RTL, from 320 px up, with reduced motion respected (the loading shimmer stops).
 - **Accessibility:**
