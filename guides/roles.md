@@ -44,6 +44,8 @@ The members API is in [`channelMembers.ts`](https://github.com/Al-Ummah-Now/AlUm
 
 ## Ownership transfer
 
+**Only a super admin can replace platform credentials** (videos admin → Platform settings → Credentials, the `credentials:manage` permission; see [Platform credentials](platform-credentials.md)).
+
 **Only a super admin can transfer channel ownership**, and only through the admin site. A channel owner can add other roles but can't change who owns the channel. There is no user-facing transfer.
 
 This is specified in the [channel claim and transfer spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/aa6a9980ba9b5a346112f337c7d058d77105a18c/docs/specs/CHANNEL-CLAIM-AND-TRANSFER.md) (draft, [PR #460](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460)). The transfer is on the videos admin's channel page. The super admin picks the new owner from a user search and confirms in the page ([AlUmmahNow#695](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/695)).
