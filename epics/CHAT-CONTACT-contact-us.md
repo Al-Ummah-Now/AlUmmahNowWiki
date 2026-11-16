@@ -33,11 +33,11 @@ The videos admin's **Contact messages** page ([#1480](https://github.com/Al-Umma
 
 - **Opening a message:** click anywhere on its row. Opening a message marks it read.
 - **Read and unread are separate from the status.** The statuses are Open, In progress, Replied, Closed and Spam. A new message is Open and unread. Sending a reply marks it Replied and read.
-- **The nav badge** counts unread messages. Spam never counts. Opening a message updates it at once. On the Contact pages it follows changes made anywhere without a reload. On other admin pages it is redrawn on the next refresh.
+- **The nav badge** counts unread messages. Spam never counts. On every admin page it follows new and read messages without a reload, and without refreshing the page.
 - **Views:** All, Unread, Open, In progress, Spam and Send failed, each with a count. Search, topic, date and assignee filters stay in the URL.
 - **Bulk bar:** select rows to mark them read or unread, set a status, assign them, or delete them.
 - **Delete** happens at once, with an **Undo** toast and no confirm. A deleted message also stays in **Recently deleted** for 30 days.
-- **Assign** uses a live picker over the inbox's own roster: admins who can handle messages and opened the inbox in the last 180 days. Roles are never read from the auth server.
+- **Assign** uses a live picker over everyone who can handle messages: every account with the Admin or Super Admin role, read from the role assignments. The picker opens with all of them before anything is typed.
 - **Spam:** each message keeps its **bot check** result (the Turnstile outcome when it was sent). A message goes straight to Spam, and gets no emails at all, when:
   - the check failed or was missing (monitor mode lets these through), or
   - the text reads as a sales pitch: two different pitch phrases (SEO, "online visibility", "rank higher on Google", a list of website builders, …) or three links or more.

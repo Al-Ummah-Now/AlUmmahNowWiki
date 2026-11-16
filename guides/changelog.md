@@ -9,7 +9,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 - **Why:** the admin's Contact messages badge always said 1 and rows looked read-only. Only the sender's name opened a message, so production's one message, an SEO sales pitch, was never opened and stayed "new". Its acknowledgement email went to the spammer.
 - **Now:**
   - **Opening:** the whole row opens a message, and opening it marks it read. Read and unread are separate from the status, and "In progress" is a new status.
-  - **Badge:** it counts unread messages. Opening a message updates it at once, and on the Contact pages it follows changes without a reload.
+  - **Badge:** it counts unread messages and follows changes on every admin page without a reload.
   - **Bulk and delete:** a bulk bar marks messages read or unread, sets a status, assigns them through a live picker, or deletes them. A delete happens at once with Undo.
   - **Bot check and spam:** each message keeps its bot check result. A failed check or a sales pitch goes straight to Spam, and no email is sent for it.
   - **Layout:** the table no longer scrolls sideways on a phone or in Arabic.
