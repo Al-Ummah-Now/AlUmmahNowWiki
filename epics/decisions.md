@@ -826,6 +826,8 @@ An "upgrade subscription" page like other sites', except users *request* a tier 
 
 Every account has a stored tier: the invite's, otherwise the current default written at sign-up. The default is only what new sign-ups get; changing it never changes existing users. **Free** («مجاني») is the one minimum tier: Member renamed, keeping its id. It is shipped, undeletable and the default out of the box, seeded with today's no-tier rights, with every limit editable. "None" is gone, and accounts without a tier get Free written to them. There is no "Use default tier" option and no assigned-vs-default filter; users show their tier's name only, and "Default" marks the default tier on the Tiers list only. A tier that users, pending invites or the default depend on cannot be deleted (409 with the count; Delete off with the reason). An admin rank orders the Upgrade page and every picker; upgrades are the tiers ranked above the current one.
 
+Invites give a tier, not a Creator/Viewer role (2026-11-16): the tier alone decides what an account may do; an invite can add only the Scholar auth role.
+
 **Blocks / affects:** Creator tiers, AUN-TIER-REQUESTS, AUN-SUBS, invites
 
 **Sources:** [AUN-TIER-REQUESTS › Default tier](AUN-TIER-REQUESTS-tier-requests.md#default-tier), [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443)

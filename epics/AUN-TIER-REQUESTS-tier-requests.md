@@ -49,6 +49,7 @@ everyone.
 
 - **Every account has a stored tier.** Nobody is ever tierless.
   - An invite stores the tier picked on the invite form. The picker starts on the current default; picking another tier needs creators:manage.
+  - An invite gives a tier only: there is no Creator/Viewer role (owner, 2026-11-16, AlUmmahNow#1443). The tier decides what the account may do, and auth roles are untouched apart from the optional Scholar. The picker lists tiers lowest rank first, with names in the admin's language. The invites list shows each invite's tier by name. Older viewer invites map to the default tier (admin-api migration `0031`; the `role` column stays, unread).
   - Otherwise sign-up writes the current default to the account (`POST /api/profiles`, `writeSignupTier`).
   - An account somehow without a row works as Free until the backfill writes it.
 - **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `creator_tier_settings.default_tier_id` (migration `0053`).
