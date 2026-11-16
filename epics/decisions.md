@@ -81,6 +81,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O29](decisions.md#o29-keep-the-openauth-fork) | Keep the openauth fork | **decided** | 2026-11-07 | Auth |
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
 | [O34](decisions.md#o34-admins-pick-the-default-tier) | Stored tier for every account; Free is the one minimum tier and the default | **decided** | 2026-11-15 | Creator tiers, AUN-TIER-REQUESTS |
+| [O35](decisions.md#o35-the-upgrade-page-mode-has-two-inputs) | The Upgrade page mode has two inputs (provider enabled, Allow tier requests) | **decided** | 2026-11-15 | AUN-SUBS, AUN-TIER-REQUESTS |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -828,6 +829,21 @@ Every account has a stored tier: the invite's, otherwise the current default wri
 **Blocks / affects:** Creator tiers, AUN-TIER-REQUESTS, AUN-SUBS, invites
 
 **Sources:** [AUN-TIER-REQUESTS › Default tier](AUN-TIER-REQUESTS-tier-requests.md#default-tier), [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443)
+
+### O35: The Upgrade page mode has two inputs
+
+**Status:** decided · **Date:** 2026-11-15
+
+The request-or-pay switch on `/upgrade` depends only on whether any payment provider is enabled and on the admin setting "Allow tier requests" (Tier requests page; audited, with Undo).
+- A provider enabled: pay (prices and Pay/Subscribe, no request form).
+- No provider, requests allowed: the request form.
+- No provider, requests off: the tiers (ranked) with the current one highlighted and "Upgrades aren't available right now".
+
+No per-tier, env or feature-flag switch takes part. The server refuses a request outside request mode (403).
+
+**Blocks / affects:** AUN-SUBS, AUN-TIER-REQUESTS
+
+**Sources:** [AUN-SUBS › Payments framework](AUN-SUBS-subscriptions-plan.md#payments-framework-building), [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418), [#1419](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1419)
 
 ### LIC: Repo licence for Core and the app repos
 
