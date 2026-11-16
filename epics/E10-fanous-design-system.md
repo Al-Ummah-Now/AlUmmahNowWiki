@@ -182,6 +182,13 @@ Owner, 2026-11-16 ([O36](decisions.md#o36-one-frosted-glass-surface-primitive-fl
   - each item has its icon at the start edge, so in Arabic it sits on the right before the label;
   - dividers between groups, and destructive items in the theme's danger **text** colour;
   - they stay on-screen, take the page's direction (never a stamped `dir="ltr"`) and are keyboard accessible (the shared `MenuButton` on the videos site).
+- **The frame stays attached** (owner, 2026-11-16, "why is nav floating"):
+  - the header stays at the top edge while a page scrolls;
+  - the side rail is a full-height column on the inline-start edge (right in Arabic), from the top bar to the bottom of the screen, never a box that ends mid-page;
+  - the phone tab bar is attached to the bottom edge with safe-area padding.
+  - No glass, transform, filter, perspective, will-change, containment or container type goes on any ancestor of the header, rail, tab bar, menus, dialogs or toasts: any of these makes a fixed child position against that box instead of the screen.
+  - Release regression: AlUmmahNow `apps/web/e2e/release/page-frame.spec.ts`.
+- **Review shots show what a user sees:** viewport-sized frames at the top, middle and end of each page, in a real browser, never full-page captures. A full-page capture draws a fixed bar once, at the first screen's bottom.
 - **RTL:** components never add `flex-row-reverse` for Arabic on top of `dir="rtl"`; the double flip puts avatars, icons and actions on the wrong side.
 
 ## Decisions and constraints
