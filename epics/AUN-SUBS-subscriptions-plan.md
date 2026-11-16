@@ -15,8 +15,15 @@
 
 The owner, 2026-11-14: *"build the framework, no need to enable now, this is for payment, as i said, now its request. if a provider is enabled in admin it switches to pay flow and so on"*.
 
-- **Plans stay creator tiers.** The creator tiers ([CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), with the Member tier from [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)) are the only plans model. The separate [Epic 27](E27-plans-entitlements.md) plans PRs ([#390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/390), [#391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/391), [#427](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/427), [#428](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/428), [#429](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/429)) were closed as superseded.
-- **Off by default.** `/upgrade` stays the request page while no provider is enabled. Once an admin enables one and prices a tier, that tier's card shows the price and Subscribe. A tier set to "By request only" is never sold. With no provider and "Allow tier requests" off, there is no Upgrade page at all ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)): `404 feature_off`, no links to it, and the user's tier still shows in Settings › Tier. Settings › Billing follows the same rule: it is listed and opens only while a provider is on or the account has subscriptions or payments (feature key `billing`); otherwise it is the site's 404.
+- **Plans stay creator tiers.** The creator tiers ([CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), with the Free tier from [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md#default-tier)) are the only plans model. The separate [Epic 27](E27-plans-entitlements.md) plans PRs ([#390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/390), [#391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/391), [#427](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/427), [#428](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/428), [#429](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/429)) were closed as superseded.
+- **The Upgrade page's mode** ([TIER-O35](decisions.md#tier-o35-the-upgrade-page-mode-has-two-inputs), owner rule 2026-11-15) depends on exactly two inputs: whether any payment provider is enabled, and the admin's **Allow tier requests** switch (videos admin › Tier requests; audited, with Undo).
+  - **Pay:** a provider is enabled. The page shows prices and Subscribe, and has no request form. A tier without a price has neither.
+  - **Request:** no provider is enabled and requests are allowed. The page shows the request form (the default).
+  - **Closed:** no provider is enabled and requests are off. The page and its entry points are hidden under [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature), and the user's tier still shows in Settings › Tier.
+  - Nothing else decides the mode: no per-tier switch (the old "By request only" sale mode is gone), no env and no feature flag.
+  - The server enforces it: `POST /api/me/tier-requests` returns 403 `tier_requests_off` in pay mode and 404 `feature_off` in closed mode.
+  - The setting is `tier_requests_enabled` in `creator_tier_settings` (search migration `0063`). The shared-types names are `UPGRADE_MODES` and `upgradeModeOf`.
+- Settings › Billing follows the same rule: it is listed and opens only while a provider is on or the account has subscriptions or payments (feature key `billing`); otherwise it is the site's 404.
 - **Providers.** One interface (checkout, webhook check, status, cancel, refund, portal, price sync) with the PayGood adapter, a test provider for QA and the local stack only, and `manual` for complimentary tiers. Never Stripe ([T2](decisions.md#t2-billing-provider)). [P1](decisions.md#p1-first-paid-providers) decided 2026-11-19: **PayGood only, off until the owner enables it**. Paddle, built from the S16 shortlist while P1 was open, was removed ([AlUmmahNow#1653](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1653)).
 - **Webhooks.** The signature is checked on the raw body, then the event is stored once (idempotent) and handled by a queued job with retry, backoff and a DLQ. Events that match nobody are flagged on the admin Errors page with Retry.
 - **Entitlement.** An active subscription assigns its tier. A higher tier an admin set is kept, and a lower one comes back when the subscription ends. Sweeps end comps and paid periods even if the provider's last event is lost.
@@ -29,6 +36,13 @@ The owner, 2026-11-14: *"build the framework, no need to enable now, this is for
   - subscriptions, cancel, refunds and complimentary tiers
 
   Every change is audited. Refunds and provider settings are for super admins only. Sensitive actions need a step-up.
+- **Password managers and autofill** (owner, 2026-11-16): 1Password, Bitwarden, iCloud Keychain and Chrome/Safari autofill fill every field we own. Each field has a `name`, an `id`, the right `type`, a visible `<label for>`, sits inside a real `<form>` that is in the page from the start, and never has `autocomplete="off"`:
+  - Request tier dialog: the name is `autocomplete="name"`, prefilled from the profile (display name → first + last → email) and editable; the note is a plain named field.
+  - /upgrade pay choices: period, currency (`autocomplete="transaction-currency"`) and provider are one form; Subscribe submits it.
+  - Admin "Tax & seller details": `section-seller organization`, `section-seller street-address`, `section-seller country`; the VAT number has the plain label "VAT number" (no standard token exists).
+  - **Exception:** a provider's API key or merchant ID is not the admin's password, so those fields use `autocomplete="off"` with the 1Password, Bitwarden and LastPass ignore hints (`data-1p-ignore`, `data-bwignore`, `data-lpignore`). That way managers never save or generate one there.
+  - **Cards never touch our pages.** The card number, expiry and CVC are entered only in the provider's hosted checkout: PayGood's hosted page. That is also where managers fill cards. Name and email reach the provider prefilled from the profile and can be changed there. Billing addresses are collected by the provider too.
+  - Tests: unit tests on the attributes (web `UpgradePage`, `PayParts`; admin-web `payments-autofill`), and E2E in Chrome, Firefox and WebKit (`autofill-forms.spec.ts`) plus admin Chromium and WebKit (`24-payments-autofill.spec.ts`).
 - **Going live** needs a Cloudflare token for Secrets Store writes (`payments-secrets-token`), then the provider credentials and their api-videos bindings. Steps are in `docs/features/payments.md` ([#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415)).
 - **Cost:** no new Workers, queues or databases. Provider fees are per transaction.
 
@@ -38,10 +52,10 @@ Each feature was inventing its own tiers: creator tiers, the [Epic 27](E27-plans
 
 ## The proposal in short
 
-- **One plans system.** [Creator tiers](CHAT-CREATOR-TIERS-creator-tiers.md) fold into Epic 27 plans, and every limit is an entitlement key. The default plan is renamed **Member** and grants no creator allowances.
+- **One plans system.** [Creator tiers](CHAT-CREATOR-TIERS-creator-tiers.md) fold into Epic 27 plans, and every limit is an entitlement key. The shipped minimum and out-of-the-box default is [**Free**](AUN-TIER-REQUESTS-tier-requests.md#default-tier), with no creator allowances in its seeded limits.
 - **Watching is never gated.** Plans gate making, storing, processing and AI.
-- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). Option B now has a request page in front of it: [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (the Member tier, `/upgrade`, the admin queue). The recommendation is **B at launch, with C added once the owner enables PayGood ([P1](decisions.md#p1-first-paid-providers), decided 2026-11-19: PayGood only, off until enabled)**. There is no public free creator tier.
-- **Ladder (seeds):** Member, Creator, Creator Plus, Creator Pro, Institution, Staff. A viewer Supporter plan stays deferred ([D4](decisions.md#d4-monetisation)). Scholars hold a role, not a plan; they get a sponsored Creator Plus grant.
+- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). Option B now has a request page in front of it: [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (the Free tier, `/upgrade`, the admin queue). The recommendation is **B at launch, with C added once the owner enables PayGood ([P1](decisions.md#p1-first-paid-providers), decided 2026-11-19: PayGood only, off until enabled)**. There is no public free creator tier.
+- **Ladder (proposal):** Free, Creator, Creator Plus, Creator Pro, Institution, Staff. A viewer Supporter plan stays deferred ([D4](decisions.md#d4-monetisation)). Scholars hold a role, not a plan; they get a sponsored Creator Plus grant.
 - **Add-ons** are additive grants: caption minutes, storage, upload hours, live hours, X posts.
 - **Payments:** never Stripe. Candidates are listed but not decided. Lemon Squeezy, Gumroad and Polar are excluded because they run on Stripe.
 
@@ -62,7 +76,7 @@ Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from sto
 | S1 | One plans system; creator tiers fold into plans | Yes |
 | S2 | Lowest creator tier: A, B or C | B at launch, then C |
 | S3 | Should platform cost controls count subscriber-paid usage? | No: controls cover platform-funded spend; paid usage is tracked separately |
-| S4 | Rename "Free" to "Member", with no creator allowances | Yes |
+| S4 | Rename "Free" to "Member", with no creator allowances | Superseded by [TIER-O34](decisions.md#tier-o34-admins-pick-the-default-tier) |
 | S5 | Tier names | Accept as seeds |
 | S6 | The plan belongs to the user, not to each channel | Yes |
 | S7 | Scholars get a sponsored Creator Plus | Yes |
