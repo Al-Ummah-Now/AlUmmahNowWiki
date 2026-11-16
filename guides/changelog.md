@@ -4,6 +4,18 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-15: a complete Contact messages inbox
+
+- **Why:** the admin's Contact messages badge always said 1 and rows looked read-only. Only the sender's name opened a message, so production's one message, an SEO sales pitch, was never opened and stayed "new". Its acknowledgement email went to the spammer.
+- **Now:**
+  - **Opening:** the whole row opens a message, and opening it marks it read. Read and unread are separate from the status, and "In progress" is a new status.
+  - **Badge:** it counts unread messages and updates without a reload.
+  - **Bulk and delete:** a bulk bar marks messages read or unread, sets a status, assigns them through a live picker, or deletes them. A delete happens at once with Undo.
+  - **Bot check and spam:** each message keeps its bot check result. A failed check or a sales pitch goes straight to Spam, and no email is sent for it.
+  - **Layout:** the table no longer scrolls sideways on a phone or in Arabic.
+
+  The PR is [#1480](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1480); see [Contact us](../epics/CHAT-CONTACT-contact-us.md#how-the-admin-inbox-works).
+
 ## 2026-11-15: R2 transcodes start reliably and a broken transcoder fails the release
 
 - **Why:** a transcoder image built without one of its files crashed at every start from 2026-11-13 until release `v2026.11.14.6`. Stage transcodes never ran, and two production jobs waited 4 to 7 minutes. Retry delays that grew to 15 minutes kept them waiting after the fixed image was live, and the release test skipped the stuck transcode as "slow".
