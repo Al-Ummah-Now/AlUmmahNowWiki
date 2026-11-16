@@ -81,7 +81,8 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 - **Now:**
   - **Opening:** the whole row opens a message, and opening it marks it read. Read and unread are separate from the status, and "In progress" is a new status.
   - **Badge:** it counts unread messages and follows changes on every admin page without a reload.
-  - **Bulk and delete:** a bulk bar marks messages read or unread, sets a status, assigns them through a live picker, or deletes them. A delete happens at once with Undo.
+  - **Bulk and delete:** a bulk bar marks messages read or unread, sets a status, assigns them, or deletes them. A delete happens at once with Undo.
+  - **Assign:** a live picker lists every active Admin and Super Admin from the videos admin's own staff list, which each admin's sign-in token keeps up to date.
   - **Bot check and spam:** each message keeps its bot check result. A failed check or a sales pitch goes straight to Spam, and no email is sent for it.
   - **Layout:** the table no longer scrolls sideways on a phone or in Arabic.
 
