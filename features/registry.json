@@ -2023,6 +2023,28 @@
         "AlUmmahNow#1381"
       ],
       "note": "API, queue jobs and admin-api settings merged (not yet released); the Studio wizard and the admin settings page are held for the owner's screenshots. Needs the owner's Google OAuth client and verification."
+    },
+    {
+      "id": "hidden-when-off",
+      "name": {
+        "en": "Features hidden when off",
+        "ar": "إخفاء الميزات غير المتاحة"
+      },
+      "status": "rolling",
+      "apps": [
+        "videos",
+        "api",
+        "status"
+      ],
+      "wiki": "guides/product-rules.md",
+      "prs": [
+        "AlUmmahNow#1494",
+        "AlUmmahNow#1498",
+        "AlUmmahNow#1501",
+        "AlUmmahNow#1509",
+        "AlUmmahNow#1510"
+      ],
+      "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510."
     }
   ]
 }

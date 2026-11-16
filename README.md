@@ -37,6 +37,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Deletion, erasure and cleanup](guides/data-lifecycle.md) | Soft delete and the 30-day purge, account erasure, scheduled cleanup |
 | [Contributing](guides/contributing.md) | Branches, PRs, tests, migrations, spec → plan → implement |
 | [Authentication and SSO](guides/authentication.md) | How sign-in works across the apps |
+| [Product rules](guides/product-rules.md) | Hidden when off: off, unconfigured or outside the tier is invisible; quotas are plain facts; `GET /api/me/features` and `feature_off` |
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
 | [Copy Tone Guide](guides/copy-tone.md) | How UI text reads in English and Arabic: content sharing, not a lecture library |
