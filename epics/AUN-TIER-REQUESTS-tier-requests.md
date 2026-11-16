@@ -35,7 +35,8 @@ normal users may create pages.
 The normal user tier becomes a real tier, **Member** (`member`, Arabic «عضو»), the default for
 everyone.
 
-- **Capability flags on every tier:** `uploads`, `channels`, `pages`, `requestable`. A tier also has a display order and optional Arabic name, description and Arabic description, shown on `/upgrade`.
+- **Capability flags on every tier:** `uploads`, `channels`, `requestable` (the `pages` flag was removed on 2026-11-16: it controlled nothing). A tier also has a rank, and a name and a description in English **and** Arabic, all four required (localized fields, owner 2026-11-16: no "leave empty to use the one above"; the admin routes answer 400 `tier_text_missing`). A tier saved before that, without its Arabic name or description, shows an "Arabic missing" / «العربية ناقصة» badge on the Tiers list until it is filled in. A Translate action (en↔ar) comes with the site-wide localized-fields work.
+- **Features a tier lacks are hidden** (owner 2026-11-16): no entry point, no upsell; the header's "Request tier" / "Upgrade" button and `/upgrade` are the only ways in. The tier editor's Live help says "Off: Live doesn't appear in Studio for them".
 - **Member** allows no uploads, channels or pages, so nothing changes for users. The owner can turn `pages` on later, in the tier editor.
 - **Creator** allows uploads and channels and is requestable. **Unlimited** allows everything and is not requestable: it stays the super admins' tier.
 - **Free backfill.** Accounts without a stored tier get Free written to them after the release (see [Default tier](#default-tier)). Since [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), assigning Member writes an explicit row (see [Default tier](#default-tier)).
@@ -62,7 +63,8 @@ everyone.
   - it is the default: `tier_is_default`.
   The purge checks all three again.
 - **Rank.** Admins reorder the tiers on the Tiers page's Rank list (drag, or Move up / Move down from the keyboard). Each move saves at once, is audited (`creator-tier:order`) and has Undo. Free ships lowest, Creator in between and Unlimited on top; a new tier goes just below the top one. The rank orders the Upgrade page and every tier picker (admin, invites). An upgrade is a tier ranked above the user's current one: `/upgrade` shows the current tier and the requestable tiers above it, and a request for a tier at or below it is refused.
-- **Where it shows.** Users show their tier's name only. "Default" marks only the default tier on the Tiers list. The tier shows on the user's admin page, not in the channel view.
+- **Where it shows.** Users show their tier's name only. "Default" marks only the default tier on the Tiers list.
+- **Arabic wording** (owner, 2026-11-16): the default tier is «الفئة الأساسية», never «الفئة الافتراضية»: the Tiers list marker «أساسية», «اجعلها الأساسية», the help text, emails and this wiki. The Arabic admin names every tier by its Arabic name (Free is «مجاني»). The tier shows on the user's admin page, not in the channel view.
 - **Backfill.** After the release, `scripts/data/backfill-free-tier.ts --env qa|stage|production` writes Free to every account without a stored tier: dry run with counts first, then `--apply`. It walks the search D1 only, in keyset batches on indexed columns, never the Auth D1. It is idempotent.
 
 ## User flow (`/{en,ar}/upgrade`)
