@@ -7,7 +7,7 @@
 | **ID** | `AUN-TIER-REQUESTS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (web `/upgrade`, api-videos, admin-api, admin-web, processor) |
 | **Status** | **in progress**: built in [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), held for the owner's screenshots |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-15 |
 | **Origin** | Owner request 2026-11-14 |
 
 ## Goal
@@ -27,6 +27,7 @@ normal users may create pages.
 - Prices are never shown. A card offers **Request**, not Buy.
 - All background work runs through queues with retries and a dead-letter queue. A delivery that gives up flags the admin on the Errors page, with Retry ([O26](decisions.md#o26-always-async-with-admin-visible-errors)).
 - No new store: the requests live in the search D1, next to the tier assignments.
+- **Wording** (owner, 2026-11-15): request mode says **"Request tier"** / «اطلب فئة» (header pill, notices, dialog heading). A tier card's button says "Request" / «اطلب», because the card names the tier, and its accessible name is "Request tier: …". Pay mode says "Upgrade" / «ترقية». The Arabic word for tier is «فئة» everywhere: on `/upgrade`, in the emails, in Billing and in the admin.
 - Copy follows the [copy tone guide](../guides/copy-tone.md): "subscribe", never "follow"; the Arabic word for video is «مرئي».
 
 ## The Member tier
@@ -37,9 +38,32 @@ everyone.
 - **Capability flags on every tier:** `uploads`, `channels`, `pages`, `requestable`. A tier also has a display order and optional Arabic name, description and Arabic description, shown on `/upgrade`.
 - **Member** allows no uploads, channels or pages, so nothing changes for users. The owner can turn `pages` on later, in the tier editor.
 - **Creator** allows uploads and channels and is requestable. **Unlimited** allows everything and is not requestable: it stays the super admins' tier.
-- **No backfill.** A user with no assignment row holds Member, and assigning Member deletes the row. Every user without a tier is therefore already on Member, and prod (one real user) needs no data change.
+- **Free backfill.** Accounts without a stored tier get Free written to them after the release (see [Default tier](#default-tier)). Since [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), assigning Member writes an explicit row (see [Default tier](#default-tier)).
 - **Enforcement** reads the flags: `tierAllowsUploads` and `tierAllowsChannels` in the upload limits, the channel-create gate and `/api/me/creator`, which also reports `canCreatePages` for when pages open. Channel editors still upload under the owner's tier; the upload page's channel picker and the channel settings notice read the flags too.
-- The admin's tier control lists "Member (no tier assigned)" once. The Tiers page counts users with no assignment as Member holders.
+- The admin's tier control lists the tiers in rank order (no "remove"). The Tiers page counts stored rows per tier.
+
+## Default tier
+
+[O34](decisions.md#o34-admins-pick-the-default-tier) (owner decisions 2026-11-15). Built in [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), stacked on #1415 and held for the owner's screenshots.
+
+- **Every account has a stored tier.** Nobody is ever tierless.
+  - An invite stores the tier picked on the invite form. The picker starts on the current default; picking another tier needs creators:manage.
+  - Otherwise sign-up writes the current default to the account (`POST /api/profiles`, `writeSignupTier`).
+  - An account somehow without a row works as Free until the backfill writes it.
+- **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `creator_tier_settings.default_tier_id` (migration `0053`).
+- **Free («مجاني») is the one minimum tier.** Member (#1415) was renamed Free (migration `0053`), keeping the id `member` so existing assignments carry over.
+  - Free is shipped, cannot be deleted, is not requestable (nobody requests the bottom tier) and is the default out of the box.
+  - It is seeded with today's no-tier rights: no uploads, no channels, no pages, 0 caption minutes. Every limit stays editable.
+  - The old "None" is gone (400 `invalid_default`); a stored `none` reads as Free.
+- **No "remove".** The tier picker only lists tiers; there is no "Use default tier" option and no assigned-vs-default filter. A request to remove a tier is refused (400 `tier_required`). A subscription that ends puts the user back on the current default.
+- **Delete is blocked** while a tier is in use. The server answers 409 with the count, and admin-web disables Delete, says why and links to the people or invites:
+  - users are on it: `tier_in_use` with `users`, an indexed count;
+  - pending invites carry it: `tier_has_invites` with `invites`, counted by admin-api on `idx_creator_invites_tier` (migration `0030`);
+  - it is the default: `tier_is_default`.
+  The purge checks all three again.
+- **Rank.** Admins reorder the tiers on the Tiers page's Rank list (drag, or Move up / Move down from the keyboard). Each move saves at once, is audited (`creator-tier:order`) and has Undo. Free ships lowest, Creator in between and Unlimited on top; a new tier goes just below the top one. The rank orders the Upgrade page and every tier picker (admin, invites). An upgrade is a tier ranked above the user's current one: `/upgrade` shows the current tier and the requestable tiers above it, and a request for a tier at or below it is refused.
+- **Where it shows.** Users show their tier's name only. "Default" marks only the default tier on the Tiers list. The tier shows on the user's admin page, not in the channel view.
+- **Backfill.** After the release, `scripts/data/backfill-free-tier.ts --env qa|stage|production` writes Free to every account without a stored tier: dry run with counts first, then `--apply`. It walks the search D1 only, in keyset batches on indexed columns, never the Auth D1. It is idempotent.
 
 ## User flow (`/{en,ar}/upgrade`)
 
@@ -63,6 +87,8 @@ everyone.
 7. `/upgrade` is `noindex`.
 
 ## Admin flow (videos admin → People → **Tier requests**)
+
+- **Allow tier requests** ([O35](decisions.md#o35-the-upgrade-page-mode-has-two-inputs)) sits at the top of the page. With no payment provider enabled it chooses between the request form and "Upgrades aren't available right now"; with one enabled the page sells whatever it says. The switch acts at once, is audited and has Undo.
 
 - **Nav and filters.** The nav item has a pending-count badge. Tabs: Pending (oldest first), Approved, Declined and All (newest first). "Show more" pages with a keyset cursor.
 - **Each card shows:**
