@@ -37,7 +37,8 @@ The videos admin's **Contact messages** page ([#1480](https://github.com/Al-Umma
 - **Views:** All, Unread, Open, In progress, Spam and Send failed, each with a count. Search, topic, date and assignee filters stay in the URL.
 - **Bulk bar:** select rows to mark them read or unread, set a status, assign them, or delete them.
 - **Delete** happens at once, with an **Undo** toast and no confirm. A deleted message also stays in **Recently deleted** for 30 days.
-- **Assign** uses a live picker over everyone who can handle messages: every account with the Admin or Super Admin role, read from the role assignments. The picker opens with all of them before anything is typed.
+- **Assign** uses a live picker over the videos admin's own **staff list**: every active Admin or Super Admin. The picker opens with all of them before anything is typed.
+- **The staff list** is a table in the videos admin (`admin_staff`), written from each staff member's own sign-in token when it reaches the admin API, with the role that token carries. Writes are throttled: at most once per person every 10 minutes, unless the role or email changes. A later token without a staff role marks the person inactive, and so does an Auth request that suspends or deletes their account once it is carried out. Erasing the account deletes the row. Auth's role tables are never read, so Auth's database takes no load from it.
 - **Spam:** each message keeps its **bot check** result (the Turnstile outcome when it was sent). A message goes straight to Spam, and gets no emails at all, when:
   - the check failed or was missing (monitor mode lets these through), or
   - the text reads as a sales pitch: two different pitch phrases (SEO, "online visibility", "rank higher on Google", a list of website builders, …) or three links or more.
