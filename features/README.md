@@ -13,12 +13,13 @@
 
 | Status | Site label (en / ar) | Means |
 |---|---|---|
-| `live` | Live / يعمل الآن | In a production release: an AlUmmahNow, UI or CMS tag whose release run's production job succeeded, or an Auth `main` release run whose production job succeeded. `release` names it. |
+| `live` | Live / يعمل الآن | In a production release **and in use there**: people use it, or the sites, pages or other instances it serves exist in production. The release is an AlUmmahNow, UI or CMS tag whose release run's production job succeeded, or an Auth `main` release run whose production job succeeded. `release` names it. |
+| `ready` | Ready, not in use yet / جاهز، لم يُستخدم بعد | In a production release and switched on, but nothing in production uses it yet: no instances exist (no scholar site, no scholar page) or an admin has not set it up. `release` names the release; `note` says what it waits for. It becomes `live` when the first production use appears. |
 | `rolling` | Built, rolling out / مكتمل، قيد الإطلاق | Merged to `main` (on QA), but no successful production release contains it yet, or it is released but switched on for only part of the platform. `note` says which. |
 | `building` | In development / قيد التطوير | Open PRs, or some stories merged and others not. |
 | `planned` | Planned / مخطط له | Specified in the wiki, with no code yet. |
 
-Only real statuses go in. Don't mark anything `live` without the release run that proves it.
+Only real statuses go in. Don't mark anything `live` without the release run that proves it, and without checking production actually uses it: a feature that shipped but has no production users or instances yet is `ready`, not `live`. `rolling` differs from `ready`: a `rolling` feature is not yet in a production release, or is switched off (or only partly on) there.
 
 ## Fields
 
@@ -39,10 +40,11 @@ Only real statuses go in. Don't mark anything `live` without the release run tha
 - `name`: English and Arabic. The Arabic follows the [glossary](../guides/glossary.md): «مرئي / مرئيات» for video, never «فيديو».
 - `apps`: one or more of `videos`, `videos-admin`, `api`, `www`, `sites`, `status`, `cms`, `auth`, `profile`, `auth-admin`, `dev`, `native`.
 - `wiki`: the epic or guide page, relative to the wiki root.
-- `release`: only for `live`. It takes one of these forms:
+- `release`: only for `live` and `ready`. It takes one of these forms:
   - `{ "repo", "tag" }`: the first production release tag that contains the feature.
   - `{ "repo": "AlUmmahNowAuth", "run", "sha" }`: Auth has no tags, so this is the release run and its commit.
   - `{ "repo", "before" }`: shipped before the repo's first tag, which is named here.
+- `note`: required for `ready` (what it waits for).
 - `prs`: the PRs, as `Repo#number`. Required for `rolling` and `building`. The release warning matches on these.
 
 ## Updating it
@@ -51,6 +53,7 @@ In the same wiki PR that documents the work:
 
 1. Add or change the feature's entry.
 2. Bump the epic's status line if the epic moved.
-3. Once a release containing the feature passes production, set `status` to `live` and add `release`.
+3. Once a release containing the feature passes production, add `release` and set `status` to `live` if production uses it, or `ready` (with a `note`) if nothing in production uses it yet.
+4. When the first production use of a `ready` feature appears (the first site, page or configured setting), set it to `live`.
 
-Check it locally with `node scripts/check-registry.mjs`.
+Check it locally with `node scripts/check-registry.mjs`; the checker's own tests run with `node --test scripts/check-registry.test.mjs`.

@@ -7,10 +7,10 @@ name: Feature registry
 
 on:
   pull_request:
-    paths: ['features/**', 'scripts/check-registry.mjs', '.github/workflows/registry.yml']
+    paths: ['features/**', 'scripts/check-registry*.mjs', '.github/workflows/registry.yml']
   push:
     branches: [main]
-    paths: ['features/**', 'scripts/check-registry.mjs', '.github/workflows/registry.yml']
+    paths: ['features/**', 'scripts/check-registry*.mjs', '.github/workflows/registry.yml']
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,7 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/check-registry.mjs
+      - run: node --test scripts/check-registry.test.mjs
 
   rebuild-dev-site:
     name: Ask alummahnow.dev to rebuild
