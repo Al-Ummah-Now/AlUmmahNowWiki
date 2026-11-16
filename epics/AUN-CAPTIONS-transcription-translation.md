@@ -90,6 +90,14 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) (moderation still uses m2m100), [#814](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/814) (purge leaves subtitle files).
 
+## Quran text copy: operations
+
+- **The copy** lives in each environment's private media bucket (`quran/current.json` → `quran/text/<version>/`, plus the matcher index), written by the processor's Content Sync (daily cron 03:41 UTC, or **Sync now** on the Errors page item `quran-sync`).
+- **2026-11-16 incident:** the sync failed every day from 2026-11-14 in production, stage and QA. Four verses (2:181, 8:6, 13:37, 37:130) each have one QF word written as two (بَعْدَ مَا, إِلْ يَاسِينَ). That word's own Imla'i text has the same space, but the build split the verse on spaces and got one token too many. No copy was ever written, and the passage API answered 503. Fixed in [AlUmmahNow#1506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1506): a word row spans as many Uthmani tokens as its Imla'i text has words, and the totals must still add up exactly.
+- **Hidden while unavailable** (owner rule, "Hidden when off"): `GET /api/me/features` has `quranText`, true only while the copy is synced and fresh (under 7 days, per the QF terms). Without it:
+  - `GET /api/v1/quran/passage` answers 404 `feature_off`, with one warning log per isolate. It is not a server error and never reaches the Errors page.
+  - Studio's Quran span card shows only the reference and the quran.com link: no text, no "unavailable" note, and no Different reference.
+
 ## Decisions and constraints
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
