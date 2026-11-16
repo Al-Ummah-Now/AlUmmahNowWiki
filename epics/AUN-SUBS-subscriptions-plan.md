@@ -35,6 +35,13 @@ The owner, 2026-11-14: *"build the framework, no need to enable now, this is for
   - subscriptions, cancel, refunds and complimentary tiers
 
   Every change is audited. Refunds and provider settings are for super admins only. Sensitive actions need a step-up.
+- **Password managers and autofill** (owner, 2026-11-16): 1Password, Bitwarden, iCloud Keychain and Chrome/Safari autofill fill every field we own. Each field has a `name`, an `id`, the right `type`, a visible `<label for>`, sits inside a real `<form>` that is in the page from the start, and never has `autocomplete="off"`:
+  - Request tier dialog: the name is `autocomplete="name"`, prefilled from the profile (display name → first + last → email) and editable; the note is a plain named field.
+  - /upgrade pay choices: period, currency (`autocomplete="transaction-currency"`) and provider are one form; Subscribe submits it.
+  - Admin "Tax & seller details": `section-seller organization`, `section-seller street-address`, `section-seller country`; the VAT number has the plain label "VAT number" (no standard token exists).
+  - **Exception:** a provider's API key or merchant ID is not the admin's password, so those fields use `autocomplete="off"` with the 1Password, Bitwarden and LastPass ignore hints (`data-1p-ignore`, `data-bwignore`, `data-lpignore`). That way managers never save or generate one there.
+  - **Cards never touch our pages.** The card number, expiry and CVC are entered only in the provider's hosted checkout: Paddle's own overlay iframe (Paddle.js v2, `displayMode: 'overlay'`) or PayGood's hosted page. That is also where managers fill cards. Name and email reach the provider prefilled from the profile and can be changed there. Billing addresses are collected by the provider too.
+  - Tests: unit tests on the attributes (web `UpgradePage`, `PayParts`; admin-web `payments-autofill`), and E2E in Chrome, Firefox and WebKit (`autofill-forms.spec.ts`) plus admin Chromium and WebKit (`24-payments-autofill.spec.ts`).
 - **Going live** needs a Cloudflare token for Secrets Store writes (`payments-secrets-token`), then the provider credentials and their api-videos bindings. Steps are in `docs/features/payments.md` ([#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415)).
 - **Cost:** no new Workers, queues or databases. Provider fees are per transaction.
 
