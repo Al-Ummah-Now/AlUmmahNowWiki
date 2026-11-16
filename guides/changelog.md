@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-16: Site visits page shows data
+
+- **Why:** the admin **Site visits** page was empty in every environment. Visits and short link clicks were sent and queued, but the processor dropped every site counter before writing it ([#1476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1476)). Visits from X were also rejected because the source name has one letter.
+- **Now:** site counters are written; X visits and clicks count; a counter the processor refuses is logged as an error. The days lost since 2026-11-13 were replayed from the message archive, aggregates only, at most once per day ([#1482](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1482), [#1477](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1477)). See [Site visits (admin)](../repos/AlUmmahNow.md#site-visits-admin).
 ## 2026-11-16: staff-set text needs English and Arabic
 
 - **Rule:** every localizable field set by staff or the system (tiers, categories, CMS pages and blocks, templates, status page, help, settings and more) needs both English and Arabic. Forms no longer say "leave empty to use the other one". Each pair gets a **Translate** button (Workers AI, glossary, Qur'an never machine-translated), and older rows missing a language are flagged **Arabic missing**. User content is exempt. See [Localized fields](localized-fields.md). The per-repo PRs are being added here as they land.
