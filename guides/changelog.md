@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-16: Arabic shows Eastern Arabic (Hindi) numerals
+
+- **Rule ([O35](../epics/decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals)):** Arabic pages and emails show ٠–٩ for every number, date, time, duration, percentage and amount of money; English keeps 0–9. Money in Arabic reads «١٢٫٦٩ دولار أمريكي». See [Numbers and dates](numbers-and-dates.md).
+- **AlUmmahNow:** shared formatter `locale-format` and the `check:locale-format` guard ([#1503](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1503)); admin ([#1521](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1521)), web ([#1507](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1507)), emails and servers ([#1505](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1505)), held for the owner's screenshot check.
+
 ## 2026-11-16: Site visits page shows data
 
 - **Why:** the admin **Site visits** page was empty in every environment. Visits and short link clicks were sent and queued, but the processor dropped every site counter before writing it ([#1476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1476)). Visits from X were also rejected because the source name has one letter.
