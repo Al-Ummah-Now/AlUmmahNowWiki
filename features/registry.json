@@ -388,9 +388,10 @@
       },
       "prs": [
         "AlUmmahNow#1415",
-        "AlUmmahNow#1651"
+        "AlUmmahNow#1651",
+        "AlUmmahNow#1443"
       ],
-      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier."
+      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every account has a stored tier: the invite's, or the default written at sign-up (Free «مجاني», the one minimum tier, out of the box; AlUmmahNow#1443)."
     },
     {
       "id": "payments",

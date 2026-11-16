@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-TIER-REQUESTS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (web `/upgrade`, api-videos, admin-api, admin-web, processor) |
-| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Status** | **shipped**: tier requests and admin-managed default tiers (see [Status evidence](#status-evidence)) |
 | **Last updated** | 2026-11-21 |
 | **Origin** | Owner request 2026-11-14 |
 
@@ -24,23 +24,52 @@ normal users may create pages.
 - [O33](decisions.md#o33-tiers-by-request-during-the-beta): tiers by request during the beta (decided).
 - [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature): with requests off and no payment provider, /upgrade is an off feature: `404 feature_off`, the site's 404 page, no header pill, account-menu item or Settings link; Settings › Tier keeps the user's tier (`GET /api/me/tier`).
 - Builds on [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md) ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers)): tiers stay admin-assigned; a request only asks an admin to assign one.
-- Lines up with [AUN-SUBS](AUN-SUBS-subscriptions-plan.md): its default plan is **Member** and its recommended launch option is "B: invite / admin grant only". This epic is that option, with a request form in front of it. When payments open, the same page gains a price and checkout per tier. Requests can stay for tiers that are not for sale.
+- Lines up with [AUN-SUBS](AUN-SUBS-subscriptions-plan.md): its out-of-the-box default is **Free** and its recommended launch option is "B: invite / admin grant only". This epic is that option, with a request form in front of it. When payments open, the same page gains a price and checkout per tier. Requests can stay for tiers that are not for sale.
 - Prices are never shown. A card offers **Request**, not Buy.
 - All background work runs through queues with retries and a dead-letter queue. A delivery that gives up flags the admin on the Errors page, with Retry ([O26](decisions.md#o26-always-async-with-admin-visible-errors)).
 - No new store: the requests live in the search D1, next to the tier assignments.
+- **Wording** (owner, 2026-11-15): request mode says **"Request tier"** / «اطلب فئة» (header pill, notices, dialog heading). A tier card's button says "Request" / «اطلب», because the card names the tier, and its accessible name is "Request tier: …". Pay mode says "Upgrade" / «ترقية». The Arabic word for tier is «فئة» everywhere: on `/upgrade`, in the emails, in Billing and in the admin.
 - Copy follows the [copy tone guide](../guides/copy-tone.md): "subscribe", never "follow"; the Arabic word for video is «مرئي».
 
-## The Member tier
+## Creator tiers
 
-The normal user tier becomes a real tier, **Member** (`member`, Arabic «عضو»), the default for
-everyone.
+[Free](#default-tier) is the minimum tier. Admins can change the tier assigned to new sign-ups.
 
-- **Capability flags on every tier:** `uploads`, `channels`, `pages`, `requestable`. A tier also has a display order and optional Arabic name, description and Arabic description, shown on `/upgrade`.
-- **Member** allows no uploads, channels or pages, so nothing changes for users. The owner can turn `pages` on later, in the tier editor.
+- **Capability flags on every tier:** `uploads`, `channels`, `requestable` (the `pages` flag was removed on 2026-11-16: it controlled nothing). A tier also has a rank, and a name and a description in English **and** Arabic, all four required (localized fields, owner 2026-11-16: no "leave empty to use the one above"; the admin routes answer 400 `tier_text_missing`). A tier saved before that, without its Arabic name or description, shows an "Arabic missing" / «العربية ناقصة» badge on the Tiers list until it is filled in. A Translate action (en↔ar) comes with the site-wide localized-fields work.
+- **Features a tier lacks are hidden** (owner 2026-11-16): no entry point, no upsell; the header's "Request tier" / "Upgrade" button and `/upgrade` are the only ways in. The tier editor's Live help says "Off: Live doesn't appear in Studio for them".
 - **Creator** allows uploads and channels and is requestable. **Unlimited** allows everything and is not requestable: it stays the super admins' tier.
-- **No backfill.** A user with no assignment row holds Member, and assigning Member deletes the row. Every user without a tier is therefore already on Member, and prod (one real user) needs no data change.
-- **Enforcement** reads the flags: `tierAllowsUploads` and `tierAllowsChannels` in the upload limits, the channel-create gate and `/api/me/creator`, which also reports `canCreatePages` for when pages open. Channel editors still upload under the owner's tier; the upload page's channel picker and the channel settings notice read the flags too.
-- The admin's tier control lists "Member (no tier assigned)" once. The Tiers page counts users with no assignment as Member holders.
+- **Enforcement** reads the flags: `tierAllowsUploads` and `tierAllowsChannels` in the upload limits, the channel-create gate and `/api/me/creator`. Channel editors still upload under the owner's tier; the upload page's channel picker and the channel settings notice read the flags too.
+- The admin's tier control lists the tiers in rank order (no "remove"). The Tiers page counts stored rows per tier.
+
+## Default tier
+
+[TIER-O34](decisions.md#tier-o34-admins-pick-the-default-tier) (owner decisions 2026-11-15). Merged in [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443) and shipped in `v2026.11.19.6`.
+
+- **Every account has a stored tier.** Nobody is ever tierless.
+  - An invite stores the tier picked on the invite form. The picker starts on the current default; picking another tier needs creators:manage.
+  - An invite gives a tier only: there is no Creator/Viewer role (owner, 2026-11-16, AlUmmahNow#1443). The tier decides what the account may do, and auth roles are untouched apart from the optional Scholar. The picker lists tiers lowest rank first, with names in the admin's language. The invites list shows each invite's tier by name. Older viewer invites map to the default tier (admin-api migration `0044`; the `role` column stays, unread).
+  - **Video in the invite email** (owner, 2026-11-16; AlUmmahNow#1443, AlUmmahNowAuth#432):
+    - The invite form has two live-search pickers, Video (English) and Video (العربية). Both start on the per-language defaults set under Admin › Settings › Emails › Creator invite (not seeded). A default only prefills the form.
+    - The email, sent in one language, shows that language's video as a static 16:9 picture card: play button, title and channel. It links through the short link (`alummahnow.link/v/<id>`, `?lang=ar`).
+    - It never falls back to the other language's video. A resend in the other language switches video.
+    - The video is read at every send. One that is no longer public leaves the card out.
+  - Otherwise sign-up writes the current default to the account (`POST /api/profiles`, `writeSignupTier`).
+  - An account somehow without a row works as Free until the backfill writes it.
+- **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `default_tier_id` in `creator_tier_settings` (search migration `0065`).
+- **Free («مجاني») is the one minimum tier.** Member (#1415) was renamed Free (search migration `0065`), keeping the id `member` so existing assignments carry over.
+  - Free is shipped, cannot be deleted, is not requestable (nobody requests the bottom tier) and is the default out of the box.
+  - It is seeded with today's no-tier rights: no uploads, no channels, no pages, 0 caption minutes. Every limit stays editable.
+  - The old "None" is gone (400 `invalid_default`); a stored `none` reads as Free.
+- **No "remove".** The tier picker only lists tiers; there is no "Use default tier" option and no assigned-vs-default filter. A request to remove a tier is refused (400 `tier_required`). A subscription that ends puts the user back on the current default.
+- **Delete is blocked** while a tier is in use. The server answers 409 with the count, and admin-web disables Delete, says why and links to the people or invites:
+  - users are on it: `tier_in_use` with `users`, an indexed count;
+  - pending invites carry it: `tier_has_invites` with `invites`, counted by admin-api on `idx_creator_invites_tier` (migration `0043`);
+  - it is the default: `tier_is_default`.
+  The purge checks all three again.
+- **Rank.** Admins reorder the tiers on the Tiers page's Rank list (drag, or Move up / Move down from the keyboard). Each move saves at once, is audited (`creator-tier:order`) and has Undo. Free ships lowest, Creator in between and Unlimited on top; a new tier goes just below the top one. The rank orders the Upgrade page and every tier picker (admin, invites). An upgrade is a tier ranked above the user's current one: `/upgrade` shows the current tier and the requestable tiers above it, and a request for a tier at or below it is refused.
+- **Where it shows.** Users show their tier's name only. "Default" marks only the default tier on the Tiers list.
+- **Arabic wording** (owner, 2026-11-16): the default tier is «الفئة الأساسية», never «الفئة الافتراضية»: the Tiers list marker «أساسية», «اجعلها الأساسية», the help text, emails and this wiki. The Arabic admin names every tier by its Arabic name (Free is «مجاني»). The tier shows on the user's admin page, not in the channel view.
+- **Backfill.** After the release, `scripts/data/backfill-free-tier.ts --env qa|stage|production` writes Free to every account without a stored tier: dry run with counts first, then `--apply`. It walks the search D1 only, in keyset batches on indexed columns, never the Auth D1. It is idempotent.
 
 ## User flow (`/{en,ar}/upgrade`)
 
@@ -67,6 +96,8 @@ everyone.
 
 ## Admin flow (videos admin → People → **Tier requests**)
 
+- **Allow tier requests** ([TIER-O35](decisions.md#tier-o35-the-upgrade-page-mode-has-two-inputs)) sits at the top of the page. With no payment provider enabled it controls whether the request form is available. With a provider enabled, the page shows paid upgrades. [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) governs the closed mode. The switch acts at once, is audited and has Undo.
+
 - **Nav and filters.** The nav item has a pending-count badge. Tabs: Pending (oldest first), Approved, Declined and All (newest first). "Show more" pages with a keyset cursor.
 - **Each card shows:**
   - the person, linked to their user page;
@@ -77,7 +108,7 @@ everyone.
 - **Approve** (creators:manage): one D1 batch marks the request approved and assigns the tier. Concurrent decisions are race-safe. It is audited like any tier change (`creator-tier` on the user, so the user page's history shows it), plus a `tier-request` row.
 - **Decline:** an optional reason, up to 500 characters, shown to the user. Audited.
 - **Moderators** see the queue read-only.
-- **Tier editor:** the flags, requestable, display order, and the Arabic name and descriptions. Member can never be unlimited, and shipped tiers cannot be deleted.
+- **Tier editor:** the flags, requestable, display order, and the Arabic name and descriptions. Free can never be unlimited or deleted.
 
 ## Delivery
 
@@ -95,7 +126,7 @@ again.
 
 ## Data and privacy
 
-- **The table.** `tier_requests` (search D1, migration `0040`) holds: id, user, tier (and its name at the time), the tier held when asking, name, about, status, decline reason, decided at/by and the email state. A unique partial index enforces one pending request per user.
+- **The table.** `tier_requests` (search D1, migration `0063`) holds: id, user, tier (and its name at the time), the tier held when asking, name, about, status, decline reason, decided at/by and the email state. A unique partial index enforces one pending request per user.
 - **Erasure.** Erasing an account deletes its requests. Requests that user decided as staff keep the decision, with the decider replaced by the erased placeholder.
 - **What the user sees.** Their own requests never include who decided them.
 
@@ -126,27 +157,22 @@ again.
 ## Tests
 
 - **Unit (shared logic):**
-  - api-videos: Member semantics, the request rules, the atomic decision and its race, the queue order and cursor, the own view without the decider;
+  - api-videos: Free tier semantics, the request rules, the atomic decision and its race, the queue order and cursor, the own view without the decider;
   - admin-api: approve and decline, audit, delivery job states, retry builtin;
   - web: card rows in en and ar with Arabic digits, card states, form checks, error copy, and the page component (states, dialog, Turnstile retry, withdraw, decline in Arabic);
-  - admin-web: queue helpers, labels in both languages, nav item, actions, the tier editor's flags and Member;
+  - admin-web: queue helpers, labels in both languages, nav item, actions, the tier editor's flags and the Free tier;
   - processor: erasure.
 - **E2E (local stack):** `release/tier-requests.spec.ts`.
-  - A Member requests Creator; an admin approves in admin-web; the user can upload and create a channel at once and sees "approved"; the notification arrives; the email is sunk.
+  - A person on Free requests Creator; an admin approves in admin-web; the user can upload and create a channel at once and sees "approved"; the notification arrives; the email is sunk.
   - An Arabic request is declined with a reason; the user sees it and may ask again.
   - Signed out, "Sign in to request" signs the visitor in and lands back on `/upgrade`.
-  - `creator-tiers.spec.ts` now expects Member for a new account.
+  - `creator-tiers.spec.ts` checks the tier assigned to a new account.
 
 ## Status evidence
 
-- [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415): the whole feature, held for the owner's screenshots.
+- [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415): the tier request flow and admin queue, merged 2026-11-19.
 
-### Reconciled 2026-11-21
-
-- **AUN-TIER-REQUESTS (AUN-54): Done** — both audits agree: AlUmmahNow#1415 (merged): /upgrade tier requests, Member tier and admin queue; AlUmmahNow#1415; apps/web/src/app/[locale]/upgrade
-## Open questions
-
-- None. The owner decides later, in the tier editor, whether Member may create pages.
+- [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443): shipped default-tier selection, explicit tier assignments, and the Free tier.
 
 ## Sources
 
