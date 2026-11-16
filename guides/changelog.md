@@ -8,6 +8,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 - **Rule ([O35](../epics/decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals)):** Arabic pages and emails show ٠–٩ for every number, date, time, duration, percentage and amount of money; English keeps 0–9. Money in Arabic reads «١٢٫٦٩ دولار أمريكي». See [Numbers and dates](numbers-and-dates.md).
 - **AlUmmahNow:** shared formatter `locale-format` and the `check:locale-format` guard ([#1503](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1503)); admin ([#1521](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1521)), web ([#1507](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1507)), emails and servers ([#1505](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1505)), held for the owner's screenshot check.
+- **AlUmmahNowUI** (www, scholar sites, dev): `packages/render/src/format.ts` and its guard test ([UI#124](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/124)); **AlUmmahNowCMS**: `src/lib/format.ts`, number fields accept ٠–٩ ([CMS#142](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/142)); **AlUmmahNowAuth** (auth, profile, admin, emails): `packages/ui/src/format.ts`, codes typed in ٠–٩ are accepted, Arabic WebKit hydration job ([Auth#430](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/430)). All held for the owner's screenshot check.
 
 ## 2026-11-16: Site visits page shows data
 
