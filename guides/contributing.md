@@ -58,6 +58,8 @@ Don't leave TODO comments. Implement the change now, or open a GitHub issue labe
 
 Features must be tier-aware through the plans and entitlements system, managed by admins, and must not hard-code plans. See [Epic 27](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/specs/EPIC-27-PLAN.md).
 
+A feature that is off, not configured or outside the person's tier is hidden, not explained: see [Product rules → Hidden when off](product-rules.md#hidden-when-off) for the rule, the `GET /api/me/features` contract and the `feature_off` convention.
+
 ## Secrets and security
 
 All repositories are public. Never commit secrets, tokens, keys, `.env` or `.dev.vars` files, signing material or real user data. CI runs committed-secret checks in several repos.
