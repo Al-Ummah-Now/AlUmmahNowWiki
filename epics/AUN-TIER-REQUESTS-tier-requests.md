@@ -50,6 +50,11 @@ everyone.
 - **Every account has a stored tier.** Nobody is ever tierless.
   - An invite stores the tier picked on the invite form. The picker starts on the current default; picking another tier needs creators:manage.
   - An invite gives a tier only: there is no Creator/Viewer role (owner, 2026-11-16, AlUmmahNow#1443). The tier decides what the account may do, and auth roles are untouched apart from the optional Scholar. The picker lists tiers lowest rank first, with names in the admin's language. The invites list shows each invite's tier by name. Older viewer invites map to the default tier (admin-api migration `0031`; the `role` column stays, unread).
+  - **Video in the invite email** (owner, 2026-11-16; AlUmmahNow#1443, AlUmmahNowAuth#432):
+    - The invite form has two live-search pickers, Video (English) and Video (العربية). Both start on the per-language defaults in Invites › Settings, which are not seeded.
+    - The email, sent in one language, shows that language's video as a static 16:9 picture card: play button, title and channel. It links through the short link (`alummahnow.link/v/<id>`, `?lang=ar`).
+    - It never falls back to the other language's video. A resend in the other language switches video.
+    - The video is read at every send. One that is no longer public leaves the card out.
   - Otherwise sign-up writes the current default to the account (`POST /api/profiles`, `writeSignupTier`).
   - An account somehow without a row works as Free until the backfill writes it.
 - **The default is only what new sign-ups get.** Admins pick it on Tiers ("Set as default": acts at once, with Undo, audited as `creator-tier:default`). Changing it affects only people who sign up afterwards; existing users keep their stored tier. It is stored in `creator_tier_settings.default_tier_id` (migration `0053`).
