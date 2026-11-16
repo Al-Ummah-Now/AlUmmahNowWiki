@@ -44,6 +44,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Copy Tone Guide](guides/copy-tone.md) | How UI text reads in English and Arabic: content sharing, not a lecture library |
 | [Numbers and dates](guides/numbers-and-dates.md) | Arabic shows ٠–٩, English 0–9, through one formatter (`locale-format`); money, placeholders, typed numbers |
 | [Localized fields](guides/localized-fields.md) | Staff-set text needs English and Arabic, with Translate; no fallback (user content exempt) |
+| [Email templates](guides/email-templates.md) | Settings › Emails: the creator invite's wording in en + ar, placeholders, preview, test send, versions; how Auth gets the copy |
 | [Help and the identity tour](guides/help-and-tour.md) | The videos site's Help pages, the first-run tour, acting as yourself or a channel, how the pictures are made |
 | [Specs index](guides/specs-index.md) | Every spec in the monorepo, with status |
 | [Changelog](guides/changelog.md) | What changed across the repos, by date and feature |
