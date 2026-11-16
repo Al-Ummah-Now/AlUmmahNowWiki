@@ -7,7 +7,7 @@
 | **ID** | `AUN-TIER-REQUESTS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (web `/upgrade`, api-videos, admin-api, admin-web, processor) |
 | **Status** | **in progress**: built in [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), held for the owner's screenshots |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-15 |
 | **Origin** | Owner request 2026-11-14 |
 
 ## Goal
@@ -37,9 +37,25 @@ everyone.
 - **Capability flags on every tier:** `uploads`, `channels`, `pages`, `requestable`. A tier also has a display order and optional Arabic name, description and Arabic description, shown on `/upgrade`.
 - **Member** allows no uploads, channels or pages, so nothing changes for users. The owner can turn `pages` on later, in the tier editor.
 - **Creator** allows uploads and channels and is requestable. **Unlimited** allows everything and is not requestable: it stays the super admins' tier.
-- **No backfill.** A user with no assignment row holds Member, and assigning Member deletes the row. Every user without a tier is therefore already on Member, and prod (one real user) needs no data change.
+- **No backfill.** A user with no assignment row holds the default tier, which ships as Member, so every user without a tier is already on Member and prod (one real user) needs no data change. Since [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), assigning Member writes an explicit row (see [Default tier](#default-tier)).
 - **Enforcement** reads the flags: `tierAllowsUploads` and `tierAllowsChannels` in the upload limits, the channel-create gate and `/api/me/creator`, which also reports `canCreatePages` for when pages open. Channel editors still upload under the owner's tier; the upload page's channel picker and the channel settings notice read the flags too.
-- The admin's tier control lists "Member (no tier assigned)" once. The Tiers page counts users with no assignment as Member holders.
+- The admin's tier control offers "Default (Member)" for no assignment, next to every tier (Member included). The Tiers page counts users with no assignment on the default tier.
+
+## Default tier
+
+[O34](decisions.md#o34-admins-pick-the-default-tier): admins mark **one** tier as the default, or **None**. Built in [AlUmmahNow#1443](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1443), stacked on #1415 and held for the owner's screenshots.
+
+- **What it is.** Every account without an assigned tier holds the default. It is read on every request (`creator_tier_settings.default_tier_id`, migration `0051`, seeded with `member`) and never copied into assignment rows, so changing it changes everyone on it at once. **None** means no tier at all: no uploads, no channels, no pages.
+- **Assignments are explicit.** Any assigned tier, Member included, is its own row and stays when the default changes. "Default (…)" in the tier control removes the row.
+- **Admin › Tiers.** A Default tier card names the current default and how many users hold it. Each tier has **Set as default**, and the card has **Make None the default**. The change applies at once with Undo (no confirm), and the audit shows it as "Default tier: default set to X" (`creator-tier:default`, previous value kept).
+- **Guards.** The default tier's Delete is disabled with the reason ("set another default first"; API 409 `tier_is_default`). A deleted tier cannot become the default (409 `default_tier_deleted`, "restore it first").
+- **Where it shows.**
+  - Admin user views (user page, Users list, bulk change, tier filter, history): "Default (Member)".
+  - `/upload`: "Your tier: Creator (the default)".
+  - `/upgrade`: "Your current tier (the default)" on the lit card; when the default is None, "You don't hold a tier yet".
+  - `/api/me/creator`: `via: 'default'`, or `'none'` when the default is None.
+  - Native apps show `tier.name` from `/api/me/creator` as before, so they need no change.
+- **Needs a tier.** When the default allows uploads, nobody is flagged "needs a tier".
 
 ## User flow (`/{en,ar}/upgrade`)
 
