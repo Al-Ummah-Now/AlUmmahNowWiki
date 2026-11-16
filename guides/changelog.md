@@ -4,6 +4,12 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-19: Invite links sign the person straight in
+
+- **Why:** the owner asked why an invitee had to "Sign in" or "Create account" with an emailed code after clicking their invite, and why a second click told them to sign in when, as far as they knew, they had no account yet.
+- **AlUmmahNowAuth:** **Continue** on the invite link signs the invited account in directly and makes it the active account (other signed-in accounts untouched), then offers a passkey with **Skip**. A used or expired link offers **Finish setting up your account** (emails a fresh link) while the account has no password or passkey, **You're already set up** + Sign in once it has one, and **This invite was withdrawn** when revoked. CSRF-checked, single use under concurrency, our origins only, en/ar from `?lang=` or the invite's language ([Auth#434](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/434)). Merged 2026-11-19 after the owner approved the screenshots; Auth released to production on merge.
+- **AlUmmahNow:** new invites continue to the Studio of the invited channel (else account settings) with a first-run welcome, without `prompt=login` ([#1559](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1559)). Merged 2026-11-19 after the owner approved the screenshots; Auth released to production on merge.
+
 ## 2026-11-18: more context on admin errors; a read-only Prod errors report
 
 - **Why:** the owner: "errors in admin need more context". An error sample showed the route, release and request id but not which Worker, video or channel, which dependency failed, or what ran before it.
