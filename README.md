@@ -41,6 +41,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Product rules](guides/product-rules.md) | Hidden when off: off, unconfigured or outside the tier is invisible; quotas are plain facts; `GET /api/me/features` and `feature_off` |
 | [Site roles and channel roles](guides/roles.md) | Two separate permission systems |
 | [Theming](guides/theming.md) | Lantern, Zujaj, Nahas and Fawanees |
+| [Error pages](guides/error-pages.md) | 404, 410, 500 and crash screens: one frosted-glass card, the same words and actions in every app; status codes and noindex |
 | [Copy Tone Guide](guides/copy-tone.md) | How UI text reads in English and Arabic: content sharing, not a lecture library |
 | [Numbers and dates](guides/numbers-and-dates.md) | Arabic shows ٠–٩, English 0–9, through one formatter (`locale-format`); money, placeholders, typed numbers |
 | [Localized fields](guides/localized-fields.md) | Staff-set text needs English and Arabic, with Translate; no fallback (user content exempt) |

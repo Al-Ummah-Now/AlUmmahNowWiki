@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-19: one family of error pages in every app (proposed, held for the owner)
+
+- **Why:** the owner asked whether the site has custom error pages. Each app had its own: the videos 404 was a generic gray/blue template with a pulsing "404", Auth's error page a hard-coded navy and amber card, the CMS and scholar sites plain text.
+- **Now (PRs held for screenshots):** 404, 410, 500, 503 and a crashed page are one frosted-glass card on the lantern street inside each app's header and footer, with the same words, "Error 404" / «خطأ ٤٠٤» line, icons and actions (Go to home, Go back, Search, Try again, the reference), noindex and the real status code. Purged videos, Shorts, playlists and channels show the 410 words. See [Error pages](error-pages.md).
+
 ## 2026-11-19: Invite links sign the person straight in
 
 - **Why:** the owner asked why an invitee had to "Sign in" or "Create account" with an emailed code after clicking their invite, and why a second click told them to sign in when, as far as they knew, they had no account yet.
