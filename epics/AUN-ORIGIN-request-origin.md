@@ -77,10 +77,10 @@ Native apps send `X-AUN-Client: <app>/<version> (<OS> <OS version>)`, for exampl
 | Audit rows and queued jobs | [AlUmmahNow#1602](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1602) | merged |
 | Analytics counters and API fields | [AlUmmahNow#1603](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1603) | merged |
 | Errors page: filter, sample origin, breakdown (visual) | [AlUmmahNow#1616](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1616) | held for the owner |
-| Studio and Site visits breakdowns (visual) | [AlUmmahNow#1619](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1619) | held for AUDIT and the owner |
+| Studio and Site visits breakdowns (visual) | [AlUmmahNow#1619](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1619) | held for the owner |
 | Auth errors carry the origin | [AlUmmahNowAuth#439](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/439) | merged |
 | aun-core `X-AUN-Client` and v0.4.0-rc.3 | [AlUmmahNowCore#49](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/49), [#50](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/50) | released |
-| Native apps send the header | [AlUmmahNowAndroid#39](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/39), [AlUmmahNowDesktop#62](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/62), [AlUmmahNowApple#65](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/65) | open |
+| Native apps send the header | [AlUmmahNowAndroid#39](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/39), [AlUmmahNowDesktop#62](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/62), [AlUmmahNowApple#65](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/65) | merged |
 
 ## Related
 
