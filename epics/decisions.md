@@ -81,6 +81,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O29](decisions.md#o29-keep-the-openauth-fork) | Keep the openauth fork | **decided** | 2026-11-07 | Auth |
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
 | [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
+| [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) | Requests off and no payment provider: /upgrade is an off feature (404 feature_off, no entry points; the tier still shows in Settings) | **decided** | 2026-11-19 | [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -838,6 +839,21 @@ Arabic pages use Eastern Arabic (Hindi) numerals ٠–٩ everywhere: numbers, co
 **Blocks / affects:** every app and email; [Numbers and dates](../guides/numbers-and-dates.md)
 
 **Sources:** owner decision on [AlUmmahNow#1488](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1488) and [AlUmmahNow#1496](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1496), 2026-11-15
+
+### O37: With tier requests off and no payment provider, /upgrade is an off feature
+
+**Status:** decided · **Date:** 2026-11-19
+
+The Upgrade page has three modes (shared-types `UPGRADE_MODES`): **pay** (a payment provider is on), **request** (no provider, "Allow tier requests" on) and **closed** (no provider, requests off). Closed follows the hidden-feature rule: /upgrade vanishes entirely, with no "not available" text and no hollow page.
+
+- `GET /api/tiers/upgrade` and `POST /api/me/tier-requests` answer the standard `404 {"code":"feature_off"}`; the page renders the site's 404 (server side, and on the client if the mode changes after the page was served).
+- No entry points: the header Request tier / Upgrade pill, the account menu's Upgrade item and Settings › Tier's "See all tiers" link are gone.
+- The user's current tier still shows where tiers normally show: Settings › Tier reads it from `GET /api/me/tier`, which answers in every mode. Its request history goes with /upgrade while closed.
+- A Creator's upload entry points work as usual, so the "request approved" card is not needed anywhere else.
+
+**Blocks / affects:** [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md), [Product rules → Hidden when off](../guides/product-rules.md)
+
+**Sources:** owner decision in the SUBS review thread, 2026-11-19; AlUmmahNow [#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418)
 
 ### LIC: Repo licence for Core and the app repos
 
