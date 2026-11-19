@@ -7,9 +7,9 @@
 | **ID** | `AUN-SOCIAL` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-18 |
 
-> Spec and owner decisions merged 2026-11-09/10 (#569, #581). SOC-1 (2026-11-14): auto-post to X, Telegram, Bluesky and Mastodon, plus scheduler-tool support, in [AlUmmahNow#1396](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1396) (API, queues, feeds, oEmbed, webhooks) and [AlUmmahNow#1402](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1402) (Studio, share kit, help, admin page). No Meta networks ([SM-6](decisions.md#sm-6-register-a-business-for-meta)).
+> Spec and owner decisions merged 2026-11-09/10 (#569, #581). SOC-1 (2026-11-14): auto-post to X, Telegram, Bluesky and Mastodon, plus scheduler-tool support, in [AlUmmahNow#1396](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1396) (API, queues, feeds, oEmbed, webhooks) and [AlUmmahNow#1402](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1402) (Studio, share kit, help, admin page; owner approved and merged 2026-11-18, ships in the next videos release). No Meta networks ([SM-6](decisions.md#sm-6-register-a-business-for-meta)).
 
 ## Goal
 
