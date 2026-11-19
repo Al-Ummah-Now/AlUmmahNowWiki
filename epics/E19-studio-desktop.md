@@ -57,11 +57,17 @@ Retirement steps: Studio gets the watch-and-approve queue and duplicate check; t
 
 The Windows and Linux Studio share one design language with the web and phone apps, built from the
 Fawanees entry of the shared native theme registry (`packages/fanous-tokens`; vendored into
-`AlUmmahNowDesktop/src/AlUmmahNow.App/Theme/fanous` by `scripts/sync-fanous.sh`). Proposal and mockups:
+`AlUmmahNowDesktop/src/AlUmmahNow.App/Theme/fanous` by `scripts/sync-fanous.sh`, including the native registry `FanousThemes.cs`). Proposal and mockups:
 [review page](https://claude.ai/artifact/H4C79akpcL19v7qm2f5iUV). Rules:
 
-- **Depth, not a recolour.** Night header band (title bar on Windows, header bars on Linux) in Light *and*
-  Dark with the owner's lantern-string art (crop/resize only); frosted cards with a gold-tinted edge, a top
+- **The header is the web Fawanees header, colour for colour** (owner rule 2026-11-18), from the shared
+  native registry (`FanousThemes`, `feat/native-theme-generators`): 90° gradient `#0b1d2a → #30342d →
+  #0b1d2a` (Light: `#0e2b3d → #33403d → #0e2b3d`; dark in both), a `#184456` line then a gold rule
+  (`#f4ae3a` at 66 %), text `#f7f1e8`/`#fbefd0`, icons `#d6dfe2`/`#f5cf92`, nav hover/active/search
+  colours. No art and no glow in the header; one header across the window. The page is the registry's
+  solid page colour (`#f3eee5` / `#09151e`, AlUmmahNow#1596).
+- **Depth, not a recolour.** The owner's lantern-string art (crop/resize only) hangs over the sign-in
+  card; frosted cards with a gold-tinted edge, a top
   sheen and a gold glow; gold for primary actions, the selected nav item, selected cards, progress and the
   playhead only.
 - **Platform materials.** Windows 11: Mica window, in-app Acrylic sidebar/cards/menus; the gold glow is a
@@ -82,8 +88,9 @@ PRs (stacked, held for owner screenshots): shell and identity menu
 [#56](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/56), Videos grid
 [#57](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/57), Analytics
 [#58](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/58), Timeline and Encode
-[#59](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/59), Settings and sign-in cards, viewer tokens
-and no System theme (PRs 6 and 7). Review frames come from the `review-shots` job (Linux) and the
+[#59](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/59), Settings and sign-in cards
+[#60](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/60), viewer tokens and no System theme
+[#61](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/61). Review frames come from the `review-shots` job (Linux) and the
 "Lantern Glass review frames" step (Windows) in the Studio CI workflows.
 
 ## Decisions and constraints
