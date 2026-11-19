@@ -1267,6 +1267,22 @@
       ]
     },
     {
+      "id": "dev-system-design",
+      "name": {
+        "en": "System design section",
+        "ar": "قسم تصميم النظام"
+      },
+      "status": "building",
+      "apps": [
+        "dev"
+      ],
+      "wiki": "epics/AUN-DEV-SITE-developer-and-partner-site.md",
+      "prs": [
+        "AlUmmahNowUI#135"
+      ],
+      "note": "12 pages with 33 diagrams (architecture, numbered flows, sketches, the cost of both video pipelines); held for owner review."
+    },
+    {
       "id": "fanous-themes",
       "name": {
         "en": "Fanous design system and themes",
