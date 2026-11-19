@@ -38,7 +38,7 @@ Every feature is tier-aware from day one: plans, versions, entitlement values, a
 
 - [T1](decisions.md#t1-plans-are-admin-managed): Plans are admin-managed (decided)
 - [T2](decisions.md#t2-billing-provider): Billing provider (decided)
-- [P1](decisions.md#p1-first-paid-providers): First paid providers (open)
+- [P1](decisions.md#p1-first-paid-providers): First paid providers (decided 2026-11-19: PayGood only, off until the owner enables it)
 - [D4](decisions.md#d4-monetisation): Monetisation (decided)
 - [Q27-1](decisions.md#q27-1-epic-27-is-plumbing-only): Epic 27 is plumbing only (decided)
 - [Q27-2](decisions.md#q27-2-available-on-plan-is-plain-text): "Available on {plan}" is plain text (decided)
