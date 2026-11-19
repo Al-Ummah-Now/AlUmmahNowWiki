@@ -74,6 +74,8 @@ HTTP/1.1 404 Not Found
 
 There is no message for a person. Clients check `code`, never the text. A client that gets `feature_off` (for example after the feature was switched off while the page was open) reads the features again, and the entry point disappears. It doesn't show an error.
 
+A whole page that belongs to an off feature is the site's 404, not a hollow page or a "not available" notice. Example: with tier requests off and no payment provider, `/upgrade` answers `feature_off`, renders the 404 page and loses every link to it, while the user's tier still shows in Settings › Tier ([O37](../epics/decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)).
+
 Quota refusals keep their own codes and plain-fact messages (`live_hours_used`, `upload_limit`, `channel_limit`, caption minutes).
 
 ### Building a feature

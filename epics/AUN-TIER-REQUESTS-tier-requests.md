@@ -22,6 +22,7 @@ normal users may create pages.
 ## Decisions and constraints
 
 - [O33](decisions.md#o33-tiers-by-request-during-the-beta): tiers by request during the beta (decided).
+- [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature): with requests off and no payment provider, /upgrade is an off feature: `404 feature_off`, the site's 404 page, no header pill, account-menu item or Settings link; Settings › Tier keeps the user's tier (`GET /api/me/tier`).
 - Builds on [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md) ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers)): tiers stay admin-assigned; a request only asks an admin to assign one.
 - Lines up with [AUN-SUBS](AUN-SUBS-subscriptions-plan.md): its default plan is **Member** and its recommended launch option is "B: invite / admin grant only". This epic is that option, with a request form in front of it. When payments open, the same page gains a price and checkout per tier. Requests can stay for tiers that are not for sale.
 - Prices are never shown. A card offers **Request**, not Buy.
@@ -61,6 +62,7 @@ everyone.
    - the account menu has an Upgrade item;
    - the home page's signed-out banner ([AlUmmahNow#1359](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1359)) has a "Request creator access" chip. It signs the visitor in and returns them to `/upgrade`. `login` accepts one allowlist of return paths, `safeSignInReturn` (apps/web `lib/auth/sign-in-return.ts`): Studio paths, `/{locale}` (the banner's Sign in) and `/{locale}/upgrade`, for the sign-in's own language only. Whichever PR merges second wires the chip.
 7. `/upgrade` is `noindex`.
+8. **Requests off, no payment provider ('closed'):** there is no Upgrade page ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)). The links in items 6 disappear and `/upgrade` is the site's 404.
 
 ## Admin flow (videos admin → People → **Tier requests**)
 
