@@ -1921,7 +1921,7 @@
         "en": "Auto-post to X, Telegram, Bluesky and Mastodon",
         "ar": "النشر التلقائي على X وتيليجرام وBluesky وماستودون"
       },
-      "status": "building",
+      "status": "rolling",
       "apps": [
         "videos",
         "videos-admin",
@@ -1932,7 +1932,7 @@
         "AlUmmahNow#1396",
         "AlUmmahNow#1402"
       ],
-      "note": "Channels connect accounts in Studio → Social and choose what to post (videos, Shorts, live, community posts) in English or Arabic. Delivery is queued with retry, failures show in Studio and on the admin Errors page. Admins set the X spend cap (default $0). No Meta networks (SM-6)."
+      "note": "Channels connect accounts in Studio → Social and choose what to post (videos, Shorts, live, community posts) in English or Arabic. Delivery is queued with retry, failures show in Studio and on the admin Errors page. Admins set the X spend cap (default $0). No Meta networks (SM-6). Studio previews each post per network, cut as the sender cuts it. Merged 2026-11-18; waiting for the next videos release."
     },
     {
       "id": "social-scheduler-tools",
@@ -1940,7 +1940,7 @@
         "en": "Feeds, link previews, webhooks and share kit for scheduler tools",
         "ar": "خلاصات ومعاينات روابط وWebhooks وحزمة مشاركة لأدوات الجدولة"
       },
-      "status": "building",
+      "status": "rolling",
       "apps": [
         "videos",
         "api"
@@ -1950,7 +1950,7 @@
         "AlUmmahNow#1396",
         "AlUmmahNow#1402"
       ],
-      "note": "RSS feeds per channel, oEmbed for videos and channels, signed webhooks, a Studio share kit and a help page for Hootsuite, Buffer, Zapier, Make and IFTTT."
+      "note": "RSS feeds per channel, oEmbed for videos and channels, signed webhooks, a Studio share kit and a help page for Hootsuite, Buffer, Zapier, Make and IFTTT. Merged 2026-11-18; waiting for the next videos release."
     },
     {
       "id": "r2-backfill",
