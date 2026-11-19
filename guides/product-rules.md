@@ -39,7 +39,7 @@ GET /api/me/features?channelId=<id>  # work on that channel: its owner's tier, t
 { "success": true, "version": 1, "features": { "upload": true, "live": false, "captionsTranscribe": false, "…": false } }
 ```
 
-- **Keys** (api-videos, `packages/shared-types/src/features.ts`): `upload`, `createChannel`, `live`, `captionsTranscribe`, `captionsTranslate`, `inlineTranslate`, `viewerTranslatedTitles`, `quranEditions`, `audioTracks`, `siteDomains`, `socialAutopost`, `youtubeImport`, `aiCategorySuggest`, `bulkSchedule`, and `quranText` (true only while the Quran Foundation copy is synced and less than 7 days old; AlUmmahNow #1506). Keys may be added, never renamed.
+- **Keys** (api-videos, `packages/shared-types/src/features.ts`): `upload`, `createChannel`, `live`, `captionsTranscribe`, `captionsTranslate`, `inlineTranslate`, `viewerTranslatedTitles`, `quranEditions`, `audioTracks`, `siteDomains`, `socialAutopost`, `youtubeImport`, `aiCategorySuggest`, `bulkSchedule`, `quranText` (true only while the Quran Foundation copy is synced and less than 7 days old; AlUmmahNow #1506), and `billing` (Settings › Billing: a payment provider is on, or the account has subscriptions or payments; AlUmmahNow #1418). Keys may be added, never renamed.
 - **Fail closed.** A key that is missing, not `true`, or unknown to the client means hidden. While a client can't read the answer, everything is hidden.
 - **Signed-out visitors** get every creator feature off. The web doesn't ask for them at all.
 - **Live** is also off while an account deletion is pending. Live hours used is a quota and doesn't hide Live.
