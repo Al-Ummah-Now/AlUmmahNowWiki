@@ -7,7 +7,7 @@
 | **ID** | `E19` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-15 |
+| **Last updated** | 2026-11-18 |
 
 > Studio MVP shipped on Mac, Windows and Linux (2026-11-11 to 11-12): sign-in with several accounts, channel picker, upload of files or a folder with set-for-all values, manage videos, bulk edit, analytics. Mac downloads, MSI, portable zip, `.deb` and Flatpak come from tag-driven release workflows (Desktop pre-release `v0.1.0-preview.1`; no Apple release cut yet). NAT-S2 (D10/D11 decided 2026-11-14): the server side is merged ([AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386), [AlUmmahNow#1378](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1378); needs an AlUmmahNow release) and Core v0.4.0-rc.1 is out ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43), [AlUmmahNowCore#44](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/44)). Studio services and Core adapters are merged on Mac ([AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36), [AlUmmahNowApple#42](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/42)) and Desktop ([AlUmmahNowDesktop#43](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/43)). The screens for captions, analytics, institution mode, the editor and pre-encode wait for the owner's screenshot review: Mac [AlUmmahNowApple#37](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/37), [AlUmmahNowApple#39](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/39), [AlUmmahNowApple#43](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/43); Desktop [AlUmmahNowDesktop#45](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/45), [AlUmmahNowDesktop#46](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/46). 19.7 waits on D3.
 
@@ -52,6 +52,39 @@ Tools writes straight to Bunny and R2 with operator keys. Studio uploads through
 | Direct Bunny / R2 writes | None: uploads go through api-videos | Retired by design |
 
 Retirement steps: Studio gets the watch-and-approve queue and duplicate check; the owner runs the last Tools import; the repo is archived read-only and the operator Bunny and R2 keys it used are revoked.
+
+## Desktop design: Lantern Glass (owner-approved 2026-11-18)
+
+The Windows and Linux Studio share one design language with the web and phone apps, built from the
+Fawanees entry of the shared native theme registry (`packages/fanous-tokens`; vendored into
+`AlUmmahNowDesktop/src/AlUmmahNow.App/Theme/fanous` by `scripts/sync-fanous.sh`). Proposal and mockups:
+[review page](https://claude.ai/artifact/H4C79akpcL19v7qm2f5iUV). Rules:
+
+- **Depth, not a recolour.** Night header band (title bar on Windows, header bars on Linux) in Light *and*
+  Dark with the owner's lantern-string art (crop/resize only); frosted cards with a gold-tinted edge, a top
+  sheen and a gold glow; gold for primary actions, the selected nav item, selected cards, progress and the
+  playhead only.
+- **Platform materials.** Windows 11: Mica window, in-app Acrylic sidebar/cards/menus; the gold glow is a
+  coloured composition shadow (ThemeShadow is grey only). Linux: libadwaita, solid surfaces with the same
+  edge, sheen and glow (GTK has no backdrop blur).
+- **Shell.** A sidebar headed by the one identity menu (channels: name + Channel and role; people: name +
+  Personal; Add another account, Add a passkey, Sign out) replaces the tab strip, the Channel picker and the
+  Account menu. Settings sits at the sidebar's foot. Below 1200 px the sidebar is an icon rail; the window's
+  minimum is 1024x700.
+- **Cards.** Buttons go in the card's footer, end-aligned (left in Arabic). Layouts fill the window (two
+  columns at 1440, more grid columns at 1920).
+- **Light or Dark only**, saved in Studio's settings (Dark by default); no System option anywhere (an old
+  saved System reads as Dark). Studio starts in the saved language (Arabic by default).
+- **Never fatal.** A theme that fails to load is reported to the crash file and Studio keeps the stock look.
+
+PRs (stacked, held for owner screenshots): shell and identity menu
+[AlUmmahNowDesktop#55](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/55), Upload
+[#56](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/56), Videos grid
+[#57](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/57), Analytics
+[#58](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/58), Timeline and Encode
+[#59](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/59), Settings and sign-in cards, viewer tokens
+and no System theme (PRs 6 and 7). Review frames come from the `review-shots` job (Linux) and the
+"Lantern Glass review frames" step (Windows) in the Studio CI workflows.
 
 ## Decisions and constraints
 
