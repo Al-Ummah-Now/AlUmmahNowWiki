@@ -73,6 +73,46 @@ The brand is the Fanous lantern identity ([Theming](../guides/theming.md)), Fawa
 - **Bilingual.** Both languages have the same structure. Arabic is not a mirrored copy: the pipeline flows right to left, and Arabic numerals 0–9 appear only in code-like labels; everything else uses Eastern Arabic (Hindi) numerals ٠–٩.
 - **Quality floor.** Keyboard focus visible on every control, reduced motion respected, axe clean in both languages and both modes, WCAG 2.1 AA contrast from the shared tokens, no horizontal scroll at 320 px.
 
+## System design section
+
+`/{en,ar}/system-design/`: a hub and 11 subpages with **33 diagrams** explaining how Al Ummah Now is built: video pipeline, delivery and caching, data, async work, realtime, identity and security, AI usage, cost, scaling, clients, release and quality. PR [AlUmmahNowUI#135](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/135). Owner approved the style on 2026-11-19 (Stage A: the reference architecture, the isometric hero and the cost animation). The PR is held for the owner.
+
+- **Styles follow the owner's samples.**
+  - Architecture diagrams use the reference-architecture layout: the Azure look in light, neon in dark.
+  - The hub hero is an isometric multi-provider view.
+  - Each page also has a numbered flow and a hand-drawn explainer.
+  - Every page has 3 to 5 diagrams.
+- **Official icons only.**
+  - Each Cloudflare service has its own Cloudflare product icon. Vendors use their own marks (Bunny's are the ones bunny.net serves), and generic actors use Lucide.
+  - Marks are scaled only, never recoloured or redrawn.
+  - Sources are listed in `apps/dev/docs/ICONS.md`.
+- **Facts are sourced.**
+  - Every claim on a diagram is listed with its file and line in `apps/dev/docs/SOURCES.md`.
+  - Nothing is invented. Where the code doesn't know a quantity, the diagram says "unknown".
+- **Cost of both pipelines.**
+  - Bunny Stream and R2 on Cloudflare Containers are shown side by side, with the checks every upload gets (AI moderation, captions, Quran detection, pre-publication review).
+  - Each stage shows its list price. A meter ticks as the flow reaches it, and each lane keeps a running total.
+  - An example picker offers one 10-minute video watched in full 1,000 times, or the admin cost page's small and medium month presets.
+  - Rates come from `apps/api-videos/src/lib/media/costs.ts`, the admin Delivery page's `ASSUMED` values, `apps/processor/src/moderation/pricing.ts`, `apps/cost-monitor/src/pricing.ts` and the [video review](AUN-VIDEO-REVIEW-pre-publication-review.md) cost table. The busy transcode slot (standard-4) is about $0.40 an hour.
+  - The same rate and a live meter appear on the Workers AI node in the overview, the pipeline and the AI map.
+- **Motion and accessibility.**
+  - Pulses travel along the wires. Delivery wires have marching streams, and numbered hops fire in order.
+  - Each flow type has its own colour, named in the legend.
+  - `prefers-reduced-motion` stops all motion and shows final totals.
+  - Phones get stacked layouts. Arabic mirrors the layout and uses ٠–٩.
+  - Diagrams use no inline styles, because the site's CSP is `style-src 'self'`.
+- **Quality gate.**
+  - `apps/dev/e2e/diagram-gate.ts` runs in a real browser. It fails when:
+    - an icon leaves its node, is larger than 48px, or is missing;
+    - two labels touch;
+    - a wire crosses a node it doesn't connect, or takes a detour;
+    - anything leaves the canvas;
+    - two groups half-overlap, or a node sits in a group it isn't part of;
+    - a CSP violation occurs;
+    - a page has fewer than 3 diagrams.
+  - CI runs it on every page through `e2e/diagram-gate.spec.ts`. `scripts/sysdesign-shots.ts` runs it while capturing review frames and clips from the built site.
+- **Adding a diagram.** Put a builder in `apps/dev/src/lib/arch/pages/<page>.ts`, its copy in `src/i18n/sd/<page>.{en,ar}.ts`, and an `SdDiagram` on the page. Add its facts to SOURCES.md, then run the gate.
+
 ## Hosting
 
 | | |
