@@ -490,7 +490,7 @@ It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUm
 
 **Decided:** our own analytics only, with no third party and no cookies. The in-house analytics are extended with **landing page** and **referrer source** (search engine / social / direct / other site, from `document.referrer`).
 
-**Shipped:** counting in [#1184](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1184); the admin **Site visits** page in [#1202](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1202). See [Site visits (admin)](../repos/AlUmmahNow.md#site-visits-admin).
+**Shipped:** counting in [#1184](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1184); the admin **Site visits** page in [#1202](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1202). See [Site visits (admin)](../repos/AlUmmahNow.md#site-visits-admin). Since 2026-11-19 visits and views are also counted by app or site, device, country and campaign (`utm_source`); see [Request origin](AUN-ORIGIN-request-origin.md).
 
 ### D-SEO-10: Shorts URLs
 
