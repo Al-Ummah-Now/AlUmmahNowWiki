@@ -2054,6 +2054,23 @@
         "AlUmmahNowApple#56"
       ],
       "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510. Desktop Studio (Windows, Linux) reads the features and hides Upload, and Analytics on feature_off, in AlUmmahNowDesktop#54. Android Studio (AlUmmahNowAndroid#27, held for the owner's screenshots) hides Upload without `upload`, Analytics on 404/feature_off, Recently deleted with Restore and Delete forever without soft delete, the invitation card, and Add a passkey on Auth's feature_off. Apple Studio (iPhone, iPad, Mac; AlUmmahNowApple#56, held for the owner's screenshots) hides Upload without `upload`, Bulk schedule without `bulkSchedule`, and Analytics on feature_off."
+    },
+    {
+      "id": "platform-credentials",
+      "name": {
+        "en": "Platform credentials",
+        "ar": "بيانات الاعتماد"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "guides/platform-credentials.md",
+      "prs": [
+        "AlUmmahNow#1547"
+      ],
+      "note": "Super Admins replace and test the Cloudflare media token from Platform settings; held for the owner's screenshots. Other Secrets Store keys: AlUmmahNow#1546."
     }
   ]
 }

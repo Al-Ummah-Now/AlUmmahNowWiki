@@ -30,6 +30,7 @@ Facts here were first read from each repo's default branch on 2026-11-09 and bro
 | [Environments and domains](guides/environments.md) | QA, stage and production hostnames |
 | [Release process](guides/release-process.md) | How each repo reaches production |
 | [Store release checklist](guides/store-release-checklist.md) | What the owner pastes where for the App Store, Play and Microsoft Store: D-U-N-S, Team ID, fingerprints, secrets |
+| [Platform credentials](guides/platform-credentials.md) | Keys a Super Admin replaces and tests in the videos admin (Cloudflare media token), sealed, write only |
 | [Testing and E2E](guides/testing.md) | Local E2E stack, placement, own data, leftover checks, cleanup jobs |
 | [CI test selection](guides/ci-test-selection.md) | Which E2E suites a PR needs, from the dependency graph; shadow rollout and the CI gate |
 | [Status page](guides/status-page.md) | status.alummahnow.net: what it checks, incidents and maintenance, alerts |
