@@ -7,7 +7,7 @@
 | **ID** | `CHAT-ERRORS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-18 |
+| **Last updated** | 2026-11-19 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
 > Merged 2026-11-10 (#588, #589, #607, #608). 2026-11-18: error context on the detail page and the read-only **Prod errors** workflow (below).
@@ -52,6 +52,10 @@ Optional **paths** (comma-separated, each starting with `/`, e.g. `/passkeys,/ap
 - warn/error log lines from Workers Observability for web, admin-web, api-videos, admin-api, media, processor, websocket, scheduler and Auth (auth, auth admin, profile), repeats collapsed with a count
 
 Read-only: the reports D1 is read through the Cloudflare API with bounded SELECTs on indexed columns (no scans, no LIKE); the Observability query only reads; no app endpoint is called. Emails, tokens and URL query strings are scrubbed; at most user ids are printed. A pull request that changes it runs it against stage. It also prints the cost collector's failed runs (`collector_runs`, `cost_job_runs`). PRs: [AlUmmahNow#1574](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1574), [AlUmmahNow#1580](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1580).
+
+## Request origin (2026-11-19)
+
+Each error sample records where its request came from: surface (web, admin, iPhone/iPad/Mac/Android/TV/desktop apps, embed, API, bot), app and version, device class, country, source with referrer host and campaign, and entry page. No IP, User-Agent or URL is kept. The Errors list filters by origin, and each group shows a per-origin breakdown. The model, the native `X-AUN-Client` header and the analytics side are in [Request origin](AUN-ORIGIN-request-origin.md).
 
 ## Status evidence
 

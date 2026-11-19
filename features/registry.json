@@ -2054,6 +2054,35 @@
         "AlUmmahNowApple#56"
       ],
       "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510. Desktop Studio (Windows, Linux) reads the features and hides Upload, and Analytics on feature_off, in AlUmmahNowDesktop#54. Android Studio (AlUmmahNowAndroid#27, held for the owner's screenshots) hides Upload without `upload`, Analytics on 404/feature_off, Recently deleted with Restore and Delete forever without soft delete, the invitation card, and Add a passkey on Auth's feature_off. Apple Studio (iPhone, iPad, Mac; AlUmmahNowApple#56, held for the owner's screenshots) hides Upload without `upload`, Bulk schedule without `bulkSchedule`, and Analytics on feature_off."
+    },
+    {
+      "id": "request-origin",
+      "name": {
+        "en": "Where requests come from: errors, audit and analytics",
+        "ar": "مصدر الطلبات: في الأخطاء والتدقيق والتحليلات"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/AUN-ORIGIN-request-origin.md",
+      "prs": [
+        "AlUmmahNow#1597",
+        "AlUmmahNow#1602",
+        "AlUmmahNow#1603",
+        "AlUmmahNow#1616",
+        "AlUmmahNow#1619",
+        "AlUmmahNowAuth#439",
+        "AlUmmahNowCore#49",
+        "AlUmmahNowCore#50",
+        "AlUmmahNowAndroid#39",
+        "AlUmmahNowDesktop#62",
+        "AlUmmahNowApple#65"
+      ],
+      "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. The Errors page filter and breakdown and the Studio and Site visits breakdowns are held for owner review."
     }
   ]
 }
