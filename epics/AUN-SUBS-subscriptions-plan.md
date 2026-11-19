@@ -17,7 +17,7 @@ The owner, 2026-11-14: *"build the framework, no need to enable now, this is for
 
 - **Plans stay creator tiers.** The creator tiers ([CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), with the Member tier from [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md)) are the only plans model. The separate [Epic 27](E27-plans-entitlements.md) plans PRs ([#390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/390), [#391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/391), [#427](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/427), [#428](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/428), [#429](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/429)) were closed as superseded.
 - **Off by default.** `/upgrade` stays the request page while no provider is enabled. Once an admin enables one and prices a tier, that tier's card shows the price and Subscribe. A tier set to "By request only" is never sold. With no provider and "Allow tier requests" off, there is no Upgrade page at all ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)): `404 feature_off`, no links to it, and the user's tier still shows in Settings › Tier. Settings › Billing follows the same rule: it is listed and opens only while a provider is on or the account has subscriptions or payments (feature key `billing`); otherwise it is the site's 404.
-- **Providers.** One interface (checkout, webhook check, status, cancel, refund, portal, price sync) with Paddle (merchant of record) and PayGood adapters, a test provider for QA and the local stack only, and `manual` for complimentary tiers. Never Stripe ([T2](decisions.md#t2-billing-provider)). Which provider goes live first stays open ([P1](decisions.md#p1-first-paid-providers)).
+- **Providers.** One interface (checkout, webhook check, status, cancel, refund, portal, price sync) with the PayGood adapter, a test provider for QA and the local stack only, and `manual` for complimentary tiers. Never Stripe ([T2](decisions.md#t2-billing-provider)). [P1](decisions.md#p1-first-paid-providers) decided 2026-11-19: **PayGood only, off until the owner enables it**. Paddle, built from the S16 shortlist while P1 was open, was removed ([AlUmmahNow#1653](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1653)).
 - **Webhooks.** The signature is checked on the raw body, then the event is stored once (idempotent) and handled by a queued job with retry, backoff and a DLQ. Events that match nobody are flagged on the admin Errors page with Retry.
 - **Entitlement.** An active subscription assigns its tier. A higher tier an admin set is kept, and a lower one comes back when the subscription ends. Sweeps end comps and paid periods even if the provider's last event is lost.
 - **Users.** Settings › Billing shows subscriptions, cancel at period end, the provider's portal, and payment history with receipts.
@@ -40,7 +40,7 @@ Each feature was inventing its own tiers: creator tiers, the [Epic 27](E27-plans
 
 - **One plans system.** [Creator tiers](CHAT-CREATOR-TIERS-creator-tiers.md) fold into Epic 27 plans, and every limit is an entitlement key. The default plan is renamed **Member** and grants no creator allowances.
 - **Watching is never gated.** Plans gate making, storing, processing and AI.
-- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). Option B now has a request page in front of it: [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (the Member tier, `/upgrade`, the admin queue). The recommendation is **B at launch, with C added once a payment provider is chosen ([P1](decisions.md#p1-first-paid-providers))**. There is no public free creator tier.
+- **Lowest tier:** options A (free with small allowances), B (invite / admin grant only) and C (paid only). Option B now has a request page in front of it: [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md) (the Member tier, `/upgrade`, the admin queue). The recommendation is **B at launch, with C added once the owner enables PayGood ([P1](decisions.md#p1-first-paid-providers), decided 2026-11-19: PayGood only, off until enabled)**. There is no public free creator tier.
 - **Ladder (seeds):** Member, Creator, Creator Plus, Creator Pro, Institution, Staff. A viewer Supporter plan stays deferred ([D4](decisions.md#d4-monetisation)). Scholars hold a role, not a plan; they get a sponsored Creator Plus grant.
 - **Add-ons** are additive grants: caption minutes, storage, upload hours, live hours, X posts.
 - **Payments:** never Stripe. Candidates are listed but not decided. Lemon Squeezy, Gumroad and Polar are excluded because they run on Stripe.
@@ -74,7 +74,7 @@ Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from sto
 | S13 | Budget stops for transcode, moderation and live | Yes |
 | S14 | Sample Workers Logs in production (~10%) | Yes |
 | S15 | Add-ons as additive grants | Yes |
-| S16 | Payment provider shortlist (P1 stays open) | Paddle or FastSpring + PayPal + Tap or Moyasar |
+| S16 | Payment provider shortlist (superseded 2026-11-19 by P1: PayGood only, off until the owner enables it) | Paddle or FastSpring + PayPal + Tap or Moyasar |
 | S17 | Native apps sell nothing until Epic 24 | Yes |
 | S18 | Inline title translation free with fair use | Yes |
 
