@@ -37,6 +37,10 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 - **Why:** the owner: "clicking mark as spam on admin messages causes a flickr in all buttons and nothing". Every button on the message page shared one busy flag, so all of them flickered (production: four 200 PATCHes 1.5 s apart).
 - **Then:** "actually its marked as spam now but button stil normal": the change was saved but the page only showed it through a refresh, which on production didn't show it.
 - **Now:** only the clicked button says "Working…" while it saves. The status chip, the Not spam button and the Undo toast show as soon as admin-api confirms, without waiting for the page refresh. Inbox rows follow a bulk change at once. A failed change shows an error in English or Arabic and is reported to the Errors page. The inbox bulk bar got the same fix. E2E `30-contact-spam` ([#1662](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1662)).
+## 2026-11-19: one family of error pages in every app (proposed, held for the owner)
+
+- **Why:** the owner asked whether the site has custom error pages. Each app had its own: the videos 404 was a generic gray/blue template with a pulsing "404", Auth's error page a hard-coded navy and amber card, the CMS and scholar sites plain text.
+- **Now (PRs held for screenshots):** 404, 410, 500, 503 and a crashed page are one frosted-glass card on the lantern street inside each app's header and footer, with the same words, "Error 404" / «خطأ ٤٠٤» line, icons and actions (Go to home, Go back, Search, Try again, the reference), noindex and the real status code. Purged videos, Shorts, playlists and channels show the 410 words. See [Error pages](error-pages.md).
 
 ## 2026-11-19: Invite links sign the person straight in
 
