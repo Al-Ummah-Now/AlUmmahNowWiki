@@ -32,6 +32,8 @@ It came up on the videos admin **Add tier** form, which said "Arabic name: Leave
 
 That content stays in the language it was written in. Viewers can still use the viewer-side title translation ([AUN-CAPTIONS](specs-index.md)).
 
+**User content needs one language only.** Where a user form has English and Arabic tabs (profile names and bio, channel name and description, upload templates, upload title), it saves when **either** language is filled, in the app and in the API. Nothing on those forms may require English (or Arabic) on its own. Both tabs stay mounted, so text typed in one tab survives a switch. The plain field (`name`, `firstName`, `title`…) carries the filled language, English first, so display falls back to the other language. The web helper is `apps/web/src/lib/localized-input.ts` (`hasAnyLanguage`, `primaryText`, `englishOf`). Background: 2026-11-19 prod report, profile create required the English first name (AlUmmahNow #1606).
+
 ## Rules
 
 1. **Both languages are first-class fields.** The form has an English and an Arabic field side by side. No field says "leave empty to use the other one".
