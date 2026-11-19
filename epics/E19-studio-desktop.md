@@ -82,16 +82,39 @@ Fawanees entry of the shared native theme registry (`packages/fanous-tokens`; ve
 - **Light or Dark only**, saved in Studio's settings (Dark by default); no System option anywhere (an old
   saved System reads as Dark). Studio starts in the saved language (Arabic by default).
 - **Never fatal.** A theme that fails to load is reported to the crash file and Studio keeps the stock look.
+- **Studio opens at rest.** No field takes focus on start; Ctrl+K or "/" jumps to the header search, and the
+  Tab order is unchanged. The header search is the web's pill (`nav-search-*` radius and colours).
+- **Media time never mirrors** (owner 2026-11-19; Apple HIG, Material, and our web and mobile players). In
+  Arabic, the Studio Timeline's ruler, lanes, clips and playhead, the viewer's seek bar, and its
+  rewind/play/forward group run left to right with their LTR icon shapes. Only the chrome around them
+  (tools, lane labels, time readouts, pickers) and lists such as Clips follow the page direction.
+- **File sizes read the same on every platform**, as the web upload page does (shared-types `formatBytes`:
+  1024 steps, Intl short units, at most one decimal; upload rows and progress show exactly two, "1.43 MB" /
+  «١٫٤٣ م.ب»). The OS's own size format is never used. A plural "bytes" waits on AlUmmahNow#1645 and
+  AlUmmahNowDesktop#64.
+- **Search suggestions show the card's title** in the page language (owner 2026-11-19). The API's
+  suggestions carry only the original title (AlUmmahNow#1648), so Studio names a video suggestion from that
+  video's card when it is on the page.
+- **Encode shows the time left**, estimated from the pace so far ("Encoding, 62%, About 2:28 left").
 
-PRs (stacked, held for owner screenshots): shell and identity menu
+PRs (stacked; each merges after the owner approves its frames): shell and identity menu
 [AlUmmahNowDesktop#55](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/55), Upload
 [#56](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/56), Videos grid
 [#57](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/57), Analytics
 [#58](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/58), Timeline and Encode
 [#59](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/59), Settings and sign-in cards
 [#60](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/60), viewer tokens and no System theme
-[#61](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/61). Review frames come from the `review-shots` job (Linux) and the
+[#61](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/61). #55–#58 are merged (2026-11-19); #59–#61 passed
+review and wait for the owner. Review frames come from the `review-shots` job (Linux) and the
 "Lantern Glass review frames" step (Windows) in the Studio CI workflows.
+
+**Review frames show realistic content, never test data.** Studio frames run on the demo backend (real
+tags, a search that narrows, a running and a finished encode). The viewer's frames use the demo catalog
+(`AUN_DEMO=1`) with committed title-card thumbnails (`tests/fixtures/viewer-thumbs`). Its watch frames play
+a committed fixture (`tests/fixtures/watch`: a title-card video with in-story English and Arabic captions,
+`AUN_FIXTURE_MEDIA`), so the playback gate never depends on a remote stream (#65). The QA-catalog runs stay
+as tests, with their screenshots in the `*-scenarios` artifacts. The Windows CI installs ffmpeg with
+retries and stops at that step if it is missing (#66).
 
 ## Decisions and constraints
 
