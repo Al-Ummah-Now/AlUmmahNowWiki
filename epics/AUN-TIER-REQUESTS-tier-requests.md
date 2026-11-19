@@ -56,13 +56,14 @@ everyone.
    - **Approved:** a link to Upload when the tier allows uploads.
    - **Declined:** the admin's reason, if given; the user may ask again.
 5. **Signed out:** every card says "Sign in to request".
-6. **Links in:**
-   - every "Uploading is by invitation" notice has a **Request access** link: the upload page, channel creation and the VideosNotices inline and page variants;
-   - the header shows a Request access pill when the user cannot upload;
-   - the account menu has an Upgrade item;
-   - the home page's signed-out banner ([AlUmmahNow#1359](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1359)) has a "Request creator access" chip. It signs the visitor in and returns them to `/upgrade`. `login` accepts one allowlist of return paths, `safeSignInReturn` (apps/web `lib/auth/sign-in-return.ts`): Studio paths, `/{locale}` (the banner's Sign in) and `/{locale}/upgrade`, for the sign-in's own language only. Whichever PR merges second wires the chip.
+6. **Links in** (owner rule: upgrading is never marketed, [AlUmmahNow#1651](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1651)):
+   - the header's Upload place: a signed-in user whose tier allows no uploads gets a pill to `/upgrade` instead, "Request tier" while it takes requests and "Upgrade" while it sells (owner 2026-11-15); none while it is closed or the mode is unknown;
+   - Settings › Tier: "See all tiers" (owner 2026-11-16);
+   - the tier-request and tier-change notices and emails link to it as before.
+   - **Not linked:** the account menu has no Upgrade item, and there is no "Uploading is by invitation" notice (the upload page and channel creation are hidden for an account that cannot use them; the unused `UploadsByInvitationNotice` was deleted, AlUmmahNow#1525).
+   - `/upgrade` is a sign-in return path: `login` accepts one allowlist, `safeSignInReturn` (apps/web `lib/auth/sign-in-return.ts`): Studio paths, `/{locale}` and `/{locale}/upgrade`, for the sign-in's own language only.
 7. `/upgrade` is `noindex`.
-8. **Requests off, no payment provider ('closed'):** there is no Upgrade page ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)). The links in items 6 disappear and `/upgrade` is the site's 404.
+8. **Requests off, no payment provider ('closed'):** there is no Upgrade page ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)). The links in item 6 disappear and `/upgrade` is the site's 404.
 
 ## Admin flow (videos admin → People → **Tier requests**)
 
