@@ -45,6 +45,8 @@ Captured at ingest (`error_events.context_json`, admin-api migration `0037`); in
 
 **Actions → Prod errors** (`.github/workflows/prod-errors.yml`, `scripts/ops/prod-errors.ts` in AlUmmahNow), environment `production` or `stage`, hours back (logs at most 72). It prints, as the job summary and a 7-day artifact:
 
+Optional **paths** (comma-separated, each starting with `/`, e.g. `/passkeys,/api/callback`): also lists every request whose path contains one of them, per Worker, with the log lines of those requests (time, method, path without query, status, outcome, browser family; no query strings, headers, bodies or ids). The filter runs in the Observability query, so the event cap never hides a match (AlUmmahNow #1608).
+
 - the Errors page groups seen in the window (app, kind, route, culprit, message, status, count, first/last seen and release) with the latest sample's method, status, release, Worker version, request id and top stack frames
 - the open needs-action items
 - warn/error log lines from Workers Observability for web, admin-web, api-videos, admin-api, media, processor, websocket, scheduler and Auth (auth, auth admin, profile), repeats collapsed with a count
