@@ -63,6 +63,7 @@ everyone.
    - the home page's signed-out banner ([AlUmmahNow#1359](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1359)) has a "Request creator access" chip. It signs the visitor in and returns them to `/upgrade`. `login` accepts one allowlist of return paths, `safeSignInReturn` (apps/web `lib/auth/sign-in-return.ts`): Studio paths, `/{locale}` (the banner's Sign in) and `/{locale}/upgrade`, for the sign-in's own language only. Whichever PR merges second wires the chip.
 7. `/upgrade` is `noindex`.
 8. **Requests off, no payment provider ('closed'):** there is no Upgrade page ([O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)). The links in items 6 disappear and `/upgrade` is the site's 404.
+9. **Hidden tiers** (owner, 2026-11-19; [AlUmmahNow#1637](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1637)): a tier marked Hidden in the tier editor never shows on `/upgrade` or any tier list a user sees, except as the current tier of the people on it. Requests and checkout for it answer 404 to anyone not on it. Admins still list it, invite to it and give it on the user page. The default tier is never hidden, and a hidden tier cannot become the default (409 `default_tier_hidden`). The switch acts at once, is audited and offers Undo.
 
 ## Admin flow (videos admin → People → **Tier requests**)
 

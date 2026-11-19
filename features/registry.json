@@ -338,6 +338,24 @@
       "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier. Held for the owner's screenshot review."
     },
     {
+      "id": "tier-hidden",
+      "name": {
+        "en": "Hidden tiers",
+        "ar": "الفئات المخفية"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-TIER-REQUESTS-tier-requests.md",
+      "prs": [
+        "AlUmmahNow#1637"
+      ],
+      "note": "A tier marked Hidden in the videos admin never shows on the Upgrade page or any tier list a user sees, except as the current tier of the people on it; requests and checkout for it answer 404 to others. Admins still list, invite to and grant it; the default tier is never hidden. The switch acts at once, audited, with Undo. Held for the owner's screenshot review."
+    },
+    {
       "id": "payments",
       "name": {
         "en": "Payments for creator tiers",
