@@ -2082,7 +2082,7 @@
         "AlUmmahNowDesktop#62",
         "AlUmmahNowApple#65"
       ],
-      "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. The Errors page filter and breakdown and the Studio and Site visits breakdowns are held for owner review."
+      "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. All parts are merged (owner approved the Errors page and Studio/Site visits views on 2026-11-19); waiting for the next videos release."
     }
   ]
 }
