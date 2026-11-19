@@ -39,6 +39,7 @@ Platform-wide constraints that apply to every epic:
 - Every feature is tiered, with plans **custom and admin-managed** ([T1](decisions.md#t1-plans-are-admin-managed)). Uploads and channel creation are invite-only through admin-assigned creator tiers until subscriptions exist ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers)).
 - Arabic shows Eastern Arabic (Hindi) numerals ٠–٩ for every number, date, time and amount; English shows Arabic numerals 0–9. Formatting goes through one shared formatter with the numbering system pinned ([O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals), [Numbers and dates](../guides/numbers-and-dates.md)).
 - UI is bilingual en/ar with RTL. Sign-in and profile pages default to **English unless `?lang=ar`** ([O21](decisions.md#o21-english-default-on-sign-in-and-profile)).
+- A channel shown anywhere (as a video's channel, or as an author of a comment, reply or post, or in a notification) is named in the page language: payloads carry the name per language (`channelNameLocalized`; comment authors `author.displayNameLocalized`, post comments `userDisplayNameLocalized`, notification params `<name>_<lang>`), and pages show their own language, falling back to the default name, then any other language, only when one is missing (`channelLabel`). People keep the display-name rule per language. ([AlUmmahNow#1610](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1610), PR [#1617](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1617).)
 
 ## Status evidence
 
