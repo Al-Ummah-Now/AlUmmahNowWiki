@@ -73,9 +73,9 @@ Tone follows the [Copy Tone Guide](copy-tone.md): plain, no hype, «مرئي/م�
 
 ## PRs
 
-- AlUmmahNow: videos site + admin + shared copy and sheet
-- AlUmmahNowUI: www, scholar sites, dev site
-- AlUmmahNowAuth: Auth 500/503/404
-- AlUmmahNowCMS: CMS 404/500
+- [AlUmmahNow#1641](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1641): videos site + admin + shared copy and sheet
+- [AlUmmahNowUI#133](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/133): www, scholar sites, dev site
+- [AlUmmahNowAuth#443](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/443): Auth 500/503/404
+- [AlUmmahNowCMS#148](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/148): CMS 404/500
 
 Review frames: `review-shots/error-pages/2026-11-19/` (before/after, en/ar, Light/Dark, desktop/phone).
