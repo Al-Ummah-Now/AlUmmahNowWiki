@@ -9,6 +9,11 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 - **AlUmmahNowAuth:** invite emails now use the wording saved in videos admin › Settings › Emails, and show the invite's video as a picture card that links to the watch page ([Auth#432](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/432), [Auth#433](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/433); approved with [#1551](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1551), rebased onto #430's Eastern Arabic digits). Merged 2026-11-19; Auth released on merge.
 - **AlUmmahNow:** the seeded wording still described the old sign-in ("choose Create account", "you can still sign in after it expires"). Migration 0045 rewrites those sentences for the one-time link wherever an admin hasn't changed them, as a new version in History ([#1658](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1658), held for the owner's screenshots). See [Email templates](email-templates.md#versions).
 
+## 2026-11-19: Mark as spam on a contact message works on the first click
+
+- **Why:** the owner: "clicking mark as spam on admin messages causes a flickr in all buttons and nothing". Every button on the message page shared one busy flag that cleared as soon as admin-api answered, before the page refreshed. All buttons flickered, the old label came back, and the next click undid the change (production: four 200 PATCHes 1.5 s apart).
+- **Now:** only the clicked button says "Working…" until the page shows the result. Mark as spam / Not spam show an Undo toast once the new status is on the page. A failed change shows an error in English or Arabic and is reported to the Errors page. The inbox bulk bar got the same fix. E2E `30-contact-spam` ([#1662](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1662)).
+
 ## 2026-11-19: Invite links sign the person straight in
 
 - **Why:** the owner asked why an invitee had to "Sign in" or "Create account" with an emailed code after clicking their invite, and why a second click told them to sign in when, as far as they knew, they had no account yet.
