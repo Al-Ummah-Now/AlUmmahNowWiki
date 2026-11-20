@@ -38,12 +38,13 @@ Super Admins and Admins (admin-api permission `emails:manage`). Moderators do no
 - Every save is a new version; nothing is overwritten. **History** lists each version with who and when (names, never stored emails) and **Restore**, which makes a new version with the old text. Save and Restore both offer **Undo** for a few seconds.
 - An editor opened before someone else saved gets "Someone saved this email while you were editing" and cannot overwrite it.
 - Version 1 is the copy Auth sent before the page existed (migration `0036_email_templates.sql`).
+- A wording fix shipped by a migration is its own version, by the system, shown in History as **Updated by Al Ummah Now** / «حدّثته الأمة الآن» (action `update`), and can be restored like any other. It only replaces a sentence that still equals the seeded text, so an admin's own edits are never overwritten. First one: migration `0045_invite_wording_link_flow.sql` ([#1658](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1658)) rewrote the sign-in sentences (`how`, `expires`, en and ar) for the one-time invite link from [Auth#434](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/434): the button signs the person in, the link works once, and an old link asks for a new one.
 
 ## Delivery
 
 - admin-api stores the templates (`email_templates`, `email_template_versions` in the reports D1).
 - The invite's create and resend requests to Auth carry `emailCopy`: the current version's copy in the invite's language (`{ key, version, locale, copy }`). Auth never reads the admin DB.
-- Auth renders with that copy. Its built-in copy is an emergency default only, used when the request has no copy, copy in another language or an incomplete one, and each use logs `[invites] Built-in invite copy used` with the reason.
+- Auth renders with that copy, video card included ([Auth#432](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/432), [Auth#433](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/433), live since 2026-11-19). Its built-in copy (the same words as the default copy in shared-types) is an emergency default only, also used for an invitee's own "Email me a new link", used when the request has no copy, copy in another language or an incomplete one, and each use logs `[invites] Built-in invite copy used` with the reason.
 
 ## Making another email editable
 

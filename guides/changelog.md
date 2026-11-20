@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-19: the invite email sends the admin's wording and the video card
+
+- **AlUmmahNowAuth:** invite emails now use the wording saved in videos admin › Settings › Emails, and show the invite's video as a picture card that links to the watch page ([Auth#432](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/432), [Auth#433](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/433); approved with [#1551](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1551), rebased onto #430's Eastern Arabic digits). Merged 2026-11-19; Auth released on merge.
+- **AlUmmahNow:** the seeded wording still described the old sign-in ("choose Create account", "you can still sign in after it expires"). Migration 0045 rewrites those sentences for the one-time link wherever an admin hasn't changed them, as a new version in History ([#1658](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1658), held for the owner's screenshots). See [Email templates](email-templates.md#versions).
+
 ## 2026-11-19: Invite links sign the person straight in
 
 - **Why:** the owner asked why an invitee had to "Sign in" or "Create account" with an emailed code after clicking their invite, and why a second click told them to sign in when, as far as they knew, they had no account yet.
