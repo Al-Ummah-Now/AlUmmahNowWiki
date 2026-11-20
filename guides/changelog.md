@@ -11,8 +11,9 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-19: Mark as spam on a contact message works on the first click
 
-- **Why:** the owner: "clicking mark as spam on admin messages causes a flickr in all buttons and nothing". Every button on the message page shared one busy flag that cleared as soon as admin-api answered, before the page refreshed. All buttons flickered, the old label came back, and the next click undid the change (production: four 200 PATCHes 1.5 s apart).
-- **Now:** only the clicked button says "Working…" until the page shows the result. Mark as spam / Not spam show an Undo toast once the new status is on the page. A failed change shows an error in English or Arabic and is reported to the Errors page. The inbox bulk bar got the same fix. E2E `30-contact-spam` ([#1662](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1662)).
+- **Why:** the owner: "clicking mark as spam on admin messages causes a flickr in all buttons and nothing". Every button on the message page shared one busy flag, so all of them flickered (production: four 200 PATCHes 1.5 s apart).
+- **Then:** "actually its marked as spam now but button stil normal": the change was saved but the page only showed it through a refresh, which on production didn't show it.
+- **Now:** only the clicked button says "Working…" while it saves. The status chip, the Not spam button and the Undo toast show as soon as admin-api confirms, without waiting for the page refresh. Inbox rows follow a bulk change at once. A failed change shows an error in English or Arabic and is reported to the Errors page. The inbox bulk bar got the same fix. E2E `30-contact-spam` ([#1662](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1662)).
 
 ## 2026-11-19: Invite links sign the person straight in
 
