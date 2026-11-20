@@ -12,6 +12,10 @@ Native viewer and Studio apps for iOS, iPadOS, tvOS and macOS. The product spec 
 
 Swift and SwiftUI, AppKit on macOS where needed, XcodeGen, SwiftLint, XCTest and XCUITest.
 
+Toolchain: CI and release builds use Xcode 27.1 (27A9275) on GitHub's `xcode-27` runner image, with the iOS/tvOS 27.0
+simulators. `XCODE_VERSION` in each workflow sets the Xcode version. New APIs must exist in that SDK. Deployment
+targets are iOS/tvOS 17 and macOS 14.
+
 ## Layout
 
 | Path | What it is |
