@@ -1272,15 +1272,20 @@
         "en": "System design section",
         "ar": "قسم تصميم النظام"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "dev"
       ],
       "wiki": "epics/AUN-DEV-SITE-developer-and-partner-site.md",
+      "release": {
+        "repo": "AlUmmahNowUI",
+        "tag": "v2026.11.19.6"
+      },
       "prs": [
-        "AlUmmahNowUI#135"
+        "AlUmmahNowUI#135",
+        "AlUmmahNowUI#137"
       ],
-      "note": "12 pages with 33 diagrams (architecture, numbered flows, sketches, the cost of both video pipelines); held for owner review."
+      "note": "12 pages with 33 diagrams (architecture, numbered flows, sketches, the cost of both video pipelines) on alummahnow.dev."
     },
     {
       "id": "fanous-themes",

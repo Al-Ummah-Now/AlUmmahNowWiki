@@ -75,7 +75,7 @@ The brand is the Fanous lantern identity ([Theming](../guides/theming.md)), Fawa
 
 ## System design section
 
-`/{en,ar}/system-design/`: a hub and 11 subpages with **33 diagrams** explaining how Al Ummah Now is built: video pipeline, delivery and caching, data, async work, realtime, identity and security, AI usage, cost, scaling, clients, release and quality. PR [AlUmmahNowUI#135](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/135). Owner approved the style on 2026-11-19 (Stage A: the reference architecture, the isometric hero and the cost animation). The PR is held for the owner.
+`/{en,ar}/system-design/`: a hub and 11 subpages with **33 diagrams** explaining how Al Ummah Now is built: video pipeline, delivery and caching, data, async work, realtime, identity and security, AI usage, cost, scaling, clients, release and quality. PR [AlUmmahNowUI#135](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/135). Owner approved the style on 2026-11-19 (Stage A: the reference architecture, the isometric hero and the cost animation) and the full section (Stage B) the same day. **Live** on alummahnow.dev since UI release `v2026.11.19.6`. The first try, `v2026.11.19.5`, rolled .dev back: its production smoke got a 404 on one page seconds after the deploy. [AlUmmahNowUI#137](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/137) made the smoke re-check a page for up to 90 s and made the build fail if any page the smoke expects (en + ar) is missing.
 
 - **Styles follow the owner's samples.**
   - Architecture diagrams use the reference-architecture layout: the Azure look in light, neon in dark.
