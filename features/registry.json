@@ -482,9 +482,10 @@
       ],
       "wiki": "epics/AUN-CAPTIONS-transcription-translation.md",
       "prs": [
-        "AlUmmahNow#1398"
+        "AlUmmahNow#1398",
+        "AlUmmahNow#1728"
       ],
-      "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review."
+      "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review. Super admins set, test and remove the DeepL API key on Caption settings; it is stored encrypted, a refused or used-up key flags the Errors page, and jobs fall back to Workers AI (#1728, in review)."
     },
     {
       "id": "transcript-search",
