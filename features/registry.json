@@ -2121,6 +2121,25 @@
       ],
       "wiki": "epics/TOOLS-ADMIN-admin-import-tool.md",
       "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages."
+    },
+    {
+      "id": "discovery-ranking",
+      "name": {
+        "en": "Discovery ranking: Trending, Popular, New and home rails",
+        "ar": "ترتيب الاستكشاف: الرائج والأكثر مشاهدة والجديد وصفوف الرئيسية"
+      },
+      "status": "building",
+      "apps": [
+        "api",
+        "videos",
+        "videos-admin",
+        "native"
+      ],
+      "wiki": "epics/E07-content-discovery.md#discovery-ranking",
+      "prs": [
+        "AlUmmahNow#1718"
+      ],
+      "note": "Ranked rails over the whole library from a queued job (retry, DLQ, Errors page Run now): Trending day/week/month, global Popular, New, Featured, per category and language, with keyset pages. Cold start first: a quality and freshness prior, engagement blended in by distinct viewers with minimum volumes, honest labels (Trending becomes New this week without enough viewers). Owner, staff, test accounts, bots and autoplay never count. Admin pins, exclusions and home rail order. Personal Recommended only when watch history is on. No AI."
     }
   ]
 }

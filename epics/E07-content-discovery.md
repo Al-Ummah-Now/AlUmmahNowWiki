@@ -7,7 +7,7 @@
 | **ID** | `E07` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-21 |
 
 > 24 ACs: 13 done, 5 partial, 2 not done, 4 owned by Epic 29.
 
@@ -26,8 +26,36 @@ Advanced search, trending and better navigation (#40, #39).
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 7.1 | Advanced search filters (#40) | Owned by Epic 29.8 (mostly done). |
-| 7.2 | Trending algorithm (#39) | Partial; real-time trending → queue issue. |
-| 7.3 | Content navigation | Partial; related videos from `/api/recommendations` done (#337). |
+| 7.2 | Trending algorithm (#39) | Ranked rails with day/week/month windows, cold start first ([Discovery ranking](#discovery-ranking)); AlUmmahNow#1718. |
+| 7.3 | Content navigation | Related videos from `/api/recommendations` done (#337); personal Recommended (history + subscriptions, privacy-gated) in #1718. |
+| 7.4 | Discovery ranking job and rails (#990, #354, #685 for discovery lists) | D1 rails computed by the `discovery.rank` admin job; keyset cursors, full pages, localized titles and channel names (#418, #408). AlUmmahNow#1718. |
+| 7.5 | Admin curation: pins, exclusions, home rail order | Videos admin → Discovery: pin videos/channels into rails, exclude, order and switch home rails, run now, preview; audited. |
+| 7.6 | Web home rails and labels | Home page rails from `/api/discovery/home`; Explore and rails show the label the rail reports (en + ar). |
+
+
+## Discovery ranking
+
+Owner brief 2026-11-21: correct at scale **and** good with no users today (one real user on production; libraries arrive by admin bulk import, often with old original dates). No paid AI or embeddings.
+
+**Rails.** A ranked list per rail and scope, computed by the `discovery.rank` job (admin-jobs queue: retry, backoff, DLQ; a run that gives up appears on the Errors page with **Run now**; state and last run on the Jobs and Discovery pages). The hourly cron starts it when no run is active and the last success is over 50 minutes old. Rails: `trending:day|week|month`, `popular`, `new`, `featured`, `top`; scopes: global, `lang:ar`, `lang:en`, and `cat:<category>` (top, new, trending:week). Items are stored as ids + score + reason (`discovery_rail_items`, search DB), written only when a rail's hash changes. Endpoints read one keyset page and the video objects from R2, drop anything no longer public, finished and policy-passing, and overfetch so pages stay full. Every feed returns localized titles and channel names.
+
+**Cold start first.** Every video has a prior: quality (verified channel, captions, bilingual title, description) × freshness (platform arrival, half-life 7 days, and original publish date, half-life 180 days) + admin-featured channels. Engagement is distinct qualified viewers per day (plus likes and distinct commenters), time-decayed per window, and blended in by confidence `n/(n+K)` with a minimum volume per window (day 3, week 5, month 8, popular 20 viewers). One or two views never decide Trending.
+
+**Honest labels.** A rail with fewer than 6 videos that have real signal does not pretend: Trending becomes *New today / this week / this month* (widening as needed), Popular becomes *Featured*. Each response carries `rail.mode` and `rail.label`; clients show the label (en + ar).
+
+**What never counts.** Views by the video's owner, staff, test and E2E accounts (`@e2e.alummahnow.net`, `@delivered.resend.dev`), bots and headless browsers, and autoplay (E21). Videos owned by test accounts and admin-excluded videos or channels never reach a rail. Anonymous viewers are keyed by a hash with a salt that lives one day; viewer rows are kept 91 days.
+
+**Diversity and language.** A per-channel penalty mixes channels; the viewer's language ranks higher without hiding the rest.
+
+**Admin control** (videos admin → Discovery, `videos:manage`, audited): pin a video or channel at a position in a rail (optionally for a time window), exclude a video or channel, order and switch home rails, preview any rail with the reason for each item, run now.
+
+**Personal recommendations** only when the viewer's watch history is on: candidates from the site's top list, newest videos of subscribed channels and videos like the recent history; scored by similarity, a subscription boost and site rank; watched videos left out; mixed across channels. History paused → the same content-based list as everyone. Nothing personal is stored. No engagement-maximising signals (E21).
+
+**API.** `GET /api/discovery/home` (admin-ordered home rails, no repeated videos or headings); `/api/trending?period=day|week|month&cursor=`; `/api/videos/sections/{trending,popular,recent,by-category/:c,recommended}` with `window`, `language`, keyset `cursor`, `metadata.rail`.
+
+**Cost.** Idle: a few thousand D1 reads an hour, near-zero writes. At 100k videos about 72M rows read a month (included quota 25B). Views: about one write per qualified viewer-day. No AI.
+
+**Quran Foundation terms.** Rails store ids, scores and existing index fields only: no transcript or verse text.
 
 ## Decisions and constraints
 
