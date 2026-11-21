@@ -24,7 +24,7 @@ Encoding, transcription, batch upload and video editing on the desktop.
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 19.1 | Content library, bulk edit | Shipped: manage videos, live search, single and bulk edit ([AlUmmahNowApple#18](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/18), [AlUmmahNowDesktop#26](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/26)). |
-| 19.2 | Batch upload & bulk import (absorbs AlUmmahNowTools) | Batch and folder upload shipped ([AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowDesktop#25](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/25)); AlUmmahNowTools retires per the plan below. |
+| 19.2 | Batch upload for creators | Batch and folder upload shipped ([AlUmmahNowApple#17](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/17), [AlUmmahNowDesktop#25](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/25)). This is the creator's batch upload, within their tier's limits. Admin bulk import is a separate app, AlUmmahNowTools ([TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md)); Studio does not replace it (owner, 2026-11-21). |
 | 19.3 | Local encoding (hardware encoders) | Building (D11). Studio can encode the server's own ladder on the creator's computer and upload the rungs before the server transcodes. The server checks every rung (ladder, codecs, segments, every segment decoded, picture and sound matched against the source) and encodes itself when anything is off. Server contract: [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386). Core ladder (matches the server across 30 sizes) and HLS packaging: [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Mac uploader: [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36). Server encoding stays the default. Screens: [AlUmmahNowApple#43](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/43), [AlUmmahNowDesktop#45](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/45), [AlUmmahNowDesktop#46](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/46); Core adapters [AlUmmahNowApple#42](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/42). |
 | 19.4 | Transcription & caption editor | Building (D10). Captions are transcribed on the server by default, or free on the creator's computer with whisper.cpp; on-device drafts go through the same Quran layer and spend no caption minutes. The editor splits, merges, nudges and deletes cues and keeps Quran segments as the server sent them. [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) (on-device transcript route), [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43) (whisper in the desktop builds, caption segmenting), [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36) (caption clients, cue editing). Screens: [AlUmmahNowApple#37](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/37), [AlUmmahNowDesktop#45](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/45); on-device engine [AlUmmahNowApple#42](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/42), [AlUmmahNowDesktop#46](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/46). |
 | 19.5 | Video editor | Building. Trim, cut, join, move and append on Core's EDL as atomic edits with undo/redo, flattened for playback and export ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43); Mac composition and export in [AlUmmahNowApple#36](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/36)). Editor timeline: [AlUmmahNowApple#43](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/43), [AlUmmahNowDesktop#46](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/46) (GES export on Linux, MediaComposition on Windows). Titles and lower thirds: Core edits `addTitle`, `setTitle` and `removeTitle` ([AlUmmahNowCore#46](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/46), v0.4.0-rc.2); desktop editor [AlUmmahNowDesktop#48](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/48), Mac editor [AlUmmahNowApple#44](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/44) (same rules and layout): add, reword, move, retime and remove with undo; Arabic and English lines, each shaped in its own direction; previewed over the picture and drawn into the export (Core Image on the Mac). |
@@ -35,23 +35,9 @@ Encoding, transcription, batch upload and video editing on the desktop.
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
-## AlUmmahNowTools retirement plan
+## AlUmmahNowTools is not retired
 
-Tools writes straight to Bunny and R2 with operator keys. Studio uploads through api-videos, so the server owns delivery, moderation and quotas. Tools retires once Studio covers what operators still use it for.
-
-| Tools feature | Studio replacement | State |
-|---|---|---|
-| Folder scan and bulk import with shared values | Batch and folder upload with set-for-all values (19.2) | Shipped |
-| Resume interrupted uploads | Core resumable TUS upload ([AlUmmahNowCore#15](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/15), [#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29)) | Shipped |
-| Multi-channel organisation | Several accounts and the channel picker | Shipped |
-| Filter presets, bulk metadata edits | Content library search and bulk edit (19.1) | Shipped |
-| Thumbnails with the video's shape | Server thumbnails and the owner's legacy thumbnails | Shipped |
-| Watch a folder, approve each file | Core folder watch (`aun-upload/watch`) with an approve queue in Studio | Next Studio step |
-| Duplicate detection (SHA-256) | Hash before upload and skip files the channel already has | Next Studio step |
-| DeepL title translation | Inline title translation (AUN-CAPTIONS P1) | Planned |
-| Direct Bunny / R2 writes | None: uploads go through api-videos | Retired by design |
-
-Retirement steps: Studio gets the watch-and-approve queue and duplicate check; the owner runs the last Tools import; the repo is archived read-only and the operator Bunny and R2 keys it used are revoked.
+An earlier version of this page planned to retire AlUmmahNowTools once Studio had folder watch and duplicate checks. The owner withdrew that on 2026-11-21: AlUmmahNowTools is the **admin** import app (bulk import into any channel without tier limits, social import and sync, captions and translation requests), signed in through Auth and working only through admin-api. See [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md). Studio's batch upload stays the creator's tool. Folder watch with approvals and SHA-256 duplicate checks are still worth adding to Studio for creators, as Studio stories in their own right.
 
 ## Desktop design: Lantern Glass (owner-approved 2026-11-18)
 

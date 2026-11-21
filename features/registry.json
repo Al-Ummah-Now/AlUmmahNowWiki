@@ -2104,6 +2104,21 @@
         "AlUmmahNowApple#65"
       ],
       "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. All parts are merged (owner approved the Errors page and Studio/Site visits views on 2026-11-19); waiting for the next videos release."
+    },
+    {
+      "id": "tools-admin-import",
+      "name": {
+        "en": "Al Ummah Now Tools: bulk import, social sync and captions for staff",
+        "ar": "أدوات الأمة الآن: الاستيراد الجماعي ومزامنة وسائل التواصل والترجمة النصية للفريق"
+      },
+      "status": "planned",
+      "apps": [
+        "native",
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/TOOLS-ADMIN-admin-import-tool.md",
+      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, sidecar captions/chapters/thumbnails/metadata, caption and translation requests, social import sources with scheduled sync."
     }
   ]
 }
