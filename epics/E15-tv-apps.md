@@ -7,7 +7,7 @@
 | **ID** | `E15` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-21 |
 
 > tvOS target (Apple), `viewer-tv` Android TV/Fire TV module, and a Tizen app that compiles and packages in CI but has never run on a TV.
 
@@ -23,14 +23,14 @@ Apple TV (Swift), Android TV / Fire TV (Kotlin), Tizen (C#), webOS (web).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 15.1 | Sign-in with device code + QR |  |
+| 15.1 | Sign-in with device code + QR | In Progress — split one step: partially built, acceptance not fully met: Kimi: openauth#19/Auth#231 provide only the backend grant; no TV sign-in or QR screen exists and Apple#6 remains open.; GLM: Device grant + bilingual activate page merged (openauth#19, Auth#231), but no TV client signs in (Apple#6 open). |
 | 15.2 | Profiles on TV |  |
-| 15.3 | 10-foot home |  |
-| 15.4 | Watch on TV |  |
-| 15.5 | Search |  |
+| 15.3 | 10-foot home | In Progress — both cross-checks agree: EPICS.md:330 requires Continue watching, Live now and Ramadan rails in addition to hero/rails; Apple#11/Desktop#7 ship only the base 10-foot home.; tvOS (#11) and Tizen (#7) homes are merged, but the spec AC also requires Continue watching, Live now and a Ramadan rail, and Desktop#13 (real-TV run) is open. |
+| 15.4 | Watch on TV | In Progress — both cross-checks agree: EPICS.md:331 requires chapters and Up next off as well as player/subtitles/speed; TVViews.swift has no chapter UI and Desktop#13 still requires real-TV validation.; tvOS/Tizen full-screen players merged, but the AC's subtitles/speed/Up-next are unverified on TV and Desktop#13 (device validation) is open. |
+| 15.5 | Search | In Progress — split one step: partially built, acceptance not fully met: Kimi: Core#24 is a shared search client, but Apple/Android/Desktop TV issues #15/#6/#23 confirm no TV search UI.; GLM: Shared aun-search client merged (Core#24); TV search UI tracked open on all three platforms. |
 | 15.6 | Phone as remote / cast target |  |
 | 15.7 | "Sakinah" ambient mode |  |
-| 15.8 | Platform integrations |  |
+| 15.8 | Platform integrations | In Progress — split one step: partially built, acceptance not fully met: Kimi: Apple has Top Shelf artwork and tvOS/Tizen platform shells, but EPICS.md:336-337 still lacks Watch Next, Top Shelf service and Fire TV catalogue integration.; GLM: The AC names Android TV channels/Watch Next, tvOS Top Shelf and Fire TV — none exist; Kimi's citations (D-pad focus, TPK, SMTC) belong to 15.3/15.4 and E16. |
 | 15.9 | Certification |  |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
@@ -56,6 +56,13 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 | AlUmmahNowDesktop | [#13](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/issues/13) | issue | Run the Tizen viewer on a real Samsung TV or emulator | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E15 / 10-foot home (HLB-704): In Progress** — both cross-checks agree: EPICS.md:330 requires Continue watching, Live now and Ramadan rails in addition to hero/rails; Apple#11/Desktop#7 ship only the base 10-foot home.; tvOS (#11) and Tizen (#7) homes are merged, but the spec AC also requires Continue watching, Live now and a Ramadan rail, and Desktop#13 (real-TV run) is open.
+- **E15 / Watch on TV (HLB-705): In Progress** — both cross-checks agree: EPICS.md:331 requires chapters and Up next off as well as player/subtitles/speed; TVViews.swift has no chapter UI and Desktop#13 still requires real-TV validation.; tvOS/Tizen full-screen players merged, but the AC's subtitles/speed/Up-next are unverified on TV and Desktop#13 (device validation) is open.
+- **E15 / Sign-in with device code + QR (HLB-702): In Progress** — split one step: partially built, acceptance not fully met: Kimi: openauth#19/Auth#231 provide only the backend grant; no TV sign-in or QR screen exists and Apple#6 remains open.; GLM: Device grant + bilingual activate page merged (openauth#19, Auth#231), but no TV client signs in (Apple#6 open).
+- **E15 / Search (HLB-706): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Core#24 is a shared search client, but Apple/Android/Desktop TV issues #15/#6/#23 confirm no TV search UI.; GLM: Shared aun-search client merged (Core#24); TV search UI tracked open on all three platforms.
+- **E15 / Platform integrations (HLB-709): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Apple has Top Shelf artwork and tvOS/Tizen platform shells, but EPICS.md:336-337 still lacks Watch Next, Top Shelf service and Fire TV catalogue integration.; GLM: The AC names Android TV channels/Watch Next, tvOS Top Shelf and Fire TV — none exist; Kimi's citations (D-pad focus, TPK, SMTC) belong to 15.3/15.4 and E16.
 ## Open questions
 
 - None recorded in the sources.

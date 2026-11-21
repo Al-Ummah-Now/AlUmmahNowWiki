@@ -7,7 +7,7 @@
 | **ID** | `E13` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-21 |
 
 > AVKit (Apple) and Media3 (Android) players with quality, speed, subtitles, PiP, background audio, AirPlay/Cast; Desktop parses HLS and WebVTT in shared code; aun-player conformance scenarios (38) in Core 0.2.0.
 
@@ -23,17 +23,17 @@ Native player per platform (AVKit, Media3, Media Foundation, GStreamer, AVPlay),
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 13.1 | HLS ABR playback, fast start |  |
-| 13.2 | Speed and skip ±10 s (mirrored in RTL) |  |
-| 13.3 | Subtitles incl. verse-synced recitation |  |
-| 13.4 | Chapters |  |
-| 13.5 | PiP, background audio, Now Playing |  |
-| 13.6 | Casting |  |
+| 13.1 | HLS ABR playback, fast start | Done — both audits agree: AlUmmahNowApple#4 (merged): AVKit HLS with quality selection; AlUmmahNowAndroid#4 (merged): Media3 HLS with quality selection; AlUmmahNowDesktop#6 and #10 (merged): GStreamer and Windows HLS playback; AlUmmahNowAndroid#4; AlUmmahNowApple#4 |
+| 13.2 | Speed and skip ±10 s (mirrored in RTL) | Done — both cross-checks agree: Apple PlayerController.swift:53-54,106,131 implements speeds, pitch correction and ±10 s; Android AunVideoPlayer.kt:64-96 implements mirrored double-tap seek.; Android#4 body: speeds 0.5x-2x in PlayerSettingsSheet and RTL-mirrored double-tap seek; Apple PlayerController.swift has speeds [0.5...2]. |
+| 13.3 | Subtitles incl. verse-synced recitation | In Progress — both cross-checks agree: EPICS.md:299-300 requires verse-synced Arabic plus translation; Apple WebVTT.swift and Android #4 ship only ordinary sidecar captions.; WebVTT sidecars shipped on both platforms, but #419 is open (no HLS renditions, so PiP/AirPlay lose subtitles) and verse-synced recitation is not in any player. |
+| 13.4 | Chapters | In Progress — split one step: partially built, acceptance not fully met: Kimi: Both watch screens render tappable chapter lists, but EPICS.md:301 also requires chapter-skip gestures, which are absent.; GLM: Android#4 body: "Chapters seek on tap"; Apple WatchView.swift renders chapters — present on both watch screens. |
+| 13.5 | PiP, background audio, Now Playing | Done — both cross-checks agree: Apple PlayerSurface.swift and NowPlayingCoordinator.swift implement PiP/background/lock-screen controls; Android AunPlaybackService.kt supplies PiP/background MediaSession.; Android: PiP auto-enter + MediaLibraryService notification (#4 body); Apple: NowPlayingCoordinator + UIBackgroundModes audio in ViewerIOS/Info.plist. |
+| 13.6 | Casting | In Progress — both audits agree: AlUmmahNowApple#4 (merged): AirPlay; AlUmmahNowAndroid#4 (merged): Chromecast; AlUmmahNowAndroid#4 |
 | 13.7 | Study tools: A–B loop, repeat-N, bookmarks |  |
 | 13.8 | Sleep timer |  |
-| 13.9 | Resume & sync (9.9) |  |
-| 13.10 | QoE telemetry, clear errors |  |
-| 13.11 | Accessibility |  |
+| 13.9 | Resume & sync (9.9) | In Progress — both cross-checks agree: Core#19 supplies resume sync, but native viewer watch screens do not call it and Core#13 lists remaining server sync gaps.; Sync API (#406) and aun-sync (Core#19) shipped but are not wired into any player and Core#13 keeps the server contract open. |
+| 13.10 | QoE telemetry, clear errors | In Progress — both cross-checks agree: Core#18 implements QoE tracking, but no Apple/Android player integration is present and Core#8/AlUmmahNow#432 leave ingest open.; Consent-gated QoE tracker merged (Core#18) and live QoE beacons ship on web; the native ingest endpoint #432 is still open. |
+| 13.11 | Accessibility | In Progress — both cross-checks agree: Native screens have screen-reader semantics and caption language selection, but EPICS.md:309-310 also requires preference defaults and audio-description tracks.; en/ar RTL UI tests ship on every platform, but no screen-reader/accessibility-matrix evidence exists. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -59,6 +59,17 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNowCore | [#5](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/5) | PR | feat(aun-player): player behaviour model + conformance suite | MERGED | 2026-11-08 |
 | AlUmmahNowCore | [#18](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/18) | PR | feat(aun-telemetry): consent-gated telemetry, QoE tracker, breadcrumbs, sinks | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E13 / HLS ABR playback, fast start (HLB-684): Done** — both audits agree: AlUmmahNowApple#4 (merged): AVKit HLS with quality selection; AlUmmahNowAndroid#4 (merged): Media3 HLS with quality selection; AlUmmahNowDesktop#6 and #10 (merged): GStreamer and Windows HLS playback; AlUmmahNowAndroid#4; AlUmmahNowApple#4
+- **E13 / Casting (HLB-689): In Progress** — both audits agree: AlUmmahNowApple#4 (merged): AirPlay; AlUmmahNowAndroid#4 (merged): Chromecast; AlUmmahNowAndroid#4
+- **E13 / Speed and skip ±10 s (mirrored in RTL) (HLB-685): Done** — both cross-checks agree: Apple PlayerController.swift:53-54,106,131 implements speeds, pitch correction and ±10 s; Android AunVideoPlayer.kt:64-96 implements mirrored double-tap seek.; Android#4 body: speeds 0.5x-2x in PlayerSettingsSheet and RTL-mirrored double-tap seek; Apple PlayerController.swift has speeds [0.5...2].
+- **E13 / Subtitles incl. verse-synced recitation (HLB-686): In Progress** — both cross-checks agree: EPICS.md:299-300 requires verse-synced Arabic plus translation; Apple WebVTT.swift and Android #4 ship only ordinary sidecar captions.; WebVTT sidecars shipped on both platforms, but #419 is open (no HLS renditions, so PiP/AirPlay lose subtitles) and verse-synced recitation is not in any player.
+- **E13 / Chapters (HLB-687): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Both watch screens render tappable chapter lists, but EPICS.md:301 also requires chapter-skip gestures, which are absent.; GLM: Android#4 body: "Chapters seek on tap"; Apple WatchView.swift renders chapters — present on both watch screens.
+- **E13 / PiP, background audio, Now Playing (HLB-688): Done** — both cross-checks agree: Apple PlayerSurface.swift and NowPlayingCoordinator.swift implement PiP/background/lock-screen controls; Android AunPlaybackService.kt supplies PiP/background MediaSession.; Android: PiP auto-enter + MediaLibraryService notification (#4 body); Apple: NowPlayingCoordinator + UIBackgroundModes audio in ViewerIOS/Info.plist.
+- **E13 / Resume & sync (9.9) (HLB-692): In Progress** — both cross-checks agree: Core#19 supplies resume sync, but native viewer watch screens do not call it and Core#13 lists remaining server sync gaps.; Sync API (#406) and aun-sync (Core#19) shipped but are not wired into any player and Core#13 keeps the server contract open.
+- **E13 / QoE telemetry, clear errors (HLB-693): In Progress** — both cross-checks agree: Core#18 implements QoE tracking, but no Apple/Android player integration is present and Core#8/AlUmmahNow#432 leave ingest open.; Consent-gated QoE tracker merged (Core#18) and live QoE beacons ship on web; the native ingest endpoint #432 is still open.
+- **E13 / Accessibility (HLB-694): In Progress** — both cross-checks agree: Native screens have screen-reader semantics and caption language selection, but EPICS.md:309-310 also requires preference defaults and audio-description tracks.; en/ar RTL UI tests ship on every platform, but no screen-reader/accessibility-matrix evidence exists.
 ## Open questions
 
 - None recorded in the sources.

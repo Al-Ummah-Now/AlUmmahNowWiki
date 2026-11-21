@@ -7,7 +7,7 @@
 | **ID** | `E29` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > All P0 stories built (Sprint A, merged through #163) and verified on QA 2026-11-08; P1/P2 stories mostly open (#370–#378).
 
@@ -27,23 +27,23 @@ Channels, posting, commenting, profiles, reactions, subscriptions, search and br
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 29.1 | `@handle` URLs, channel About | Built (P0). Lookalike handles #276. |
+| 29.1 | `@handle` URLs, channel About | Done — both cross-checks agree: docs/specs/EPIC-29-PLAN.md:19 marks 29.1 shipped and QA-verified; #276 is separately tracked reserved-handle hardening.; channelHandles.ts on main, Sprint A verified on QA 2026-11-08; #276 is a lookalike-hardening edge case, not the story. |
 | 29.2 | Comments completion | Built; signed-out live delivery fixed (#361); #379. |
 | 29.3 | Creator comment moderation | P1; owned by Epic 6/28. |
 | 29.4 | Community posts completion | Built in AlUmmahNow#1379, held for owner screenshots: owner Edit/Delete menu on post cards and the permalink (in-app delete dialog), post editor at `/settings/channel/<id>/community/<postId>/edit`, a Publish now / Schedule for later picker in the composer (5 minutes to a year ahead, viewer's time zone; `posts.scheduled` entitlement, 402 when a plan says no), Studio Scheduled tab with Publish now and Change time, and a `newPost` notification to subscribers (bell all/highlights, new `posts` category) queued by the processor as a `new_post` fan-out (retry, DLQ, admin Errors). Post detail URL was #1203. |
-| 29.5 | Public profile + privacy toggles | Built, in review (AlUmmahNow#1385): /u/@handle with the name, picture, bio, public channels, and playlists and subscriptions behind two switches; held for owner screenshots. Owner decisions 2026-11-14: "others see your likes? nope" (no liked-videos switch, section or API); "searching users? nope" (never in site search or autocomplete; `noindex, nofollow` meta and X-Robots-Tag, no canonical or hreflang, no ProfilePage JSON-LD, never in a sitemap); "only way you reach a user profile is if he comments on a video or post" (the only links to /u/@handle are comment and reply author names and avatars on videos and posts, plus the user's own Settings preview link). |
-| 29.6 | Library hub, Watch later, Liked | Built (P0). |
-| 29.7 | Explore page | Built (P0). |
-| 29.8 | Search v2 (Arabic normalisation) | Built (P0). |
-| 29.9 | Search index (D1 FTS5) | Built (P0). |
-| 29.10 | Notification center | Built (P0). |
+| 29.5 | Public profile + privacy toggles | Done — both audits agree: AlUmmahNow#1385 (merged): public profile and privacy switches; AlUmmahNow issue #371 (closed); AlUmmahNow#1385; apps/web/src/app/[locale]/u |
+| 29.6 | Library hub, Watch later, Liked | Done — both cross-checks agree: AlUmmahNow#168 and apps/web/src/app/[locale]/library ship and QA-verify the library, Watch later and Liked hub.; P0 verified on QA 2026-11-08 per the wiki; apps/web/src/app/[locale]/library on main (#168). |
+| 29.7 | Explore page | Done — both cross-checks agree: EPIC-29-PLAN.md:22 marks Explore shipped with no follow-up; explore page and API are present on main.; P0 verified on QA 2026-11-08; apps/web/src/app/[locale]/explore on main (#170). |
+| 29.8 | Search v2 (Arabic normalisation) | Done — both cross-checks agree: EPIC-29-PLAN.md:23 verifies Arabic normalization on QA; search UI and multi-type results are present on main.; P0 verified on QA 2026-11-08; apps/web/src/app/[locale]/search on main (#170). |
+| 29.9 | Search index (D1 FTS5) | Done — both cross-checks agree: EPIC-29-PLAN.md:24 verifies D1 FTS5 sync and daily reconciliation; 0001_search_index.sql is on main.; migrations/search/0001_search_index.sql (FTS5) on main, released (#170). |
+| 29.10 | Notification center | Done — both cross-checks agree: AlUmmahNow#168 and apps/web/src/app/[locale]/notifications ship the inbox, with QA verification recorded in EPIC-29-PLAN.md:25.; apps/web/src/app/[locale]/notifications on main (#168), P0 QA-verified. |
 | 29.11 | Home personalisation | Partial (#372). |
 | 29.12 | Watch page completion | Owned by Epic 8. |
-| 29.13 | Playlists queue, shuffle, visibility | Not built (#373). |
+| 29.13 | Playlists queue, shuffle, visibility | Done — both audits agree: AlUmmahNow#856 (merged): playlist queue API, autoplay and playback pane; AlUmmahNow#858 (merged): embed playlist playback from the queue; AlUmmahNow#1183 (merged): personal and Unlisted playlists; AlUmmahNow issue #373 (closed); AlUmmahNow#373; apps/web/src/hooks/usePlaylistPlayback.ts |
 | 29.14 | Lamahat vertical viewer | Not built (#374). |
 | 29.15 | Subscriptions UX | Partial (#375). |
 | 29.16 | Account settings consolidation | Not built (#376). |
-| 29.17 | Live watch page `/live/{id}` | Not built (#377); chat after D3. |
+| 29.17 | Live watch page `/live/{id}` | Done — both audits agree: AlUmmahNow#872 (merged): /live watch implementation; AlUmmahNow#1387 (merged): live viewer count; AlUmmahNow issue #377 (closed); AlUmmahNow#377; apps/web/src/app/[locale]/live/[id]/page.tsx; AlUmmahNow#1373 |
 | 29.18 | Channel extras | Partial (#378). |
 
 ## Decisions and constraints
@@ -87,6 +87,17 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#379](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/379) | issue | Realtime: watch page opens 3 sockets; 2 never authenticate | OPEN | 2026-11-08 |
 | AlUmmahNow | [#424](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/424) | PR | test(release): Epic 29 core web specs and plan doc | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E29 / Public profile + privacy toggles (HLB-823): Done** — both audits agree: AlUmmahNow#1385 (merged): public profile and privacy switches; AlUmmahNow issue #371 (closed); AlUmmahNow#1385; apps/web/src/app/[locale]/u
+- **E29 / Playlists queue, shuffle, visibility (HLB-831): Done** — both audits agree: AlUmmahNow#856 (merged): playlist queue API, autoplay and playback pane; AlUmmahNow#858 (merged): embed playlist playback from the queue; AlUmmahNow#1183 (merged): personal and Unlisted playlists; AlUmmahNow issue #373 (closed); AlUmmahNow#373; apps/web/src/hooks/usePlaylistPlayback.ts
+- **E29 / Live watch page /live/{id} (HLB-835): Done** — both audits agree: AlUmmahNow#872 (merged): /live watch implementation; AlUmmahNow#1387 (merged): live viewer count; AlUmmahNow issue #377 (closed); AlUmmahNow#377; apps/web/src/app/[locale]/live/[id]/page.tsx; AlUmmahNow#1373
+- **E29 / @handle URLs, channel About (HLB-819): Done** — both cross-checks agree: docs/specs/EPIC-29-PLAN.md:19 marks 29.1 built and QA-verified; #276 is separately tracked reserved-handle hardening.; channelHandles.ts on main, Sprint A verified on QA 2026-11-08; #276 is a lookalike-hardening edge case, not the story.
+- **E29 / Library hub, Watch later, Liked (HLB-824): Done** — both cross-checks agree: AlUmmahNow#168 and apps/web/src/app/[locale]/library ship and QA-verify the library, Watch later and Liked hub.; P0 verified on QA 2026-11-08 per the wiki; apps/web/src/app/[locale]/library on main (#168).
+- **E29 / Explore page (HLB-825): Done** — both cross-checks agree: EPIC-29-PLAN.md:22 marks Explore built with no follow-up; explore page and API are present on main.; P0 verified on QA 2026-11-08; apps/web/src/app/[locale]/explore on main (#170).
+- **E29 / Search v2 (Arabic normalisation) (HLB-826): Done** — both cross-checks agree: EPIC-29-PLAN.md:23 verifies Arabic normalization on QA; search UI and multi-type results are present on main.; P0 verified on QA 2026-11-08; apps/web/src/app/[locale]/search on main (#170).
+- **E29 / Search index (D1 FTS5) (HLB-827): Done** — both cross-checks agree: EPIC-29-PLAN.md:24 verifies D1 FTS5 sync and daily reconciliation; 0001_search_index.sql is on main.; migrations/search/0001_search_index.sql (FTS5) on main, released (#170).
+- **E29 / Notification center (HLB-828): Done** — both cross-checks agree: AlUmmahNow#168 and apps/web/src/app/[locale]/notifications ship the inbox, with QA verification recorded in EPIC-29-PLAN.md:25.; apps/web/src/app/[locale]/notifications on main (#168), P0 QA-verified.
 ## Open questions
 
 - None recorded in the sources.

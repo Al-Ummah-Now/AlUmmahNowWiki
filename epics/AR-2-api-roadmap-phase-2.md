@@ -7,7 +7,7 @@
 | **ID** | `AR-2` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2025-11-05 |
+| **Last updated** | 2026-11-21 |
 
 > Carried by numbered epics: live (17, D3), moderation (28), monetisation (24, 27; deferred by D4), privacy (1.3, 29.5).
 
@@ -19,10 +19,10 @@ Q2 2025: live streaming, moderation, monetisation, privacy.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | Live streaming |  |
-| – | Content moderation |  |
-| – | Monetisation support |  |
-| – | Privacy & security |  |
+| – | Live streaming | In Progress — split one step: partially built, acceptance not fully met: Kimi: apps/api-videos/ROADMAP.md:121-126 also requires real-time chat and stream scheduling; AlUmmahNow#872/#1373 ship only part of that live scope.; GLM: AlUmmahNow#872+#1373+#1387 merged and #1367 attached the prod live host (11-15): create, watch, viewer counts and tier limits are live in production; chat/premieres/apps remain under E17/LIVE-PHASES. |
+| – | Content moderation | In Progress — both cross-checks agree: apps/api-videos/ROADMAP.md:128-133 includes DMCA tooling and enforcement, while #330/#343/#384 leave fast path and holds open (#392/#393).; Manual moderation (reports, review queues, CSAM #1327-1330) is live but AI runs shadow-only and Phase B holds are open (#393); carrier epic 28 mid-flight. |
+| – | Monetisation support | In Progress — both audits agree: AlUmmahNow#1418, #1419 (merged): web pay flow and admin Payments, off by default; AlUmmahNow#1415 (merged): beta tier requests; AlUmmahNow#1418; AlUmmahNow#1419 |
+| – | Privacy & security | In Progress — both audits agree: AlUmmahNowAuth#233 (merged): account deletion/export; AlUmmahNow main: apps/api-videos/src/endpoints/privacy/privacy.ts; AlUmmahNow#434 (open): signed playback authorization; apps/api-videos/src/endpoints/privacy; AlUmmahNow#349 |
 
 ## Decisions and constraints
 
@@ -38,6 +38,12 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AR-2 / Monetisation support (HLB-425): In Progress** — both audits agree: AlUmmahNow#1418, #1419 (merged): web pay flow and admin Payments, off by default; AlUmmahNow#1415 (merged): beta tier requests; AlUmmahNow#1418; AlUmmahNow#1419
+- **AR-2 / Privacy & security (HLB-426): In Progress** — both audits agree: AlUmmahNowAuth#233 (merged): account deletion/export; AlUmmahNow main: apps/api-videos/src/endpoints/privacy/privacy.ts; AlUmmahNow#434 (open): signed playback authorization; apps/api-videos/src/endpoints/privacy; AlUmmahNow#349
+- **AR-2 / Live streaming (HLB-423): In Progress** — split one step: partially built, acceptance not fully met: Kimi: apps/api-videos/ROADMAP.md:121-126 also requires real-time chat and stream scheduling; AlUmmahNow#872/#1373 ship only part of that live scope.; GLM: AlUmmahNow#872+#1373+#1387 merged and #1367 attached the prod live host (11-15): create, watch, viewer counts and tier limits are live in production; chat/premieres/apps remain under E17/LIVE-PHASES.
+- **AR-2 / Content moderation (HLB-424): In Progress** — both cross-checks agree: apps/api-videos/ROADMAP.md:128-133 includes DMCA tooling and enforcement, while #330/#343/#384 leave fast path and holds open (#392/#393).; Manual moderation (reports, review queues, CSAM #1327-1330) is live but AI runs shadow-only and Phase B holds are open (#393); carrier epic 28 mid-flight.
 ## Open questions
 
 - None recorded in the sources.

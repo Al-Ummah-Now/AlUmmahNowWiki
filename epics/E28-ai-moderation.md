@@ -7,7 +7,7 @@
 | **ID** | `E28` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress**: AI flagging runs in production in shadow mode (since v2026.11.08.4); holding is a per-category admin setting. 28.9 CSAM intake shipped in v2026.11.14.3 (AlUmmahNow #1327, #1329, #1330): takedown, encrypted evidence, cases, NCMEC reports, legal hold, one-year minimum preservation |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > Phase A in progress (EPIC-28-PLAN, 2026-11-08): schema, processor, producers, admin-api and admin-web PRs; later phases are `queue` issues. Chat (Epic 28 thread): merged and on QA in shadow / flag-only mode.
 
@@ -27,19 +27,19 @@ Workers AI signals on comments, posts and videos in shadow mode first; AI never 
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 28.1 | Moderation queue, `moderation_signals` schema, decision engine | P0, Phase A |
+| 28.1 | Moderation queue, `moderation_signals` schema, decision engine | Done — both audits agree: AlUmmahNow#330 (merged): moderation schema and shared types; AlUmmahNow#343, #366 (merged): decision consumer and content-write scans; AlUmmahNow#381 (merged): review endpoints; AlUmmahNow#330; AlUmmahNow#343; AlUmmahNow#366 |
 | 28.2 | Fast path: normalisation, keyword/link rules, trust score | P0, queued |
-| 28.3 | Text pipeline: language detect → translate → Llama Guard + extension classifier | P0, Phase A |
-| 28.4 | Golden evaluation set + CI eval + shadow mode | P0, Phase A |
-| 28.5 | Admin queue UI | P0, Phase A |
+| 28.3 | Text pipeline: language detect → translate → Llama Guard + extension classifier | Done — both audits agree: AlUmmahNow#343 (merged): Workers AI text moderation in shadow mode; AlUmmahNow#1294 (merged): Gemma Arabic moderation replacing m2m100; AlUmmahNow#343; apps/processor/src/__tests__/moderation-consumer.test.ts |
+| 28.4 | Golden evaluation set + CI eval + shadow mode | In Progress — split one step: partially built, acceptance not fully met: Kimi: processor/eval/README.md:9-16 runs mocked AI in CI and live eval only manually; #407 leaves required precision calibration open.; GLM: All three named components shipped: moderation-golden.test.ts in CI, processor/eval, shadow mode in production since v2026.11.08.4; #407 is Phase-B calibration, not this story. |
+| 28.5 | Admin queue UI | Done — both audits agree: AlUmmahNow#384 (merged): bilingual admin AI moderation queue, review and settings; AlUmmahNow#821 (merged): Action needed and History queues; AlUmmahNow#384; apps/admin-web/src/app/(protected)/moderation/ai |
 | 28.6 | Media pipeline (vision) | P1, queued |
 | 28.7 | Whisper transcripts, draft captions | P1, queued |
 | 28.8 | Spam clustering (bge-m3) | P1, queued |
-| 28.9 | CSAM Scanning Tool + reporting runbook | P0, queued |
+| 28.9 | CSAM Scanning Tool + reporting runbook | In Progress — both cross-checks agree: #1327/#1329/#1330 ship case handling, but open #397 still requires CSAM tool enablement, R2 coverage confirmation and the reporting runbook.; Takedown/evidence/cases/NCMEC/legal hold merged (#1327-1330), but the runbook is in the story title and #397 (enablement + runbook) is still open. |
 | 28.10 | Creator & Site moderation controls | P1, queued |
 | 28.11 | Appeals flow + notices (en/ar) | P1, queued |
 | 28.12 | Live chat fast path | P2, queued |
-| 28.13 | Admin config, model/prompt versioning | P1, queued |
+| 28.13 | Admin config, model/prompt versioning | In Progress — both cross-checks agree: #384 ships admin moderation settings, while #402 leaves model/prompt versioning and staged rollout open.; Admin moderation settings shipped (#384) but staged model/prompt rollout is open (#402) — half the story. |
 | 28.14 | Report triage assistant | P2, queued |
 
 ## Decisions and constraints
@@ -90,6 +90,14 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNowCMS | [#17](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/17) | issue | AI writing assist for editors (translate en↔ar, SEO meta, content checks) | CLOSED | 2026-11-10 |
 | AlUmmahNowCMS | [#47](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/47) | PR | feat: AI writing assist for editors (translate en↔ar, SEO copy, pre-publish checks) | MERGED | 2026-11-10 |
 
+### Reconciled 2026-11-21
+
+- **E28 / Moderation queue, moderation_signals schema, decision engine (HLB-804): Done** — both audits agree: AlUmmahNow#330 (merged): moderation schema and shared types; AlUmmahNow#343, #366 (merged): decision consumer and content-write scans; AlUmmahNow#381 (merged): review endpoints; AlUmmahNow#330; AlUmmahNow#343; AlUmmahNow#366
+- **E28 / Text pipeline: language detect → translate → Llama Guard + extension classifier (HLB-806): Done** — both audits agree: AlUmmahNow#343 (merged): Workers AI text moderation in shadow mode; AlUmmahNow#1294 (merged): Gemma Arabic moderation replacing m2m100; AlUmmahNow#343; apps/processor/src/__tests__/moderation-consumer.test.ts
+- **E28 / Admin queue UI (HLB-808): Done** — both audits agree: AlUmmahNow#384 (merged): bilingual admin AI moderation queue, review and settings; AlUmmahNow#821 (merged): Action needed and History queues; AlUmmahNow#384; apps/admin-web/src/app/(protected)/moderation/ai
+- **E28 / Golden evaluation set + CI eval + shadow mode (HLB-807): In Progress** — split one step: partially built, acceptance not fully met: Kimi: processor/eval/README.md:9-16 runs mocked AI in CI and live eval only manually; #407 leaves required precision calibration open.; GLM: All three named components shipped: moderation-golden.test.ts in CI, processor/eval, shadow mode in production since v2026.11.08.4; #407 is Phase-B calibration, not this story.
+- **E28 / CSAM Scanning Tool + reporting runbook (HLB-812): In Progress** — both cross-checks agree: #1327/#1329/#1330 ship case handling, but open #397 still requires CSAM tool enablement, R2 coverage confirmation and the reporting runbook.; Takedown/evidence/cases/NCMEC/legal hold merged (#1327-1330), but the runbook is in the story title and #397 (enablement + runbook) is still open.
+- **E28 / Admin config, model/prompt versioning (HLB-816): In Progress** — both cross-checks agree: #384 ships admin moderation settings, while #402 leaves model/prompt versioning and staged rollout open.; Admin moderation settings shipped (#384) but staged model/prompt rollout is open (#402) — half the story.
 ## Open questions
 
 - Q2: create the AI Gateway per environment now or after shadow?

@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `OA-ADMIN-APIS` |
 | **Owning repos** | [openauth](../repos/openauth.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **shipped** (Phase 4 and the Phase 6 middleware are in openauth but Auth doesn't mount them) |
-| **Last updated** | 2026-11-14 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > Checked against openauth `master` and AlUmmahNowAuth `main` on 2026-11-14. Every file the six task plans list exists in `packages/openauth/src` (two were renamed: `client/d1-adapter.ts` is `client/client-d1-adapter.ts`, and the `rbac/api-types.ts` types live in `rbac/types.ts`). Auth mounts the user, RBAC and client admin APIs behind M2M tokens with an admin scope.
 
@@ -41,6 +41,9 @@ Platform-wide constraints that apply to every epic:
 - openauth `master`: `packages/openauth/src/{m2m,user,rbac,dynamic-provider,client,middleware}` with tests.
 - AlUmmahNowAuth `main`: `apps/auth/src/index.ts` mounts `userApiRoutes`, `rbacAdminEndpoints` and `clientAdminRoutes` behind `requireAdmin()`; [Auth#378](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/378).
 
+### Reconciled 2026-11-21
+
+- **OA-ADMIN-APIS (HLB-918): In Progress** — both cross-checks agree: openauth dynamic-provider and middleware are built but not adopted by Auth, so phases 4 and 6 remain incomplete.; Phases 4 and 6 are built in openauth but unmounted (Auth uses its own requireAdmin) — the epic's stories are mixed, so not Done.
 ## Open questions
 
 - None recorded in the sources.

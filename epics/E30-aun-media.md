@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E30` |
 | **Owning repos** | [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > `aun-media` shipped in Core 0.2.0 (probe, job graph, proxies, whisper transcription, EDL v1 schema, HarfBuzz shaping, upload handoff). Apps still use interim edit models. NAT-S2 ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43)) adds EDL edit operations, the server's HLS ladder and fMP4 packaging for pre-encoded renditions (D11), caption segmenting, and whisper.cpp in the desktop builds (D10), all exported over FFI.
 
@@ -23,13 +23,13 @@ One media engine behind Studio desktop and mobile: probe, encode plans, proxies,
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 30.1 | Probe & analyse |  |
+| 30.1 | Probe & analyse | Done — both audits agree: AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4 |
 | 30.2 | Encode job graph | Server ladder mirrored in Core (fixture from `ladder.mjs`, 30 sizes) and fMP4 HLS packaging of each encoded rung ([AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43)). |
-| 30.3 | Proxies & thumbnails |  |
+| 30.3 | Proxies & thumbnails | Done — both audits agree: AlUmmahNowCore#4 (merged): thumbnails and media analysis; AlUmmahNowCore#4; AlUmmahNowCore#16 |
 | 30.4 | Transcription (whisper.cpp) | Shipped in Core 0.2.0; desktop builds (macOS, Windows, Linux) turn it on and caption segmenting is exported in [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). |
 | 30.5 | Edit model (EDL) | EDL v1 in Core 0.2.0; trim, cut, join, move and append as atomic edits plus a flattened timeline in [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). |
-| 30.6 | Text rendering (HarfBuzz, bidi) |  |
-| 30.7 | Upload handoff |  |
+| 30.6 | Text rendering (HarfBuzz, bidi) | Done — both audits agree: AlUmmahNowCore#10 (merged): HarfBuzz/bidi-aware text shaping and line breaking; AlUmmahNowCore#10 |
+| 30.7 | Upload handoff | Done — both audits agree: AlUmmahNowCore#12 (merged): upload handoff; AlUmmahNowCore#12 |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -63,6 +63,13 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNowCore | [#12](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/12) | PR | feat(media): upload handoff (Epic 30.7) | MERGED | 2026-11-08 |
 | AlUmmahNowCore | [#16](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/16) | PR | feat(ffi): expose aun-media analysis, waveforms, thumbnails, subtitles and EDL | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E30 (HLB-837): Done** — both audits agree: E30 / Probe & analyse: Backlog → Done; E30 / Proxies & thumbnails: Backlog → Done; E30 / Text rendering (HarfBuzz, bidi): Backlog → Done; E30 / Upload handoff: Backlog → Done; AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4 (merged): thumbnails and media analysis
+- **E30 / Probe & analyse (HLB-838): Done** — both audits agree: AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4
+- **E30 / Proxies & thumbnails (HLB-840): Done** — both audits agree: AlUmmahNowCore#4 (merged): thumbnails and media analysis; AlUmmahNowCore#4; AlUmmahNowCore#16
+- **E30 / Text rendering (HarfBuzz, bidi) (HLB-843): Done** — both audits agree: AlUmmahNowCore#10 (merged): HarfBuzz/bidi-aware text shaping and line breaking; AlUmmahNowCore#10
+- **E30 / Upload handoff (HLB-844): Done** — both audits agree: AlUmmahNowCore#12 (merged): upload handoff; AlUmmahNowCore#12
 ## Open questions
 
 - None recorded in the sources.

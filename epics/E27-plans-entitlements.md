@@ -7,7 +7,7 @@
 | **ID** | `E27` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **superseded**: creator tiers stay the only plans model; payments are built under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
-| **Last updated** | 2026-11-15 |
+| **Last updated** | 2026-11-21 |
 
 > Plumbing plan approved 2026-11-08 (payments deferred per D4). On 2026-11-14 the plans PRs (#390, #391, #427, #428, #429) were closed as superseded: creator tiers are the plans, and payments for them are built in [AUN-SUBS](AUN-SUBS-subscriptions-plan.md).
 
@@ -31,8 +31,8 @@ Every feature is tier-aware from day one: plans, versions, entitlement values, a
 | 27.3 | Plans are custom and admin-managed (T1, resolved) |  |
 | 27.4 | Entitlement matrix seed values |  |
 | 27.5 | Metering & limits (80% warn, 100% stop, grace period) |  |
-| 27.6 | Admin tooling: Plans & Billing | Provider management part deferred (D4). |
-| 27.7 | Pluggable payment providers (T2, resolved: never Stripe) | Deferred (D4). |
+| 27.6 | Admin tooling: Plans & Billing | Canceled — both cross-checks agree: E27 is explicitly superseded: #427/#428 closed unmerged and the wiki moves Plans & Billing to creator tiers plus AUN-SUBS.; Wiki marks E27 superseded (creator tiers are the plans; payments under AUN-SUBS) and the plans PRs #427/#428 were closed unmerged 11-15 — explicitly superseded. |
+| 27.7 | Pluggable payment providers (T2, resolved: never Stripe) | Canceled — both cross-checks agree: E27 is explicitly superseded and payment providers moved to AUN-SUBS (#1418/#1419), so this story is Canceled rather than active E27 work.; Same supersession: the merged payments work (#1418/#1419) is AUN-SUBS scope, and Paddle removal (0067) confirms the model moved. |
 
 ## Decisions and constraints
 
@@ -72,6 +72,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#430](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/430) | issue | Epic 27: close enforcement gaps after limits ship | OPEN | 2026-11-08 |
 | AlUmmahNowAuth | [#227](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/227) | issue | Add billing_admin and billing_viewer RBAC roles (Epic 27) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E27 / Admin tooling: Plans & Billing (HLB-801): Canceled** — both cross-checks agree: E27 is explicitly superseded: #427/#428 closed unmerged and the wiki moves Plans & Billing to creator tiers plus AUN-SUBS.; Wiki marks E27 superseded (creator tiers are the plans; payments under AUN-SUBS) and the plans PRs #427/#428 were closed unmerged 11-15 — explicitly superseded.
+- **E27 / Pluggable payment providers (T2, resolved: never Stripe) (HLB-802): Canceled** — both cross-checks agree: E27 is explicitly superseded and payment providers moved to AUN-SUBS (#1418/#1419), so this story is Canceled rather than active E27 work.; Same supersession: the merged payments work (#1418/#1419) is AUN-SUBS scope, and Paddle removal (0067) confirms the model moved.
 ## Open questions
 
 - First paid providers (P1) open until monetisation is decided (D4).

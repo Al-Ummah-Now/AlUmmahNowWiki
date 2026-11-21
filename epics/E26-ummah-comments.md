@@ -7,7 +7,7 @@
 | **ID** | `E26` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-07 |
+| **Last updated** | 2026-11-21 |
 
 > Read-only v1 shipped (`/embed/comments/{videoId}` + `widget.js`, embeds plan D10). Posting, Sites, moderation and the rest are queued (#261).
 
@@ -26,14 +26,14 @@ A site owner drops one tag on a page to get a video plus its comment thread, or 
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 26.1 | Sites in Studio |  |
-| 26.2 | Widget: install |  |
-| 26.3 | Widget: experience |  |
-| 26.4 | Thread scope |  |
+| 26.2 | Widget: install | In Progress — split one step: partially built, acceptance not fully met: Kimi: #264 supplies a read-only tag, but 26.2 also requires site keys, verified domains, framework/WordPress snippets and hijack protection.; GLM: apps/web/public/embed/widget.js + <alummah-discussion> shipped in #264 with an install contract in docs/embeds and e2e coverage. |
+| 26.3 | Widget: experience | In Progress — both audits agree: AlUmmahNow#264 (merged): read-only thread, replies and load more; AlUmmahNow issue #261 (open): posting and the rest of the widget experience; apps/web/src/app/embed/comments/[id]; AlUmmahNow#261 |
+| 26.4 | Thread scope | In Progress — both cross-checks agree: #264 implements scope=shared only; docs/embeds/README.md:273 explicitly leaves Site/page threads out of v1.; #264 ships the shared video thread (scope=shared); docs/embeds defers page-scoped threads beyond v1. |
 | 26.5 | Moderation (Studio → Sites) |  |
 | 26.6 | Anti-abuse |  |
 | 26.7 | SEO & no-JS |  |
 | 26.8 | Data, privacy & export |  |
-| 26.9 | API (`/api/sites`, `/api/discussions`) |  |
+| 26.9 | API (`/api/sites`, `/api/discussions`) | In Progress — both audits agree: AlUmmahNow#264 (merged): read-only discussion endpoint and widget; AlUmmahNow issue #261 (open): Sites, posting and remaining API; apps/admin-api/src/routers/sites.router.ts; apps/admin-api/src/routers/siteDomains.router.ts |
 | 26.10 | Studio surfaces |  |
 
 ## Decisions and constraints
@@ -63,6 +63,12 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#264](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/264) | PR | feat(embeds): embed player, oEmbed, share dialog, social cards, embed analytics, read-only discussions widget | MERGED | 2026-11-08 |
 | AlUmmahNowUI | [#3](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/3) | issue | Embedded discussions on www (epic 26 consumer) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E26 / Widget: experience (HLB-787): In Progress** — both audits agree: AlUmmahNow#264 (merged): read-only thread, replies and load more; AlUmmahNow issue #261 (open): posting and the rest of the widget experience; apps/web/src/app/embed/comments/[id]; AlUmmahNow#261
+- **E26 / API (/api/sites, /api/discussions) (HLB-793): In Progress** — both audits agree: AlUmmahNow#264 (merged): read-only discussion endpoint and widget; AlUmmahNow issue #261 (open): Sites, posting and remaining API; apps/admin-api/src/routers/sites.router.ts; apps/admin-api/src/routers/siteDomains.router.ts
+- **E26 / Widget: install (HLB-786): In Progress** — split one step: partially built, acceptance not fully met: Kimi: #264 supplies a read-only tag, but 26.2 also requires site keys, verified domains, framework/WordPress snippets and hijack protection.; GLM: apps/web/public/embed/widget.js + <alummah-discussion> shipped in #264 with an install contract in docs/embeds and e2e coverage.
+- **E26 / Thread scope (HLB-788): In Progress** — both cross-checks agree: #264 implements scope=shared only; docs/embeds/README.md:273 explicitly leaves Site/page threads out of v1.; #264 ships the shared video thread (scope=shared); docs/embeds defers page-scoped threads beyond v1.
 ## Open questions
 
 - Guest commenting (E3): off by default, Pro+ with pre-moderation (recommendation).

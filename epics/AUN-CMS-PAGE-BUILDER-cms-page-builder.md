@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-CMS-PAGE-BUILDER` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (canonical module, videos About page), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (editor, storage, public API), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www, scholar sites) |
-| **Status** | **in progress** (PRs open, held for the owner's screenshot review) |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner in chat, 2026-11-14: "there should be a way to add elements like squarespace, not pure html, spec, design, implement" |
 
 > Builds on [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md) (the first 11 block types, CMS #48). The About page that started it is AlUmmahNowCMS#130, AlUmmahNowUI#109 and AlUmmahNow#1360.
@@ -171,6 +171,9 @@ None. Validation, serving and rendering run synchronously in the request; video 
 - AlUmmahNowUI [#112](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/112): www and scholar sites
 - Frosted glass on panels and every info page: AlUmmahNow [#1481](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1481), AlUmmahNowCMS [#138](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/138), AlUmmahNowUI [#122](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/122)
 
+### Reconciled 2026-11-21
+
+- **AUN-CMS-PAGE-BUILDER (HLB-437): Done** — both cross-checks agree: AlUmmahNow#1368, AlUmmahNowCMS#130/#136 and AlUmmahNowUI#109 are merged, wiring the typed-block editor, shared renderer and hosts end to end.; #1368 (shared block renderer + videos About), CMS#136 (block picker/styled blocks/live preview) and UI#109 (www About) all merged 11-14..16 — the wiki's "PRs open" is stale.
 ## Sources
 
 - Owner request in chat, 2026-11-14.

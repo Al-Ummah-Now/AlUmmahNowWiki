@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-MULTI-AUDIO` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, media, processor, admin-api, admin-web, web); the native apps read the contract through AlUmmahNowCore |
-| **Status** | **in progress**: built 2026-11-14, in review ([AlUmmahNow#1397](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1397) API, jobs and packaging; [AlUmmahNow#1412](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1412) player, Studio and admin); needs a release |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > Owner, 2026-11-14: "multiple audio support, spec, design, build". Videos with more than one audio track, e.g. the original plus an Arabic/English/Urdu dub, a translation voice-over, or audio description.
 
@@ -133,6 +133,11 @@ The video editor gets an **Audio tracks** panel below Subtitles:
 | MA-S3 | Player (default by language, saved choice), Studio panel, admin tier field and review item | in review ([#1412](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1412)) |
 | MA-S4 | E2E on QA, wiki status, feature registry | written; the QA run follows the merge |
 
+## Status evidence
+
+### Reconciled 2026-11-21
+
+- **AUN-MULTI-AUDIO (HLB-446): Done** — both audits agree: AlUmmahNow#1397 (merged): audio-track API, jobs, packaging and review; AlUmmahNow#1412 (merged): player Audio menu, Studio panel and admin fields; AlUmmahNow#1397; AlUmmahNow#1412
 ## Sources
 
 - [Bunny Stream: multi audio](https://docs.bunny.net/stream/multi-audio) · [Bunny blog: multi-audio support](https://bunny.net/blog/hop-to-new-territories-with-bunny-streams-new-multi-audio-support/)

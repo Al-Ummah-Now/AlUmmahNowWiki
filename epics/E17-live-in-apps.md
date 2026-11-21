@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-14 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > **Unblocked on the web side, apps not started.** D3 was decided on 2026-11-11: both providers, round-robin. The web live layer works end to end on QA with real video (self-hosted HTTPS HLS push; [#1372](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1372)). Production needs the live host release step ([#1367](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1367), awaiting a tag) and, for Bunny, preview access ([#874](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/874)). The apps can use the same `/api/live-streams` calls: `state` for playback and the viewer count, and `viewers` for the watching heartbeat. See [D3 production status](D3-live-provider.md#production-status-checked-2026-11-14).
 
@@ -23,11 +23,11 @@ Live viewing in the apps.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 17.1 | Live watch: low-latency HLS, viewer count, DVR |  |
-| 17.2 | Live chat (moderated) |  |
+| 17.1 | Live watch: low-latency HLS, viewer count, DVR | In Progress — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:358 requires native low-latency HLS, realtime count and DVR; only the web watch page exists, with no native live code.; GLM: Web live watch + viewer counts are live (#872, #1387, prod host #1367) and /api/live-streams is ready for apps; no app has live yet. |
+| 17.2 | Live chat (moderated) | In Progress — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:359 requires native moderated chat; web comments/roles do not implement the app story and feature-live is a marker only.; GLM: Comment infra and live moderation roles merged (#1374) but live comments are broken on the web today (#301) and absent in apps. |
 | 17.3 | Premieres & scheduled streams |  |
 | 17.4 | Event streams (Taraweeh, Jumu'ah) |  |
-| 17.5 | Replays become VOD |  |
+| 17.5 | Replays become VOD | In Progress — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#1372/#1302 prove server VOD conversion, not native replay with optional chat replay; no app replay code exists.; GLM: Server-side and shipped: #1372 runs real ffmpeg watch/end/VOD-release E2E and #1302 reviews the recording after the stream. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -54,6 +54,12 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#309](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/309) | PR | docs: native apps epics (9–24), embeds/discussions/tiers (25–27), AI moderation (28) — onto main | MERGED | 2026-11-08 |
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E17 (HLB-716): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Android feature-live contains only ModuleInfo.kt and no live implementation; web live work does not start the native-app epic.; GLM: Platform live shipped (web watch page, counts, moderation, VOD) and AlUmmahNow co-owns the epic, but the app slice is not started (feature-live is a marker).
+- **E17 / Live watch: low-latency HLS, viewer count, DVR (HLB-717): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:358 requires native low-latency HLS, realtime count and DVR; only the web watch page exists, with no native live code.; GLM: Web live watch + viewer counts are live (#872, #1387, prod host #1367) and /api/live-streams is ready for apps; no app has live yet.
+- **E17 / Live chat (moderated) (HLB-718): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:359 requires native moderated chat; web comments/roles do not implement the app story and feature-live is a marker only.; GLM: Comment infra and live moderation roles merged (#1374) but live comments are broken on the web today (#301) and absent in apps.
+- **E17 / Replays become VOD (HLB-721): In Progress** — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#1372/#1302 prove server VOD conversion, not native replay with optional chat replay; no app replay code exists.; GLM: Server-side and shipped: #1372 runs real ffmpeg watch/end/VOD-release E2E and #1302 reviews the recording after the stream.
 ## Open questions
 
 - None recorded in the sources.

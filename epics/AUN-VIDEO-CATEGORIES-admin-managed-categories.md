@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-VIDEO-CATEGORIES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, admin-api, admin-web, web, processor, shared-types) |
-| **Status** | **in progress**: built in [AlUmmahNow#1423](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1423), held for the owner's screenshots |
-| **Last updated** | 2026-11-15 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner request 2026-11-15: "can you add categories in admin? if not make a pr" |
 
 ## Goal
@@ -42,6 +42,9 @@ Video categories were a fixed list in code (`VIDEO_CATEGORIES`, the 15 categorie
   `GET /api/categories`, admin-api `/api/video-categories`, admin-web `/categories`, web pickers on the live list,
   processor `CategoryRelabel`). Held for the owner's screenshots; needs release after merge.
 
+### Reconciled 2026-11-21
+
+- **AUN-VIDEO-CATEGORIES (HLB-457): Done** — both audits agree: AlUmmahNow#1423 (merged): admin add, rename, reorder and retire video categories; AlUmmahNow#1423; apps/admin-web/src/app/(protected)/categories/CategoriesAdmin.tsx
 ## Open questions
 
 - None recorded.

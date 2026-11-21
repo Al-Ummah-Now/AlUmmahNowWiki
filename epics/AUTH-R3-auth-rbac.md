@@ -7,7 +7,7 @@
 | **ID** | `AUTH-R3` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2024-12-01 |
+| **Last updated** | 2026-11-21 |
 
 > RBAC "97% complete" and migrated to OpenAuth RBAC; tenants implemented (Lane 5); deletion/export shipped (9.7). The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 
@@ -19,11 +19,11 @@ Auth roadmap epic `category/rbac` (P1, Beta v0.9.0).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | Role hierarchy | Issue #__ (never filed) |
-| – | Profile management | Issue #__ (never filed) |
-| – | Organisation/tenant support | Issue #__ (never filed) |
-| – | Import/export (GDPR) | Issue #__ (never filed) |
-| – | Self-service features | Issue #__ (never filed) |
+| – | Role hierarchy | Done — both audits agree: AlUmmahNowAuth#75, #76 (merged): role hierarchy and RBAC; openauth#7, #32, #46 (merged): RBAC and permission-cache hardening; openauth rbac/admin-endpoints.ts; apps/admin/app/routes/roles._index.tsx |
+| – | Profile management | Done — both audits agree: AlUmmahNowAuth#254, #327, #339 (merged): profile, display names and cross-app name updates; apps/profile; apps/auth/src/services/d1-user-service.ts |
+| – | Organisation/tenant support | Done — both audits agree: openauth#5, #21, #36 (merged): multi-tenant issuer and tenant theming; AlUmmahNowAuth#173 (merged): tenant route authentication; apps/auth/src/adapters/tenant-adapter.ts |
+| – | Import/export (GDPR) | Done — both audits agree: AlUmmahNowAuth#233 (merged): in-app account deletion and export; AlUmmahNowAuth#293, #326, #335, #351 (merged): erasure cleanup; apps/auth/src/routes/account-routes.ts |
+| – | Self-service features | In Progress — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:63 requires profile updates, password change and deletion; account-routes has DELETE /account but no hub deletion UI or account.deleted delivery.; GLM: Deletion/export (#233), passkeys (#366), profile hub and password change (apps/auth/src/security/password-change-redirect.ts) all merged. |
 
 ## Decisions and constraints
 
@@ -39,6 +39,13 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AUTH-R3 / Role hierarchy (HLB-518): Done** — both audits agree: AlUmmahNowAuth#75, #76 (merged): role hierarchy and RBAC; openauth#7, #32, #46 (merged): RBAC and permission-cache hardening; openauth rbac/admin-endpoints.ts; apps/admin/app/routes/roles._index.tsx
+- **AUTH-R3 / Profile management (HLB-519): Done** — both audits agree: AlUmmahNowAuth#254, #327, #339 (merged): profile, display names and cross-app name updates; apps/profile; apps/auth/src/services/d1-user-service.ts
+- **AUTH-R3 / Organisation/tenant support (HLB-520): Done** — both audits agree: openauth#5, #21, #36 (merged): multi-tenant issuer and tenant theming; AlUmmahNowAuth#173 (merged): tenant route authentication; apps/auth/src/adapters/tenant-adapter.ts
+- **AUTH-R3 / Import/export (GDPR) (HLB-521): Done** — both audits agree: AlUmmahNowAuth#233 (merged): in-app account deletion and export; AlUmmahNowAuth#293, #326, #335, #351 (merged): erasure cleanup; apps/auth/src/routes/account-routes.ts
+- **AUTH-R3 / Self-service features (HLB-522): In Progress** — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:63 requires profile updates, password change and deletion; account-routes has DELETE /account but no hub deletion UI or account.deleted delivery.; GLM: Deletion/export (#233), passkeys (#366), profile hub and password change (apps/auth/src/security/password-change-redirect.ts) all merged.
 ## Open questions
 
 - None recorded in the sources.

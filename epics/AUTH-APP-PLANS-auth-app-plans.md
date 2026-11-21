@@ -7,7 +7,7 @@
 | **ID** | `AUTH-APP-PLANS` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-01-14 |
+| **Last updated** | 2026-11-21 |
 
 > OpenAuth 1.0.9 migration phases 1–5 "✅ COMPLETED" (202/202 tests); JWT phases 0–4 complete; RBAC "97% complete"; admin enhancement, RBAC UI, refactor and M2M phases have no status.
 
@@ -19,13 +19,13 @@ Per-app plans for the auth service and its admin app.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| Admin enh. P1–P6 | Critical functionality, UX, RBAC, security, administrative, polish | No status (gaps table: user creation stubbed, audit UI missing) |
-| RBAC UI P1–P7 | Admin app to full RBAC | No status |
-| Refactor P1–P4 | Use OpenAuth `clientAdminRoutes` | No status |
-| M2M P1–P6 | Admin app calls auth APIs with client_credentials | No status |
+| Admin enh. P1–P6 | Critical functionality, UX, RBAC, security, administrative, polish | In Progress — both audits agree: AlUmmahNowAuth#197, #299, #304, #320, #374, #375 (merged): admin users, invites, dialogs and accessibility; AlUmmahNowAuth issue #431 (open): Arabic admin pages remain partly English; apps/admin/app/routes/users._index.tsx; apps/admin/app/routes/audit.tsx |
+| RBAC UI P1–P7 | Admin app to full RBAC | Done — both cross-checks agree: RBAC_UI_PLAN phases are wired on main: roles CRUD/permissions pages, user-role manager, dashboard stats and M2M APIs all exist.; Auth#76 (full RBAC impl) plus #374/#375/#437 (role pages, figures, M2M wiring) merged; roles list/detail admin UI on main. |
+| Refactor P1–P4 | Use OpenAuth `clientAdminRoutes` | Done — both cross-checks agree: apps/auth/src/index.ts:347-359 mounts clientAdminRoutes; admin-api.server.ts uses PATCH and /rotate, and old client handlers are removed.; apps/auth/src/router.ts: client routes "now handled by adminClientApp (OpenAuth's clientAdminRoutes)" — the refactor landed in auth itself. |
+| M2M P1–P6 | Admin app calls auth APIs with client_credentials | Done — both cross-checks agree: apps/admin/app/lib/admin-api.server.ts implements client_credentials and users/roles/clients/audit calls; route files use it rather than direct business-data D1 access.; Auth#197/#378/#394/#395/#437 merged: admin signs in as a confidential client and role/users pages call Auth with scoped M2M tokens. |
 | Migration P1–P5 | Adopt openauth 1.0.9, delete ~3k LOC | Completed |
 | JWT P0–P5 (#74) | Key management, token service, rotation | Completed |
-| Audit tests P1–P5 (#65) | Edge-case tests for audit logging | In progress |
+| Audit tests P1–P5 (#65) | Edge-case tests for audit logging | Done — both cross-checks agree: audit-edge-cases.test.ts covers errors, large payloads, sinks and concurrent emits, and #65 is closed after the edge-case test expansion.; Tracking issue Auth#65 closed with the audit test suites (#60/#62/#72/#241) merged. |
 
 ## Decisions and constraints
 
@@ -41,6 +41,13 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AUTH-APP-PLANS / Critical functionality, UX, RBAC, security, administrative, polish (HLB-477): In Progress** — both audits agree: AlUmmahNowAuth#197, #299, #304, #320, #374, #375 (merged): admin users, invites, dialogs and accessibility; AlUmmahNowAuth issue #431 (open): Arabic admin pages remain partly English; apps/admin/app/routes/users._index.tsx; apps/admin/app/routes/audit.tsx
+- **AUTH-APP-PLANS / Admin app to full RBAC (HLB-478): Done** — both cross-checks agree: RBAC_UI_PLAN phases are wired on main: roles CRUD/permissions pages, user-role manager, dashboard stats and M2M APIs all exist.; Auth#76 (full RBAC impl) plus #374/#375/#437 (role pages, figures, M2M wiring) merged; roles list/detail admin UI on main.
+- **AUTH-APP-PLANS / Use OpenAuth clientAdminRoutes (HLB-479): Done** — both cross-checks agree: apps/auth/src/index.ts:347-359 mounts clientAdminRoutes; admin-api.server.ts uses PATCH and /rotate, and old client handlers are removed.; apps/auth/src/router.ts: client routes "now handled by adminClientApp (OpenAuth's clientAdminRoutes)" — the refactor landed in auth itself.
+- **AUTH-APP-PLANS / Admin app calls auth APIs with client_credentials (HLB-480): Done** — both cross-checks agree: apps/admin/app/lib/admin-api.server.ts implements client_credentials and users/roles/clients/audit calls; route files use it rather than direct business-data D1 access.; Auth#197/#378/#394/#395/#437 merged: admin signs in as a confidential client and role/users pages call Auth with scoped M2M tokens.
+- **AUTH-APP-PLANS / Edge-case tests for audit logging (HLB-483): Done** — both cross-checks agree: audit-edge-cases.test.ts covers errors, large payloads, sinks and concurrent emits, and #65 is closed after the edge-case test expansion.; Tracking issue Auth#65 closed with the audit test suites (#60/#62/#72/#241) merged.
 ## Open questions
 
 - None recorded in the sources.

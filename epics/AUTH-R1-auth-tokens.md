@@ -19,11 +19,11 @@ Auth roadmap epic `category/tokens` (P0, Alpha v0.8.0).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | Session management | Issue #__ (never filed) |
-| – | Token security (JWT, rotation) | Issue #__ (never filed) |
+| – | Session management | Done — both audits agree: AlUmmahNowAuth#196, #232, #237, #286, #287, #386 (merged): SSO, revocation, persistent sessions and per-device sign-out; apps/auth/src/routes/admin-session-routes.ts; AlUmmahNowAuth commit 7c95b58 |
+| – | Token security (JWT, rotation) | Done — both audits agree: AlUmmahNowAuth#237, #240, #244, #266, #389, #390 (merged): revocation, short lifetimes, refresh and signing-key rotation; openauth#30, #51 (merged): atomic refresh rotation and signing-key rotation; AlUmmahNowAuth commit cc4f901; openauth refresh-token |
 | – | MFA (TOTP, backup codes) | Issue #__ (never filed) |
-| – | Rate limiting & brute force | Issue #__ (never filed) |
-| – | Audit logging | Issue #__ (never filed) |
+| – | Rate limiting & brute force | Done — both audits agree: AlUmmahNowAuth#264, #268 (merged): attempt limits and Workers Rate Limiting; openauth#35 (merged): atomic rate-limit counters; apps/auth/src/middleware/rate-limit.ts |
+| – | Audit logging | Done — both audits agree: AlUmmahNowAuth#60, #72, #241 (merged): audit events, retry/DLQ and production consumer; apps/auth/src/audit-events.ts; apps/admin/app/routes/audit.tsx |
 
 ## Decisions and constraints
 
@@ -39,6 +39,12 @@ Platform-wide constraints that apply to every epic:
 
 - 2026-11-15, AUTH-1: signing-key rotation with a published-before-use overlap, scheduled and from the admin, audited ([Auth#388](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/388), [Auth#389](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/389), [Auth#390](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/390)); verifiers refetch JWKS on an unknown `kid` ([AlUmmahNow#1394](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1394)); per-device sign-out by `sid` ([Auth#386](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/386), [AlUmmahNow#1408](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1408)); sign-in logs without PII ([Auth#385](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/385)); critical Dependabot alerts cleared and pnpm as the only lockfile ([Auth#393](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/393), [Auth#397](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/397)). See [Authentication](../guides/authentication.md#tokens).
 
+### Reconciled 2026-11-21
+
+- **AUTH-R1 / Session management (HLB-506): Done** — both audits agree: AlUmmahNowAuth#196, #232, #237, #286, #287, #386 (merged): SSO, revocation, persistent sessions and per-device sign-out; apps/auth/src/routes/admin-session-routes.ts; AlUmmahNowAuth commit 7c95b58
+- **AUTH-R1 / Token security (JWT, rotation) (HLB-507): Done** — both audits agree: AlUmmahNowAuth#237, #240, #244, #266, #389, #390 (merged): revocation, short lifetimes, refresh and signing-key rotation; openauth#30, #51 (merged): atomic refresh rotation and signing-key rotation; AlUmmahNowAuth commit cc4f901; openauth refresh-token
+- **AUTH-R1 / Rate limiting & brute force (HLB-509): Done** — both audits agree: AlUmmahNowAuth#264, #268 (merged): attempt limits and Workers Rate Limiting; openauth#35 (merged): atomic rate-limit counters; apps/auth/src/middleware/rate-limit.ts
+- **AUTH-R1 / Audit logging (HLB-510): Done** — both audits agree: AlUmmahNowAuth#60, #72, #241 (merged): audit events, retry/DLQ and production consumer; apps/auth/src/audit-events.ts; apps/admin/app/routes/audit.tsx
 ## Open questions
 
 - None recorded in the sources.

@@ -7,7 +7,7 @@
 | **ID** | `AUN-COST` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > Spec merged (#266, 2026-11-08); phases P0–P4 are open issues #268–#272. On 2026-11-12 a first slice landed: the `apps/cost-monitor` collector (deployed by every release) feeds platform analytics per environment to the admin **Operations** page ([#974](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/974), [#976](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/976)), per the [admin analytics design](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/admin/LIVE_OPS.md). The Delivery page has daily cost inputs per source ([#896](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/896)). QA's own usage was cut in [#863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/863). On 2026-11-14 COST-1 ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400), owner: "build infra, set a place in admin to set token") added the videos admin **Costs** page: super admins set a read-only Cloudflare token and optional Bunny and Resend keys there (AES-GCM sealed, only the last 4 shown, audited, with a connection test); the collector runs through a queue with retry and a DLQ (failures on the Errors page with Retry) and adds Containers, Bunny billing and Resend; the page shows month to date against the budget, the forecast, products, environments and top movers; budget, spike and weekly digest alerts go by email to admins who opt in and to the Errors page, with thresholds edited on the page. With no token it says so and nothing fails.
 
@@ -20,9 +20,9 @@ Admin cost/usage dashboard with register-based alerts, built from the CloudFlare
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | P0 | Verify data sources, read-only token, CF notifications | Open #268; the read-only token is set in Costs → Connections and tested there ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400)); CF notifications not set up |
-| P1 | Collector worker, costs D1, minimal overview | Built: collector and Operations page ([#974](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/974), [#976](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/976)); queued jobs with retry/DLQ, Containers, Bunny and Resend ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400), in review) |
-| P2 | Alert engine | Budget levels, month-end forecast, spikes against the 7-day baseline and a weekly digest; opt-in emails ([O24](decisions.md#o24-cost-dashboard-per-channel-cost-later-opt-in-alerts)) and the Errors page; thresholds editable ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400), in review) |
-| P3 | Full dashboard | Costs page: budget, forecast, products, environments, 30-day trend, top movers ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400), in review). Per-channel cost stays later (O24) |
+| P1 | Collector worker, costs D1, minimal overview | Done — both audits agree: AlUmmahNow#974, #976 (merged): collector and Operations page; AlUmmahNow#1400 (merged): queue-backed collector and Costs page; AlUmmahNow#974; AlUmmahNow#976; AlUmmahNow#1400 |
+| P2 | Alert engine | Done — both audits agree: AlUmmahNow#1400 (merged): budget, spike, forecast and digest alerts; AlUmmahNow#1400 |
+| P3 | Full dashboard | Done — both audits agree: AlUmmahNow#1400 (merged): Costs budget, forecast, products, environments, trends and movers; AlUmmahNow#1400 |
 | P4 | Resend cost, invoice reconciliation | Resend cost by plan from the emails sent ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400), in review); invoice reconciliation open #272 |
 
 ## Decisions and constraints
@@ -47,6 +47,11 @@ Platform-wide constraints that apply to every epic:
 - Issue [AlUmmahNow#271](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/271)
 - Issue [AlUmmahNow#272](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/272)
 
+### Reconciled 2026-11-21
+
+- **AUN-COST / Collector worker, costs D1, minimal overview (HLB-440): Done** — both audits agree: AlUmmahNow#974, #976 (merged): collector and Operations page; AlUmmahNow#1400 (merged): queued collector and Costs page; AlUmmahNow#974; AlUmmahNow#976; AlUmmahNow#1400
+- **AUN-COST / Alert engine (HLB-441): Done** — both audits agree: AlUmmahNow#1400 (merged): budget, spike, forecast and digest alerts; AlUmmahNow#1400
+- **AUN-COST / Full dashboard (HLB-442): Done** — both audits agree: AlUmmahNow#1400 (merged): Costs budget, forecast, products, environments, trends and movers; AlUmmahNow#1400
 ## Open questions
 
 - None recorded in the sources.

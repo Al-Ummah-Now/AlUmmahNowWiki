@@ -7,7 +7,7 @@
 | **ID** | `AUTH-PHASES` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2024-12-01 |
+| **Last updated** | 2026-11-21 |
 
 > Phase 1 Foundation "Complete"; Phase 2 Security & Compliance "In Progress"; Phase 3 Scale "Planned"; Phase 4 Community "Future". Milestones Alpha (2025-02-15), Beta (2025-03-15), v1.0 (2025-03-31) all "0% Complete" and long past.
 
@@ -21,7 +21,7 @@ The 2024/25 plan to take auth to v1.0.
 |---|---|---|
 | Phase 1 | Foundation | Complete |
 | Phase 2 | Enhanced security & compliance (MFA, GDPR, SAML/LDAP) | In progress per doc |
-| Phase 3 | Scale & performance | Planned per doc |
+| Phase 3 | Scale & performance | In Progress — both cross-checks agree: Auth#315/#321/#333/#353/#356 ship scaling work while #311/#314 leave D1 performance work open; Phase 3 is partially built.; Auth#315/#321/#333/#353/#356 shipped latency/D1/KV/audit-capping work; #311/#314 remain open. |
 | Phase 4 | Community & integration (Islamic calendar, prayer-aware sessions) | Future per doc |
 
 ## Decisions and constraints
@@ -38,6 +38,9 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AUTH-PHASES / Scale & performance (HLB-503): In Progress** — both cross-checks agree: Auth#315/#321/#333/#353/#356 ship scaling work while #311/#314 leave D1 performance work open; Phase 3 is partially built.; Auth#315/#321/#333/#353/#356 shipped latency/D1/KV/audit-capping work; #311/#314 remain open.
 ## Open questions
 
 - None recorded in the sources.
