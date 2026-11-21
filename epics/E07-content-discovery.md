@@ -30,7 +30,7 @@ Advanced search, trending and better navigation (#40, #39).
 | 7.3 | Content navigation | Related videos from `/api/recommendations` done (#337); personal Recommended (history + subscriptions, privacy-gated) in #1718. |
 | 7.4 | Discovery ranking job and rails (#990, #354, #685 for discovery lists) | D1 rails computed by the `discovery.rank` admin job; keyset cursors, full pages, localized titles and channel names (#418, #408). AlUmmahNow#1718. |
 | 7.5 | Admin curation: pins, exclusions, home rail order | Videos admin → Discovery: pin videos/channels into rails, exclude, order and switch home rails, run now, preview; audited. AlUmmahNow#1721. |
-| 7.6 | Web home rails and labels | Home page rails from `/api/discovery/home`; Explore and rails show the label the rail reports (en + ar). AlUmmahNow#1723. |
+| 7.6 | Web home rails and labels | Home page rails from `/api/discovery/home`; Explore and rails show the label the rail reports (en + ar). Continue watching is one playlist-style card on home (owner 2026-11-21). AlUmmahNow#1723. |
 
 
 ## Discovery ranking
@@ -54,6 +54,11 @@ Owner brief 2026-11-21: correct at scale **and** good with no users today (one r
 **API.** `GET /api/discovery/home` (admin-ordered home rails, no repeated videos or headings; category rails carry `categoryLabel` en/ar); `/api/trending?period=day|week|month&cursor=`; `/api/videos/sections/{trending,popular,recent,by-category/:c,recommended}` with `window`, `language`, keyset `cursor`, `metadata.rail`.
 
 **Web.** The home page shows the rails between the hero and the full grid, server-rendered in the page language and fetched after hydration when the API was slow. Each heading is the rail's `label` (cold start: *New this week*, *Featured*, *Top in <category>*); a rail scrolls sideways with snap, page buttons on pointer devices and a peeking card on phones; *See all* opens Explore, every video, the category search or the sections page. Explore's Trending and the sections page take their heading from the same label and show no trending ranks while a list is not trending. Copy in shared-types `i18n-rails.ts` (en + ar).
+
+**Continue watching on home (owner 2026-11-21).** One playlist-style card, never a row of video cards:
+- **What it shows.** The card uses the same frame as playlist cards. The cover is the newest unfinished video's thumbnail. It carries a compact count of unfinished videos («٢٣ مرئيًا»; from 1K, cut to one decimal) and that video's progress bar. The title is "Continue watching" / «متابعة المشاهدة». The meta line is the video's title and "38% watched", joined with «،» in Arabic.
+- **Where it leads.** The card opens the history page's Continue watching view (`/history?view=continue`): unfinished videos only, a link back to the whole history, and no Clear all. A separate *Resume* / «تابِع» link on the cover opens the newest video, which resumes from its saved position.
+- **When it appears.** Only for a signed-in viewer with watch history on and at least one unfinished video (`GET /api/watch-history?completed=false&limit=1`). A failed load shows nothing.
 
 **Cost.** Idle: a few thousand D1 reads an hour, near-zero writes. At 100k videos about 72M rows read a month (included quota 25B). Views: about one write per qualified viewer-day. No AI.
 
