@@ -27,7 +27,7 @@ How the videos monorepo decides which E2E suites a pull request needs, and how t
 | Local web suite (5 shards) | web specs; web, api-videos, processor, websocket-server, short-links |
 | Local admin suite (5) | admin specs; admin-web, admin-api, api-videos, processor, websocket-server, status, web |
 | Local release suite (7) | release specs; all eight apps the local stack boots |
-| Player E2E (6 browsers) | player specs; the player paths in web; fanous-tokens |
+| Player E2E (6 browsers) | player specs; the player paths in web (with resume storage and `next.config.ts`); fanous-tokens |
 
 ### Runs everything
 
@@ -68,7 +68,7 @@ These changes skip E2E entirely: unit tests and type-check run on every PR in `d
 
 **When a test fails:** add the path to a node, or add the edge with a `why` naming the file that creates it. To see the current scan, run `node --experimental-strip-types scripts/ci/select/drift.ts`.
 
-**Known limit:** inside `apps/web`, the `web:player` sub-node is the same path list as Player E2E's old `paths:` filter. A web file outside that list does not select Player E2E even if the player imports it, which is no change from before.
+**Known limit:** inside `apps/web`, the `web:player` sub-node is the same path list as Player E2E's `paths:` filter (resume storage and `next.config.ts` added in [#1697](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1697)); Player E2E also runs on every push to `main` and in every release, whatever changed. A web file outside that list does not select Player E2E even if the player imports it, which is no change from before.
 
 ## Shadow rollout
 

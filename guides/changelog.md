@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-21: the player resumes a saved position again; Player E2E runs on main and in releases
+
+- **AlUmmahNow:** after next 16.4, Player E2E failed on `main`: in development (React Strict Mode) the player's two simultaneous progress reads lost a saved position that was still being moved into encrypted storage, so the "Start from beginning" pill never showed. On-device progress is now read and written one operation at a time, and the old plaintext copy is removed only after the encrypted copy is saved. A production build was not affected ([#1696](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1696), [#1697](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1697)).
+- **AlUmmahNow:** Player E2E used to run only on PRs that touched the player, so the break went unseen for five days. It now also runs on every push to `main`, on PRs that change the lockfile, the web's `package.json` or `next.config.ts`, or resume storage, and it gates production in every release. See [Testing](testing.md).
+
 ## 2026-11-19: the invite email sends the admin's wording and the video card
 
 - **AlUmmahNowAuth:** invite emails now use the wording saved in videos admin › Settings › Emails, and show the invite's video as a picture card that links to the watch page ([Auth#432](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/432), [Auth#433](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/433); approved with [#1551](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1551), rebased onto #430's Eastern Arabic digits). Merged 2026-11-19; Auth released on merge.
