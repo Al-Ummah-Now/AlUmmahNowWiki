@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-YT-IMPORT` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (api-videos, web Studio, admin-web, admin-api, shared-types) |
-| **Status** | **building**: API, queue jobs, admin-api settings and the local-stack fake Google merged ([AlUmmahNow#1390](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1390), made-for-kids comments off in [#1417](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1417); not yet released); the Studio wizard ([#1391](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1391)) and the admin settings page with the write-only client secret ([#1381](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1381)) are held for the owner's screenshots |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner, 2026-11-14: "if creator want to switch from youtube to us they should be able, spec, design, build" |
 
 ## Goal
@@ -136,6 +136,11 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 - Unit (api-videos): OAuth state and token encryption, the Google client against a fake Google, every queue step (paging, quota wait, retry, last-attempt flag), initiate with `youtubeImport`, the tier setting.
 - E2E on the local stack (`scripts/local-stack/fake-google.ts`): a fake Google (OAuth, Data API, thumbnail host) and a fixture Takeout zip built by the test: connect → pick → choose the zip → review → import → the videos exist with their YouTube metadata, dates and playlist. No real Google in any test.
 
+## Status evidence
+
+### Reconciled 2026-11-21
+
+- **AUN-YT-IMPORT (HLB-460): Done** — both audits agree: AlUmmahNow#1390 (merged): import API, jobs and settings; AlUmmahNow#1391 (merged): Studio import wizard; AlUmmahNow#1417 (merged): made-for-kids imports disable comments; AlUmmahNow#1390; AlUmmahNow#1391; AlUmmahNow#1381
 ## Decisions and constraints
 
 - [O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers): uploads are invitation-only through creator tiers; imports follow the same gate.

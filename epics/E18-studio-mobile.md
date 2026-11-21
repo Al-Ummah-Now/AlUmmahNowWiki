@@ -7,7 +7,7 @@
 | **ID** | `E18` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-21 |
 
 > Studio MVP shipped on iPhone, iPad and Android phone and tablet (2026-11-11 to 11-12): sign-in with several accounts, channel picker, resumable single and batch upload, manage videos, bulk edit, soft delete and restore, analytics. Release pipelines exist (Apple: TestFlight on a tag, none cut yet; Android: GitHub pre-release `v2026.11.11`). Comments, notifications, the editor and go-live are still to do; 18.7 waits on D3.
 
@@ -29,9 +29,9 @@ Manage, upload, edit and go live from a phone.
 | 18.4 | Comments & community |  |
 | 18.5 | Analytics | Basic charts shipped ([AlUmmahNowApple#25](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/25), [AlUmmahNowAndroid#9](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/9)); Android value-axis fix open ([AlUmmahNowAndroid#12](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/12)). |
 | 18.6 | Channel management |  |
-| 18.7 | Go live from phone over RTMP/SRT (D3) | Waits on D3 (unblocked 2026-11-10; recommendation: self-hosted RTMP/SRT → HLS in R2). |
+| 18.7 | Go live from phone over RTMP/SRT (D3) | Not started — both cross-checks agree: Android feature-live has only ModuleInfo.kt; #1373 is web Studio and supplies no phone RTMP/SRT camera ingest.; feature-live is a module marker on Android and iOS has nothing; the shipped go-live (#1373/#872) is web Studio, not "from phone". |
 | 18.8 | Notifications |  |
-| 18.9 | Mobile video editor (EDL from Epic 30) |  |
+| 18.9 | Mobile video editor (EDL from Epic 30) | In Progress — both audits agree: AlUmmahNowAndroid#33, #34, #35 (merged): import, timeline, trim/split/undo and MP4 export/share/upload; AlUmmahNowApple#12 (merged): iOS editor spike; AlUmmahNowAndroid#33; AlUmmahNowAndroid#34; AlUmmahNowAndroid#35 |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -63,6 +63,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#476](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/476) | PR | docs(spec): web Creator Studio | OPEN | 2026-11-09 |
 | AlUmmahNowApple | [#10](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/10) | issue | Studio stories after the spikes (Epics 18, 19, 30) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E18 / Mobile video editor (EDL from Epic 30) (HLB-731): In Progress** — both audits agree: AlUmmahNowAndroid#33, #34, #35 (merged): import, timeline, trim/split/undo and MP4 export/share/upload; AlUmmahNowApple#12 (merged): iOS editor spike; AlUmmahNowAndroid#33; AlUmmahNowAndroid#34; AlUmmahNowAndroid#35
+- **E18 / Go live from phone over RTMP/SRT (D3) (HLB-729): Backlog** — both cross-checks agree: Android feature-live has only ModuleInfo.kt; #1373 is web Studio and supplies no phone RTMP/SRT camera ingest.; feature-live is a module marker on Android and iOS has nothing; the shipped go-live (#1373/#872) is web Studio, not "from phone".
 ## Open questions
 
 - None recorded in the sources.

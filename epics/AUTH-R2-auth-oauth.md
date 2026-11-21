@@ -19,9 +19,9 @@ Auth roadmap epic `category/oauth` (P0, Alpha).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | OAuth 2.0/OIDC compliance | Issue #__ (never filed) |
-| – | Authorization code + PKCE | Issue #__ (never filed) |
-| – | Client management | Issue #__ (never filed) |
+| – | OAuth 2.0/OIDC compliance | Done — both audits agree: openauth#1, #13, #15, #20, #24, #28, #52 (merged): OIDC, hardening, single-use codes, PKCE and confidential-client authentication; openauth; apps/auth/src/routes/authorize.ts |
+| – | Authorization code + PKCE | Done — both audits agree: AlUmmahNowAuth#276, #283, #302, #392 (merged): PKCE across public and web clients; openauth#28 (merged): PKCE enforcement; openauth#18 |
+| – | Client management | Done — both audits agree: AlUmmahNowAuth#196, #205, #210 (merged): client registry and registered clients; openauth main: client/ management API; apps/admin/app/routes/clients.tsx; openauth clientAdminRoutes |
 | – | Social auth | Issue #__ (never filed) |
 | – | SAML 2.0, LDAP/AD | Issue #__ (never filed) |
 
@@ -39,6 +39,11 @@ Platform-wide constraints that apply to every epic:
 
 - 2026-11-15, AUTH-1: public clients must send PKCE on `/authorize` ([Auth#392](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/392)); confidential clients authenticate with their secret on the code and refresh grants ([openauth#52](https://github.com/Al-Ummah-Now/openauth/pull/52), [Auth#394](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/394), [Auth#395](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/395)); `/select-account` finds the client by id ([Auth#391](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/391)); `/password/change` is no longer an open redirect ([Auth#384](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/384)). See [Authentication](../guides/authentication.md#signing-in).
 
+### Reconciled 2026-11-21
+
+- **AUTH-R2 / OAuth 2.0/OIDC compliance (HLB-512): Done** — both audits agree: openauth#1, #13, #15, #20, #24, #28, #52 (merged): OIDC, hardening, single-use codes, PKCE and confidential-client authentication; openauth; apps/auth/src/routes/authorize.ts
+- **AUTH-R2 / Authorization code + PKCE (HLB-513): Done** — both audits agree: AlUmmahNowAuth#276, #283, #302, #392 (merged): PKCE across public and web clients; openauth#28 (merged): PKCE enforcement; openauth#18
+- **AUTH-R2 / Client management (HLB-514): Done** — both audits agree: AlUmmahNowAuth#196, #205, #210 (merged): client registry and registered clients; openauth main: client/ management API; apps/admin/app/routes/clients.tsx; openauth clientAdminRoutes
 ## Open questions
 
 - None recorded in the sources.

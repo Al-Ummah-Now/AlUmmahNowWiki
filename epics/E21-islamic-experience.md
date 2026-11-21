@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E21` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 ## Goal
 
@@ -23,10 +23,10 @@ Prayer times, Hijri seasons, scholar verification, recitation tools, learning pa
 |---|---|---|
 | 21.1 | Prayer times (auto-pause at adhan, opt-in) |  |
 | 21.2 | Hijri calendar & Ramadan mode |  |
-| 21.3 | Scholar & institution verification |  |
+| 21.3 | Scholar & institution verification | In Progress — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:447-448 requires Studio application and badge detail/filter; #367/#382 supply only the earlier E06.1 admin endpoint/badge.; GLM: Admin verification endpoint + verified badge merged (#367, #382); the scholar application flow is still not built. |
 | 21.4 | Recitation tools |  |
 | 21.5 | Learning paths |  |
-| 21.6 | Intentional viewing (autoplay off, no streaks) |  |
+| 21.6 | Intentional viewing (autoplay off, no streaks) | In Progress — split one step: partially built, acceptance not fully met: Kimi: No daily-time reminder, session-complete card or finite Lamahat exists; general watch code and an autoplay violation do not implement 21.6.; GLM: No streaks exist anywhere, but autoplay-off is violated on Android (playWhenReady=true) and the finite home is not built. |
 | 21.7 | Content preferences |  |
 | 21.8 | Study mode notes |  |
 
@@ -54,6 +54,11 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#380](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/380) | issue | Channel verification can be lost to a concurrent owner edit (R2 read-modify-write) | OPEN | 2026-11-08 |
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E21 (HLB-748): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No E21 story has a shipped implementation: the verification item belongs to E06.1 and the general viewer is not the intentional-viewing feature.; GLM: 21.3 and 21.6 finalize In Progress; the rest of the Islamic-experience layer is unbuilt.
+- **E21 / Scholar & institution verification (HLB-751): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:447-448 requires Studio application and badge detail/filter; #367/#382 supply only the earlier E06.1 admin endpoint/badge.; GLM: Admin verification endpoint + verified badge merged (#367, #382); the scholar application flow is still not built.
+- **E21 / Intentional viewing (autoplay off, no streaks) (HLB-754): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No daily-time reminder, session-complete card or finite Lamahat exists; general watch code and an autoplay violation do not implement 21.6.; GLM: No streaks exist anywhere, but autoplay-off is violated on Android (playWhenReady=true) and the finite home is not built.
 ## Open questions
 
 - None recorded in the sources.

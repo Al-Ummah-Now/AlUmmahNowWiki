@@ -19,12 +19,12 @@ Harden and extend the Windows bulk importer (.NET, Uno) for Bunny/R2 uploads.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| Sprint 1 | Critical security & stability (P0-001…005) |  |
-| Sprint 2 | Core functionality (P1-001…006) |  |
-| Sprint 3 | Quality & docs (P1-007…010) |  |
-| Sprint 4 | Enhanced features (P2-001…006) |  |
-| Sprint 5 | Advanced features (P2-007…010) |  |
-| Sprint 6 | UI/UX incl. mobile app and AI features (P3) |  |
+| Sprint 1 | Critical security & stability (P0-001…005) | In Progress — split one step: partially built, acceptance not fully met: Kimi: IMPLEMENTATION_ROADMAP.md:25-40 requires authentication, validation, SignalR and secure file operations; merged TOOLS fixes cover only part of Sprint 1.; GLM: The ten TOOLS-N fixes (#30-#39) merged 11-10 and shipped while the importer was still in use; completed work is not canceled by the later retirement. |
+| Sprint 2 | Core functionality (P1-001…006) | In Progress — split one step: partially built, acceptance not fully met: Kimi: Sprint 2 has xUnit suites, loading UI and import work, but IMPLEMENTATION_ROADMAP.md:44-63 still lacks full refactor/caching/performance acceptance.; GLM: Wiki retirement rule triggered by native bulk import (Apple#17/Desktop#25/Android#8); the sprint never started. |
+| Sprint 3 | Quality & docs (P1-007…010) | In Progress — split one step: partially built, acceptance not fully met: Kimi: SettingsViewModel.cs:181-367 persists settings and user docs exist, but Sprint 3 RBAC and audit logging remain unmet.; GLM: Wiki retirement rule triggered; never started. |
+| Sprint 4 | Enhanced features (P2-001…006) | In Progress — split one step: partially built, acceptance not fully met: Kimi: FileWatchServiceIntegrationTests and service APIs provide partial Sprint 4 work; WCAG, email, backup and full REST acceptance remain open.; GLM: Wiki retirement rule triggered; never started. |
+| Sprint 5 | Advanced features (P2-007…010) | In Progress — split one step: partially built, acceptance not fully met: Kimi: Splunk/logging and recent DB concurrency/index work are partial Sprint 5 progress; scheduling, full monitoring and export acceptance remain open.; GLM: Wiki retirement rule triggered; never started. |
+| Sprint 6 | UI/UX incl. mobile app and AI features (P3) | In Progress — split one step: partially built, acceptance not fully met: Kimi: ModernImportView.xaml:47-49 implements drag/drop and themed resources exist, but localization, mobile and AI stories remain open.; GLM: Wiki retirement rule triggered; native apps own the mobile side now. |
 
 ## Decisions and constraints
 
@@ -42,6 +42,15 @@ Platform-wide constraints that apply to every epic:
 - Tools [AlUmmahNowTools#19](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/19), [AlUmmahNowTools#21](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/21), [AlUmmahNowTools#23](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/23), [AlUmmahNowTools#27](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/27), [AlUmmahNowTools#30](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/30), [AlUmmahNowTools#31](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/31)
 - Importer work merged 2026-11-09 to 11-10, not tracked against the sprint list. Scalability-audit fixes: idempotent imports [AlUmmahNowTools#34](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/34), session-scoped lookups [AlUmmahNowTools#31](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/31), one upload routine for import and Resume [AlUmmahNowTools#33](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/33), unique storage keys [AlUmmahNowTools#30](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/30). Other changes: thumbnails keep the video's shape [AlUmmahNowTools#40](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/40), no hard-delete of platform content [AlUmmahNowTools#41](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/41), channel autocomplete [AlUmmahNowTools#42](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/42), owner's icon art [AlUmmahNowTools#45](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/45).
 
+### Reconciled 2026-11-21
+
+- **TOOLS-IMPORTER (HLB-931): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:394-401 retires the importer only after all 19.2 acceptance ships; current native batch upload lacks the listed manifests/approval/dedup/scheduling features.; GLM: The wiki page's explicit rule — native Epic 19.2 absorbs bulk import and retires the .NET importer — has triggered (Apple#17/Desktop#25/Android#8 merged); Sprint 1 shipped first, sprints 2-6 never start.
+- **TOOLS-IMPORTER / Critical security & stability (P0-001…005) (HLB-932): In Progress** — split one step: partially built, acceptance not fully met: Kimi: IMPLEMENTATION_ROADMAP.md:25-40 requires authentication, validation, SignalR and secure file operations; merged TOOLS fixes cover only part of Sprint 1.; GLM: The ten TOOLS-N fixes (#30-#39) merged 11-10 and shipped while the importer was still in use; completed work is not canceled by the later retirement.
+- **TOOLS-IMPORTER / Core functionality (P1-001…006) (HLB-933): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Sprint 2 has xUnit suites, loading UI and import work, but IMPLEMENTATION_ROADMAP.md:44-63 still lacks full refactor/caching/performance acceptance.; GLM: Wiki retirement rule triggered by native bulk import (Apple#17/Desktop#25/Android#8); the sprint never started.
+- **TOOLS-IMPORTER / Quality & docs (P1-007…010) (HLB-934): In Progress** — split one step: partially built, acceptance not fully met: Kimi: SettingsViewModel.cs:181-367 persists settings and user docs exist, but Sprint 3 RBAC and audit logging remain unmet.; GLM: Wiki retirement rule triggered; never started.
+- **TOOLS-IMPORTER / Enhanced features (P2-001…006) (HLB-935): In Progress** — split one step: partially built, acceptance not fully met: Kimi: FileWatchServiceIntegrationTests and service APIs provide partial Sprint 4 work; WCAG, email, backup and full REST acceptance remain open.; GLM: Wiki retirement rule triggered; never started.
+- **TOOLS-IMPORTER / Advanced features (P2-007…010) (HLB-936): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Splunk/logging and recent DB concurrency/index work are partial Sprint 5 progress; scheduling, full monitoring and export acceptance remain open.; GLM: Wiki retirement rule triggered; never started.
+- **TOOLS-IMPORTER / UI/UX incl. mobile app and AI features (P3) (HLB-937): In Progress** — split one step: partially built, acceptance not fully met: Kimi: ModernImportView.xaml:47-49 implements drag/drop and themed resources exist, but localization, mobile and AI stories remain open.; GLM: Wiki retirement rule triggered; native apps own the mobile side now.
 ## Open questions
 
 - None recorded in the sources.

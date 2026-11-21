@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUTH-R4` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **planned** |
-| **Last updated** | 2024-12-01 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > No evidence of SDKs or a developer portal. The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 
@@ -19,11 +19,11 @@ Auth roadmap epic `category/docs` (P1, Beta).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | OpenAPI | Issue #__ (never filed) |
-| – | SDKs (JS/TS, Python, Go) | Issue #__ (never filed) |
-| – | Integration guides | Issue #__ (never filed) |
-| – | Example apps | Issue #__ (never filed) |
-| – | Developer portal | Issue #__ (never filed) |
+| – | OpenAPI | In Progress — split one step: partially built, acceptance not fully met: Kimi: openapi.yaml documents core OAuth endpoints only and no interactive docs route exists; ROADMAP.md:67 requires a complete interactive specification.; GLM: AlUmmahNowAuth/openapi.yaml exists on main with the API reference from #48. |
+| – | SDKs (JS/TS, Python, Go) | In Progress — both audits agree: AlUmmahNowAuth#48 (merged): TypeScript SDK documentation; AlUmmahNowAuth issue #18 (open): frontend SDK/client package; @al-ummah-now/openauth (npm) |
+| – | Integration guides | Done — both cross-checks agree: CLIENT-INTEGRATION-GUIDE.md contains Next.js, React Router and Vue 3 sections plus runnable flow examples; #17 is closed.; Auth#17 (quickstart, API reference, migration guide) closed and #48 (API + SDK docs) merged. |
+| – | Example apps | Done — both cross-checks agree: openauth examples/client contains Next.js, React, SvelteKit and API demo apps with real auth flows; #54 maintains them.; openauth/examples/ ships quickstart, client, issuer and enterprise examples (#54 upgraded them). |
+| – | Developer portal | In Progress — both cross-checks agree: AlUmmahNowUI#110/#135 ship a general developer site, but ROADMAP.md:71 requires API testing, key management and usage analytics, which it lacks.; alummahnow.dev + the system-design section (UI#135) serve developers, but there is no auth-specific developer portal/console beyond the internal admin clients UI. |
 
 ## Decisions and constraints
 
@@ -39,6 +39,14 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AUTH-R4 / SDKs (JS/TS, Python, Go) (HLB-525): In Progress** — both audits agree: AlUmmahNowAuth#48 (merged): TypeScript SDK documentation; AlUmmahNowAuth issue #18 (open): frontend SDK/client package; @al-ummah-now/openauth (npm)
+- **AUTH-R4 (HLB-523): In Progress** — both cross-checks agree: OpenAPI/guides/examples exist, but the developer portal and multi-language SDK acceptance remain incomplete, so AUTH-R4 is underway.; Mixed finals: OpenAPI/guides/examples Done, SDKs and developer portal In Progress — epic not complete.
+- **AUTH-R4 / OpenAPI (HLB-524): In Progress** — split one step: partially built, acceptance not fully met: Kimi: openapi.yaml documents core OAuth endpoints only and no interactive docs route exists; ROADMAP.md:67 requires a complete interactive specification.; GLM: AlUmmahNowAuth/openapi.yaml exists on main with the API reference from #48.
+- **AUTH-R4 / Integration guides (HLB-526): Done** — both cross-checks agree: CLIENT-INTEGRATION-GUIDE.md contains Next.js, React Router and Vue 3 sections plus runnable flow examples; #17 is closed.; Auth#17 (quickstart, API reference, migration guide) closed and #48 (API + SDK docs) merged.
+- **AUTH-R4 / Example apps (HLB-527): Done** — both cross-checks agree: openauth examples/client contains Next.js, React, SvelteKit and API demo apps with real auth flows; #54 maintains them.; openauth/examples/ ships quickstart, client, issuer and enterprise examples (#54 upgraded them).
+- **AUTH-R4 / Developer portal (HLB-528): In Progress** — both cross-checks agree: AlUmmahNowUI#110/#135 ship a general developer site, but ROADMAP.md:71 requires API testing, key management and usage analytics, which it lacks.; alummahnow.dev + the system-design section (UI#135) serve developers, but there is no auth-specific developer portal/console beyond the internal admin clients UI.
 ## Open questions
 
 - None recorded in the sources.

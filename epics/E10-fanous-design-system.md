@@ -7,7 +7,7 @@
 | **ID** | `E10` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > 10.1 tokens done, and since 2026-11-09 extended with four themes and theme packages (see [Themes](AUN-THEMES-themes.md)); 10.2 done except the font choice (D6); 10.3/10.4/10.7 components not started; 10.5 needs a designer; 10.6 web favicons now use the owner's art, while store art and native app icons still need a designer.
 
@@ -25,9 +25,9 @@ One design language implemented natively per platform plus web.
 |---|---|---|
 | 10.1 | Tokens as one JSON source generating SwiftUI, Compose, WinUI 3, GTK 4, Tizen NUI, web CSS | Done (`packages/fanous-tokens`). Four themes in a registry (#455) and a CI gate on colours outside the tokens (#456). The web apps now compile theme packages (`packages/theme-packages`, #571); a test keeps them equal to the tokens. |
 | 10.2 | Typography licensing & pairing (D6), Eastern Arabic numerals | Done except the choice (D6). |
-| 10.3 | Component library | Not started (built per platform in Epics 12, 15, 16). |
+| 10.3 | Component library | In Progress — both cross-checks agree: Apple#3/Android#3 and web theme packages provide platform components, while #387 leaves the shared component/catalogue scope open.; #387 explicitly lists 10.3 as remaining, but per-platform components exist (Apple#3/Android#3 Fanous components, #571 web theme packages) — partial. |
 | 10.4 | 10-foot components | Tokens done, components not started. |
-| 10.5 | Iconography & illustration | Requirements doc; needs a designer. |
+| 10.5 | Iconography & illustration | In Progress — both cross-checks agree: Owner icon art and #335 shipped, but #364 still requires the vector lantern, full icon set and store art.; Iconography brief (#335) and the owner's app icons shipped everywhere; the vector set/store art wait on a designer (#364/#365 open). |
 | 10.6 | App icons, splash, store art | Web favicons for every app are the owner's art, cropped and downscaled with no edits (#729), as exact-size PNGs with no SVG in production (#845). Generator: `packages/app-icons`. Splash and store art still need a designer. |
 | 10.7 | Component catalogues | Not started. |
 
@@ -220,6 +220,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 Since that sweep (2026-11-12): the theme registry [AlUmmahNow#455](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/455), colour gate [AlUmmahNow#456](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/456), theme packages [AlUmmahNow#564](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/564), [AlUmmahNow#571](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/571), [AlUmmahNow#575](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/575), and app icons [AlUmmahNow#691](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/691), [AlUmmahNow#729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/729), [AlUmmahNow#845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/845) merged, with matching favicon PRs in [AlUmmahNowUI#49](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/49) and [AlUmmahNowCMS#86](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/86). Issues #364, #365 and #387 are still open.
 
+### Reconciled 2026-11-21
+
+- **E10 / Component library (HLB-653): In Progress** — both cross-checks agree: Apple#3/Android#3 and web theme packages provide platform components, while #387 leaves the shared component/catalogue scope open.; #387 explicitly lists 10.3 as remaining, but per-platform components exist (Apple#3/Android#3 Fanous components, #571 web theme packages) — partial.
+- **E10 / Iconography & illustration (HLB-655): In Progress** — both cross-checks agree: Owner icon art and #335 shipped, but #364 still requires the vector lantern, full icon set and store art.; Iconography brief (#335) and the owner's app icons shipped everywhere; the vector set/store art wait on a designer (#364/#365 open).
 ## Open questions
 
 - None recorded in the sources.

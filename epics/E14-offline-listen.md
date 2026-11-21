@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E14` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-10 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > Android Auto browse module exists (Android step 5); downloads wait on 9.6. D2 decided 2026-11-10 (R2 + Cloudflare CDN), so download URLs can be designed against R2.
 
@@ -27,7 +27,7 @@ Downloads and an audio-first listening mode.
 | 14.2 | Audio-only downloads |  |
 | 14.3 | Listen mode |  |
 | 14.4 | CarPlay & Android Auto |  |
-| 14.5 | Offline-first library sync |  |
+| 14.5 | Offline-first library sync | In Progress — both cross-checks agree: crates/aun-sync/src/lib.rs:1-12 implements offline-library history/notes/likes/downloads and queued sync; server gaps remain in Core#13.; The LWW sync engine (Core#19) and offline write queue (Core#3) exist, but no offline-first library UI or download store. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -54,6 +54,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#309](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/309) | PR | docs: native apps epics (9–24), embeds/discussions/tiers (25–27), AI moderation (28) — onto main | MERGED | 2026-11-08 |
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E14 (HLB-695): In Progress** — both cross-checks agree: Core aun-sync explicitly implements offline-library state, notes and queued writes; the story is partially built, so E14 is In Progress.; 14.5 finalizes In Progress on the aun-sync foundation; downloads/listen/CarPlay remain unbuilt.
+- **E14 / Offline-first library sync (HLB-700): In Progress** — both cross-checks agree: crates/aun-sync/src/lib.rs:1-12 implements offline-library history/notes/likes/downloads and queued sync; server gaps remain in Core#13.; The LWW sync engine (Core#19) and offline write queue (Core#3) exist, but no offline-first library UI or download store.
 ## Open questions
 
 - None recorded in the sources.

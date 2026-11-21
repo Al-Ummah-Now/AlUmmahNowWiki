@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-TIER-REQUESTS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (web `/upgrade`, api-videos, admin-api, admin-web, processor) |
-| **Status** | **in progress**: built in [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), held for the owner's screenshots |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner request 2026-11-14 |
 
 ## Goal
@@ -141,6 +141,9 @@ again.
 
 - [AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415): the whole feature, held for the owner's screenshots.
 
+### Reconciled 2026-11-21
+
+- **AUN-TIER-REQUESTS (HLB-456): Done** — both audits agree: AlUmmahNow#1415 (merged): /upgrade tier requests, Member tier and admin queue; AlUmmahNow#1415; apps/web/src/app/[locale]/upgrade
 ## Open questions
 
 - None. The owner decides later, in the tier editor, whether Member may create pages.

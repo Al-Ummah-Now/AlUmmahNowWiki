@@ -7,7 +7,7 @@
 | **ID** | `AUTH-R5` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2024-12-01 |
+| **Last updated** | 2026-11-21 |
 
 > Stage-then-promote release pipeline shipped (Auth #188 and #184–#187 phases). The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 
@@ -19,10 +19,10 @@ Auth roadmap epic `category/infra` (P1, Beta).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | Monitoring | Issue #__ (never filed) |
-| – | Release automation | Issue #__ (never filed) |
-| – | Testing infra | Issue #__ (never filed) |
-| – | Deployment optimisation | Issue #__ (never filed) |
+| – | Monitoring | In Progress — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:75 requires metrics and alerting as well as health checks; main has deep health/error reporting but no production metrics/alerting stack.; GLM: Auth#175 (/health, request IDs), #344/#439 (errors reach the admin Errors page with origin) plus deep-health and the status app. |
+| – | Release automation | In Progress — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:76 requires semantic versioning and changelog generation; release.yml automates stage/promote/rollback but no changelog generation.; GLM: Auth release.yml + rollback.yml exist; #189/#194/#202/#208 shipped stage -> E2E -> promote -> smoke -> auto-rollback. |
+| – | Testing infra | Done — both audits agree: AlUmmahNowAuth#73, #193, #303, #309 (merged): Playwright, code sink, locked test routes and per-run accounts; apps/auth/src/__tests__/ |
+| – | Deployment optimisation | Done — both cross-checks agree: Auth runs at the Cloudflare edge and #213/#256/#321/#333 add logging and discovery/JWKS caching plus deployment optimization.; Auth#306 (serialized deploys), #323 (local-stack bundle per release) and #321 (Cloudflare usage cuts) merged. |
 | – | Backup & DR | Issue #__ (never filed) |
 
 ## Decisions and constraints
@@ -39,6 +39,12 @@ Platform-wide constraints that apply to every epic:
 
 - None found on GitHub or in the repos.
 
+### Reconciled 2026-11-21
+
+- **AUTH-R5 / Testing infra (HLB-532): Done** — both audits agree: AlUmmahNowAuth#73, #193, #303, #309 (merged): Playwright, code sink, locked test routes and per-run accounts; apps/auth/src/__tests__/
+- **AUTH-R5 / Monitoring (HLB-530): In Progress** — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:75 requires metrics and alerting as well as health checks; main has deep health/error reporting but no production metrics/alerting stack.; GLM: Auth#175 (/health, request IDs), #344/#439 (errors reach the admin Errors page with origin) plus deep-health and the status app.
+- **AUTH-R5 / Release automation (HLB-531): In Progress** — split one step: partially built, acceptance not fully met: Kimi: ROADMAP.md:76 requires semantic versioning and changelog generation; release.yml automates stage/promote/rollback but no changelog generation.; GLM: Auth release.yml + rollback.yml exist; #189/#194/#202/#208 shipped stage -> E2E -> promote -> smoke -> auto-rollback.
+- **AUTH-R5 / Deployment optimisation (HLB-533): Done** — both cross-checks agree: Auth runs at the Cloudflare edge and #213/#256/#321/#333 add logging and discovery/JWKS caching plus deployment optimization.; Auth#306 (serialized deploys), #323 (local-stack bundle per release) and #321 (Cloudflare usage cuts) merged.
 ## Open questions
 
 - None recorded in the sources.

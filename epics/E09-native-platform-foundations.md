@@ -7,7 +7,7 @@
 | **ID** | `E09` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [openauth](../repos/openauth.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > 9.1, 9.2, 9.3, 9.4 (part), 9.5, 9.9 merged (9.5's admin editor and KV binding in #1410, 2026-11-14); 9.6, 9.7, 9.8 still in open PRs (#434, #433, #432) on 2026-11-12. Native Studio sign-in now works on Apple, Android and Desktop with the registered native clients.
 
@@ -27,11 +27,11 @@ Make the backend safe and complete for public native clients on every platform.
 | 9.2 | Device authorization grant (RFC 8628) + activate page; codes expire in 10 min | Merged in openauth#19, AlUmmahNowAuth#231. |
 | 9.3 | Versioned API `/api/v1`, OpenAPI contract, `/api/app-config` | Merged (#369, #416); follow-ups #409, #415. |
 | 9.4 | Push fan-out to APNs, FCM, WNS, web push; device registration; per-category prefs | 9.4a/9.4b merged (#421, #422). APNs/FCM/WNS senders merged (#1286) and wait for their credentials. Web Push sender and queued retries in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371), browser opt-in in [#1375](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1375), VAPID bindings in [#1376](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1376), which waits for the Secrets Store keys. |
-| 9.5 | Remote config & feature flags (KV) by platform, version, locale | Merged (#369, #416). The APP_CONFIG namespaces were never bound, so the apps got defaults; [AlUmmahNow#1410](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1410) binds them on production, stage and QA (#415) and adds the videos-admin editor (#413: rules per key, JSON preview, "Try it" on the drafts, conflict-safe audited saves). Held for owner screenshots. |
+| 9.5 | Remote config & feature flags (KV) by platform, version, locale | Done — both audits agree: AlUmmahNow#369, #416 (merged): remote config and app config; AlUmmahNow#1410 (merged): bind APP_CONFIG and add the audited editor; AlUmmahNow issues #413 and #415 (closed); AlUmmahNow#416; AlUmmahNow#1410; AlUmmahNow#415 |
 | 9.6 | Playback authorization: signed expiring playback/download URLs, device-bound entitlements | Open PR #434. Was blocked on D2; D2 decided 2026-11-10 (R2 + Cloudflare CDN), so the R2 adapter can now be written. |
 | 9.7 | In-app account deletion & data export (Apple 5.1.1(v), Play policy) | openauth#20, AlUmmahNowAuth#233 merged; monorepo PR #433 open; #437. |
 | 9.8 | Client telemetry ingest (consent-gated, QoE) | Open PRs #432/#433; Core PR #18 merged. |
-| 9.9 | Watch-state sync & Continue watching | Merged (#406); Core issue #13. |
+| 9.9 | Watch-state sync & Continue watching | In Progress — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#406 and Core#19 ship first-generation sync, but Core#13 still requires client stamps, tombstones/change feed and continue-watching support.; GLM: #406 shipped working watch-state + continue-watching endpoints; Core#13 asks for exactness refinements (client stamps, change feed) on top of a working slice. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -90,6 +90,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | openauth | [#19](https://github.com/Al-Ummah-Now/openauth/pull/19) | PR | feat: device authorization grant (RFC 8628) with a bilingual activation page | MERGED | 2026-11-08 |
 | openauth | [#20](https://github.com/Al-Ummah-Now/openauth/pull/20) | PR | feat: OIDC auth_time (and iat) on access tokens, kept across refreshes | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E09 / Remote config & feature flags (KV) by platform, version, locale (HLB-645): Done** — both audits agree: AlUmmahNow#369, #416 (merged): remote config and app config; AlUmmahNow#1410 (merged): bind APP_CONFIG and add the audited editor; AlUmmahNow issues #413 and #415 (closed); AlUmmahNow#416; AlUmmahNow#1410; AlUmmahNow#415
+- **E09 / Watch-state sync & Continue watching (HLB-649): In Progress** — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#406 and Core#19 ship first-generation sync, but Core#13 still requires client stamps, tombstones/change feed and continue-watching support.; GLM: #406 shipped working watch-state + continue-watching endpoints; Core#13 asks for exactness refinements (client stamps, change feed) on top of a working slice.
 ## Open questions
 
 - `apple-app-site-association` / `assetlinks.json` need the Apple team id and signing fingerprints (owner).

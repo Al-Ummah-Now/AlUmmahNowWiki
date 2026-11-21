@@ -7,7 +7,7 @@
 | **ID** | `E11` |
 | **Owning repos** | [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-21 |
 
 > aun-core 0.1.0 and 0.2.0 released 2026-11-08; pre-release `0.3.0-rc.1` on 2026-11-11 added `aun-search`, sign-out revocation, loopback sign-in and the upload resume fix. Studio on Apple, Android and Desktop pins `0.3.0-rc.1` for sign-in, uploads and search. The Apple and Android viewers still use temporary native bridges.
 
@@ -23,13 +23,13 @@ One implementation of logic that must behave identically everywhere, with thin b
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 11.1 | Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) |  |
-| 11.2 | API client from the api-videos OpenAPI |  |
+| 11.1 | Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) | Done — both audits agree: AlUmmahNowCore#2 (merged): workspace, UniFFI facade and binding smoke tests; AlUmmahNowCore#2 |
+| 11.2 | API client from the api-videos OpenAPI | Done — both audits agree: AlUmmahNowCore#3 (merged): OpenAPI-generated API client; AlUmmahNowCore#3 |
 | 11.3 | Auth module: PKCE, device flow, multi-account, secure storage | Used by Studio on every platform. Added since: `LoginPrompt` ([AlUmmahNowCore#22](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/22)), refresh-token revocation and loopback redirects ([AlUmmahNowCore#27](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/27)). |
-| 11.4 | i18n shared bundles, plurals, runtime locale |  |
-| 11.5 | Player behaviour spec + conformance tests |  |
+| 11.4 | i18n shared bundles, plurals, runtime locale | Done — both audits agree: AlUmmahNowCore#17 (merged): shared i18n catalogues, CLDR plurals, formatting and bidi; AlUmmahNowCore#17; AlUmmahNowCore#48 |
+| 11.5 | Player behaviour spec + conformance tests | Done — both audits agree: AlUmmahNowCore#5 (merged): player behaviour model and conformance suite; AlUmmahNowCore#5 |
 | 11.6 | Download & upload engines (`aun-upload`) | Studio uploads on every platform use it. Store locks ([AlUmmahNowCore#23](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/23)), resume through the proxy ([AlUmmahNowCore#29](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/29)). |
-| 11.7 | Analytics & consent |  |
+| 11.7 | Analytics & consent | Done — both audits agree: AlUmmahNowCore#18 (merged): consent-gated telemetry and QoE; AlUmmahNowCore#18 |
 | 11.8 | Realtime client |  |
 | 11.9 | Per-platform app layers | Studio adapters on all three platforms; viewers partly. |
 
@@ -64,6 +64,13 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNowCore | [#17](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/17) | PR | feat(aun-i18n): translation catalog, CLDR plurals, formatting, bidi, API sync | MERGED | 2026-11-08 |
 | AlUmmahNowCore | [#18](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/18) | PR | feat(aun-telemetry): consent-gated telemetry, QoE tracker, breadcrumbs, sinks | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E11 / Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) (HLB-659): Done** — both audits agree: AlUmmahNowCore#2 (merged): workspace, UniFFI facade and binding smoke tests; AlUmmahNowCore#2
+- **E11 / API client from the api-videos OpenAPI (HLB-660): Done** — both audits agree: AlUmmahNowCore#3 (merged): OpenAPI-generated API client; AlUmmahNowCore#3
+- **E11 / i18n shared bundles, plurals, runtime locale (HLB-662): Done** — both audits agree: AlUmmahNowCore#17 (merged): shared i18n catalogues, CLDR plurals, formatting and bidi; AlUmmahNowCore#17; AlUmmahNowCore#48
+- **E11 / Player behaviour spec + conformance tests (HLB-663): Done** — both audits agree: AlUmmahNowCore#5 (merged): player behaviour model and conformance suite; AlUmmahNowCore#5
+- **E11 / Analytics & consent (HLB-665): Done** — both audits agree: AlUmmahNowCore#18 (merged): consent-gated telemetry and QoE; AlUmmahNowCore#18
 ## Open questions
 
 - None recorded in the sources.

@@ -7,7 +7,7 @@
 | **ID** | `CMS-QUEUE` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) |
 | **Status** | **in progress**: draft preview, scheduled publishing, revisions, responsive images, Articles and search are live (CMS v2026.11.10.3 to v2026.11.10.5, UI v2026.11.10.2 to v2026.11.10.4). The About page managed in the CMS (CMS #130, UI #109) is merged, not yet in a production release. Continue watching (UI #115), videos in www search (UI #114), the newsletter (UI #117, AlUmmahNow #1384) and the scholar fallback, nav link and byline links (UI #113, CMS #137) are built, in review |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-21 |
 
 > Scheduled publishing (#41), revisions (#43), draft preview (CMS #38, UI #24), image variants (#42) shipped 2026-11-10. Post search shipped on www (CMS #60, UI #35), and the CMS gained a writer role for scholars (CMS #67). Continue watching, videos in www search, the newsletter and the scholar links are built and in review (package WWW-1). A general Content Editor role, embedded discussions on www (Epic 26) and retiring the old `al-ummah-now-ui` Worker are still queued.
 
@@ -19,7 +19,7 @@ Work deferred out of CMS/www v1.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| – | Content Editor auth role | Queued. A Scholar → `writer` role (own posts only) shipped in CMS #67; Moderator still maps to `editor`. |
+| – | Content Editor auth role | In Progress — both audits agree: AlUmmahNowCMS#67 (merged): Scholar/writer role for own posts; AlUmmahNowAuth#360 (merged): Writer role; AlUmmahNowAuth issue #212 (open): Content Editor role; AlUmmahNowCMS#67 |
 | – | Scheduled publishing (#7) | Shipped (#41) |
 | – | Revisions/history (#8) | Shipped (#43) |
 | – | Draft preview (#9) | Shipped |
@@ -27,7 +27,7 @@ Work deferred out of CMS/www v1.
 | – | Embedded discussions on www (Epic 26 consumer) | Queued ([AlUmmahNowUI#3](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/3)) |
 | – | Continue watching on www | Built, in review ([AlUmmahNowUI#115](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/115), closes #4): a row under the hero for signed-in viewers, filled in the browser from the videos API's continue-watching list so the home HTML stays edge-cacheable. www's sealed session cookie now holds the access and refresh tokens (refreshed server-side, revoked at sign-out). |
 | – | Search | Post search shipped: header autocomplete and a search page over live CMS posts (CMS #60, UI #35). Videos in www search: built, in review ([AlUmmahNowUI#114](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/114)): a Videos group in the search boxes and up to 6 videos on the search page from the videos API's search index, linking to the videos site's search for more. |
-| – | Newsletter | Built, in review ([AlUmmahNow#1384](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1384), [AlUmmahNowUI#117](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/117), closes #6). The videos admin API stores subscribers (double opt-in, only token hashes, per-IP rate limit, Turnstile where enforced) and sends through Resend via its contact mail queue (retry/backoff, DLQ, failures on the Errors page with Retry). Admins write issues in English and Arabic on the admin Newsletter page (`newsletter:manage`, audited) and erase subscribers. www has a footer form on every page and `/{l}/newsletter/`, plus confirm and unsubscribe pages (button POST; RFC 8058 one-click). $0 on Resend's free tier (3,000 emails a month). Off or unconfigured = invisible ([AlUmmahNowUI#123](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/123), [AlUmmahNow#1484](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1484)): www reads `GET /public/features` on the admin API (on only when Resend, the mail queue and the internal key are bound, and www has `ADMIN_API_URL` + `INTERNAL_API_KEY`). When off there is no footer section, `/newsletter` and `/newsletter/confirm` are 404, and unsubscribe still works without a Sign up link; the admin API answers subscribe/confirm with 404 `feature_off`. |
+| – | Newsletter | Done — both audits agree: AlUmmahNow#1384 (merged): double opt-in subscribers and admin Newsletter; AlUmmahNowUI#117 (merged): www signup, confirmation and unsubscribe; AlUmmahNow#1484 and AlUmmahNowUI#123 (merged): feature-off behaviour; AlUmmahNow#1384; AlUmmahNowUI#117 |
 | – | Scholar fallback, nav link and byline links (UI #41, #42) | Built, in review ([AlUmmahNowUI#113](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/113), [AlUmmahNowCMS#137](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/137)): scholar pages render from the KV snapshot when the CMS is down; Scholars / العلماء in the header menu (CMS) and in www's built-in nav; timeline bylines link to the scholar page with `rel=author`. |
 | – | Retire `al-ummah-now-ui` and `bknd` Workers | `al-ummah-now-ui` queued ([AlUmmahNowUI#5](https://github.com/Al-Ummah-Now/AlUmmahNowUI/issues/5)). `bknd` closed: no such Worker was ever deployed ([AlUmmahNowCMS#11](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/issues/11)). |
 | – | Contact us link on www | Shipped (UI #23) |
@@ -47,6 +47,10 @@ Platform-wide constraints that apply to every epic:
 - CMS [AlUmmahNowCMS#38](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/38), [AlUmmahNowCMS#41](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/41), [AlUmmahNowCMS#42](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/42), [AlUmmahNowCMS#43](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/43), [AlUmmahNowCMS#60](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/60), [AlUmmahNowCMS#67](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/67)
 - UI [AlUmmahNowUI#23](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/23), [AlUmmahNowUI#24](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/24), [AlUmmahNowUI#26](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/26), [AlUmmahNowUI#35](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/35)
 
+### Reconciled 2026-11-21
+
+- **CMS-QUEUE / Content Editor auth role (HLB-574): In Progress** — both audits agree: AlUmmahNowCMS#67 (merged): Scholar/writer role for own posts; AlUmmahNowAuth#360 (merged): Writer role; AlUmmahNowAuth issue #212 (open): Content Editor role; AlUmmahNowCMS#67
+- **CMS-QUEUE / Newsletter (HLB-582): Done** — both audits agree: AlUmmahNow#1384 (merged): double opt-in subscribers and admin Newsletter; AlUmmahNowUI#117 (merged): www signup, confirmation and unsubscribe; AlUmmahNow#1484 and AlUmmahNowUI#123 (merged): feature-off behaviour; AlUmmahNow#1384; AlUmmahNowUI#117
 ## Open questions
 
 - None recorded in the sources.

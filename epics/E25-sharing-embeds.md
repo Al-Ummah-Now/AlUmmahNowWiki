@@ -7,7 +7,7 @@
 | **ID** | `E25` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-07 |
+| **Last updated** | 2026-11-21 |
 
 > v1 shipped per `docs/embeds/PLAN.md` (embed routes, oEmbed, share dialog, postMessage API, embed analytics context); 25.1/25.2 extras, 25.5 npm wrapper, 25.6 creator controls, 25.7, 25.8 Studio views are queued (#255–#259).
 
@@ -25,7 +25,7 @@ Every video is shareable and embeddable with the Al Ummah Now player.
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 25.1 | Share sheet (web + apps) | Share dialog shipped in v1; short links, QR, chapter links → #259. |
-| 25.2 | Rich previews | OG/Twitter metadata in v1; JSON-LD → #259. |
+| 25.2 | Rich previews | Done — both audits agree: AlUmmahNow#264 (merged): Open Graph and Twitter player cards; AlUmmahNow#1178, #1201, #1320 (merged): JSON-LD and VideoObject enhancements; AlUmmahNow issue #259 records short links and JSON-LD as shipped; AlUmmahNow#1210; AlUmmahNow#1320; apps/web/src/app/[locale]/HomePageClient.tsx |
 | 25.3 | oEmbed provider | Shipped (`/oembed`). |
 | 25.4 | Embed player (iframe) | Shipped (facade by default). |
 | 25.5 | Player JavaScript API | postMessage API shipped; npm wrapper → #256. |
@@ -68,6 +68,9 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#263](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/263) | issue | Embed analytics: rank kept embed origins by count, harden origin attribution | OPEN | 2026-11-08 |
 | AlUmmahNow | [#264](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/264) | PR | feat(embeds): embed player, oEmbed, share dialog, social cards, embed analytics, read-only discussions widget | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E25 / Rich previews (HLB-776): Done** — both audits agree: AlUmmahNow#264 (merged): Open Graph and Twitter player cards; AlUmmahNow#1178, #1201, #1320 (merged): JSON-LD and VideoObject enhancements; AlUmmahNow issue #259 records short links and JSON-LD as shipped; AlUmmahNow#1210; AlUmmahNow#1320; apps/web/src/app/[locale]/HomePageClient.tsx
 ## Open questions
 
 - None recorded in the sources.

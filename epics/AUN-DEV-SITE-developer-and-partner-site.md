@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-DEV-SITE` |
 | **Owning repos** | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (new app `apps/dev`) |
-| **Status** | **in progress**: spec in this page; site in AlUmmahNowUI #110, held for the owner's screenshots. Its feature statuses come from the [feature registry](../features/README.md) at build time |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner request, 2026-11-14 (chat) |
 
 ## The owner's words
@@ -140,3 +140,9 @@ The brand is the Fanous lantern identity ([Theming](../guides/theming.md)), Fawa
 ## Not in scope
 
 Donations or payments, a blog or news feed on this site, analytics or cookies, a newsletter sign-up, investor documents (decks, financials). The owner can ask for any of these; none is implied by this spec.
+
+## Status evidence
+
+### Reconciled 2026-11-21
+
+- **AUN-DEV-SITE (HLB-445): Done** — both audits agree: AlUmmahNowUI#110 (merged 2026-11-15): alummahnow.dev project site; AlUmmahNowUI#110

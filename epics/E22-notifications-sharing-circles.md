@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E22` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 ## Goal
 
@@ -21,8 +21,8 @@ Push inbox, sharing with deep links, synchronised study circles, event calendar.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 22.1 | Push categories & inbox |  |
-| 22.2 | Share with deep links |  |
+| 22.1 | Push categories & inbox | In Progress — split one step: partially built, acceptance not fully met: Kimi: Backend push providers and the web inbox belong to 9.4/29.10; no native inbox, quiet hours or prayer-time windows exist for 22.1.; GLM: Push categories + senders + web notification center shipped (#421/#422/#1286/#1371, #168); native badge/settings open (Core#40). |
+| 22.2 | Share with deep links | In Progress — both cross-checks agree: Apple AppLink routing and web OG cards ship part of 22.2, but native share UI and full entity/timestamp links remain incomplete.; Short links with share buttons (#1192) and verified AASA/assetlinks (#411) shipped; native share-to-short-link fixes open (Apple#31/Android#20/Desktop#39). |
 | 22.3 | Study circles |  |
 | 22.4 | Event calendar |  |
 
@@ -48,6 +48,11 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#309](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/309) | PR | docs: native apps epics (9–24), embeds/discussions/tiers (25–27), AI moderation (28) — onto main | MERGED | 2026-11-08 |
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E22 (HLB-757): In Progress** — both cross-checks agree: Apple deep links and web rich previews provide a partial sharing slice, so E22 is underway even though native inbox/quiet hours are absent.; 22.1 and 22.2 finalize In Progress on shipped push/share infrastructure.
+- **E22 / Push categories & inbox (HLB-758): In Progress** — split one step: partially built, acceptance not fully met: Kimi: Backend push providers and the web inbox belong to 9.4/29.10; no native inbox, quiet hours or prayer-time windows exist for 22.1.; GLM: Push categories + senders + web notification center shipped (#421/#422/#1286/#1371, #168); native badge/settings open (Core#40).
+- **E22 / Share with deep links (HLB-759): In Progress** — both cross-checks agree: Apple AppLink routing and web OG cards ship part of 22.2, but native share UI and full entity/timestamp links remain incomplete.; Short links with share buttons (#1192) and verified AASA/assetlinks (#411) shipped; native share-to-short-link fixes open (Apple#31/Android#20/Desktop#39).
 ## Open questions
 
 - None recorded in the sources.

@@ -7,7 +7,7 @@
 | **ID** | `AUTH-ACCOUNT-HUB` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-21 |
 
 > Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Step A2's sign-in hardening landed through the SSO audit (state and PKCE, sessions in D1 with one refresh at a time, logout CSRF guard). Other steps (A3–C3, T1) not started.
 
@@ -24,17 +24,17 @@ Turn the profile app into a Google-account-style hub: home, devices, data, conne
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | A1 | `account.*` 301 redirect, client-name migration | Merged (#253) |
-| A2 | Sign-in hardening (state, PKCE, refresh, CSRF) | Merged (#276, #283, #286, #287, #302). Issues #251 and #252 are still open |
-| A3 | Hub UI rebuild on theme tokens |  |
-| A4 | AlUmmahNow #444 wording |  |
-| B1 | `/account/profile`, stored locale default |  |
+| A2 | Sign-in hardening (state, PKCE, refresh, CSRF) | Done — both audits agree: AlUmmahNowAuth#276, #283, #286, #287, #302 (merged): PKCE, refresh and SSO hardening; AlUmmahNowAuth issues #251 and #252 (closed); AlUmmahNowAuth#276; AlUmmahNowAuth#283; AlUmmahNowAuth#286; AlUmmahNowAuth#287 |
+| A3 | Hub UI rebuild on theme tokens | Done — both audits agree: AlUmmahNowAuth#257, #261, #279, #379 (merged): themed profile and shared header; apps/profile/src/page.ts; AlUmmahNowAuth#379 |
+| A4 | AlUmmahNow #444 wording | In Progress — both cross-checks agree: AlUmmahNow PR #444 is open with the profile/account header wording changes; the work has started but is not merged.; PR #444 implementing exactly this wording/headers change is open. |
+| B1 | `/account/profile`, stored locale default | In Progress — split one step: partially built, acceptance not fully met: Kimi: router.ts exposes /account/name, /account/export and DELETE /account but no GET/PATCH /account/profile, and metadata.locale is unused; B1 has not started.; GLM: The profile hub ships at /, but apps/profile/src/i18n.ts pickLocale explicitly uses only ?lang= — "neither a saved cookie nor Accept-Language is used". |
 | B3 | Recent activity |  |
 | B4 | Connected apps |  |
-| B4b | Launcher and privacy links from the client registry (chat: "profile app should link to all available apps", 2026-11-08) |  |
-| B5 | Hub pages, step-up |  |
+| B4b | Launcher and privacy links from the client registry (chat: "profile app should link to all available apps", 2026-11-08) | In Progress — both cross-checks agree: docs/account-hub/PLAN.md:102-106 requires migration 0017, privacy_url and /account/launcher; none exists on main and apps/profile/src/apps.ts remains.; apps/profile/src/launcher.ts+apps.ts ship the launcher, but no privacy link exists anywhere in apps/profile/src (verified) — the story names both. |
+| B5 | Hub pages, step-up | In Progress — both cross-checks agree: account-routes.ts has recent-sign-in step-up and the hub has passkeys, but PLAN.md:108-112 editable/activity/connected-apps pages are absent.; Hub pages exist (sign-in, passkeys, apps); staff step-up is tracked open in Auth#361. |
 | B6 | AlUmmahNow privacy link |  |
 | C1 | Account events (signed SETs) |  |
-| C2 | Deletion in the hub |  |
+| C2 | Deletion in the hub | In Progress — both cross-checks agree: DELETE /account exists, but PLAN.md:120-124 requires a confirmation UI and account.deleted event; neither is on main.; DELETE /account + cleanup merged (#233 etc.), but no deletion UI exists in apps/profile (verified) — API-only. |
 | C3 | Videos receiver erases on `account.deleted` |  |
 | T1 | Drop theme-demo redirect URIs |  |
 
@@ -55,6 +55,15 @@ Platform-wide constraints that apply to every epic:
 - Auth [AlUmmahNowAuth#250](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/250), [AlUmmahNowAuth#253](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/253)
 - A2: [AlUmmahNowAuth#276](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/276), [AlUmmahNowAuth#283](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/283), [AlUmmahNowAuth#286](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/286), [AlUmmahNowAuth#287](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/287), [AlUmmahNowAuth#302](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/302)
 
+### Reconciled 2026-11-21
+
+- **AUTH-ACCOUNT-HUB / Sign-in hardening (state, PKCE, refresh, CSRF) (HLB-463): Done** — both audits agree: AlUmmahNowAuth#276, #283, #286, #287, #302 (merged): PKCE, refresh and SSO hardening; AlUmmahNowAuth issues #251 and #252 (closed); AlUmmahNowAuth#276; AlUmmahNowAuth#283; AlUmmahNowAuth#286; AlUmmahNowAuth#287
+- **AUTH-ACCOUNT-HUB / Hub UI rebuild on theme tokens (HLB-464): Done** — both audits agree: AlUmmahNowAuth#257, #261, #279, #379 (merged): themed profile and shared header; apps/profile/src/page.ts; AlUmmahNowAuth#379
+- **AUTH-ACCOUNT-HUB / Launcher and privacy links from the client registry (chat: "profile app should link to all available apps", 2026-11-08) (HLB-469): In Progress** — both cross-checks agree: docs/account-hub/PLAN.md:102-106 requires migration 0017, privacy_url and /account/launcher; none exists on main and apps/profile/src/apps.ts remains.; apps/profile/src/launcher.ts+apps.ts ship the launcher, but no privacy link exists anywhere in apps/profile/src (verified) — the story names both.
+- **AUTH-ACCOUNT-HUB / /account/profile, stored locale default (HLB-466): In Progress** — split one step: partially built, acceptance not fully met: Kimi: router.ts exposes /account/name, /account/export and DELETE /account but no GET/PATCH /account/profile, and metadata.locale is unused; B1 has not started.; GLM: The profile hub ships at /, but apps/profile/src/i18n.ts pickLocale explicitly uses only ?lang= — "neither a saved cookie nor Accept-Language is used".
+- **AUTH-ACCOUNT-HUB / Hub pages, step-up (HLB-470): In Progress** — both cross-checks agree: account-routes.ts has recent-sign-in step-up and the hub has passkeys, but PLAN.md:108-112 editable/activity/connected-apps pages are absent.; Hub pages exist (sign-in, passkeys, apps); staff step-up is tracked open in Auth#361.
+- **AUTH-ACCOUNT-HUB / Deletion in the hub (HLB-473): In Progress** — both cross-checks agree: DELETE /account exists, but PLAN.md:120-124 requires a confirmation UI and account.deleted event; neither is on main.; DELETE /account + cleanup merged (#233 etc.), but no deletion UI exists in apps/profile (verified) — API-only.
+- **AUTH-ACCOUNT-HUB / AlUmmahNow #444 wording (HLB-465): In Progress** — both cross-checks agree: AlUmmahNow PR #444 is open with the profile/account header wording changes; the work has started but is not merged.; PR #444 implementing exactly this wording/headers change is open.
 ## Open questions
 
 - Does the owner still want phases A2–C3, given the chat decision below?

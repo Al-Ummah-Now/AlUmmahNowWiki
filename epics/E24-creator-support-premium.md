@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E24` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) |
-| **Status** | **deferred** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > D4 (owner, 2026-11-08): no monetisation at launch.
 
@@ -25,7 +25,7 @@ Donations to creators, viewer Premium and ethical sponsorship, later.
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | 24.1 | Creator support (sadaqah/donations) |  |
-| 24.2 | Premium membership (IAP + web checkout) |  |
+| 24.2 | Premium membership (IAP + web checkout) | In Progress — both audits agree: AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419 |
 | 24.3 | Ethical sponsorship slots |  |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
@@ -51,6 +51,10 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 |---|---|---|---|---|---|
 | AlUmmahNow | [#309](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/309) | PR | docs: native apps epics (9–24), embeds/discussions/tiers (25–27), AI moderation (28) — onto main | MERGED | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E24 (HLB-770): In Progress** — both audits agree: E24 / Premium membership (IAP + web checkout): Backlog → In Progress; AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
+- **E24 / Premium membership (IAP + web checkout) (HLB-772): In Progress** — both audits agree: AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
 ## Open questions
 
 - None recorded in the sources.

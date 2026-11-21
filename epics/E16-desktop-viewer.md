@@ -7,7 +7,7 @@
 | **ID** | `E16` |
 | **Owning repos** | [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-21 |
 
 > Windows (WinUI 3) and Linux (GTK 4) viewer projects proven in CI; macOS viewer target in Apple.
 
@@ -23,9 +23,9 @@ Native desktop viewers: macOS (Swift), Windows (WinUI 3), Linux (GTK 4).
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 16.1 | Native desktop shells |  |
-| 16.2 | Distribution (Mac App Store, MSIX/winget, Flathub) |  |
-| 16.3 | Mini-player, media keys, notifications |  |
+| 16.1 | Native desktop shells | Done — both audits agree: AlUmmahNowApple#11 (merged): macOS viewer shell; AlUmmahNowDesktop#6 and #10 (merged): GTK 4 and WinUI 3 viewer shells; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10; AlUmmahNowApple#11 |
+| 16.2 | Distribution (Mac App Store, MSIX/winget, Flathub) | In Progress — both audits agree: AlUmmahNowApple#19, #38 (merged): notarized Mac downloads and store release infrastructure; AlUmmahNowDesktop#6, #27, #44 (merged): Flatpak, MSI/deb and Microsoft Store infrastructure; AlUmmahNowDesktop issue #15 (open): Flathub source build and signing inputs; AlUmmahNowDesktop#27; AlUmmahNowDesktop#44; AlUmmahNowApple#19 |
+| 16.3 | Mini-player, media keys, notifications | In Progress — both audits agree: AlUmmahNowDesktop#6 (merged): Linux MPRIS; AlUmmahNowDesktop#10 (merged): Windows SMTC; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10 |
 | 16.4 | Downloads & Listen mode on desktop |  |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
@@ -52,6 +52,11 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 | AlUmmahNow | [#309](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/309) | PR | docs: native apps epics (9–24), embeds/discussions/tiers (25–27), AI moderation (28) — onto main | MERGED | 2026-11-08 |
 | AlUmmahNowApple | [#9](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/9) | issue | Viewer stories after the first slice (Epics 12-17, 20-22) | OPEN | 2026-11-08 |
 
+### Reconciled 2026-11-21
+
+- **E16 / Native desktop shells (HLB-712): Done** — both audits agree: AlUmmahNowApple#11 (merged): macOS viewer shell; AlUmmahNowDesktop#6 and #10 (merged): GTK 4 and WinUI 3 viewer shells; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10; AlUmmahNowApple#11
+- **E16 / Distribution (Mac App Store, MSIX/winget, Flathub) (HLB-713): In Progress** — both audits agree: AlUmmahNowApple#19, #38 (merged): notarized Mac downloads and store release infrastructure; AlUmmahNowDesktop#6, #27, #44 (merged): Flatpak, MSI/deb and Microsoft Store infrastructure; AlUmmahNowDesktop issue #15 (open): Flathub source build and signing inputs; AlUmmahNowDesktop#27; AlUmmahNowDesktop#44; AlUmmahNowApple#19
+- **E16 / Mini-player, media keys, notifications (HLB-714): In Progress** — both audits agree: AlUmmahNowDesktop#6 (merged): Linux MPRIS; AlUmmahNowDesktop#10 (merged): Windows SMTC; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10
 ## Open questions
 
 - None recorded in the sources.

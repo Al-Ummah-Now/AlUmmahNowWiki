@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `TOOLS-PLANS` |
 | **Owning repos** | [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
-| **Status** | **planned** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **planned** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > Consolidation looks done in code (no FileScanApi; SignalR client exists) though the plan says "Proposed"; the 7-week testing plan is all unticked; the encoding and Bunny roadmaps have no status.
 
@@ -20,7 +20,7 @@ Smaller Tools plans.
 | Story | What | Status / acceptance notes |
 |---|---|---|
 | Consolidation P1–P5 | Merge FileScanApi into the Windows service with SignalR | Looks done (observation) |
-| Testing Wk 1–7 | ViewModel tests, E2E (WinAppDriver), CI | Not started |
+| Testing Wk 1–7 | ViewModel tests, E2E (WinAppDriver), CI | In Progress — both cross-checks agree: ViewModel xUnit tests and CI exist, but WinAppDriver/E2E acceptance is not implemented.; xUnit suites + the 60%-coverage item (#3/#11) shipped; WinAppDriver E2E never started — partial. |
 | Encoding P1–P4 | FFMpegCore metadata, thumbnails, throttled upload, transcoding | FFMpegCore added (Tools #21) |
 | Bunny P1–P4 | Retry, refactor, resumable uploads, cost monitoring | Retry/rate limiting merged (Tools #19, #24); 429/5xx retry with jittered backoff and `Retry-After` ([AlUmmahNowTools#39](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/39), 2026-11-10) |
 
@@ -38,6 +38,10 @@ Platform-wide constraints that apply to every epic:
 
 - FileScan service concurrency fixes from the monorepo's [scalability audit](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/architecture/SCALABILITY-AUDIT.md) (TOOLS-5 to TOOLS-9): [AlUmmahNowTools#32](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/32), [AlUmmahNowTools#35](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/35), [AlUmmahNowTools#36](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/36), [AlUmmahNowTools#37](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/37), [AlUmmahNowTools#38](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/38) (merged 2026-11-10). They harden the consolidated service; the plan documents themselves are unchanged.
 
+### Reconciled 2026-11-21
+
+- **TOOLS-PLANS (HLB-938): In Progress** — both audits agree: TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI: Backlog → In Progress; AlUmmahNowTools#3 (merged): xUnit testing framework; AlUmmahNowTools issue #11 (closed): test-coverage work; AlUmmahNowTools#21; AlUmmahNowTools#39
+- **TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI (HLB-940): In Progress** — both cross-checks agree: ViewModel xUnit tests and CI exist, but WinAppDriver/E2E acceptance is not implemented.; xUnit suites + the 60%-coverage item (#3/#11) shipped; WinAppDriver E2E never started — partial.
 ## Open questions
 
 - None recorded in the sources.
