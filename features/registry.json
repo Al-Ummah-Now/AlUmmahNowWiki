@@ -2150,18 +2150,22 @@
         "en": "Fast channel playlists and live lists at any depth",
         "ar": "قوائم تشغيل القناة والبث المباشر سريعة مهما طال التصفح"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "api",
         "videos",
         "videos-admin"
       ],
       "wiki": "epics/AUN-SCALABILITY-scalability-audit.md#index-backed-lists-and-per-object-repair",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.21.7"
+      },
       "prs": [
         "AlUmmahNow#683",
         "AlUmmahNow#685"
       ],
-      "note": "The channel Playlists tab, the Home playlist and live shelves, GET /api/playlists?channelId= and the live list read the search index with keyset cursors: each page is one index seek however deep the scroll (#685, open). Failed index writes are repaired per object by a queued admin job (backoff, then the Errors page with Retry) and the full reconcile runs weekly (#683, merged 2026-11-21). The home feed and trending belong to discovery ranking."
+      "note": "The channel Playlists tab, the Home playlist and live shelves, GET /api/playlists?channelId= and the live list read the search index with keyset cursors: each page is one index seek however deep the scroll. Failed index writes are repaired per object by a queued admin job (backoff, then the Errors page with Retry) and the full reconcile runs weekly. The home feed and trending belong to discovery ranking."
     }
   ]
 }
