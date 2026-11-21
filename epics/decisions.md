@@ -82,7 +82,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
 | [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) | Requests off and no payment provider: /upgrade is an off feature (404 feature_off, no entry points; the tier still shows in Settings) | **decided** | 2026-11-19 | [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
-| [O38](decisions.md#o38-arabic-numbers-are-never-grouped) | Arabic numbers are never grouped: «٫» is the only mark («٤٨٨٧», «١٢٣٤٫٥»); replaces O35's «٬» | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
+| [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) | Numbers: Arabic never grouped («٤٨٨٧»); counts compact from 1,000, cut not rounded («٤٫٨ ألف», «١٫٢ م»); replaces O35's «٬» and the «مليون» forms | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -867,19 +867,36 @@ The Upgrade page has three modes (shared-types `UPGRADE_MODES`): **pay** (a paym
 **Sources:** owner decision in the SUBS review thread, 2026-11-19; AlUmmahNow [#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418)
 
 
-### O38: Arabic numbers are never grouped
+### O38: Numbers: never grouped in Arabic, counts compact from 1,000
 
-**Status:** decided · **Date:** 2026-11-21 · **Replaces:** the thousands mark «٬» that [O35](#o35-arabic-uses-eastern-arabic-hindi-numerals) used (2026-11-15)
+**Status:** decided · **Date:** 2026-11-21 · **Replaces:** the thousands mark «٬» that [O35](#o35-arabic-uses-eastern-arabic-hindi-numerals) used (2026-11-15), and the million word forms «مليون / مليونا / ملايين» of the 2026-11-20 compact rule
 
-Arabic numbers carry no thousands mark: «٤٨٨٧», «١٢٣٤٫٥», «٥٦١٩٩», watch time «٥٠٦٢٫٦ س». The decimal mark «٫» is the only mark inside an Arabic number. No «٬» (U+066C), and no space grouping either (a narrow no-break space was tried on AlUmmahNow#1665 and dropped). English keeps its grouping: "4,887", "1,234.5". Large counts are shown compact anyway («١٫٢ مليون»).
+One rule for every platform (web, admin, emails, Android, Apple, Desktop, Tools):
 
-**Why:** «٬» and «٫» are drawn in the same comma shape by most Arabic UI fonts (IBM Plex Sans Arabic, Noto Kufi Arabic, Amiri), so «١٥٬٤١٩٫٩» read as 15,419,9.
+1. **Arabic numbers are never grouped.** «٫» is the only mark inside an Arabic number: «٤٨٨٧», «١٢٣٤٫٥», «٥٠٦٢٫٦ س». No «٬» (U+066C) and no space between digits (a narrow no-break space was tried on AlUmmahNow#1665 and dropped). English keeps its grouping: "4,887". **Why:** «٬» and «٫» are drawn in the same comma shape by most Arabic UI fonts (IBM Plex Sans Arabic, Noto Kufi Arabic, Amiri), so «١٥٬٤١٩٫٩» read as 15,419,9.
+2. **Counts are compact from 1,000 on:** view counts, subscriber counts, stat tiles, chart ticks and cards. Cut to one decimal, never rounded up: 4,887 → "4.8K" / «٤٫٨ ألف»; 1,299 → "1.2K" / «١٫٢ ألف». Under 1,000 stays full: "887" / «٨٨٧».
+3. **Arabic scale words.** Thousands and billions agree with the number shown: exactly 1 is the word alone («ألف مشاهدة», «مليار»), exactly 2 the dual alone («ألفان», «ألفا مشاهدة» before a noun; «ملياران», «مليارا»), whole 3–10 the plural («٣ آلاف مشاهدة», «٣ مليارات»), 11+ and every decimal the singular («١١ ألف», «١٫٣ ألف مشاهدة»). **Millions are always the digit and «م»:** «١ م», «٢ م», «١٫٢ م مشاهدة», «١٥ م». The noun after a scale word is singular. English: "1K", "1.2K", "1M", "1.2M views", "2B".
+4. **Exact values stay exact** (ungrouped in Arabic): analytics table cells where the exact figure is the point (Top content, traffic sources, a chart's data table and hover readout), admin list columns, watch-time hours («٥٠٦٢٫٦ س»), money («١٢٣٤٫٥٠ دولار أمريكي»), file sizes, small notices ("{count} selected") and screen-reader labels.
 
-**How:** each repo's one formatter turns grouping off for Arabic whatever the caller asks (AlUmmahNow: `numberFormat` in `@al-ummah/shared-types` locale-format, plus the push service worker's copy). Typed numbers still accept «٬» or a space and drop it.
+| Value | English | Arabic |
+|---|---|---|
+| 887 views | 887 views | ٨٨٧ مشاهدة |
+| 1,000 views | 1K views | ألف مشاهدة |
+| 2,000 views | 2K views | ألفا مشاهدة |
+| 3,000 views | 3K views | ٣ آلاف مشاهدة |
+| 4,887 (tile) | 4.8K | ٤٫٨ ألف |
+| 1,000,000 | 1M | ١ م |
+| 1,250,000 views | 1.2M views | ١٫٢ م مشاهدة |
+| 3,000,000,000 | 3B | ٣ مليارات |
+| 4,887 (table cell) | 4,887 | ٤٨٨٧ |
+| 5,062.6 hours | 5,062.6 hr | ٥٠٦٢٫٦ س |
 
-**Blocks / affects:** every app and email, native apps ([AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), commit 7d5b0fe, follows it); [Numbers and dates](../guides/numbers-and-dates.md)
+**How:** each repo has one formatter. AlUmmahNow: `numberFormat` in `@al-ummah/shared-types` locale-format sets `useGrouping: false` for Arabic whatever the caller asks (and the push service worker's copy); `formatCompact` builds the Arabic scale words; tiles call `formatCompact` (admin `formatStat`), table cells `formatNumber`. Desktop: `Localizer.Stat` / `Compact` / `Views` (e684263). Typed numbers still accept «٬» or a space and drop it.
 
-**Sources:** owner decision relayed by MOBILE-DESIGN, 2026-11-21; [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)
+**Blocks / affects:** every app and email, native apps ([AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), commit 7d5b0fe); [Numbers and dates](../guides/numbers-and-dates.md)
+
+**Sources:** owner decisions relayed by MOBILE-DESIGN, 2026-11-21; [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)
+
 ### LIC: Repo licence for Core and the app repos
 
 **Status:** open · **Date:** 2026-11-08

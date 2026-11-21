@@ -2,13 +2,15 @@
 
 # Numbers and dates
 
-Owner decisions [O35](../epics/decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) (2026-11-15) and [O38](../epics/decisions.md#o38-arabic-numbers-are-never-grouped) (2026-11-21). Words used here: **Arabic numerals** are 0–9; **Eastern Arabic (Hindi) numerals** are ٠–٩. Never call 0–9 "Latin".
+Owner decisions [O35](../epics/decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) (2026-11-15) and [O38](../epics/decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) (2026-11-21). Words used here: **Arabic numerals** are 0–9; **Eastern Arabic (Hindi) numerals** are ٠–٩. Never call 0–9 "Latin".
 
 ## The rule
 
 - Arabic pages and emails show ٠–٩ for every number people read: counts, dates, times, durations, percentages and money. English shows 0–9.
 - The numbering system is always explicit. Plain `ar` gives 0–9 in Node and Chromium but ٠–٩ in WebKit, so a page rendered on the server and hydrated in Safari disagreed (React #418, AlUmmahNow#1473). Arabic always formats as `ar-u-nu-arab`; English as `en-u-nu-latn`.
-- **Arabic numbers are never grouped** ([O38](../epics/decisions.md#o38-arabic-numbers-are-never-grouped), replacing «٬»): «٤٨٨٧», «١٢٣٤٫٥», «٥٠٦٢٫٦ س». «٫» is the only mark inside an Arabic number; no «٬» and no space between digits. «٬» and «٫» look alike in most Arabic UI fonts, so «١٥٬٤١٩٫٩» read as 15,419,9. English keeps "4,887". The formatter turns grouping off for Arabic whatever the caller passes.
+- **Arabic numbers are never grouped** ([O38](../epics/decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000), replacing «٬»): «٤٨٨٧», «١٢٣٤٫٥», «٥٠٦٢٫٦ س». «٫» is the only mark inside an Arabic number; no «٬» and no space between digits. «٬» and «٫» look alike in most Arabic UI fonts, so «١٥٬٤١٩٫٩» read as 15,419,9. English keeps "4,887". The formatter turns grouping off for Arabic whatever the caller passes.
+- **Counts are compact from 1,000 on** (view and subscriber counts, stat tiles, chart ticks, cards), cut to one decimal and never rounded up: "4.8K" / «٤٫٨ ألف». Under 1,000 stays full. Arabic thousands and billions agree with the number shown («ألف مشاهدة», «ألفا مشاهدة», «٣ آلاف مشاهدة», «١٫٣ ألف مشاهدة»; «مليار / ملياران / ٣ مليارات»); millions are always «{n} م» («١ م», «١٫٢ م مشاهدة»). English: "1.2M views".
+- **Exact stays exact** (ungrouped in Arabic): analytics table cells, admin list columns, watch-time hours, money, file sizes, small notices and screen-reader labels. Full table with examples: [O38](../epics/decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000).
 - **Money in Arabic** uses the currency's Arabic name: «١٢٫٦٩ دولار أمريكي» (`currencyDisplay: 'name'`). Never «US$» or «$US» inside Arabic text. English stays `$12.69`.
 - **No hard-coded digits in messages**, in either language. A number in a message is a placeholder the formatter fills: a named one (`{days}`), or one written in the message itself: `{#30}` → «٣٠» / "30", `{#50%}` → «٥٠٪» / "50%", `{$0.011}` → money. In Arabic, `%` after a placeholder is written `٪`.
 - **Left as written:** code, ids, URLs, slugs, versions (1.4.0), file names, header names, product names (R2, D1, SHA-256), JSON and config examples, status and exit codes, and machine data (JSON-LD, API fields).
