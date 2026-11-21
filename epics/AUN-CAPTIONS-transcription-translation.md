@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-CAPTIONS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (later AlUmmahNowCMS for the shared provider layer, and the native Studio apps) |
-| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. On-device desktop transcription (D10) is in review in [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) and [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Translation is in review in [AlUmmahNow#1398](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1398): Studio's Translate on a caption draft (queued per language, counted in caption minutes), Quran in the channel's Quran Foundation edition, the inline en/ar Translate button, and labelled viewer titles (an admin setting, on by default, waiting for the owner, P4). Transcript search is in review in [AlUmmahNow#1401](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1401) |
-| **Last updated** | 2026-11-14 |
+| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. On-device desktop transcription (D10) is in review in [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) and [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Translation is in review in [AlUmmahNow#1398](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1398): Studio's Translate on a caption draft (queued per language, counted in caption minutes), Quran in the channel's Quran Foundation edition, the inline en/ar Translate button, and labelled viewer titles (an admin setting, on by default, waiting for the owner, P4). Transcript search is in review in [AlUmmahNow#1401](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1401). **QF terms (2026-11-21):** audit and backend fixes in [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716); attribution in every Quran cue and in Studio in [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), held for the owner's screenshots (see below) |
+| **Last updated** | 2026-11-21 |
 
 > v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
 
@@ -100,8 +100,41 @@ Follow-ups found: [#813](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/813) 
   - `GET /api/v1/quran/passage` answers 404 `feature_off`, with one warning log per isolate. It is not a server error and never reaches the Errors page.
   - Studio's Quran span card shows only the reference and the quran.com link: no text, no "unavailable" note, and no Different reference.
 
+## QF terms (2026-11-21)
+
+Quran Foundation answered our permission email (O13) on 2026-11-21. These terms bind every app that touches Quran text, including the native apps, Tools and search:
+
+> - No caption files that keep Quran text and translation permanently with each video; no exception or partnership.
+> - Outside Content Sync, QF content may NOT be stored for more than 1 week. Compliant: store only verse keys + our own timestamps in captions; load text + translation at play time from the Content API, or from a Content Sync copy synced at least every 7 days.
+> - Content Sync covers quran_core (Uthmani text, word-level data), translations, word-by-word translations, transliterations, tafsirs, recitations, chapter_recitations (word timing segments), articles.
+> - No fixed rate limits; on HTTP 429 back off and honour Retry-After.
+> - New backend apps with Client Credentials get granular scopes (content.quran.read, content.translations.read) instead of `content`. Frontend apps get no Content scope and must call Content through our backend.
+> - Attribution wherever the text appears: "Quran data provided by Quran Foundation (https://quran.foundation/)" plus the translation edition by name.
+
+Refs: [Content Sync, offline content](https://api-docs.quran.foundation/docs/tutorials/content-sync/getting-started#content-available-for-offline-sync) · [Quickstart](https://api-docs.quran.foundation/docs/quickstart/) · [FAQ: rate limits](https://api-docs.quran.foundation/docs/tutorials/faq#are-there-rate-limits) · [Connected apps: attribution](https://api-docs.quran.foundation/docs/connected-apps#content-and-attribution-requirements)
+
+**Where we stand** (full audit table in spec §9.5):
+- **Already compliant:**
+  - Caption drafts, published tracks, transcript search, the review pipeline, transcript translation, inline translation and on-device captions store verse keys and our own timestamps only.
+  - The Content Sync copy syncs daily and is deleted at 7 days.
+  - The native apps make no direct QF calls, hold no credentials, keep no offline copies and bundle no Quran text.
+  - No stored data violated the terms, so no cleanup job was needed.
+- **Fixed in [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716):**
+  - 429 honoured everywhere we call QF (`Retry-After` in seconds or as an HTTP date, bounded backoff with jitter).
+  - api-videos requests only `content.quran.read content.translations.read`; the processor requests `content.sync.read`. Both clients already hold these scopes, so nothing changes for the owner.
+  - A copy not synced for over 3 days flags the admin (`quran-stale`, **Sync now**).
+- **[AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722)**, held for the owner's screenshots:
+  - Every served cue with Quran text or a translation ends with QF's attribution line (en, or ar right to left). A translated cue also names its edition.
+  - Because the line is part of the cue, the web player, the native apps and embeds all show it without app releases.
+  - Studio's span card uses the same wording.
+- **Rules for other work:**
+  - TOOLS-ADMIN: local transcription, transcript translations and SEO keywords.
+  - DISCOVERY: the search index.
+  - Store and send references only, never QF text. Quran spans are never machine-translated, never indexed as text, and never used as SEO keywords or descriptions.
+  - Any QF text shown comes from our API, with the attribution line. No QF credentials in any app.
+
 ## Decisions and constraints
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
 - [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
-- The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: QF permission email sent 2026-11-11, awaiting reply**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
+- The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: answered by QF 2026-11-21, see [QF terms](#qf-terms-2026-11-21)**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
