@@ -6,10 +6,10 @@
 |---|---|
 | **ID** | `TOOLS-IMPORTER` |
 | **Owning repos** | [AlUmmahNowTools](../repos/AlUmmahNowTools.md) |
-| **Status** | **deferred** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **superseded** by [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (2026-11-21) |
+| **Last updated** | 2026-11-21 |
 
-> No status in the roadmap. `FEATURE_MATRIX.md` says "Overall Health 21%"; `IMPLEMENTATION_COMPLETE.md` says the watch/approval UI is "100% Complete". Native Epic 19.2 absorbs bulk import and retires the .NET importer once it ships.
+> **Superseded.** The owner set the direction on 2026-11-21: AlUmmahNowTools is the admin import app, signed in through Auth and working through admin-api, specified in [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md). Studio does not absorb it and it is not retired. The six-sprint roadmap below is kept as history; its open items are either in TOOLS-ADMIN's stories or dropped (the mobile app and Azure AI items were never asked for).
 
 ## Goal
 
@@ -51,7 +51,7 @@ Platform-wide constraints that apply to every epic:
 - The roadmap budgets **$5,000–10,000/month** for infrastructure, which contradicts the ≤ $500/month whole-platform cap.
 - P3-005 (mobile app) overlaps the native-apps epics; P3-006 suggests Azure AI.
 - `FEATURE_MATRIX` (21% health) and `IMPLEMENTATION_COMPLETE` (100%) disagree and aren't dated against each other.
-- Status here is *deferred* because `EPICS.md` Epic 19 retires this importer once 19.2 ships. The Tools repo itself doesn't say so.
+- `EPICS.md` Epic 19 planned to retire this importer once 19.2 shipped. Withdrawn by the owner on 2026-11-21 ([TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md)).
 
 ## Sources
 

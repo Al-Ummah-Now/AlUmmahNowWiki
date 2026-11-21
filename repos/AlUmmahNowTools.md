@@ -6,9 +6,9 @@
 
 ## Purpose
 
-.NET tools for managing video content in bulk: scanning files, importing them, and uploading to Bunny.net and Cloudflare R2. It has a command-line client, a cross-platform GUI and a background scanning service.
+**Al Ummah Now Tools**, the staff app for bulk import (Windows, macOS, Linux). Admins sign in through Auth and the app works only through the videos admin API: create channels, bulk-import videos into any channel without creator-tier limits, attach sidecar captions, chapters, thumbnails and metadata, request captions and translations, and run social import sources. Specified in [TOOLS-ADMIN](../epics/TOOLS-ADMIN-admin-import-tool.md) (owner, 2026-11-21). It is not retired in favour of Studio.
 
-Studio desktop is taking over these jobs; see the [retirement plan](../epics/E19-studio-desktop.md#alummahnowtools-retirement-plan).
+Until TOOLS-ADMIN's app stories land, the code still has the older direct Bunny and database paths described below.
 
 ## Tech stack
 
