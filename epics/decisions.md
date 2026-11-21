@@ -21,7 +21,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [D11](decisions.md#d11-who-encodes-renditions) | Who encodes renditions | **decided** | 2026-11-14 | 19.3 |
 | [T1](decisions.md#t1-plans-are-admin-managed) | Plans are admin-managed | **decided** | 2026-11-07 | Epic 27, every tiered feature |
 | [T2](decisions.md#t2-billing-provider) | Billing provider | **decided** | 2026-11-07 | 27.7, Epic 24 |
-| [P1](decisions.md#p1-first-paid-providers) | First paid providers | **open** | 2026-11-07 | 27.7 |
+| [P1](decisions.md#p1-first-paid-providers) | First paid providers | **decided** | 2026-11-19 | 27.7 |
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions plan (decisions S1–S18) | **pending** | 2026-11-11 | Epic 27, Epic 24, every tiered feature, P1 |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (decisions AD1–AD14) | **decided** | 2026-11-13 | AUN-ADMIN-NATIVE build (held until the owner says go) |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | Multiple audio tracks (decisions MA1–MA10: demuxed HLS alternate audio from R2, tier limit per video, review of each track) | **decided** | 2026-11-14 | AUN-MULTI-AUDIO build |
@@ -224,7 +224,7 @@ Plans are custom and fully admin-managed in admin-web (create, version, price, p
 
 Pluggable `PaymentProvider` interface; manual provider always present; app-store adapters for IAP. **Never Stripe.**
 
-Built 2026-11-14 under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md), off by default: Paddle and PayGood adapters behind one interface, a `manual` provider for complimentary tiers, and a test provider for QA and local only. The build brief suggested Stripe, but this decision stands, so Stripe is not used. Creator tiers are the plans (no separate Epic 27 plans). Which provider goes live first is still [P1](#p1-first-paid-providers).
+Built 2026-11-14 under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md), off by default: a PayGood adapter behind one interface (a Paddle adapter was removed 2026-11-19, P1), a `manual` provider for complimentary tiers, and a test provider for QA and local only. The build brief suggested Stripe, but this decision stands, so Stripe is not used. Creator tiers are the plans (no separate Epic 27 plans). [P1](#p1-first-paid-providers) is decided: PayGood only, off until the owner enables it.
 
 **Blocks / affects:** 27.7, Epic 24
 
@@ -232,9 +232,15 @@ Built 2026-11-14 under [AUN-SUBS](AUN-SUBS-subscriptions-plan.md), off by defaul
 
 ### P1: First paid providers
 
-**Status:** open · **Date:** 2026-11-07
+**Status:** decided · **Date:** 2026-11-19
 
-Pick one global merchant-of-record plus 1–2 MENA gateways by the 27.7 criteria. Waits on D4.
+**PayGood only, off until the owner enables it** (owner, 2026-11-19: *"only PayGood, and off"*).
+
+- PayGood is the one payment provider. It ships off: no provider is enabled until the owner turns it on in the videos admin Payments page.
+- Paddle, built 2026-11-14 from the pending [S16](AUN-SUBS-subscriptions-plan.md) shortlist while P1 was open, was never the owner's choice. It was removed completely ([AlUmmahNow#1653](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1653)): adapter, webhook route, admin settings (tax category and tax mode included), copy, tests and docs. Search migration 0067 drops any stored Paddle config.
+- The provider framework, `manual` (complimentary tiers) and the QA/local test provider stay. Never Stripe ([T2](#t2-billing-provider)).
+
+Earlier wording (2026-11-07): pick one global merchant-of-record plus 1–2 MENA gateways by the 27.7 criteria; waits on D4.
 
 **Blocks / affects:** 27.7
 
