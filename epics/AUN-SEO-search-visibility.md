@@ -232,6 +232,8 @@ Rules:
 - A scholar's `Person` `@id` = `https://{slug}.alummahnow.net/#person`, or `https://www.alummahnow.net/{l}/scholars/{slug}/#person` until scholar sites ship.
 - `BreadcrumbList` on watch, playlist, article, CMS and scholar pages.
 
+> **Video keywords (2026-11-21):** every video gets accepted keywords in Arabic and in English (from its transcript, the translation and a shared glossary of Islamic terms), used in each language page's `<meta name="keywords">`, `VideoObject.keywords` and the search index; caption tracks are referenced from `VideoObject`. Specified in [TOOLS-ADMIN TA-21](TOOLS-ADMIN-admin-import-tool.md#translated-caption-tracks-and-bilingual-keywords-owner-2026-11-21).
+
 ### URL, canonical and hreflang rules
 
 | Content | Canonical | hreflang | Other URLs that show it | What they do |

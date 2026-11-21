@@ -2118,7 +2118,7 @@
         "api"
       ],
       "wiki": "epics/TOOLS-ADMIN-admin-import-tool.md",
-      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, sidecar captions/chapters/thumbnails/metadata, caption and translation requests, social import sources with scheduled sync."
+      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages."
     }
   ]
 }

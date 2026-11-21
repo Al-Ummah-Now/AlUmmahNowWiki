@@ -77,6 +77,8 @@ Transcription plus one translation language, including the Quran pipeline (≈ $
 
 **Also decided 2026-11-11:** viewer-side auto-translated titles, labelled, with per-channel opt-out (O6); Arabic subtitles keep the spoken honorific by default, with ﷺ per channel (O10).
 
+> **2026-11-21:** transcripts are translated into the other site language as caption drafts that a person publishes, labelled machine translated until edited, and local (desktop) transcripts from the admin importer use the on-device route. See [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) TA-7, TA-13 and TA-20.
+
 ## Stories (phases)
 
 | Story | What | Status / acceptance notes |
