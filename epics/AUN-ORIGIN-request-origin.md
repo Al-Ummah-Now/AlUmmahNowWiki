@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-ORIGIN` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), AlUmmahNowCore, AlUmmahNowApple, AlUmmahNowAndroid, AlUmmahNowDesktop, AlUmmahNowAuth |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-19 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Owner, 2026-11-18: "can we include where the request came from, this is for analytics, and included on sources, errors and so on" |
 
 ## Goal

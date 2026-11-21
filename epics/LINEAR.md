@@ -2,12 +2,12 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in HamzaLabs / HLB.
 
-The project contains 105 epics and 447 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status. Stories with inherited statuses are included in those statuses.
+The project contains 105 epics and 450 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status. Stories with inherited statuses are included in those statuses.
 
 | Epic | Linear issue | Done | In Progress | Backlog | Canceled | Total stories |
 |---|---|---:|---:|---:|---:|---:|
 | [AR-1](AR-1-api-roadmap-phase-1.md) | [HLB-417](https://linear.app/hamzalabs/issue/HLB-417/ar-1-api-videos-roadmap-phase-1-enhanced-core-features) | 4 | 0 | 0 | 0 | 4 |
-| [AR-2](AR-2-api-roadmap-phase-2.md) | [HLB-422](https://linear.app/hamzalabs/issue/HLB-422/ar-2-api-videos-roadmap-phase-2-advanced-platform-features) | 0 | 0 | 4 | 0 | 4 |
+| [AR-2](AR-2-api-roadmap-phase-2.md) | [HLB-422](https://linear.app/hamzalabs/issue/HLB-422/ar-2-api-videos-roadmap-phase-2-advanced-platform-features) | 0 | 4 | 0 | 0 | 4 |
 | [AR-3](AR-3-api-roadmap-phase-3.md) | [HLB-427](https://linear.app/hamzalabs/issue/HLB-427/ar-3-api-videos-roadmap-phase-3-enterprise-and-scale) | 0 | 0 | 4 | 0 | 4 |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | [HLB-432](https://linear.app/hamzalabs/issue/HLB-432/aun-admin-native-native-admin-app-mobile-first-moderation) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) | [HLB-433](https://linear.app/hamzalabs/issue/HLB-433/aun-captions-transcription-translation-and-inline-translation-quran) | 0 | 0 | 0 | 0 | 0 |
@@ -15,7 +15,7 @@ The project contains 105 epics and 447 stories. Each epic below links to its Lin
 | [AUN-CHANNEL-ROLES](AUN-CHANNEL-ROLES-channel-roles.md) | [HLB-435](https://linear.app/hamzalabs/issue/HLB-435/aun-channel-roles-per-channel-roles) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-CHANNEL-SECTIONS](AUN-CHANNEL-SECTIONS-channel-sections.md) | [HLB-436](https://linear.app/hamzalabs/issue/HLB-436/aun-channel-sections-channel-sections-home-tab) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md) | [HLB-437](https://linear.app/hamzalabs/issue/HLB-437/aun-cms-page-builder-cms-page-builder-pages-from-typed-blocks) | 0 | 0 | 0 | 0 | 0 |
-| [AUN-COST](AUN-COST-cost-monitoring.md) | [HLB-438](https://linear.app/hamzalabs/issue/HLB-438/aun-cost-cost-monitoring-dashboard-and-alerts) | 0 | 5 | 0 | 0 | 5 |
+| [AUN-COST](AUN-COST-cost-monitoring.md) | [HLB-438](https://linear.app/hamzalabs/issue/HLB-438/aun-cost-cost-monitoring-dashboard-and-alerts) | 3 | 2 | 0 | 0 | 5 |
 | [AUN-CREATOR-STUDIO](AUN-CREATOR-STUDIO-web-creator-studio.md) | [HLB-444](https://linear.app/hamzalabs/issue/HLB-444/aun-creator-studio-web-creator-studio) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) | [HLB-445](https://linear.app/hamzalabs/issue/HLB-445/aun-dev-site-alummahnowdev-the-project-site-for-developers-and) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | [HLB-446](https://linear.app/hamzalabs/issue/HLB-446/aun-multi-audio-multiple-audio-tracks) | 0 | 0 | 0 | 0 | 0 |
@@ -33,18 +33,18 @@ The project contains 105 epics and 447 stories. Each epic below links to its Lin
 | [AUN-VIDEO-PLAYER](AUN-VIDEO-PLAYER-production-video-player.md) | [HLB-458](https://linear.app/hamzalabs/issue/HLB-458/aun-video-player-production-video-player-themed-token-driven) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md) | [HLB-459](https://linear.app/hamzalabs/issue/HLB-459/aun-video-review-pre-publication-video-review-in-review-nsfw-and) | 0 | 0 | 0 | 0 | 0 |
 | [AUN-YT-IMPORT](AUN-YT-IMPORT-move-from-youtube.md) | [HLB-460](https://linear.app/hamzalabs/issue/HLB-460/aun-yt-import-move-from-youtube-a-creator-brings-their-own-channel) | 0 | 0 | 0 | 0 | 0 |
-| [AUTH-ACCOUNT-HUB](AUTH-ACCOUNT-HUB-account-hub.md) | [HLB-461](https://linear.app/hamzalabs/issue/HLB-461/auth-account-hub-account-hub-al-ummah-now-account) | 1 | 1 | 12 | 0 | 14 |
-| [AUTH-APP-PLANS](AUTH-APP-PLANS-auth-app-plans.md) | [HLB-476](https://linear.app/hamzalabs/issue/HLB-476/auth-app-plans-auth-app-plans-admin-enhancement-rbac-ui-refactor-m2m) | 2 | 1 | 4 | 0 | 7 |
+| [AUTH-ACCOUNT-HUB](AUTH-ACCOUNT-HUB-account-hub.md) | [HLB-461](https://linear.app/hamzalabs/issue/HLB-461/auth-account-hub-account-hub-al-ummah-now-account) | 3 | 5 | 6 | 0 | 14 |
+| [AUTH-APP-PLANS](AUTH-APP-PLANS-auth-app-plans.md) | [HLB-476](https://linear.app/hamzalabs/issue/HLB-476/auth-app-plans-auth-app-plans-admin-enhancement-rbac-ui-refactor-m2m) | 6 | 1 | 0 | 0 | 7 |
 | [AUTH-ENTERPRISE](AUTH-ENTERPRISE-openauth-enterprise-features.md) | [HLB-484](https://linear.app/hamzalabs/issue/HLB-484/auth-enterprise-openauth-fork-enterprise-features) | 5 | 0 | 0 | 1 | 6 |
 | [AUTH-IDP](AUTH-IDP-identity-platform.md) | [HLB-491](https://linear.app/hamzalabs/issue/HLB-491/auth-idp-identity-platform-sso-provider-lanes-1-7) | 7 | 0 | 0 | 0 | 7 |
 | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) | [HLB-499](https://linear.app/hamzalabs/issue/HLB-499/auth-passkeys-passkeys-everywhere-sign-in-with-a-passkey-on-every-site) | 0 | 0 | 0 | 0 | 0 |
-| [AUTH-PHASES](AUTH-PHASES-auth-roadmap-phases.md) | [HLB-500](https://linear.app/hamzalabs/issue/HLB-500/auth-phases-auth-v10-roadmap-milestones-and-phases) | 1 | 1 | 2 | 0 | 4 |
-| [AUTH-R1](AUTH-R1-auth-tokens.md) | [HLB-505](https://linear.app/hamzalabs/issue/HLB-505/auth-r1-auth-v10-roadmap-authentication-and-token-management) | 0 | 0 | 5 | 0 | 5 |
-| [AUTH-R2](AUTH-R2-auth-oauth.md) | [HLB-511](https://linear.app/hamzalabs/issue/HLB-511/auth-r2-auth-v10-roadmap-oauth-and-external-authentication) | 0 | 0 | 5 | 0 | 5 |
-| [AUTH-R3](AUTH-R3-auth-rbac.md) | [HLB-517](https://linear.app/hamzalabs/issue/HLB-517/auth-r3-auth-v10-roadmap-rbac-and-user-management) | 0 | 0 | 5 | 0 | 5 |
-| [AUTH-R4](AUTH-R4-auth-docs-dx.md) | [HLB-523](https://linear.app/hamzalabs/issue/HLB-523/auth-r4-auth-v10-roadmap-documentation-and-developer-experience) | 0 | 0 | 5 | 0 | 5 |
-| [AUTH-R5](AUTH-R5-auth-cicd.md) | [HLB-529](https://linear.app/hamzalabs/issue/HLB-529/auth-r5-auth-v10-roadmap-cicd-and-infrastructure) | 0 | 0 | 5 | 0 | 5 |
-| [AUTH-R6](AUTH-R6-auth-release.md) | [HLB-535](https://linear.app/hamzalabs/issue/HLB-535/auth-r6-auth-v10-roadmap-release-and-distribution) | 0 | 0 | 5 | 0 | 5 |
+| [AUTH-PHASES](AUTH-PHASES-auth-roadmap-phases.md) | [HLB-500](https://linear.app/hamzalabs/issue/HLB-500/auth-phases-auth-v10-roadmap-milestones-and-phases) | 1 | 2 | 0 | 1 | 4 |
+| [AUTH-R1](AUTH-R1-auth-tokens.md) | [HLB-505](https://linear.app/hamzalabs/issue/HLB-505/auth-r1-auth-v10-roadmap-authentication-and-token-management) | 4 | 0 | 0 | 1 | 5 |
+| [AUTH-R2](AUTH-R2-auth-oauth.md) | [HLB-511](https://linear.app/hamzalabs/issue/HLB-511/auth-r2-auth-v10-roadmap-oauth-and-external-authentication) | 3 | 0 | 0 | 2 | 5 |
+| [AUTH-R3](AUTH-R3-auth-rbac.md) | [HLB-517](https://linear.app/hamzalabs/issue/HLB-517/auth-r3-auth-v10-roadmap-rbac-and-user-management) | 4 | 1 | 0 | 0 | 5 |
+| [AUTH-R4](AUTH-R4-auth-docs-dx.md) | [HLB-523](https://linear.app/hamzalabs/issue/HLB-523/auth-r4-auth-v10-roadmap-documentation-and-developer-experience) | 2 | 3 | 0 | 0 | 5 |
+| [AUTH-R5](AUTH-R5-auth-cicd.md) | [HLB-529](https://linear.app/hamzalabs/issue/HLB-529/auth-r5-auth-v10-roadmap-cicd-and-infrastructure) | 2 | 2 | 0 | 1 | 5 |
+| [AUTH-R6](AUTH-R6-auth-release.md) | [HLB-535](https://linear.app/hamzalabs/issue/HLB-535/auth-r6-auth-v10-roadmap-release-and-distribution) | 1 | 3 | 0 | 1 | 5 |
 | [CHAT-ADMIN-CONTENT](CHAT-ADMIN-CONTENT-admin-content-management.md) | [HLB-541](https://linear.app/hamzalabs/issue/HLB-541/chat-admin-content-videos-admin-platform-content-management) | 0 | 0 | 0 | 0 | 0 |
 | [CHAT-AI-CATEGORIES](CHAT-AI-CATEGORIES-ai-categories.md) | [HLB-542](https://linear.app/hamzalabs/issue/HLB-542/chat-ai-categories-ai-category-suggestions-explore-hides-empty) | 0 | 0 | 0 | 0 | 0 |
 | [CHAT-CONTACT](CHAT-CONTACT-contact-us.md) | [HLB-543](https://linear.app/hamzalabs/issue/HLB-543/chat-contact-contact-us-page-and-admin-inbox) | 0 | 0 | 0 | 0 | 0 |
@@ -62,7 +62,7 @@ The project contains 105 epics and 447 stories. Each epic below links to its Lin
 | [CMS-AI-ASSIST](CMS-AI-ASSIST-cms-ai-writing-assist.md) | [HLB-560](https://linear.app/hamzalabs/issue/HLB-560/cms-ai-assist-cms-ai-writing-assist) | 9 | 0 | 0 | 1 | 10 |
 | [CMS-HOME-TIMELINE](CMS-HOME-TIMELINE-www-home-timeline.md) | [HLB-571](https://linear.app/hamzalabs/issue/HLB-571/cms-home-timeline-www-home-timeline-cms-managed-feed) | 0 | 0 | 0 | 0 | 0 |
 | [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md) | [HLB-572](https://linear.app/hamzalabs/issue/HLB-572/cms-page-blocks-cms-page-builder-blocks-and-card-posts) | 0 | 0 | 0 | 0 | 0 |
-| [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) | [HLB-573](https://linear.app/hamzalabs/issue/HLB-573/cms-queue-cms-and-www-post-v1-queue) | 5 | 4 | 3 | 0 | 12 |
+| [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) | [HLB-573](https://linear.app/hamzalabs/issue/HLB-573/cms-queue-cms-and-www-post-v1-queue) | 6 | 4 | 2 | 0 | 12 |
 | [CMS-WWW-V1](CMS-WWW-V1-cms-www-v1.md) | [HLB-586](https://linear.app/hamzalabs/issue/HLB-586/cms-www-v1-www-astro-cms-bknd-v1) | 20 | 0 | 0 | 0 | 20 |
 | [E01](E01-accessibility-security.md) | [HLB-607](https://linear.app/hamzalabs/issue/HLB-607/e01-critical-accessibility-and-security-compliance) | 5 | 0 | 0 | 0 | 5 |
 | [E02](E02-player-analytics.md) | [HLB-613](https://linear.app/hamzalabs/issue/HLB-613/e02-advanced-video-player-analytics-phase-3) | 1 | 1 | 0 | 1 | 3 |
@@ -70,30 +70,30 @@ The project contains 105 epics and 447 stories. Each epic below links to its Lin
 | [E04](E04-testing-migration.md) | [HLB-621](https://linear.app/hamzalabs/issue/HLB-621/e04-phase-5-testing-and-migration-infrastructure) | 1 | 0 | 0 | 2 | 3 |
 | [E05](E05-creator-tools.md) | [HLB-625](https://linear.app/hamzalabs/issue/HLB-625/e05-content-creator-tools-enhancement) | 0 | 2 | 0 | 1 | 3 |
 | [E06](E06-community-moderation.md) | [HLB-629](https://linear.app/hamzalabs/issue/HLB-629/e06-community-and-moderation-platform) | 0 | 2 | 0 | 1 | 3 |
-| [E07](E07-content-discovery.md) | [HLB-633](https://linear.app/hamzalabs/issue/HLB-633/e07-content-discovery-enhancement) | 0 | 2 | 0 | 1 | 3 |
+| [E07](E07-content-discovery.md) | [HLB-633](https://linear.app/hamzalabs/issue/HLB-633/e07-content-discovery-enhancement) | 0 | 5 | 0 | 1 | 6 |
 | [E08](E08-video-content-features.md) | [HLB-637](https://linear.app/hamzalabs/issue/HLB-637/e08-video-content-features-chapters-navigation) | 0 | 2 | 0 | 0 | 2 |
 | [E09](E09-native-platform-foundations.md) | [HLB-640](https://linear.app/hamzalabs/issue/HLB-640/e09-platform-foundations-for-native-clients-backend) | 4 | 5 | 0 | 0 | 9 |
-| [E10](E10-fanous-design-system.md) | [HLB-650](https://linear.app/hamzalabs/issue/HLB-650/e10-fanous-design-system) | 2 | 2 | 3 | 0 | 7 |
-| [E11](E11-aun-core.md) | [HLB-658](https://linear.app/hamzalabs/issue/HLB-658/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 2 | 1 | 6 | 0 | 9 |
-| [E12](E12-viewer-mobile.md) | [HLB-668](https://linear.app/hamzalabs/issue/HLB-668/e12-viewer-mobile-apps-ios-ipados-android) | 0 | 0 | 14 | 0 | 14 |
-| [E13](E13-native-players.md) | [HLB-683](https://linear.app/hamzalabs/issue/HLB-683/e13-native-players) | 0 | 0 | 11 | 0 | 11 |
-| [E14](E14-offline-listen.md) | [HLB-695](https://linear.app/hamzalabs/issue/HLB-695/e14-offline-and-listen-mode-incl-carplay-android-auto) | 0 | 0 | 5 | 0 | 5 |
-| [E15](E15-tv-apps.md) | [HLB-701](https://linear.app/hamzalabs/issue/HLB-701/e15-tv-apps) | 0 | 0 | 9 | 0 | 9 |
-| [E16](E16-desktop-viewer.md) | [HLB-711](https://linear.app/hamzalabs/issue/HLB-711/e16-desktop-viewer-windows-macos-linux) | 0 | 0 | 4 | 0 | 4 |
-| [E17](E17-live-in-apps.md) | [HLB-716](https://linear.app/hamzalabs/issue/HLB-716/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 0 | 5 | 0 | 5 |
+| [E10](E10-fanous-design-system.md) | [HLB-650](https://linear.app/hamzalabs/issue/HLB-650/e10-fanous-design-system) | 2 | 4 | 1 | 0 | 7 |
+| [E11](E11-aun-core.md) | [HLB-658](https://linear.app/hamzalabs/issue/HLB-658/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 7 | 1 | 1 | 0 | 9 |
+| [E12](E12-viewer-mobile.md) | [HLB-668](https://linear.app/hamzalabs/issue/HLB-668/e12-viewer-mobile-apps-ios-ipados-android) | 2 | 4 | 8 | 0 | 14 |
+| [E13](E13-native-players.md) | [HLB-683](https://linear.app/hamzalabs/issue/HLB-683/e13-native-players) | 3 | 6 | 2 | 0 | 11 |
+| [E14](E14-offline-listen.md) | [HLB-695](https://linear.app/hamzalabs/issue/HLB-695/e14-offline-and-listen-mode-incl-carplay-android-auto) | 0 | 1 | 4 | 0 | 5 |
+| [E15](E15-tv-apps.md) | [HLB-701](https://linear.app/hamzalabs/issue/HLB-701/e15-tv-apps) | 0 | 5 | 4 | 0 | 9 |
+| [E16](E16-desktop-viewer.md) | [HLB-711](https://linear.app/hamzalabs/issue/HLB-711/e16-desktop-viewer-windows-macos-linux) | 1 | 2 | 1 | 0 | 4 |
+| [E17](E17-live-in-apps.md) | [HLB-716](https://linear.app/hamzalabs/issue/HLB-716/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 3 | 2 | 0 | 5 |
 | [E18](E18-studio-mobile.md) | [HLB-722](https://linear.app/hamzalabs/issue/HLB-722/e18-studio-mobile-ios-ipados-android) | 2 | 3 | 4 | 0 | 9 |
-| [E19](E19-studio-desktop.md) | [HLB-732](https://linear.app/hamzalabs/issue/HLB-732/e19-studio-desktop-windows-macos-linux) | 2 | 6 | 0 | 1 | 9 |
+| [E19](E19-studio-desktop.md) | [HLB-732](https://linear.app/hamzalabs/issue/HLB-732/e19-studio-desktop-windows-macos-linux) | 2 | 5 | 1 | 1 | 9 |
 | [E20](E20-ummah-kids.md) | [HLB-742](https://linear.app/hamzalabs/issue/HLB-742/e20-ummah-kids-profiles-and-parental-controls) | 0 | 0 | 5 | 0 | 5 |
-| [E21](E21-islamic-experience.md) | [HLB-748](https://linear.app/hamzalabs/issue/HLB-748/e21-islamic-experience-layer) | 0 | 0 | 8 | 0 | 8 |
-| [E22](E22-notifications-sharing-circles.md) | [HLB-757](https://linear.app/hamzalabs/issue/HLB-757/e22-notifications-sharing-study-circles) | 0 | 0 | 4 | 0 | 4 |
-| [E23](E23-release-engineering.md) | [HLB-762](https://linear.app/hamzalabs/issue/HLB-762/e23-release-engineering-and-store-compliance) | 1 | 3 | 3 | 0 | 7 |
-| [E24](E24-creator-support-premium.md) | [HLB-770](https://linear.app/hamzalabs/issue/HLB-770/e24-creator-support-and-premium) | 0 | 0 | 3 | 0 | 3 |
-| [E25](E25-sharing-embeds.md) | [HLB-774](https://linear.app/hamzalabs/issue/HLB-774/e25-sharing-and-embeddable-player) | 2 | 4 | 3 | 0 | 9 |
-| [E26](E26-ummah-comments.md) | [HLB-784](https://linear.app/hamzalabs/issue/HLB-784/e26-embedded-discussions-ummah-comments) | 0 | 0 | 10 | 0 | 10 |
-| [E27](E27-plans-entitlements.md) | [HLB-795](https://linear.app/hamzalabs/issue/HLB-795/e27-plans-and-entitlements-framework) | 0 | 2 | 0 | 5 | 7 |
-| [E28](E28-ai-moderation.md) | [HLB-803](https://linear.app/hamzalabs/issue/HLB-803/e28-ai-assisted-moderation-and-flagging-cloudflare-workers-ai) | 0 | 0 | 14 | 0 | 14 |
-| [E29](E29-core-web-experience.md) | [HLB-818](https://linear.app/hamzalabs/issue/HLB-818/e29-core-web-experience-completion-p0) | 0 | 12 | 4 | 2 | 18 |
-| [E30](E30-aun-media.md) | [HLB-837](https://linear.app/hamzalabs/issue/HLB-837/e30-studio-media-engine-aun-media-rust) | 3 | 0 | 4 | 0 | 7 |
+| [E21](E21-islamic-experience.md) | [HLB-748](https://linear.app/hamzalabs/issue/HLB-748/e21-islamic-experience-layer) | 0 | 2 | 6 | 0 | 8 |
+| [E22](E22-notifications-sharing-circles.md) | [HLB-757](https://linear.app/hamzalabs/issue/HLB-757/e22-notifications-sharing-study-circles) | 0 | 2 | 2 | 0 | 4 |
+| [E23](E23-release-engineering.md) | [HLB-762](https://linear.app/hamzalabs/issue/HLB-762/e23-release-engineering-and-store-compliance) | 1 | 6 | 0 | 0 | 7 |
+| [E24](E24-creator-support-premium.md) | [HLB-770](https://linear.app/hamzalabs/issue/HLB-770/e24-creator-support-and-premium) | 0 | 1 | 2 | 0 | 3 |
+| [E25](E25-sharing-embeds.md) | [HLB-774](https://linear.app/hamzalabs/issue/HLB-774/e25-sharing-and-embeddable-player) | 3 | 3 | 3 | 0 | 9 |
+| [E26](E26-ummah-comments.md) | [HLB-784](https://linear.app/hamzalabs/issue/HLB-784/e26-embedded-discussions-ummah-comments) | 0 | 4 | 6 | 0 | 10 |
+| [E27](E27-plans-entitlements.md) | [HLB-795](https://linear.app/hamzalabs/issue/HLB-795/e27-plans-and-entitlements-framework) | 0 | 0 | 0 | 7 | 7 |
+| [E28](E28-ai-moderation.md) | [HLB-803](https://linear.app/hamzalabs/issue/HLB-803/e28-ai-assisted-moderation-and-flagging-cloudflare-workers-ai) | 3 | 3 | 8 | 0 | 14 |
+| [E29](E29-core-web-experience.md) | [HLB-818](https://linear.app/hamzalabs/issue/HLB-818/e29-core-web-experience-completion-p0) | 9 | 5 | 2 | 2 | 18 |
+| [E30](E30-aun-media.md) | [HLB-837](https://linear.app/hamzalabs/issue/HLB-837/e30-studio-media-engine-aun-media-rust) | 7 | 0 | 0 | 0 | 7 |
 | [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md) | [HLB-845](https://linear.app/hamzalabs/issue/HLB-845/live-phases-live-streaming-plan-phases-1-3-phase-2-task-2n-issues) | 0 | 0 | 0 | 0 | 0 |
 | [LR-1.1](LR-1.1-legacy-video-portal-ui.md) | [HLB-846](https://linear.app/hamzalabs/issue/HLB-846/lr-11-legacy-roadmap-11-video-portal-ui-completion) | 8 | 0 | 0 | 0 | 8 |
 | [LR-1.2](LR-1.2-legacy-api-backend.md) | [HLB-855](https://linear.app/hamzalabs/issue/HLB-855/lr-12-legacy-roadmap-12-api-backend) | 7 | 0 | 0 | 0 | 7 |
@@ -109,6 +109,6 @@ The project contains 105 epics and 447 stories. Each epic below links to its Lin
 | [OA-THEME](OA-THEME-openauth-theme-unification.md) | [HLB-925](https://linear.app/hamzalabs/issue/HLB-925/oa-theme-openauth-theme-unification-for-the-multi-tenant-issuer) | 4 | 1 | 0 | 0 | 5 |
 | [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) | [HLB-947](https://linear.app/hamzalabs/issue/HLB-947/tools-admin-al-ummah-now-tools-the-admin-import-app) | 0 | 1 | 20 | 0 | 21 |
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [HLB-931](https://linear.app/hamzalabs/issue/HLB-931/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 6 | 6 |
-| [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [HLB-938](https://linear.app/hamzalabs/issue/HLB-938/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 1 | 0 | 4 |
+| [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [HLB-938](https://linear.app/hamzalabs/issue/HLB-938/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 3 | 0 | 0 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [HLB-943](https://linear.app/hamzalabs/issue/HLB-943/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 2 | 3 |
-| **All** | **104 epics** | **136** | **64** | **208** | **18** | **426** |
+| **All** | **105 epics** | **191** | **118** | **109** | **32** | **450** |

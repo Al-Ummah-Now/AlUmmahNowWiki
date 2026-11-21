@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E04` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-12 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > E2E mostly done; #71 rollout superseded by `release.yml`. Since 2026-11-12 most E2E runs on a local Miniflare stack per CI job, with own-data builders, leftover checks and per-test outcome summaries; QA's wide suite is nightly only. See [Testing and E2E](../guides/testing.md).
 

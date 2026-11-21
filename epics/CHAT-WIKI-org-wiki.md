@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `CHAT-WIKI` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), AlUmmahNowWiki, .github |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-09 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
 > Wiki and org profile merged (AlUmmahNowWiki #1, .github #1); this epics section is the follow-up the owner asked for on 2026-11-10 16:52 UTC.
