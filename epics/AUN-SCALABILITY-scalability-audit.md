@@ -6,14 +6,14 @@
 |---|---|
 | **ID** | `AUN-SCALABILITY` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **in progress** |
+| **Status** | **shipped** |
 | **Last updated** | 2026-11-21 |
 
-> Audit doc merged (#506); the audit's AV, PR and WS items are marked fixed with their PRs ([#671](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/671), [#672](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/672), [#678](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/678)). Later: public lists fill their page ([#800](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/800)), search index converges under writes ([#860](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/860), [#873](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/873), [#879](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/879)), admin lists and user search read indexes ([#841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/841), [#869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/869), [#902](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/902)). Revived 2026-11-21 (owner approved): per-object index repair ([#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683)) merged 2026-11-21; index-backed channel playlists, live lists and processing sweep ([#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)) is open. See [Index-backed lists and per-object repair](#index-backed-lists-and-per-object-repair).
+> Audit doc merged (#506); the audit's AV, PR and WS items are marked fixed with their PRs ([#671](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/671), [#672](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/672), [#678](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/678)). Later: public lists fill their page ([#800](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/800)), search index converges under writes ([#860](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/860), [#873](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/873), [#879](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/879)), admin lists and user search read indexes ([#841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/841), [#869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/869), [#902](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/902)). Revived 2026-11-21 (owner approved): per-object index repair ([#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683)) and index-backed channel playlists, live lists and processing sweep ([#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)) are live in production since release `v2026.11.21.7`. See [Index-backed lists and per-object repair](#index-backed-lists-and-per-object-repair).
 
 ## Index-backed lists and per-object repair
 
-Revived 2026-11-21 (owner approved). [#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683) merged 2026-11-21. [#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685) is open, rebased onto main.
+Revived 2026-11-21 (owner approved). [#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683) and [#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685) merged 2026-11-21 and shipped in videos release `v2026.11.21.7` (stage E2E passed, promoted to production).
 
 **Per-object index repair ([#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683), search migration 0069)**
 - When a write to the search index fails, one row per object is recorded in `index_repairs`. It replaces the older dirty marks, and the rebuild drains any marks that are left.
@@ -57,7 +57,7 @@ Platform-wide constraints that apply to every epic:
 
 ## Status evidence
 
-- PRs [AlUmmahNow#506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/506), [AlUmmahNow#514](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/514), [AlUmmahNow#517](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/517), [AlUmmahNow#520](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/520), [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522), [AlUmmahNow#554](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/554); [AlUmmahNow#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683) (merged 2026-11-21); open [AlUmmahNow#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)
+- PRs [AlUmmahNow#506](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/506), [AlUmmahNow#514](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/514), [AlUmmahNow#517](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/517), [AlUmmahNow#520](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/520), [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522), [AlUmmahNow#554](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/554); [AlUmmahNow#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683), [AlUmmahNow#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)
 
 ## Open questions
 
