@@ -1251,7 +1251,23 @@
       "prs": [
         "AlUmmahNow#1400"
       ],
-      "note": "Videos admin → Costs: month to date against the budget, forecast, per product and per environment, top movers; budget, spike and weekly digest alerts by email (opt-in) and on the Errors page; super admins set a read-only Cloudflare token and optional Bunny and Resend keys there (encrypted, only the last 4 shown). Works with no token. Estimates at list prices."
+      "note": "Videos admin → Costs: month to date against the budget, forecast, per product and per environment, top movers; budget, spike and weekly digest alerts by email (opt-in) and on the Errors page; super admins set a read-only Cloudflare token and optional Bunny and Resend keys there (encrypted, only the last 4 shown). Works with no token. Cloudflare in the budget is the billed estimate (after the account’s included usage); breakdowns at list price."
+    },
+    {
+      "id": "cost-every-source",
+      "name": {
+        "en": "Every platform cost on Costs, billed like the invoice",
+        "ar": "كل تكاليف المنصة في صفحة التكاليف، كما تُفوتَر"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-COST-cost-monitoring.md",
+      "prs": [
+        "AlUmmahNow#1729"
+      ],
+      "note": "Cloudflare list price against billed per invoice line (allowances once per account and month, reconciled to the cent with the owner's invoice), Workers Logs, Logpush, CPU as billed, KV lists and deletes; a super-admin list of fixed and other costs (Apple, domains, GitHub, Linear, AI subscriptions) counted in the budget and alerts; idle cost, per-source trend and drivers moved from Operations, which now shows usage and health per environment only."
     },
     {
       "id": "dev-site",
