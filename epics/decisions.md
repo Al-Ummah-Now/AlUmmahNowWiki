@@ -82,7 +82,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
 | [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) | Requests off and no payment provider: /upgrade is an off feature (404 feature_off, no entry points; the tier still shows in Settings) | **decided** | 2026-11-19 | [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
-| [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) | Numbers: Arabic never grouped («٤٨٨٧»); counts compact from 1,000, cut not rounded («٤٫٨ ألف», «١٫٢ م»); replaces O35's «٬» and the «مليون» forms | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
+| [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) | Numbers: Arabic never grouped («٤٨٨٧»); counts compact from 1,000, cut not rounded («٤٫٨ ألف», «١٫٢ م»); standalone «١٢ ألفًا»; Arabic separates values with «، »; replaces O35's «٬» and the «مليون» forms | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -875,8 +875,9 @@ One rule for every platform (web, admin, emails, Android, Apple, Desktop, Tools)
 
 1. **Arabic numbers are never grouped.** «٫» is the only mark inside an Arabic number: «٤٨٨٧», «١٢٣٤٫٥», «٥٠٦٢٫٦ س». No «٬» (U+066C) and no space between digits (a narrow no-break space was tried on AlUmmahNow#1665 and dropped). English keeps its grouping: "4,887". **Why:** «٬» and «٫» are drawn in the same comma shape by most Arabic UI fonts (IBM Plex Sans Arabic, Noto Kufi Arabic, Amiri), so «١٥٬٤١٩٫٩» read as 15,419,9.
 2. **Counts are compact from 1,000 on:** view counts, subscriber counts, stat tiles, chart ticks and cards. Cut to one decimal, never rounded up: 4,887 → "4.8K" / «٤٫٨ ألف»; 1,299 → "1.2K" / «١٫٢ ألف». Under 1,000 stays full: "887" / «٨٨٧».
-3. **Arabic scale words.** Thousands and billions agree with the number shown: exactly 1 is the word alone («ألف مشاهدة», «مليار»), exactly 2 the dual alone («ألفان», «ألفا مشاهدة» before a noun; «ملياران», «مليارا»), whole 3–10 the plural («٣ آلاف مشاهدة», «٣ مليارات»), 11+ and every decimal the singular («١١ ألف», «١٫٣ ألف مشاهدة»). **Millions are always the digit and «م»:** «١ م», «٢ م», «١٫٢ م مشاهدة», «١٥ م». The noun after a scale word is singular. English: "1K", "1.2K", "1M", "1.2M views", "2B".
-4. **Exact values stay exact** (ungrouped in Arabic): analytics table cells where the exact figure is the point (Top content, traffic sources, a chart's data table and hover readout), admin list columns, watch-time hours («٥٠٦٢٫٦ س»), money («١٢٣٤٫٥٠ دولار أمريكي»), file sizes, small notices ("{count} selected") and screen-reader labels.
+3. **Arabic scale words.** Thousands and billions agree with the number shown: exactly 1 is the word alone («ألف مشاهدة», «مليار»), exactly 2 the dual alone («ألفان», «ألفا مشاهدة» before a noun; «ملياران», «مليارا»), whole 3–10 the plural («٣ آلاف مشاهدة», «٣ مليارات»), 11+ and every decimal the singular («١١ ألف مشاهدة», «١٫٣ ألف مشاهدة»). **Standing alone** (a stat tile or chart tick with no noun after it), a whole number whose last two digits are 11–99 takes the accusative: «١٢ ألفًا», «١٢٠ ألفًا», «٩٩ ألفًا», «١٢ مليارًا»; 100, 200 and decimals stay singular («١٠٠ ألف», «١١٫٥ ألف»). Before a noun it stays singular: «١٢ ألف مشاهدة». **Millions are always the digit and «م»:** «١ م», «٢ م», «١٫٢ م مشاهدة», «١٥ م». The noun after a scale word is singular. English: "1K", "1.2K", "1M", "1.2M views", "2B".
+4. **Separators between values.** In Arabic a dot between two values («·» or « • ») reads as the digit zero next to Arabic digits («عام • ١٢ ألف» reads as «١٢٠ ألف»), so Arabic separates values with the Arabic comma: «الأمة الآن، ٣ م مشاهدة»; «١٢ ألف مشاهدة، قبل ٣ أيام». English keeps its mark: "Al Ummah Now · 3M views". Applies to cards, watch meta, channel rows, Studio rows, admin lists and tooltips.
+5. **Exact values stay exact** (ungrouped in Arabic): analytics table cells where the exact figure is the point (Top content, traffic sources, a chart's data table and hover readout), admin list columns, watch-time hours («٥٠٦٢٫٦ س»), money («١٢٣٤٫٥٠ دولار أمريكي»), file sizes, small notices ("{count} selected") and screen-reader labels.
 
 | Value | English | Arabic |
 |---|---|---|
@@ -885,13 +886,20 @@ One rule for every platform (web, admin, emails, Android, Apple, Desktop, Tools)
 | 2,000 views | 2K views | ألفا مشاهدة |
 | 3,000 views | 3K views | ٣ آلاف مشاهدة |
 | 4,887 (tile) | 4.8K | ٤٫٨ ألف |
+| 12,000 (tile) | 12K | ١٢ ألفًا |
+| 12,000 views | 12K views | ١٢ ألف مشاهدة |
+| 120,000 (tile) | 120K | ١٢٠ ألفًا |
+| 100,000 (tile) | 100K | ١٠٠ ألف |
+| 11,500 (tile) | 11.5K | ١١٫٥ ألف |
+| 12,000,000,000 (tile) | 12B | ١٢ مليارًا |
 | 1,000,000 | 1M | ١ م |
 | 1,250,000 views | 1.2M views | ١٫٢ م مشاهدة |
 | 3,000,000,000 | 3B | ٣ مليارات |
 | 4,887 (table cell) | 4,887 | ٤٨٨٧ |
 | 5,062.6 hours | 5,062.6 hr | ٥٠٦٢٫٦ س |
+| channel and views | Al Ummah Now · 3M views | الأمة الآن، ٣ م مشاهدة |
 
-**How:** each repo has one formatter. AlUmmahNow: `numberFormat` in `@al-ummah/shared-types` locale-format sets `useGrouping: false` for Arabic whatever the caller asks (and the push service worker's copy); `formatCompact` builds the Arabic scale words; tiles call `formatCompact` (admin `formatStat`), table cells `formatNumber`. Desktop: `Localizer.Stat` / `Compact` / `Views` (e684263). Typed numbers still accept «٬» or a space and drop it.
+**How:** each repo has one formatter. AlUmmahNow: `numberFormat` in `@al-ummah/shared-types` locale-format sets `useGrouping: false` for Arabic whatever the caller asks (and the push service worker's copy); `formatCompact` builds the Arabic scale words (`beforeNoun` picks the singular before a noun; `formatCountNoun` passes it); `metaSeparator` / `joinMeta` give the separator (web `<MetaSep />` and admin `<Sep />` for rows of elements, admin message `common.sep`); tiles call `formatCompact` (admin `formatStat`), table cells `formatNumber`. Desktop: `Localizer.Stat` / `Compact` / `Views` (e684263); Desktop #69 and Android #51 add the standalone accusative and the Arabic comma. Typed numbers still accept «٬» or a space and drop it.
 
 **Blocks / affects:** every app and email, native apps ([AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), commit 7d5b0fe); [Numbers and dates](../guides/numbers-and-dates.md)
 
