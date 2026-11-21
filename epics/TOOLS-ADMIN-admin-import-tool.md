@@ -73,6 +73,22 @@ Moderators can sign in to Auth but the app shows "This app is for Al Ummah Now a
 | TA-14 | App: folder watch and approvals on the API | AlUmmahNowTools | FileScanService watch + approvals upload through admin-api; Bunny uploader and DB writes removed; old keys revoked after the first import. |
 | TA-15 | Release flow | AlUmmahNowTools | Proposed, like Desktop's `release.yml`: a tag `vX.Y.Z` on master builds production defaults, `vX.Y.Z-preview.N` builds QA defaults as a pre-release. Windows MSIX + portable zip (Authenticode-signed when `WINDOWS_CERT_*` are set, as Desktop Admin's `ADMIN_WINDOWS_CERT_*`), macOS `.dmg` (Developer ID signed and notarized when the Apple secrets are set), Linux `.deb` and `.tar.gz`; each smoke-launched in CI; a draft GitHub release with `SHA256SUMS.txt`. Internal distribution only. |
 | TA-16 | Security and repo hygiene | AlUmmahNowTools | SECURITY.md and SHA-pinned actions ([#29](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/29)); CI on .NET 9 with all projects. |
+| TA-17 | Transcript suggestions for tags and classification | AlUmmahNow, AlUmmahNowTools | For each imported video, a queued job reads its transcript (the sidecar `.srt`/`.vtt` when there is one, otherwise the server transcript once the AUN-CAPTIONS job is done) and suggests tags, category, topics, language, speaker (the scholar) and, optionally, a better title and description in en and ar. Suggestions only: the app's review step shows them per field with Accept, Edit and Reject, plus Accept for the whole batch; nothing is applied until the admin confirms. Stored with the video so Studio and admin can reuse them. Details below. |
+
+## Transcript suggestions (owner, 2026-11-21)
+
+The importer uses each video's transcript to suggest how to tag and classify it. **Nothing is applied without the admin confirming.**
+
+| Step | How | Cost |
+|---|---|---|
+| Transcript | The sidecar caption file, if any; otherwise the server transcript when its caption job finishes (the job waits for it, it never starts transcription by itself) | none |
+| 1. Vocabulary match | Keyword and phrase matching against **our own** vocabulary: the admin-managed categories ([AUN-VIDEO-CATEGORIES](AUN-VIDEO-CATEGORIES-admin-managed-categories.md)) with their en/ar names and keywords, the channel's and platform's existing tags, the scholar names of linked channels, and Quran references the caption pipeline already finds. Scored by frequency and position. Language from the caption track. | none (Worker CPU) |
+| 2. Workers AI, only when it helps | Only when step 1 is unsure (no category above its threshold) or the admin asked for title/description suggestions. One call to the open-weight model already used for translation (`@cf/google/gemma-4-26b-a4b-it`, $0.10 / $0.30 per million input/output tokens), with an excerpt of at most about 4,000 tokens and the vocabulary as the allowed answers. | about $0.0005 a video; 1,000 imported videos a month ≈ **$0.50** |
+
+- **A queued job** `import.suggest` (admin jobs: retry/backoff, DLQ, Errors page with Retry, per-job log lines).
+- **Stored with the video** (`video_suggestions`: field, value, source `vocabulary` or `ai`, score, state `pending`/`accepted`/`edited`/`rejected`, who and when), so Studio and admin read the same suggestions later. The category suggestion uses the existing "AI suggests, uploader confirms" record ([CHAT-AI-CATEGORIES](CHAT-AI-CATEGORIES-ai-categories.md)), not a second one.
+- **In the app**: the review step shows each suggestion beside the current value with Accept, Edit and Reject, and "Accept all suggestions" for the batch, with a count of what will change. Accepting writes through the normal video update, audited.
+- **Tests** use a mocked model; no paid AI in tests.
 
 ## Social import: what we import, and how we stay within each platform's terms
 
@@ -107,7 +123,7 @@ A scholar page has no store of its own: it shows the **community posts of the sc
 
 ## Running cost
 
-None when idle: no messages in the queues; one hourly cron tick in the processor finds due sources (a single D1 query). Per import: the uploads' normal cost (originals and transcodes, as any upload), a few queue messages per item, and caption minutes when asked for. Within the [$500/month cap](decisions.md#o1-whole-platform-cost-cap).
+None when idle: no messages in the queues; one hourly cron tick in the processor finds due sources (a single D1 query). Per import: the uploads' normal cost (originals and transcodes, as any upload), a few queue messages per item, caption minutes when asked for, and transcript suggestions at about $0.0005 a video when Workers AI is needed. Within the [$500/month cap](decisions.md#o1-whole-platform-cost-cap).
 
 ## Decisions and constraints
 
@@ -120,7 +136,7 @@ None when idle: no messages in the queues; one hourly cron tick in the processor
 ## Status evidence
 
 - Spec: this page.
-- Linear: epic [HLB-947](https://linear.app/hamzalabs/issue/HLB-947), stories TA-1…TA-16 = HLB-948…HLB-963.
+- Linear: epic [HLB-947](https://linear.app/hamzalabs/issue/HLB-947), stories TA-1…TA-16 = HLB-948…HLB-963, TA-17 = HLB-964.
 
 ## Sources
 
