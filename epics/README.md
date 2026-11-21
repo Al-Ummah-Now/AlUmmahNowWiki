@@ -18,6 +18,10 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 
 **IDs.** `E01`–`E30` are the monorepo's numbered epics (Epics 1–30). No number above 30 is used for an Al Ummah Now epic in any repo doc, issue, PR or chat thread. The `wt-epics58` checkout means "Epics 5–8", and the "Epic 59.03" and "Epic 40" mentions in chat belong to other projects. Other IDs are prefixed by origin: `LR-` and `AR-` for legacy roadmap items, `AUN-` for monorepo workstreams with a spec but no epic number, and a repo prefix for epics defined in another repo. Epics that exist only in chat are marked *(chat only)*.
 
+## Linear roadmap
+
+The [Linear roadmap](LINEAR.md) links every epic to its Linear issue and summarizes its stories by status.
+
 ## Totals
 
 | Status | Epics |
