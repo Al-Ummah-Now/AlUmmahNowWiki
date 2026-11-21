@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in HamzaLabs / HLB.
 
-The project contains 105 epics and 442 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status. Stories with inherited statuses are included in those statuses.
+The project contains 105 epics and 443 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status. Stories with inherited statuses are included in those statuses.
 
 | Epic | Linear issue | Done | In Progress | Backlog | Canceled | Total stories |
 |---|---|---:|---:|---:|---:|---:|
@@ -107,7 +107,7 @@ The project contains 105 epics and 442 stories. Each epic below links to its Lin
 | [LR-4.3](LR-4.3-legacy-web-archive.md) | [HLB-912](https://linear.app/hamzalabs/issue/HLB-912/lr-43-legacy-roadmap-43-web-archive) | 0 | 0 | 5 | 0 | 5 |
 | [OA-ADMIN-APIS](OA-ADMIN-APIS-openauth-admin-apis.md) | [HLB-918](https://linear.app/hamzalabs/issue/HLB-918/oa-admin-apis-openauth-enterprise-admin-apis) | 4 | 2 | 0 | 0 | 6 |
 | [OA-THEME](OA-THEME-openauth-theme-unification.md) | [HLB-925](https://linear.app/hamzalabs/issue/HLB-925/oa-theme-openauth-theme-unification-for-the-multi-tenant-issuer) | 4 | 1 | 0 | 0 | 5 |
-| [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) | [HLB-947](https://linear.app/hamzalabs/issue/HLB-947/tools-admin-al-ummah-now-tools-the-admin-import-app) | 0 | 1 | 15 | 0 | 16 |
+| [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) | [HLB-947](https://linear.app/hamzalabs/issue/HLB-947/tools-admin-al-ummah-now-tools-the-admin-import-app) | 0 | 1 | 16 | 0 | 17 |
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [HLB-931](https://linear.app/hamzalabs/issue/HLB-931/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [HLB-938](https://linear.app/hamzalabs/issue/HLB-938/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 1 | 0 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [HLB-943](https://linear.app/hamzalabs/issue/HLB-943/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 2 | 3 |
