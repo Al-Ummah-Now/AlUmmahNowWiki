@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUTH-R1` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **in progress** |
-| **Last updated** | 2026-11-15 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 > JWT phases 0–4 complete, refresh rotation, sessions and audit logging exist; MFA not built. The roadmap (Dec 2024, links to the old `meywd/AlUmmahNowAuth`) still says **0/5 issues** for every epic and was never updated. Later work (Lanes, the openauth fork, JWT/RBAC docs, Epic 9) built much of it.
 

@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-SEO` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (videos web), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md). It also touches [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) and [openauth](../repos/openauth.md) (noindex only), and the scholar sites that are being specified separately |
-| **Status** | **in progress**: owner decisions D-SEO-1 to D-SEO-12 taken 2026-11-13. Live in production: AlUmmahNow phases from v2026.11.13.4 to v2026.11.14.3, www from UI v2026.11.13.7 (scholar-site canonicals and per-host sitemaps in UI v2026.11.14.6), CMS from v2026.11.13.3 to v2026.11.14. The videos About page (AlUmmahNow #1360) is merged and waits for a release. See the [feature registry](../features/README.md) |
-| **Last updated** | 2026-11-14 |
+| **Status** | **shipped** (reconciled 2026-11-21; see Status evidence) |
+| **Last updated** | 2026-11-21 |
 
 Read from `origin/main` on 2026-11-13: AlUmmahNow [`de8c284`](https://github.com/Al-Ummah-Now/AlUmmahNow/tree/de8c284f8a1b84b7008c416a68e2f007de55ab5c), AlUmmahNowUI [`b521637`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/b5216371b3aa37a8308f1bc3b6491af4b8689a82), AlUmmahNowCMS [`d661daf`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/tree/d661daf7d266cb6804637cf616fa7b5fa680b21b). The live checks fetched production pages as Googlebot (smartphone) and as desktop Chrome, read-only. Lighthouse 12.6 ran locally in mobile mode, because the PageSpeed Insights API was over its daily quota.
 
