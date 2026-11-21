@@ -4,6 +4,12 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-21: one number rule; Studio titles in the page language; Latin codes keep their order in Arabic admin text
+
+- **AlUmmahNow:** Arabic numbers are never grouped («٤٨٨٧», «٥٠٦٢٫٦ س»; English keeps "4,887"), and counts from 1,000 on are compact, cut to one decimal, with millions always «{n} م» («١٫٢ م مشاهدة»). Analytics table cells, watch-time hours, money and file sizes stay exact. The rule is [O38](../epics/decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) ([#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)).
+- **AlUmmahNow:** Studio's Top content table and a video's analytics page show the title in the page's language, the same as the watch page: an English Studio page lists "Adhkar after Fajr", not the stored Arabic title (`top-content` now returns `titleLocalized`).
+- **AlUmmahNow:** in the Arabic videos admin, Latin codes whose punctuation is part of the code sit in a left-to-right isolate, so the Errors search box reads «الرسالة أو رمز ERR-» and not «…رمز -ERR». The same applies to `re_`, `mer_`, `https://` and Alt+↑/↓, and a test checks the whole Arabic catalogue.
+
 ## 2026-11-21: the player resumes a saved position again; Player E2E runs on main and in releases
 
 - **AlUmmahNow:** after next 16.4, Player E2E failed on `main`: in development (React Strict Mode) the player's two simultaneous progress reads lost a saved position that was still being moved into encrypted storage, so the "Start from beginning" pill never showed. On-device progress is now read and written one operation at a time, and the old plaintext copy is removed only after the encrypted copy is saved. A production build was not affected ([#1696](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1696), [#1697](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1697)).
