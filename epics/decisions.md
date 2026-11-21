@@ -82,6 +82,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O30](decisions.md#o30-social-media-answers) | Social media answers | **decided** | 2026-11-09 | Social media management |
 | [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) | Requests off and no payment provider: /upgrade is an off feature (404 feature_off, no entry points; the tier still shows in Settings) | **decided** | 2026-11-19 | [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
+| [O38](decisions.md#o38-arabic-numbers-are-never-grouped) | Arabic numbers are never grouped: «٫» is the only mark («٤٨٨٧», «١٢٣٤٫٥»); replaces O35's «٬» | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -865,6 +866,20 @@ The Upgrade page has three modes (shared-types `UPGRADE_MODES`): **pay** (a paym
 
 **Sources:** owner decision in the SUBS review thread, 2026-11-19; AlUmmahNow [#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418)
 
+
+### O38: Arabic numbers are never grouped
+
+**Status:** decided · **Date:** 2026-11-21 · **Replaces:** the thousands mark «٬» that [O35](#o35-arabic-uses-eastern-arabic-hindi-numerals) used (2026-11-15)
+
+Arabic numbers carry no thousands mark: «٤٨٨٧», «١٢٣٤٫٥», «٥٦١٩٩», watch time «٥٠٦٢٫٦ س». The decimal mark «٫» is the only mark inside an Arabic number. No «٬» (U+066C), and no space grouping either (a narrow no-break space was tried on AlUmmahNow#1665 and dropped). English keeps its grouping: "4,887", "1,234.5". Large counts are shown compact anyway («١٫٢ مليون»).
+
+**Why:** «٬» and «٫» are drawn in the same comma shape by most Arabic UI fonts (IBM Plex Sans Arabic, Noto Kufi Arabic, Amiri), so «١٥٬٤١٩٫٩» read as 15,419,9.
+
+**How:** each repo's one formatter turns grouping off for Arabic whatever the caller asks (AlUmmahNow: `numberFormat` in `@al-ummah/shared-types` locale-format, plus the push service worker's copy). Typed numbers still accept «٬» or a space and drop it.
+
+**Blocks / affects:** every app and email, native apps ([AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), commit 7d5b0fe, follows it); [Numbers and dates](../guides/numbers-and-dates.md)
+
+**Sources:** owner decision relayed by MOBILE-DESIGN, 2026-11-21; [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)
 ### LIC: Repo licence for Core and the app repos
 
 **Status:** open · **Date:** 2026-11-08
