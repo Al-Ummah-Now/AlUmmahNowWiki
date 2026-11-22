@@ -4,6 +4,13 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-21: Studio composer, post menu, Upload access, zero counts, home and library (held for the owner)
+
+- **AlUmmahNow:** the Studio New post page puts its sections in glass panels, shows the schedule time in the viewer's zone with its label, and a missing post type is an error under the type tiles instead of a disabled Publish ([#1511](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1511)).
+- **AlUmmahNow:** every post card has a ⋮ menu: Copy link for everyone, Report for signed-in viewers, Edit and Delete (with Undo) for the channel ([#1518](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1518)).
+- **AlUmmahNow:** Upload shows only for an account whose tier allows uploads; signed-out visitors see no Upload, and a member without a tier sees the Request access pill when tier requests are open ([#1626](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1626), [creator tiers](../epics/CHAT-CREATOR-TIERS-creator-tiers.md)).
+- **AlUmmahNow:** zero counts read as words ("No subscribers", «لا يوجد مشتركون») rather than "0 subscribers" ([#1630](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1630)); an empty home page says what to do next and links to Explore ([#1631](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1631)); the library cards use the shared glass surface ([#1639](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1639)).
+
 ## 2026-11-21: one number rule; Studio titles in the page language; Latin codes keep their order in Arabic admin text
 
 - **AlUmmahNow:** in Arabic, values in a line are separated by the Arabic comma, not a dot, because a dot next to Arabic digits reads as zero: «الأمة الآن، ٣ م مشاهدة» on cards, watch meta, channel rows, Studio rows, admin lists and tooltips. English keeps its dot. Shared `metaSeparator` / `joinMeta`; web `<MetaSep />`, admin `<Sep />` and `common.sep`. Same as Android #51 and Desktop #69 ([O38](../epics/decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000)).
