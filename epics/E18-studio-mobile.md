@@ -65,8 +65,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E18 / Mobile video editor (EDL from Epic 30) (HLB-731): In Progress** — both audits agree: AlUmmahNowAndroid#33, #34, #35 (merged): import, timeline, trim/split/undo and MP4 export/share/upload; AlUmmahNowApple#12 (merged): iOS editor spike; AlUmmahNowAndroid#33; AlUmmahNowAndroid#34; AlUmmahNowAndroid#35
-- **E18 / Go live from phone over RTMP/SRT (D3) (HLB-729): Backlog** — both cross-checks agree: Android feature-live has only ModuleInfo.kt; #1373 is web Studio and supplies no phone RTMP/SRT camera ingest.; feature-live is a module marker on Android and iOS has nothing; the shipped go-live (#1373/#872) is web Studio, not "from phone".
+- **E18 / Mobile video editor (EDL from Epic 30) (AUN-352): In Progress** — both audits agree: AlUmmahNowAndroid#33, #34, #35 (merged): import, timeline, trim/split/undo and MP4 export/share/upload; AlUmmahNowApple#12 (merged): iOS editor spike; AlUmmahNowAndroid#33; AlUmmahNowAndroid#34; AlUmmahNowAndroid#35
+- **E18 / Go live from phone over RTMP/SRT (D3) (AUN-350): Backlog** — both cross-checks agree: Android feature-live has only ModuleInfo.kt; #1373 is web Studio and supplies no phone RTMP/SRT camera ingest.; feature-live is a module marker on Android and iOS has nothing; the shipped go-live (#1373/#872) is web Studio, not "from phone".
 ## Open questions
 
 - None recorded in the sources.

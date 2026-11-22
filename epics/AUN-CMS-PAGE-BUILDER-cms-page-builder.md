@@ -173,7 +173,7 @@ None. Validation, serving and rendering run synchronously in the request; video 
 
 ### Reconciled 2026-11-21
 
-- **AUN-CMS-PAGE-BUILDER (HLB-437): Done** — both cross-checks agree: AlUmmahNow#1368, AlUmmahNowCMS#130/#136 and AlUmmahNowUI#109 are merged, wiring the typed-block editor, shared renderer and hosts end to end.; #1368 (shared block renderer + videos About), CMS#136 (block picker/styled blocks/live preview) and UI#109 (www About) all merged 11-14..16 — the wiki's "PRs open" is stale.
+- **AUN-CMS-PAGE-BUILDER (AUN-31): Done** — both cross-checks agree: AlUmmahNow#1368, AlUmmahNowCMS#130/#136 and AlUmmahNowUI#109 are merged, wiring the typed-block editor, shared renderer and hosts end to end.; #1368 (shared block renderer + videos About), CMS#136 (block picker/styled blocks/live preview) and UI#109 (www About) all merged 11-14..16 — the wiki's "PRs open" is stale.
 ## Sources
 
 - Owner request in chat, 2026-11-14.

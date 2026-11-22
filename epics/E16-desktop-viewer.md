@@ -54,9 +54,9 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E16 / Native desktop shells (HLB-712): Done** — both audits agree: AlUmmahNowApple#11 (merged): macOS viewer shell; AlUmmahNowDesktop#6 and #10 (merged): GTK 4 and WinUI 3 viewer shells; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10; AlUmmahNowApple#11
-- **E16 / Distribution (Mac App Store, MSIX/winget, Flathub) (HLB-713): In Progress** — both audits agree: AlUmmahNowApple#19, #38 (merged): notarized Mac downloads and store release infrastructure; AlUmmahNowDesktop#6, #27, #44 (merged): Flatpak, MSI/deb and Microsoft Store infrastructure; AlUmmahNowDesktop issue #15 (open): Flathub source build and signing inputs; AlUmmahNowDesktop#27; AlUmmahNowDesktop#44; AlUmmahNowApple#19
-- **E16 / Mini-player, media keys, notifications (HLB-714): In Progress** — both audits agree: AlUmmahNowDesktop#6 (merged): Linux MPRIS; AlUmmahNowDesktop#10 (merged): Windows SMTC; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10
+- **E16 / Native desktop shells (AUN-333): Done** — both audits agree: AlUmmahNowApple#11 (merged): macOS viewer shell; AlUmmahNowDesktop#6 and #10 (merged): GTK 4 and WinUI 3 viewer shells; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10; AlUmmahNowApple#11
+- **E16 / Distribution (Mac App Store, MSIX/winget, Flathub) (AUN-334): In Progress** — both audits agree: AlUmmahNowApple#19, #38 (merged): notarized Mac downloads and store release infrastructure; AlUmmahNowDesktop#6, #27, #44 (merged): Flatpak, MSI/deb and Microsoft Store infrastructure; AlUmmahNowDesktop issue #15 (open): Flathub source build and signing inputs; AlUmmahNowDesktop#27; AlUmmahNowDesktop#44; AlUmmahNowApple#19
+- **E16 / Mini-player, media keys, notifications (AUN-335): In Progress** — both audits agree: AlUmmahNowDesktop#6 (merged): Linux MPRIS; AlUmmahNowDesktop#10 (merged): Windows SMTC; AlUmmahNowDesktop#6; AlUmmahNowDesktop#10
 ## Open questions
 
 - None recorded in the sources.

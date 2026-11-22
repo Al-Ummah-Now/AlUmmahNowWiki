@@ -140,7 +140,7 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 
 ### Reconciled 2026-11-21
 
-- **AUN-YT-IMPORT (HLB-460): Done** — both audits agree: AlUmmahNow#1390 (merged): import API, jobs and settings; AlUmmahNow#1391 (merged): Studio import wizard; AlUmmahNow#1417 (merged): made-for-kids imports disable comments; AlUmmahNow#1390; AlUmmahNow#1391; AlUmmahNow#1381
+- **AUN-YT-IMPORT (AUN-59): Done** — both audits agree: AlUmmahNow#1390 (merged): import API, jobs and settings; AlUmmahNow#1391 (merged): Studio import wizard; AlUmmahNow#1417 (merged): made-for-kids imports disable comments; AlUmmahNow#1390; AlUmmahNow#1391; AlUmmahNow#1381
 ## Decisions and constraints
 
 - [O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers): uploads are invitation-only through creator tiers; imports follow the same gate.

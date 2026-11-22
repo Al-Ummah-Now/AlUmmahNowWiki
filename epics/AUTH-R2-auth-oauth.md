@@ -41,9 +41,9 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUTH-R2 / OAuth 2.0/OIDC compliance (HLB-512): Done** — both audits agree: openauth#1, #13, #15, #20, #24, #28, #52 (merged): OIDC, hardening, single-use codes, PKCE and confidential-client authentication; openauth; apps/auth/src/routes/authorize.ts
-- **AUTH-R2 / Authorization code + PKCE (HLB-513): Done** — both audits agree: AlUmmahNowAuth#276, #283, #302, #392 (merged): PKCE across public and web clients; openauth#28 (merged): PKCE enforcement; openauth#18
-- **AUTH-R2 / Client management (HLB-514): Done** — both audits agree: AlUmmahNowAuth#196, #205, #210 (merged): client registry and registered clients; openauth main: client/ management API; apps/admin/app/routes/clients.tsx; openauth clientAdminRoutes
+- **AUTH-R2 / OAuth 2.0/OIDC compliance (AUN-117): Done** — both audits agree: openauth#1, #13, #15, #20, #24, #28, #52 (merged): OIDC, hardening, single-use codes, PKCE and confidential-client authentication; openauth; apps/auth/src/routes/authorize.ts
+- **AUTH-R2 / Authorization code + PKCE (AUN-118): Done** — both audits agree: AlUmmahNowAuth#276, #283, #302, #392 (merged): PKCE across public and web clients; openauth#28 (merged): PKCE enforcement; openauth#18
+- **AUTH-R2 / Client management (AUN-119): Done** — both audits agree: AlUmmahNowAuth#196, #205, #210 (merged): client registry and registered clients; openauth main: client/ management API; apps/admin/app/routes/clients.tsx; openauth clientAdminRoutes
 ## Open questions
 
 - None recorded in the sources.

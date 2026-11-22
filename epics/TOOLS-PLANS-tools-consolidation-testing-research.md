@@ -40,8 +40,8 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **TOOLS-PLANS (HLB-938): In Progress** — both audits agree: TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI: Backlog → In Progress; AlUmmahNowTools#3 (merged): xUnit testing framework; AlUmmahNowTools issue #11 (closed): test-coverage work; AlUmmahNowTools#21; AlUmmahNowTools#39
-- **TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI (HLB-940): In Progress** — both cross-checks agree: ViewModel xUnit tests and CI exist, but WinAppDriver/E2E acceptance is not implemented.; xUnit suites + the 60%-coverage item (#3/#11) shipped; WinAppDriver E2E never started — partial.
+- **TOOLS-PLANS (AUN-562): In Progress** — both audits agree: TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI: Backlog → In Progress; AlUmmahNowTools#3 (merged): xUnit testing framework; AlUmmahNowTools issue #11 (closed): test-coverage work; AlUmmahNowTools#21; AlUmmahNowTools#39
+- **TOOLS-PLANS / ViewModel tests, E2E (WinAppDriver), CI (AUN-564): In Progress** — both cross-checks agree: ViewModel xUnit tests and CI exist, but WinAppDriver/E2E acceptance is not implemented.; xUnit suites + the 60%-coverage item (#3/#11) shipped; WinAppDriver E2E never started — partial.
 ## Open questions
 
 - None recorded in the sources.

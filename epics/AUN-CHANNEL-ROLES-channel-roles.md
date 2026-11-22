@@ -42,7 +42,7 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUN-CHANNEL-ROLES (HLB-435): Done** — both cross-checks agree: Main commit 446493ba2 adds invitations/activity/notifications; channelTeam.ts, TeamActivity.tsx and the team page wire CH-1 end to end.; Spec #462 + enforcement #1374 + invitations/activity-log #1389 all merged 11-15 and released; transfer lives in AUN-CHANNEL-CLAIM.
+- **AUN-CHANNEL-ROLES (AUN-28): Done** — both cross-checks agree: Main commit 446493ba2 adds invitations/activity/notifications; channelTeam.ts, TeamActivity.tsx and the team page wire CH-1 end to end.; Spec #462 + enforcement #1374 + invitations/activity-log #1389 all merged 11-15 and released; transfer lives in AUN-CHANNEL-CLAIM.
 ## Open questions
 
 - Auth's `account.deleted` event, which would remove a purged account's memberships, doesn't exist yet ([Auth#291](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/291)). Erasing an account on the videos side already removes its memberships and cancels its invitations.

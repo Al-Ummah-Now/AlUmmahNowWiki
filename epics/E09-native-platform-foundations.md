@@ -93,8 +93,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E09 / Remote config & feature flags (KV) by platform, version, locale (HLB-645): Done** — both audits agree: AlUmmahNow#369, #416 (merged): remote config and app config; AlUmmahNow#1410 (merged): bind APP_CONFIG and add the audited editor; AlUmmahNow issues #413 and #415 (closed); AlUmmahNow#416; AlUmmahNow#1410; AlUmmahNow#415
-- **E09 / Watch-state sync & Continue watching (HLB-649): In Progress** — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#406 and Core#19 ship first-generation sync, but Core#13 still requires client stamps, tombstones/change feed and continue-watching support.; GLM: #406 shipped working watch-state + continue-watching endpoints; Core#13 asks for exactness refinements (client stamps, change feed) on top of a working slice.
+- **E09 / Remote config & feature flags (KV) by platform, version, locale (AUN-262): Done** — both audits agree: AlUmmahNow#369, #416 (merged): remote config and app config; AlUmmahNow#1410 (merged): bind APP_CONFIG and add the audited editor; AlUmmahNow issues #413 and #415 (closed); AlUmmahNow#416; AlUmmahNow#1410; AlUmmahNow#415
+- **E09 / Watch-state sync & Continue watching (AUN-266): In Progress** — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#406 and Core#19 ship first-generation sync, but Core#13 still requires client stamps, tombstones/change feed and continue-watching support.; GLM: #406 shipped working watch-state + continue-watching endpoints; Core#13 asks for exactness refinements (client stamps, change feed) on top of a working slice.
 ## Open questions
 
 - `apple-app-site-association` / `assetlinks.json` need the Apple team id and signing fingerprints (owner).

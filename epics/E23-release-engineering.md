@@ -56,9 +56,9 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E23 / Staged rollouts + kill switches (HLB-766): In Progress** — both audits agree: AlUmmahNowAuth#202 (merged): staged promote, smoke and automatic rollback; AlUmmahNow#1410 (merged): remote-config editor and feature flags; AlUmmahNow#416; AlUmmahNow#1410
-- **E23 / Monitoring (Sentry, QoE gates) (HLB-768): In Progress** — both cross-checks agree: Core#18 and live QoE beacons ship telemetry, but Sentry and release-health gates from EPICS.md:484 are absent.; QoE beacons + telemetry client shipped, but native ingest (#432) is open and no Sentry/gates exist — partial, not nothing.
-- **E23 / Accessibility & RTL QA matrix (HLB-769): In Progress** — both cross-checks agree: Apple/Android/Desktop RTL automation exists, but EPICS.md:485 requires a per-platform accessibility matrix and device lab, which is not present.; Concrete en/ar RTL automation exists on all platforms (Apple#4/#11, Android#4 goldens, Desktop#6/#10), short of a completed matrix.
+- **E23 / Staged rollouts + kill switches (AUN-389): In Progress** — both audits agree: AlUmmahNowAuth#202 (merged): staged promote, smoke and automatic rollback; AlUmmahNow#1410 (merged): remote-config editor and feature flags; AlUmmahNow#416; AlUmmahNow#1410
+- **E23 / Monitoring (Sentry, QoE gates) (AUN-391): In Progress** — both cross-checks agree: Core#18 and live QoE beacons ship telemetry, but Sentry and release-health gates from EPICS.md:484 are absent.; QoE beacons + telemetry client shipped, but native ingest (#432) is open and no Sentry/gates exist — partial, not nothing.
+- **E23 / Accessibility & RTL QA matrix (AUN-392): In Progress** — both cross-checks agree: Apple/Android/Desktop RTL automation exists, but EPICS.md:485 requires a per-platform accessibility matrix and device lab, which is not present.; Concrete en/ar RTL automation exists on all platforms (Apple#4/#11, Android#4 goldens, Desktop#6/#10), short of a completed matrix.
 ## Open questions
 
 - None recorded in the sources.

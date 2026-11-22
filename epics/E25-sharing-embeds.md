@@ -70,7 +70,7 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E25 / Rich previews (HLB-776): Done** — both audits agree: AlUmmahNow#264 (merged): Open Graph and Twitter player cards; AlUmmahNow#1178, #1201, #1320 (merged): JSON-LD and VideoObject enhancements; AlUmmahNow issue #259 records short links and JSON-LD as shipped; AlUmmahNow#1210; AlUmmahNow#1320; apps/web/src/app/[locale]/HomePageClient.tsx
+- **E25 / Rich previews (AUN-399): Done** — both audits agree: AlUmmahNow#264 (merged): Open Graph and Twitter player cards; AlUmmahNow#1178, #1201, #1320 (merged): JSON-LD and VideoObject enhancements; AlUmmahNow issue #259 records short links and JSON-LD as shipped; AlUmmahNow#1210; AlUmmahNow#1320; apps/web/src/app/[locale]/HomePageClient.tsx
 ## Open questions
 
 - None recorded in the sources.

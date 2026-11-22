@@ -49,8 +49,8 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **CMS-QUEUE / Content Editor auth role (HLB-574): In Progress** — both audits agree: AlUmmahNowCMS#67 (merged): Scholar/writer role for own posts; AlUmmahNowAuth#360 (merged): Writer role; AlUmmahNowAuth issue #212 (open): Content Editor role; AlUmmahNowCMS#67
-- **CMS-QUEUE / Newsletter (HLB-582): Done** — both audits agree: AlUmmahNow#1384 (merged): double opt-in subscribers and admin Newsletter; AlUmmahNowUI#117 (merged): www signup, confirmation and unsubscribe; AlUmmahNow#1484 and AlUmmahNowUI#123 (merged): feature-off behaviour; AlUmmahNow#1384; AlUmmahNowUI#117
+- **CMS-QUEUE / Content Editor auth role (AUN-185): In Progress** — both audits agree: AlUmmahNowCMS#67 (merged): Scholar/writer role for own posts; AlUmmahNowAuth#360 (merged): Writer role; AlUmmahNowAuth issue #212 (open): Content Editor role; AlUmmahNowCMS#67
+- **CMS-QUEUE / Newsletter (AUN-193): Done** — both audits agree: AlUmmahNow#1384 (merged): double opt-in subscribers and admin Newsletter; AlUmmahNowUI#117 (merged): www signup, confirmation and unsubscribe; AlUmmahNow#1484 and AlUmmahNowUI#123 (merged): feature-off behaviour; AlUmmahNow#1384; AlUmmahNowUI#117
 ## Open questions
 
 - None recorded in the sources.

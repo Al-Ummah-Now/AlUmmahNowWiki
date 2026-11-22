@@ -239,8 +239,8 @@ Since that sweep (2026-11-12): the theme registry [AlUmmahNow#455](https://githu
 
 ### Reconciled 2026-11-21
 
-- **E10 / Component library (HLB-653): In Progress** — both cross-checks agree: Apple#3/Android#3 and web theme packages provide platform components, while #387 leaves the shared component/catalogue scope open.; #387 explicitly lists 10.3 as remaining, but per-platform components exist (Apple#3/Android#3 Fanous components, #571 web theme packages) — partial.
-- **E10 / Iconography & illustration (HLB-655): In Progress** — both cross-checks agree: Owner icon art and #335 shipped, but #364 still requires the vector lantern, full icon set and store art.; Iconography brief (#335) and the owner's app icons shipped everywhere; the vector set/store art wait on a designer (#364/#365 open).
+- **E10 / Component library (AUN-271): In Progress** — both cross-checks agree: Apple#3/Android#3 and web theme packages provide platform components, while #387 leaves the shared component/catalogue scope open.; #387 explicitly lists 10.3 as remaining, but per-platform components exist (Apple#3/Android#3 Fanous components, #571 web theme packages) — partial.
+- **E10 / Iconography & illustration (AUN-273): In Progress** — both cross-checks agree: Owner icon art and #335 shipped, but #364 still requires the vector lantern, full icon set and store art.; Iconography brief (#335) and the owner's app icons shipped everywhere; the vector set/store art wait on a designer (#364/#365 open).
 ## Open questions
 
 - None recorded in the sources.

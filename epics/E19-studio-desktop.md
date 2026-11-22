@@ -137,7 +137,7 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E19 / Live control room (D3) (HLB-739): Backlog** — both cross-checks agree: #1373 is web Studio Live; desktop Studio has no stream keys/OBS export/health/chat control room.; Web Studio Live shipped (#872/#1373) but the desktop Studio app has no live surface (open PRs Desktop#45/46/48 are captions/editor/brand kit).
+- **E19 / Live control room (D3) (AUN-361): Backlog** — both cross-checks agree: #1373 is web Studio Live; desktop Studio has no stream keys/OBS export/health/chat control room.; Web Studio Live shipped (#872/#1373) but the desktop Studio app has no live surface (open PRs Desktop#45/46/48 are captions/editor/brand kit).
 ## Open questions
 
 - None recorded in the sources.

@@ -56,9 +56,9 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E21 (HLB-748): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No E21 story has a shipped implementation: the verification item belongs to E06.1 and the general viewer is not the intentional-viewing feature.; GLM: 21.3 and 21.6 finalize In Progress; the rest of the Islamic-experience layer is unbuilt.
-- **E21 / Scholar & institution verification (HLB-751): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:447-448 requires Studio application and badge detail/filter; #367/#382 supply only the earlier E06.1 admin endpoint/badge.; GLM: Admin verification endpoint + verified badge merged (#367, #382); the scholar application flow is still not built.
-- **E21 / Intentional viewing (autoplay off, no streaks) (HLB-754): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No daily-time reminder, session-complete card or finite Lamahat exists; general watch code and an autoplay violation do not implement 21.6.; GLM: No streaks exist anywhere, but autoplay-off is violated on Android (playWhenReady=true) and the finite home is not built.
+- **E21 (AUN-371): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No E21 story has a shipped implementation: the verification item belongs to E06.1 and the general viewer is not the intentional-viewing feature.; GLM: 21.3 and 21.6 finalize In Progress; the rest of the Islamic-experience layer is unbuilt.
+- **E21 / Scholar & institution verification (AUN-374): In Progress** — split one step: partially built, acceptance not fully met: Kimi: EPICS.md:447-448 requires Studio application and badge detail/filter; #367/#382 supply only the earlier E06.1 admin endpoint/badge.; GLM: Admin verification endpoint + verified badge merged (#367, #382); the scholar application flow is still not built.
+- **E21 / Intentional viewing (autoplay off, no streaks) (AUN-377): In Progress** — split one step: partially built, acceptance not fully met: Kimi: No daily-time reminder, session-complete card or finite Lamahat exists; general watch code and an autoplay violation do not implement 21.6.; GLM: No streaks exist anywhere, but autoplay-off is violated on Android (playWhenReady=true) and the finite home is not built.
 ## Open questions
 
 - None recorded in the sources.
