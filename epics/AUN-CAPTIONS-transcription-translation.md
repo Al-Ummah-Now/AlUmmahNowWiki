@@ -160,6 +160,11 @@ QF answered yes to all five follow-up questions. Decision record: [QF1](decision
   - Verses are cut into words by `mushaf_word.text` (`word_id`), which is not stored twice.
   - It falls back to the Imla'i spans, with a warning, if the mushaf words are missing, not Uthmani, or differ.
 - **No-ML guard:** the rule is written where the index is built and read, and in spec §9.4 and §9.6.
+
+**Who may read captions ([AlUmmahNow#1742](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1742), merged 2026-11-22, not released yet):** the caption list, the viewing route and the download follow the video's own read rule (`GET /api/videos/:id`).
+- A removed, soft-deleted or pending-deletion video gives 404 to everyone. So does a video that isn't open to anyone (private, draft, scheduled, still processing, held or rejected by review), unless the viewer is allowed to see it. It is the same 404 as the video page, so the video's existence is never revealed.
+- The owner and channel members with `video.view_private` read those captions with their token. These answers are never cached (`private, no-store`, no ETag or 304). The list says `restricted`, so the player fetches each track with the token.
+- Only a video open to anyone serves its captions with public caching and an ETag.
   - Audit: no pipeline uses the index, the QF text or QF timings as training or evaluation data. Fixtures are synthetic.
   - One 2026-11-11 research timing measurement used QF word segments as ground truth. It predates the answer, its data was never kept, and it is not repeated.
 - **Offline and pages:** never restricted in code. No app keeps an offline copy and no page renders verse text today.
