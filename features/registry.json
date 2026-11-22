@@ -510,7 +510,7 @@
         "AlUmmahNow#1728",
         "AlUmmahNow#1751"
       ],
-      "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review. Super admins set, test and remove the DeepL API key on Caption settings; it is stored encrypted, a refused or used-up key flags the Errors page, and jobs fall back to Workers AI (#1728, in review). A language with no caption draft is translated from its published track (imported sidecars, uploaded files); a draft still wins (#1751, in review)."
+      "note": "Transcript translation (Workers AI, DeepL optional and off by default), Quran in the channel's Quran Foundation edition, inline en/ar Translate button and labelled viewer titles (O6) are in review. Super admins set, test and remove the DeepL API key on Caption settings; it is stored encrypted, a refused or used-up key flags the Errors page, and jobs fall back to Workers AI (#1728, in review). A language with no caption draft is translated from its published track (imported sidecars, uploaded files); a draft still wins (#1751, merged 2026-11-22)."
     },
     {
       "id": "transcript-search",
@@ -2181,7 +2181,8 @@
         "AlUmmahNow#1741",
         "AlUmmahNow#1745",
         "AlUmmahNowCore#52",
-        "AlUmmahNow#1751"
+        "AlUmmahNow#1751",
+        "AlUmmahNowTools#53"
       ],
       "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages. Live in production since release v2026.11.22: the server side of the app's error reports (TA-11) and of local encoding (TA-12), with the app's pages for them pending. Merged: the admin-api import surface (TA-3 to TA-7) and the app's sign-in and shell (TA-10), the bulk import engine, its local work queue and the Import page that drives them (TA-11), the app's local encoding with the server's verdict (TA-12), the Quran verse index served to the app (TA-13); in review: the videos admin Imports view with each job's attempts, next try, log and Cancel (TA-8), and social import sources with scheduled sync, each item a post on the channel that says where it first came out (TA-9), and on-computer speech to text (TA-13): whisper on the GPU (Metal, Vulkan) with the CPU as fallback."
     },
