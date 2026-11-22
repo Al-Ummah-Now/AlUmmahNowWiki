@@ -172,6 +172,7 @@ An invited account whose passkey was skipped or failed has no password and no pa
 - **A failure is not a "no" (PK1).** Only a plain Not now / Skip with no failure starts the 30-day pause.
 - **Audit.** Each failure records `passkey.add_failed` with the reason (failed, cancelled, network, expired) and a coarse browser and OS from the User-Agent. Auth admin → user → Passkeys lists the last 10 under **Failed passkey attempts** (local time with zone, UTC on hover) and links to the audit log.
 - **Failure wording** (same PR): each failure case on the card and on `/passkeys/setup` says what happened and what to do. Expired registrations answer `{ error: 'expired' }`.
+- **One header on these pages too** (same PR, E10 "UNIFY"): the invite page, the passkey card and "Check your inbox" carry the shared site header, backdrop and header graphic like the issuer's sign-in pages. A page that answers a POST names a GET address (`Content-Location`) for the language switch: `GET /sign-in/link?state=sent|busy|invalid` shows the same page for display only (no address, nothing sent); the passkey card opens `/passkeys/setup`. OpenAuth's form links read "Don’t have an account?" and "Back to sign in" / «العودة إلى تسجيل الدخول», never split, and sit flush with the fields.
 
 ### Recovery
 
