@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-SCALABILITY` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **shipped** |
-| **Last updated** | 2026-11-21 |
+| **Status** | **in progress**: index-backed public lists are live (`v2026.11.21.7`); the admin lists (keyset cursors, trigram search, `channel_totals` and processing health lists, audit items 6 and 11) are open in [AlUmmahNow#688](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/688), which needs a rebase onto main |
+| **Last updated** | 2026-11-22 |
 
 > Audit doc merged (#506); the audit's AV, PR and WS items are marked fixed with their PRs ([#671](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/671), [#672](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/672), [#678](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/678)). Later: public lists fill their page ([#800](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/800)), search index converges under writes ([#860](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/860), [#873](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/873), [#879](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/879)), admin lists and user search read indexes ([#841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/841), [#869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/869), [#902](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/902)). Revived 2026-11-21 (owner approved): per-object index repair ([#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683)) and index-backed channel playlists, live lists and processing sweep ([#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)) are live in production since release `v2026.11.21.7`. See [Index-backed lists and per-object repair](#index-backed-lists-and-per-object-repair).
 

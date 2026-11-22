@@ -293,8 +293,14 @@
       "prs": [
         "AlUmmahNow#339",
         "AlUmmahNow#812",
-        "AlUmmahNowUI#141"
-      ]
+        "AlUmmahNowUI#141",
+        "AlUmmahNow#1665",
+        "AlUmmahNow#1729",
+        "AlUmmahNowDesktop#69",
+        "AlUmmahNowApple#75",
+        "AlUmmahNowApple#78"
+      ],
+      "note": "Both languages shipped on every web app in v2026.11.08.4. The O38 pass on wording and the Arabic number rule across web and native apps is open (AlUmmahNow#1665, AlUmmahNowUI#141, AlUmmahNowDesktop#69, AlUmmahNowApple#75 and #78, AlUmmahNow#1729)."
     },
     {
       "id": "creator-tiers",
@@ -328,17 +334,22 @@
         "en": "Tier requests: the upgrade page",
         "ar": "طلب المستويات: صفحة الترقية"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "videos",
         "videos-admin",
         "api"
       ],
       "wiki": "epics/AUN-TIER-REQUESTS-tier-requests.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.19.4"
+      },
       "prs": [
-        "AlUmmahNow#1415"
+        "AlUmmahNow#1415",
+        "AlUmmahNow#1651"
       ],
-      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier. Held for the owner's screenshot review."
+      "note": "During the beta, users request a tier on /upgrade (name and a few lines about themselves) instead of paying; admins approve or decline in the videos admin, and the user is told in the app and by email. Every user without a tier holds the Member tier."
     },
     {
       "id": "payments",
@@ -346,20 +357,24 @@
         "en": "Payments for creator tiers",
         "ar": "الدفع لمستويات صنّاع المحتوى"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "videos",
         "videos-admin",
         "api"
       ],
       "wiki": "epics/AUN-SUBS-subscriptions-plan.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.20.1"
+      },
       "prs": [
         "AlUmmahNow#1415",
         "AlUmmahNow#1418",
         "AlUmmahNow#1419",
         "AlUmmahNow#1653"
       ],
-      "note": "Off by default: /upgrade stays the request page until an admin enables a payment provider and prices a tier. Then that tier's card shows the price and Subscribe, and the provider's webhook assigns the tier. PayGood is the only provider (P1, 2026-11-19), off until the owner enables it (never Stripe); users see billing history in Settings › Billing; admins manage providers, prices, tax, subscriptions, refunds and complimentary tiers on the videos admin Payments page. Held for the owner's screenshot review."
+      "note": "Off by default: /upgrade stays the request page until an admin enables a payment provider and prices a tier. Then that tier's card shows the price and Subscribe, and the provider's webhook assigns the tier. PayGood is the only provider (P1, 2026-11-19), off until the owner enables it (never Stripe); users see billing history in Settings › Billing; admins manage providers, prices, tax, subscriptions, refunds and complimentary tiers on the videos admin Payments page. The framework shipped in v2026.11.19.4; PayGood-only (AlUmmahNow#1653) shipped in v2026.11.20.1."
     },
     {
       "id": "creator-studio",
@@ -377,8 +392,10 @@
         "tag": "v2026.11.11.4"
       },
       "prs": [
-        "AlUmmahNow#498"
-      ]
+        "AlUmmahNow#498",
+        "AlUmmahNow#1382"
+      ],
+      "note": "The first Studio shipped in v2026.11.11.4. Completing Studio (AlUmmahNow#1382) is open, held for the owner's screenshot review."
     },
     {
       "id": "studio-comments-and-channel-pages",
@@ -2077,11 +2094,12 @@
         "AlUmmahNow#1501",
         "AlUmmahNow#1509",
         "AlUmmahNow#1510",
-        "AlUmmahNowDesktop#54",
         "AlUmmahNowAndroid#27",
-        "AlUmmahNowApple#56"
+        "AlUmmahNowApple#56",
+        "AlUmmahNowUI#123",
+        "AlUmmahNowAuth#426"
       ],
-      "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe follow in #1498, #1501, #1509 and #1510. Desktop Studio (Windows, Linux) reads the features and hides Upload, and Analytics on feature_off, in AlUmmahNowDesktop#54. Android Studio (AlUmmahNowAndroid#27, held for the owner's screenshots) hides Upload without `upload`, Analytics on 404/feature_off, Recently deleted with Restore and Delete forever without soft delete, the invitation card, and Add a passkey on Auth's feature_off. Apple Studio (iPhone, iPad, Mac; AlUmmahNowApple#56, held for the owner's screenshots) hides Upload without `upload`, Bulk schedule without `bulkSchedule`, and Analytics on feature_off."
+      "note": "GET /api/me/features and the 404 feature_off convention shipped in #1494. Live, captions/translate/Quran/audio, upload/channel/settings/domains/AI hint/bulk schedule and status subscribe followed in #1498, #1501, #1509 and #1510 (v2026.11.18.4 and v2026.11.19); the shared header hides off items in AlUmmahNowUI#123 and Auth hides Add a passkey in AlUmmahNowAuth#426. Android Studio (AlUmmahNowAndroid#27) and Apple Studio (AlUmmahNowApple#56) are merged and reach users with their next store builds. Desktop Studio's change (AlUmmahNowDesktop#54) was closed and still needs a new PR."
     },
     {
       "id": "request-origin",
@@ -2089,7 +2107,7 @@
         "en": "Where requests come from: errors, audit and analytics",
         "ar": "مصدر الطلبات: في الأخطاء والتدقيق والتحليلات"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "videos",
         "videos-admin",
@@ -2097,6 +2115,10 @@
         "native"
       ],
       "wiki": "epics/AUN-ORIGIN-request-origin.md",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.19.4"
+      },
       "prs": [
         "AlUmmahNow#1597",
         "AlUmmahNow#1602",
@@ -2110,7 +2132,7 @@
         "AlUmmahNowDesktop#62",
         "AlUmmahNowApple#65"
       ],
-      "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. All parts are merged (owner approved the Errors page and Studio/Site visits views on 2026-11-19); waiting for the next videos release."
+      "note": "Errors, audit rows, queued jobs and analytics record the app or site, device class, country, source and entry page of each request (no IP, User-Agent or URL kept); native apps send X-AUN-Client through aun-core 0.4.0-rc.3. The owner approved the Errors page and Studio/Site visits views on 2026-11-19. The web parts shipped across v2026.11.19, v2026.11.19.2 and v2026.11.19.4; the native parts are merged."
     },
     {
       "id": "tools-admin-import",
@@ -2169,7 +2191,32 @@
         "AlUmmahNow#683",
         "AlUmmahNow#685"
       ],
-      "note": "The channel Playlists tab, the Home playlist and live shelves, GET /api/playlists?channelId= and the live list read the search index with keyset cursors: each page is one index seek however deep the scroll. Failed index writes are repaired per object by a queued admin job (backoff, then the Errors page with Retry) and the full reconcile runs weekly. The home feed and trending belong to discovery ranking."
+      "note": "The channel Playlists tab, the Home playlist and live shelves, GET /api/playlists?channelId= and the live list read the search index with keyset cursors: each page is one index seek however deep the scroll. Failed index writes are repaired per object by a queued admin job (backoff, then the Errors page with Retry) and the full reconcile runs weekly. The home feed and trending belong to discovery ranking. The admin lists (keyset cursors, trigram search, channel_totals and processing health lists) are still open in AlUmmahNow#688."
+    },
+    {
+      "id": "error-pages",
+      "name": {
+        "en": "One error-page family on every app",
+        "ar": "صفحات أخطاء موحّدة في كل التطبيقات"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "auth",
+        "cms",
+        "www",
+        "sites",
+        "dev"
+      ],
+      "wiki": "epics/E10-fanous-design-system.md#error-page-family",
+      "prs": [
+        "AlUmmahNow#1641",
+        "AlUmmahNowAuth#443",
+        "AlUmmahNowCMS#148",
+        "AlUmmahNowUI#133"
+      ],
+      "note": "Every error screen (404, 410, 500 and crash) is one frosted-glass Fanous card in every app and theme, in Arabic and English, with the same actions. Spec: guides/error-pages.md (wiki PR 144). All four PRs and the spec are held for the owner's screenshot review."
     }
   ]
 }

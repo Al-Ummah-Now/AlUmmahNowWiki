@@ -30,6 +30,7 @@ One design language implemented natively per platform plus web.
 | 10.5 | Iconography & illustration | In Progress — both cross-checks agree: Owner icon art and #335 shipped, but #364 still requires the vector lantern, full icon set and store art.; Iconography brief (#335) and the owner's app icons shipped everywhere; the vector set/store art wait on a designer (#364/#365 open). |
 | 10.6 | App icons, splash, store art | Web favicons for every app are the owner's art, cropped and downscaled with no edits (#729), as exact-size PNGs with no SVG in production (#845). Generator: `packages/app-icons`. Splash and store art still need a designer. |
 | 10.7 | Component catalogues | Not started. |
+| 10.9 | Error-page family (404, 410, 500, crash) on every app | In Review — held for the owner's screenshots: AlUmmahNow#1641, AlUmmahNowAuth#443, AlUmmahNowCMS#148, AlUmmahNowUI#133; spec in wiki PR 144. See [Error-page family](#error-page-family). |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
@@ -190,6 +191,22 @@ Owner, 2026-11-16 ([O36](decisions.md#o36-one-frosted-glass-surface-primitive-fl
   - Release regression: AlUmmahNow `apps/web/e2e/release/page-frame.spec.ts`.
 - **Review shots show what a user sees:** viewport-sized frames at the top, middle and end of each page, in a real browser, never full-page captures. A full-page capture draws a fixed bar once, at the first screen's bottom.
 - **RTL:** components never add `flex-row-reverse` for Arabic on top of `dir="rtl"`; the double flip puts avatars, icons and actions on the wrong side.
+
+## Error-page family
+
+Every error screen in every app is one design: a frosted-glass card with a gold edge on the theme's page, inside the app's own header, in Light and Dark, Arabic and English (RTL).
+
+- **404 and 410:** Search, Go back (only with history), Go to home. 410 is for content that was removed for good.
+- **500 and crash:** Try again, Go to home, and the error reference with Copy.
+- "Still stuck? Contact us" on every page. Arabic uses ٠–٩ («خطأ ٤٠٤»).
+
+| Part | PR | Status |
+|---|---|---|
+| Videos site and admin | AlUmmahNow#1641 | Held for the owner's screenshots |
+| Auth | AlUmmahNowAuth#443 | Held for the owner's screenshots |
+| CMS | AlUmmahNowCMS#148 | Held for the owner's screenshots |
+| www, sites, dev (shared UI) | AlUmmahNowUI#133 | Held for the owner's screenshots |
+| Spec (`guides/error-pages.md`) | wiki PR 144 | Held with its PRs |
 
 ## Decisions and constraints
 
