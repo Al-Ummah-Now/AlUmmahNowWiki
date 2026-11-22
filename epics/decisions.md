@@ -509,6 +509,7 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 - **The derived index** (normalised words + locations, built from the Content Sync copy) is allowed for matching. **It is never used to train, fine-tune or evaluate a machine-learning or AI model.** The same applies to the synced text and QF timings. Tests and evals use synthetic fixtures only.
 - **`mushafs:4`** (Uthmani Hafs) is synced. Its `mushaf_word` rows, linked by `word_id`, cut verses into words and are not stored twice.
 - **Subtitle downloads:** a viewer may download one video's subtitle file. The verse text is filled at download time, unaltered, and the attribution and edition go inside the file.
+  - **Viewer downloads: built, off by owner decision 2026-11-22.** QF allows it, but the owner chose to ship it switched off: an admin switch (`viewerCaptionDownload`, default off) hides the player's row. While it is off, only the video's owner, its channel's caption editors and admins download, from Studio ([AlUmmahNow#1735](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1735), merged 2026-11-22, not released yet).
 - **Offline device copies** are allowed when refreshed from our synced backend at least every 7 days. A copy expires only when a refresh is missed.
 - **Web pages and JSON-LD** may carry verse text that is rendered fresh.
 - **Every call to QF:** on HTTP 429, back off and honour `Retry-After`. Use granular scopes, and access QF only from the backend.
@@ -516,7 +517,7 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 
 **Blocks / affects:** AUN-CAPTIONS, TOOLS-ADMIN, DISCOVERY, any feature that shows Quran text
 
-**Sources:** AlUmmahNow spec `docs/specs/TRANSCRIPTION-TRANSLATION.md` §9.5–9.6; [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716), [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), [AlUmmahNow#1734](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1734)
+**Sources:** AlUmmahNow spec `docs/specs/TRANSCRIPTION-TRANSLATION.md` §9.5–9.6; [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716), [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), [AlUmmahNow#1734](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1734), [AlUmmahNow#1735](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1735)
 
 ## Owner decisions and standing rules recorded only in chat (O-series, wiki IDs)
 
