@@ -72,7 +72,9 @@ HTTP/1.1 404 Not Found
 {"success": false, "code": "feature_off"}
 ```
 
-There is no message for a person. Clients check `code`, never the text. A client that gets `feature_off` (for example after the feature was switched off while the page was open) reads the features again, and the entry point disappears. It doesn't show an error.
+Clients check `code`, never the text. A client that gets `feature_off` (for example after the feature was switched off while the page was open, or in an old app version) shows the server's `message` once, inline or as a toast: "Live streaming isn't available right now." Then it reads the features again, and the entry point disappears ([O40](../epics/decisions.md#o40-server-written-error-messages), owner 2026-11-22). Today the answer has no message; it gains one with [AUN-FEATURES](../epics/AUN-FEATURES-feature-switches.md). The message never mentions tiers, never upsells and never links to /upgrade.
+
+Admins switch features on and off on one page, **Features** in the videos admin ([O39](../epics/decisions.md#o39-one-features-page-server-enforced)). A feature switched off there counts as "off" in the table above.
 
 A whole page that belongs to an off feature is the site's 404, not a hollow page or a "not available" notice. Example: with tier requests off and no payment provider, `/upgrade` answers `feature_off`, renders the 404 page and loses every link to it, while the user's tier still shows in Settings › Tier ([O37](../epics/decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature)).
 
