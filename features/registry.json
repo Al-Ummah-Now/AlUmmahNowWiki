@@ -2140,14 +2140,22 @@
         "en": "Al Ummah Now Tools: bulk import, social sync and captions for staff",
         "ar": "أدوات الأمة الآن: الاستيراد الجماعي ومزامنة وسائل التواصل والترجمة النصية للفريق"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "native",
         "videos-admin",
         "api"
       ],
       "wiki": "epics/TOOLS-ADMIN-admin-import-tool.md",
-      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages."
+      "prs": [
+        "AlUmmahNow#1715",
+        "AlUmmahNow#1719",
+        "AlUmmahNow#1720",
+        "AlUmmahNowTools#49",
+        "AlUmmahNow#1733",
+        "AlUmmahNowTools#50"
+      ],
+      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages. Merged: the admin-api import surface (TA-3 to TA-7) and the app's sign-in and shell (TA-10); in review: the bulk import engine and its local work queue (TA-11)."
     },
     {
       "id": "discovery-ranking",
