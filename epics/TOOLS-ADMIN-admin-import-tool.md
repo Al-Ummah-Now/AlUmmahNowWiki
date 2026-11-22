@@ -197,8 +197,8 @@ None when idle: no messages in the queues; one hourly cron tick in api-videos fi
 
 - Spec: this page.
 - TA-3 to TA-7: AlUmmahNow PRs #1715, #1719, #1720 (merged). TA-10: Tools PR #49 (merged 2026-11-21).
-- TA-11: Tools PR #50 (engine) and AlUmmahNow PR #1733 (error reports) merged 2026-11-22; Tools PR #51 (Import page, visual) in review.
-- TA-12: AlUmmahNow PR #1736 (renditions through admin-api) merged 2026-11-22; Tools PR #52 (local encode, visual) in review.
+- TA-11: Tools PR #50 (engine) and AlUmmahNow PR #1733 (error reports) merged 2026-11-22; #1733 is live in production (release v2026.11.22, server side). Tools PR #51 (Import page, visual) in review, so the app side is pending.
+- TA-12: AlUmmahNow PR #1736 (renditions through admin-api) merged 2026-11-22 and live in production (release v2026.11.22, server side). Tools PR #52 (local encode, visual) in review, so the app side is pending.
 - TA-8: AlUmmahNow PR #1738 (Imports view, job log, Cancel; visual) in review.
 - TA-9: AlUmmahNow PR #1741 (social import sources, scheduled sync, origin line on posts; visual) in review.
 - Linear: epic [AUN-571](https://linear.app/hamzalabs/issue/AUN-571), stories TA-1…TA-16 = AUN-572…AUN-587, TA-17 = AUN-588, TA-18 = AUN-589, TA-19 = AUN-590, TA-20 = AUN-591, TA-21 = AUN-592.
