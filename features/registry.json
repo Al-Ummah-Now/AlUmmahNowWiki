@@ -485,9 +485,10 @@
         "AlUmmahNow#1318",
         "AlUmmahNow#1332",
         "AlUmmahNow#1716",
-        "AlUmmahNow#1722"
+        "AlUmmahNow#1722",
+        "AlUmmahNow#1734"
       ],
-      "note": "Caption minutes per tier with audited grants. The Quran index shipped in v2026.11.13.10; Studio's Transcribe button in v2026.11.14.3. QF terms (2026-11-21): captions keep verse keys only and the text is loaded at play time; 429 Retry-After is honoured, the scopes are granular, and a stale copy is flagged at 3 days (#1716). QF attribution appears in every Quran cue and in Studio (#1722, held for screenshots)."
+      "note": "Caption minutes per tier with audited grants. The Quran index shipped in v2026.11.13.10; Studio's Transcribe button in v2026.11.14.3. QF terms (2026-11-21): captions keep verse keys only and the text is loaded at play time; 429 Retry-After is honoured, the scopes are granular, and a stale copy is flagged at 3 days (#1716). QF attribution appears in every Quran cue and in Studio (#1722, held for screenshots). QF answers (2026-11-22): one-video subtitle downloads with the text filled at download time and the attribution inside, mushafs:4 word cuts, and the index never used for ML (#1734)."
     },
     {
       "id": "caption-translation",

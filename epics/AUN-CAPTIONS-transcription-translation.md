@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-CAPTIONS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (later AlUmmahNowCMS for the shared provider layer, and the native Studio apps) |
-| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. On-device desktop transcription (D10) is in review in [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) and [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Translation is in review in [AlUmmahNow#1398](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1398): Studio's Translate on a caption draft (queued per language, counted in caption minutes), Quran in the channel's Quran Foundation edition, the inline en/ar Translate button, and labelled viewer titles (an admin setting, on by default, waiting for the owner, P4). Transcript search is in review in [AlUmmahNow#1401](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1401). **QF terms (2026-11-21):** audit and backend fixes in [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716); attribution in every Quran cue and in Studio in [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), held for the owner's screenshots (see below) |
-| **Last updated** | 2026-11-21 |
+| **Status** | **in progress**: transcription is live: the Quran index (v2026.11.13.10), caption drafts, transcription jobs and caption minutes per tier with grants (v2026.11.14), and Studio's Transcribe button (v2026.11.14.3); AlUmmahNow #1303, #1311, #1312, #1315, #1318, #1332. On-device desktop transcription (D10) is in review in [AlUmmahNow#1386](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1386) and [AlUmmahNowCore#43](https://github.com/Al-Ummah-Now/AlUmmahNowCore/pull/43). Translation is in review in [AlUmmahNow#1398](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1398): Studio's Translate on a caption draft (queued per language, counted in caption minutes), Quran in the channel's Quran Foundation edition, the inline en/ar Translate button, and labelled viewer titles (an admin setting, on by default, waiting for the owner, P4). Transcript search is in review in [AlUmmahNow#1401](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1401). **QF terms (2026-11-21):** audit and backend fixes in [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716); attribution in every Quran cue and in Studio in [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), held for the owner's screenshots (see below). **QF answers (2026-11-22):** one-video subtitle downloads, `mushafs:4` word cuts and the no-ML guard in [AlUmmahNow#1734](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1734) |
+| **Last updated** | 2026-11-22 |
 
 > v1 spec merged in [#816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/816). The v2 update is in PR [#819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/819): [spec](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/specs/TRANSCRIPTION-TRANSLATION.md) · [research](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/72b76733fe10c4aa4185433ac3f1b23bdb47f93c/docs/research/TRANSCRIPTION-TRANSLATION-RESEARCH.md). v2 adds the zero-mistake Quran design, Quran identify-vs-store split (QF permission email drafted), DeepL measured, and the full price comparison. v3 ([#826](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/826)): quran.com-only Quran fetched live, "Confirm all suggested", DeepL tested on lectures.
 
@@ -134,8 +134,39 @@ Refs: [Content Sync, offline content](https://api-docs.quran.foundation/docs/tut
   - Store and send references only, never QF text. Quran spans are never machine-translated, never indexed as text, and never used as SEO keywords or descriptions.
   - Any QF text shown comes from our API, with the attribution line. No QF credentials in any app.
 
+## QF answers (2026-11-22)
+
+QF answered yes to all five follow-up questions. Decision record: [QF1](decisions.md#qf1-quran-foundation-content-use).
+
+> 1. The derived index is OK, **never for ML training, fine-tuning or evaluation**.
+> 2. `mushafs:4` is available; `mushaf_word` rows carry the Uthmani text, linked to quran_core words by `word_id`.
+> 3. A viewer may download the subtitle file for one video with the verse text filled at download time, unaltered, with the attribution inside the file.
+> 4. Offline device copies refreshed from our synced backend at least every 7 days are fine.
+> 5. Web pages and JSON-LD are OK if the text is served fresh.
+
+**What changed ([AlUmmahNow#1734](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1734)):**
+- **Downloads:** `GET /api/v1/videos/:id/subtitles/:lang/download?format=vtt|srt` returns one video's track as a file.
+  - The verse text is filled at download time exactly as it is served for viewing.
+  - QF's attribution (en + ar) and the edition go in a `NOTE` block in VTT, or a first zero-length cue in SRT.
+  - The response is `no-store`, built for each request and never stored.
+  - The player's download button is a visual change and waits for the owner's review.
+- **Content Sync:** syncs `quran_core:1;mushafs:4`.
+  - Verses are cut into words by `mushaf_word.text` (`word_id`), which is not stored twice.
+  - It falls back to the Imla'i spans, with a warning, if the mushaf words are missing, not Uthmani, or differ.
+- **No-ML guard:** the rule is written where the index is built and read, and in spec §9.4 and §9.6.
+  - Audit: no pipeline uses the index, the QF text or QF timings as training or evaluation data. Fixtures are synthetic.
+  - One 2026-11-11 research timing measurement used QF word segments as ground truth. It predates the answer, its data was never kept, and it is not repeated.
+- **Offline and pages:** never restricted in code. No app keeps an offline copy and no page renders verse text today.
+  - A future offline copy must refresh from our backend at least every 7 days.
+  - A future page renders the text live, with the attribution.
+
+**Rules for TOOLS-ADMIN and DISCOVERY (added):**
+- Never export the index, Quran text or QF timings as a dataset, eval set or ML input.
+- A download or export holds one video and fills the text at the moment it is made.
+
 ## Decisions and constraints
 
 - [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
 - [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
+- [QF1](decisions.md#qf1-quran-foundation-content-use): Quran Foundation content use (decided 2026-11-22: index never for ML, one-video downloads, `mushafs:4`)
 - The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: answered by QF 2026-11-21, see [QF terms](#qf-terms-2026-11-21)**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.
