@@ -281,7 +281,9 @@
         "videos",
         "www",
         "cms",
-        "auth"
+        "auth",
+        "sites",
+        "dev"
       ],
       "wiki": "epics/E03-i18n-enhancement.md",
       "release": {
@@ -290,7 +292,8 @@
       },
       "prs": [
         "AlUmmahNow#339",
-        "AlUmmahNow#812"
+        "AlUmmahNow#812",
+        "AlUmmahNowUI#141"
       ]
     },
     {
