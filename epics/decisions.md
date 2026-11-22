@@ -24,7 +24,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [P1](decisions.md#p1-first-paid-providers) | First paid providers | **decided** | 2026-11-19 | 27.7 |
 | [QF1](decisions.md#qf1-quran-foundation-content-use) | Quran Foundation content use (QF's answers 2026-11-21 and 2026-11-22; the derived index is never used for ML training or evaluation) | **decided** | 2026-11-22 | AUN-CAPTIONS, TOOLS-ADMIN, DISCOVERY, any feature that shows Quran text |
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions plan (decisions S1–S18) | **pending** | 2026-11-11 | Epic 27, Epic 24, every tiered feature, P1 |
-| [AUN-MEMBERS](AUN-MEMBERS-creator-support.md#15-owner-decisions) | Supporting creators (decisions MEM-D1–MEM-D16: how we act for creators' PayGood merchants, creators outside the US and Canada, countries no provider covers, who pays fees, minimum, who may receive, supporter visibility, messages, refunds, ages, payment methods, legal entity, charity route, perks, business costs, apps) | **pending** | 2026-11-22 | AUN-MEMBERS build, [Epic 24](E24-creator-support-premium.md) story 24.1 |
+| [AUN-MEMBERS](AUN-MEMBERS-creator-support.md#15-owner-decisions) | Supporting creators (decisions MEM-D2–MEM-D24; D1 and D16 withdrawn: payout rail, hold, payout threshold and schedule, payout fees, chargebacks after payout, unclaimed balances, payout approvals, countries no rail covers, who pays fees, minimum, who may receive, supporter visibility, messages, refunds, ages, payment methods, legal entity, charity route, perks, business costs, apps) | **pending** | 2026-11-22 | AUN-MEMBERS build, [Epic 24](E24-creator-support-premium.md) story 24.1 |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (decisions AD1–AD14) | **decided** | 2026-11-13 | AUN-ADMIN-NATIVE build (held until the owner says go) |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | Multiple audio tracks (decisions MA1–MA10: demuxed HLS alternate audio from R2, tier limit per video, review of each track) | **decided** | 2026-11-14 | AUN-MULTI-AUDIO build |
 | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) | Passkeys everywhere, required for staff (from AD6; PK1–PK8 built to recommendation, owner may change) | **built to recommendation** | 2026-11-13 | AUTH-PASSKEYS, AUN-ADMIN-NATIVE step 0b |
@@ -87,7 +87,8 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) | Numbers: Arabic never grouped («٤٨٨٧»); counts compact from 1,000, cut not rounded («٤٫٨ ألف», «١٫٢ م»); standalone «١٢ ألفًا»; Arabic separates values with «، »; replaces O35's «٬» and the «مليون» forms | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [O39](decisions.md#o39-one-features-page-server-enforced) | One Features page in the videos admin for every switchable feature; the server refuses an off feature (`feature_off`) and every client hides it; switches in the search D1, 30 s server bound, 2 min everywhere; admins change most, super admins only Uploads, Creating channels, Live and Caption download for viewers | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md) |
 | [O40](decisions.md#o40-server-written-error-messages) | Server-written error messages: one envelope (`code`, localized `message`, `action`, `retryAfter`, `helpUrl`, `reference`) and one en/ar catalogue; unknown codes show the server's message; `feature_off` carries a message, shown once when an action still reaches an off feature (amends Hidden when off) | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), every client |
-| [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float) and never holds funds; paid perks only as a separate optional section, default off | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
+| [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float); paid perks only as a separate optional section, default off. "Never hold funds" replaced by [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
+| [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -978,11 +979,25 @@ The messages come from one English and Arabic catalogue on the server. A client 
 
 The owner, 2026-11-22, on the members spec: no paid perks now; the product is support for a creator, one-time or monthly, with nothing unlocked in return. Paid perks (badges, member-only posts, videos and live, early access) are a separate optional section, designed but not in the build order, behind their own switch, default off. The same day: the platform takes nothing: 0% cut, no platform fee, no margin, no float. "Fees" means only what vendors (payment provider, exchange, payout, chargeback) and governments (tax) take.
 
-Consequences in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md): the creator is the payee at the provider and the platform never holds funds; the supporter sees every vendor fee and tax and what the creator receives before paying; Apple guideline 3.2.1(vii) applies because 100% goes to the creator and nothing is unlocked.
+Consequences in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md): the supporter sees every vendor fee and tax and what the creator receives before paying; Apple guideline 3.2.1(vii) applies because 100% goes to the creator and nothing is unlocked.
 
 **Blocks / affects:** [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [Epic 24](E24-creator-support-premium.md)
 
 **Sources:** owner messages relayed by the orchestrator thread, 2026-11-22
+
+**Updated 2026-11-22:** the original "the creator is the payee and the platform never holds funds" is replaced by [O42](#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail). The 0% rule stands.
+
+### O42: PayGood collects only, creators paid through a separate payout rail
+
+**Status:** decided · **Date:** 2026-11-22
+
+The owner, 2026-11-22: "how others do it, youtube patreon, we will not use paygood to pay creators". PayGood ([P1](#p1-first-paid-providers)) only **collects** support, into the organisation's own merchant account. Creators are paid through a **separate payout rail**, never Stripe or a service built on it ([T2](#t2-billing-provider)). The organisation (the waqf / nonprofit, [SM-4](#sm-4-legal-entity)) holds creators' money in a separate non-interest account until payout; the owner never holds, signs for, approves or receives it.
+
+Consequences in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) revision 2: a double-entry ledger with daily three-way reconciliation; a hold, threshold and monthly payout cycle; queued, idempotent payout jobs with retry, DLQ and admin Errors; money permissions only for the organisation's finance list. Recommended rails (owner decision MEM-D17): Wise Business primary, PayPal Payouts fallback, Trolley later. Money transmission, PayGood's "third party payments" rule and the rails' own rules are open legal questions before launch.
+
+**Blocks / affects:** [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [Epic 24](E24-creator-support-premium.md)
+
+**Sources:** owner message relayed by the orchestrator thread, 2026-11-22
 
 ### LIC: Repo licence for Core and the app repos
 

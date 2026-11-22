@@ -2301,7 +2301,7 @@
         "www"
       ],
       "wiki": "epics/AUN-MEMBERS-creator-support.md",
-      "note": "Spec written 2026-11-22: one-time and monthly support straight to the creator's own payment account, 0% to the platform, off by default; paid perks designed separately and off."
+      "note": "Spec written 2026-11-22 (revision 2): one-time and monthly support collected by PayGood into the organisation's account and paid to creators monthly through a separate payout rail (Wise, PayPal Payouts fallback), 0% to the platform, off by default and off until the organisation exists; paid perks designed separately and off."
     }
   ]
 }
