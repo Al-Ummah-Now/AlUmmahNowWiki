@@ -1893,7 +1893,7 @@
         "AlUmmahNowDesktop#43",
         "AlUmmahNowDesktop#45"
       ],
-      "note": "Daily metrics over any range, retention curve and CSV export."
+      "note": "Daily metrics over any range, retention curve and CSV export. The analytics API takes the viewer's IANA zone as `tz`, so days and \"today\" follow the local clock (AlUmmahNow#1665); the native clients can send it."
     },
     {
       "id": "studio-institution-mode",
