@@ -31,6 +31,7 @@ One **solid card with a gold edge and glow** on the lantern street, inside the a
   - An app's own page-title plate (the Fawanees street plate) never applies inside the card: the card is already a solid surface.
   - **Still stuck? Contact us** links to the videos site's Contact us (www's `/contact` redirects there), with `?ref=` when there is a reference.
 - **Words**: balanced lines (`text-wrap: balance` on the title, body, help line and reference hint, and a no-break space before the last word where a line could still end on it), so a heading or sentence never ends on one lone word. "Al Ummah Now" is kept on one line (no-break spaces).
+- **Sentences**: the body is drawn one sentence per span (`.ep-s`, an inline block; `errorBodySentences` / `errorBodyHtml` in shared-types, the same split in UI, Auth and the CMS). Two sentences share a line only when both fit, so no line ends on the opening words of the next one («… الصفحة. ربما», “… a problem. Try”). The 410 rewrite writes the same spans.
 - **Never**: a stack trace, a raw error message, a framework URL, a timestamp, or a pulsing/animated illustration.
 
 ## Words
