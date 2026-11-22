@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 105 epics and 487 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 106 epics and 508 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -20,6 +20,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUN-COST](AUN-COST-cost-monitoring.md) | [AUN-1](https://linear.app/hamzalabs/issue/AUN-1/aun-cost-cost-monitoring-dashboard-and-alerts) | 3 | 3 | 0 | 0 | 0 | 6 |
 | [AUN-CREATOR-STUDIO](AUN-CREATOR-STUDIO-web-creator-studio.md) | [AUN-32](https://linear.app/hamzalabs/issue/AUN-32/aun-creator-studio-web-creator-studio) | 0 | 0 | 1 | 0 | 0 | 1 |
 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md) | [AUN-594](https://linear.app/hamzalabs/issue/AUN-594/aun-features-feature-switches-one-features-page-enforced-everywhere) | 0 | 1 | 0 | 16 | 0 | 17 |
+| [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) | [AUN-612](https://linear.app/hamzalabs/issue/AUN-612/aun-members-supporting-creators-one-time-and-monthly-support-0percent) | 0 | 0 | 0 | 21 | 0 | 21 |
 | [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) | [AUN-34](https://linear.app/hamzalabs/issue/AUN-34/aun-dev-site-alummahnowdev-the-project-site-for-developers-and) | 1 | 0 | 1 | 0 | 0 | 2 |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | [AUN-37](https://linear.app/hamzalabs/issue/AUN-37/aun-multi-audio-multiple-audio-tracks) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-ORIGIN](AUN-ORIGIN-request-origin.md) | [AUN-38](https://linear.app/hamzalabs/issue/AUN-38/aun-origin-request-origin-where-a-request-came-from) | 2 | 0 | 0 | 0 | 0 | 2 |

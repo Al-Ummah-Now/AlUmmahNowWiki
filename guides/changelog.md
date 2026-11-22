@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-22: supporting creators specified (AUN-MEMBERS)
+
+- **AlUmmahNowWiki:** new epic [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md): viewers support a creator once or monthly, the money goes straight to the creator's own account at the payment provider, and Al Ummah Now takes nothing ([O41](../epics/decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds)). It covers Islamic compliance, legality, fees with worked examples, taxes, payouts by country, app store rules, partners and vendors, the architecture, English and Arabic copy, questions for a lawyer, an accountant and a scholar, and owner decisions MEM-D1 to MEM-D15. Paid perks are designed separately and stay off. Research, not legal advice. Linear AUN-612. No code yet.
+
 ## 2026-11-21: one number rule; Studio titles in the page language; Latin codes keep their order in Arabic admin text
 
 - **AlUmmahNow:** Studio analytics days follow the viewer's time zone, the same way admin times do. At 7:30 pm in New York (already the next day in UTC), the chart still ends on today's date. Studio sends its IANA zone as `tz` with `dateFrom`/`dateTo` (`/api/analytics/channels/:id`, `/metrics`, `/videos/:id`, `/videos/:id/retention` and `/api/channels/:id/analytics/top-content`). Likes, comments and new subscribers are counted on their local day. Views and watch time are stored per UTC day and keep that date. Without `tz`, or with an unknown zone, days are UTC as before. Native Studio apps can send the same parameter ([#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)).

@@ -24,7 +24,7 @@ Donations to creators, viewer Premium and ethical sponsorship, later.
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 24.1 | Creator support (sadaqah/donations) |  |
+| 24.1 | Creator support (sadaqah/donations) | Specified in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) (2026-11-22): one-time and monthly support straight to the creator, 0% to the platform ([O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds)) |
 | 24.2 | Premium membership (IAP + web checkout) | In Progress — both audits agree: AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419 |
 | 24.3 | Ethical sponsorship slots |  |
 
