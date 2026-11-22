@@ -2248,6 +2248,40 @@
         "AlUmmahNowUI#133"
       ],
       "note": "Every error screen (404, 410, 500 and crash) is one frosted-glass Fanous card in every app and theme, in Arabic and English, with the same actions. Spec: guides/error-pages.md (wiki PR 144). All four PRs and the spec are held for the owner's screenshot review."
+    },
+    {
+      "id": "feature-switches",
+      "name": {
+        "en": "Feature switches (one Features page)",
+        "ar": "مفاتيح الميزات (صفحة الميزات)"
+      },
+      "status": "planned",
+      "apps": [
+        "videos-admin",
+        "videos",
+        "api",
+        "www",
+        "native"
+      ],
+      "wiki": "epics/AUN-FEATURES-feature-switches.md",
+      "note": "Spec written 2026-11-22; design and build follow."
+    },
+    {
+      "id": "server-error-messages",
+      "name": {
+        "en": "Server-written error messages",
+        "ar": "رسائل أخطاء يكتبها الخادم"
+      },
+      "status": "planned",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "www",
+        "native"
+      ],
+      "wiki": "epics/AUN-FEATURES-feature-switches.md",
+      "note": "One error envelope with en/ar messages; clients show messages for codes they don't know yet."
     }
   ]
 }

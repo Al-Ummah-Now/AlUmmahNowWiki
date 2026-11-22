@@ -84,6 +84,8 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O35](decisions.md#o35-arabic-uses-eastern-arabic-hindi-numerals) | Arabic uses Eastern Arabic (Hindi) numerals ٠–٩ everywhere | **decided** | 2026-11-15 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
 | [O37](decisions.md#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) | Requests off and no payment provider: /upgrade is an off feature (404 feature_off, no entry points; the tier still shows in Settings) | **decided** | 2026-11-19 | [AUN-TIER-REQUESTS](AUN-TIER-REQUESTS-tier-requests.md), [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) |
 | [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) | Numbers: Arabic never grouped («٤٨٨٧»); counts compact from 1,000, cut not rounded («٤٫٨ ألف», «١٫٢ م»); standalone «١٢ ألفًا»; Arabic separates values with «، »; replaces O35's «٬» and the «مليون» forms | **decided** | 2026-11-21 | Every app and email; [Numbers and dates](../guides/numbers-and-dates.md) |
+| [O39](decisions.md#o39-one-features-page-server-enforced) | One Features page in the videos admin for every switchable feature; the server refuses an off feature (`feature_off`) and every client hides it; switches in the search D1, 30 s server bound, 2 min everywhere; admins change most, super admins only Uploads, Creating channels, Live and Caption download for viewers | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md) |
+| [O40](decisions.md#o40-server-written-error-messages) | Server-written error messages: one envelope (`code`, localized `message`, `action`, `retryAfter`, `helpUrl`, `reference`) and one en/ar catalogue; unknown codes show the server's message; `feature_off` carries a message, shown once when an action still reaches an off feature (amends Hidden when off) | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), every client |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -931,6 +933,41 @@ One rule for every platform (web, admin, emails, Android, Apple, Desktop, Tools)
 **Blocks / affects:** every app and email, native apps ([AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), commit 7d5b0fe); [Numbers and dates](../guides/numbers-and-dates.md)
 
 **Sources:** owner decisions relayed by MOBILE-DESIGN, 2026-11-21; [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665)
+
+### O39: One Features page, server enforced
+
+**Status:** decided · **Date:** 2026-11-22
+
+Every feature that can be switched on or off is listed in one registry (`packages/shared-types/src/feature-registry.ts`) and switched on one page in the videos admin, **Features** (`/features`). Each row has the name, help text in English and Arabic that says what people lose while it is off, the switch, who changed it last and when, and dependency notes.
+
+- **The server is the source of truth.** Every gated route and job is mapped to its key, and the server refuses an off feature with `404 feature_off`. `GET /api/me/features` includes the switches, and every client (web, Apple, Android, Desktop, Tools, www) hides what is off.
+- **Storage:** the switches live in the search D1, with a change history and an admin audit entry. Servers refuse within 30 seconds of a change, and every surface follows within 2 minutes.
+- **Who changes them:** admins and super admins (`features:manage`). Uploads, Creating channels, Live streaming and Caption download for viewers can be changed only by super admins. There is no new role and no Auth RBAC.
+- **Existing switches move here.** Allow tier requests, YouTube import, Social, AI category suggestions, Caption translation, the Translate button and Translated titles keep their stored values. Their old pages keep their setup and show a status line.
+- **Background jobs park** while their feature is off and resume when it is back on, through a queued job. If resuming gives up, the Errors page shows it with Retry.
+
+**Blocks / affects:** [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), [O37](#o37-with-tier-requests-off-and-no-payment-provider-upgrade-is-an-off-feature) (its switch moves, its rule doesn't change)
+
+**Sources:** owner request 2026-11-22: "enable and disable features, from videos admin on one page for all features with help text, enforced on web and native apps"
+
+### O40: Server-written error messages
+
+**Status:** decided · **Date:** 2026-11-22 · **Amends:** [Product rules → The `feature_off` convention](../guides/product-rules.md#the-feature_off-convention)
+
+Every API error carries one envelope:
+
+- a stable `code`;
+- a whole-sentence `message` in the request's language (`Accept-Language`, else `X-App-Locale`);
+- an `action` (retry, sign in, update app, contact support, none);
+- optionally `retryAfter`, `helpUrl` and a `reference`.
+
+The messages come from one English and Arabic catalogue on the server. A client keeps its tailored handling for the codes it knows. For **any other code** it shows the server's message in one generic component (inline, toast or full page), so a client that doesn't know a code yet still shows it properly.
+
+**`feature_off` now carries a message**, for example "Live streaming isn't available right now." / «البث المباشر غير متاح الآن.» Entry points the client knows about stay hidden, as before. The message appears only when an action still reaches an off feature: an old app version, or a page opened before the switch. It shows once, then the client re-reads the features and the entry point disappears. It never mentions tiers, never upsells and never links to /upgrade.
+
+**Blocks / affects:** [AUN-FEATURES](AUN-FEATURES-feature-switches.md), every API and client
+
+**Sources:** owner addition 2026-11-22: a generic server error so "errors coming from the server can be shown even when a client doesn't support them yet", e.g. "This feature is not currently available"; owner the same day: the server side is spelled out as its own stories
 
 ### LIC: Repo licence for Core and the app repos
 
