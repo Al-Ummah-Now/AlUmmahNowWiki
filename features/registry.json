@@ -1277,6 +1277,22 @@
       "note": "Videos admin → Costs: month to date against the budget, forecast, per product and per environment, top movers; budget, spike and weekly digest alerts by email (opt-in) and on the Errors page; super admins set a read-only Cloudflare token and optional Bunny and Resend keys there (encrypted, only the last 4 shown). Works with no token. Estimates at list prices."
     },
     {
+      "id": "cost-full-coverage",
+      "name": {
+        "en": "Every platform cost on the Costs page",
+        "ar": "كل تكاليف المنصة في صفحة التكاليف"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-COST-cost-monitoring.md",
+      "prs": [
+        "AlUmmahNow#1729"
+      ],
+      "note": "Every Cloudflare invoice line, billed as the invoice bills it; fixed and other costs that super admins edit; idle cost for every resource; alert settings on the page; a daily chart on the viewer's calendar. Operations keeps usage and health; spend moved to Costs."
+    },
+    {
       "id": "dev-site",
       "name": {
         "en": "alummahnow.dev, this site",
