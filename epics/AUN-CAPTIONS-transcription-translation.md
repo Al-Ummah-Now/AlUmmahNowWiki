@@ -149,7 +149,10 @@ QF answered yes to all five follow-up questions. Decision record: [QF1](decision
   - The verse text is filled at download time exactly as it is served for viewing.
   - QF's attribution (en + ar) and the edition go in a `NOTE` block in VTT, or a first zero-length cue in SRT.
   - The response is `no-store`, built for each request and never stored.
-  - The player's download button for viewers is off (owner, 2026-11-22: no viewer downloads). The work is kept behind a switch that stays off.
+  - **Viewer downloads: built, off by owner decision 2026-11-22** ([AlUmmahNow#1735](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1735), merged 2026-11-22, not released yet). The player's **Download captions** row («تنزيل الترجمة») is kept behind an admin switch: videos admin → Caption settings → "Let viewers download captions" (`viewerDownload`, default off), which feeds the `viewerCaptionDownload` feature.
+    - Off: the player shows no Download row at all.
+    - Off: after the video's own read rule, the download API serves only site admins and the video's team with `video.edit` (owner, channel owner/admin/editor), which is how Studio downloads. Everyone else gets `404 feature_off`: anonymous callers, other users and channel moderators.
+    - On: anyone who can watch the video can download its shown track from the player.
 - **Creators download their own captions in Studio ([AlUmmahNow#1743](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1743), in review, held for the owner's screenshots):**
   - Every ready published track and every caption draft has **Download captions** («تنزيل الترجمة») with WebVTT (.vtt) or SubRip (.srt).
   - It works for private, unlisted and draft videos. The owner and channel staff who may edit captions can download. Channel moderators and other users can't.
