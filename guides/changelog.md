@@ -6,7 +6,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-22: supporting creators specified (AUN-MEMBERS)
 
-- **AlUmmahNowWiki:** new epic [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md): viewers support a creator once or monthly, the money goes straight to the creator's own account at the payment provider, and Al Ummah Now takes nothing ([O41](../epics/decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds)). It covers Islamic compliance, legality, fees with worked examples, taxes, payouts by country, app store rules, partners and vendors, the architecture, English and Arabic copy, questions for a lawyer, an accountant and a scholar, and owner decisions MEM-D1 to MEM-D15. Paid perks are designed separately and stay off. Research, not legal advice. Linear AUN-612. No code yet.
+- **AlUmmahNowWiki:** new epic [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md): viewers support a creator once or monthly, the money goes straight to the creator's own PayGood merchant account, and Al Ummah Now takes nothing ([O41](../epics/decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds)). It covers Islamic compliance, legality, fees with worked examples, taxes, payouts by country, app store rules, partners and vendors, the architecture, English and Arabic copy, questions for a lawyer, an accountant and a scholar, and owner decisions MEM-D1 to MEM-D16. Paid perks are designed separately and stay off. Research, not legal advice. Linear AUN-612. No code yet.
 
 ## 2026-11-21: one number rule; Studio titles in the page language; Latin codes keep their order in Arabic admin text
 

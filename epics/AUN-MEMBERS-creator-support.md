@@ -15,7 +15,7 @@
 
 ## Goal
 
-A viewer can support a creator they love: once, or every month. The money goes straight from the supporter to the creator's own account at a payment provider. Al Ummah Now takes nothing and never holds the money. The supporter sees, before paying, exactly what the payment provider and any tax take and what the creator receives. Nothing is unlocked in return: support is a gift.
+A viewer can support a creator they love: once, or every month. The money goes straight from the supporter to the creator's own merchant account at PayGood. Al Ummah Now takes nothing and never holds the money. The supporter sees, before paying, exactly what the payment provider and any tax take and what the creator receives. Nothing is unlocked in return: support is a gift.
 
 The feature is one switch on the Features page, **off by default**, and it can be turned off per country, per channel and all at once.
 
@@ -24,8 +24,7 @@ The feature is one switch on the Features page, **off by default**, and it can b
 - **Support only, nothing in return** (owner, 2026-11-22). Badges, member-only posts, videos and live, and early access are designed in [§10](#10-optional-paid-perks-designed-not-scheduled) but are not in the build order and sit behind their own switch, default off.
 - **0% to the platform** (owner, 2026-11-22). "Fees" on this page means only what vendors (payment provider, currency exchange, payout, chargeback) and governments (tax) take.
 - **Never hold funds.** The creator is the payee. No platform balance, no float, no interest ([§3](#3-islamic-compliance)).
-- **Never Stripe** ([T2](decisions.md#t2-billing-provider), [O4](decisions.md#o4-pluggable-payment-providers-never-stripe-admin-managed-plans)), and nothing built on Stripe (Lemon Squeezy, Polar, Gumroad, Buy Me a Coffee).
-- **PayGood** is the owner's chosen provider for platform tiers ([P1](decisions.md#p1-first-paid-providers)). It is US and Canada only, so this page recommends it for US and Canadian creators and adds PayPal for the rest ([§12](#12-partners-and-vendors)). That is an owner decision ([§15](#15-owner-decisions)).
+- **PayGood only** ([P1](decisions.md#p1-first-paid-providers), decided 2026-11-19), off until the owner enables it, and **never Stripe** ([T2](decisions.md#t2-billing-provider)). This spec is built on PayGood. Where PayGood can't do something today, this page says so plainly and lists it as an owner decision ([§12.1](#121-paygood-what-it-can-and-cant-do), [§15](#15-owner-decisions)); it doesn't swap providers. The other providers researched are recorded only in [§12.3](#123-other-providers-researched-for-the-record-not-recommended), for the record.
 - **Switchable feature, default off** ([O39](decisions.md#o39-one-features-page-server-enforced), [AUN-FEATURES](AUN-FEATURES-feature-switches.md)). Hidden when off ([Product rules](../guides/product-rules.md)); `feature_off` carries a server message ([O40](decisions.md#o40-server-written-error-messages)).
 - **Always async** ([O26](decisions.md#o26-always-async-with-admin-visible-errors)): every money event goes through a queue with retry and a DLQ; failures flag the admin **Errors** page with **Retry**. Troubleshooting is done from the admin, never from Cloudflare or a provider's dashboard.
 - **Channel roles live in videos**, not Auth RBAC ([O16](decisions.md#o16-channel-roles-separate-from-site-roles-only-super-admins-transfer-ownership), [roles](../guides/roles.md)). Only the channel **owner** connects a payout account, because the money is theirs.
@@ -85,7 +84,7 @@ The feature is one switch on the Features page, **off by default**, and it can b
 ### 2.3 Chargebacks, disputes and fraud
 
 - The creator is the merchant, so a chargeback is raised against the creator's provider account, with the provider's fee. The creator agreement says so ([§4.8](#48-terms)).
-- The admin **Disputes** page shows every open dispute and its due date, and can send evidence through the provider's API (our records: account, time, IP country, the consent line the supporter ticked).
+- The admin **Disputes** page shows every dispute we learn of and its due date, with our records ready to send (account, time, IP country, the consent line the supporter ticked). PayGood's public API has no dispute endpoints, so the creator answers in their own PayGood dashboard; the page gives them our records as a download ([§12.1](#121-paygood-what-it-can-and-cant-do)).
 - Fraud controls, all on the server: a minimum amount; per-account and per-card limits per day (admin-set); new accounts limited to small amounts for their first days; card testing blocked by the provider's own risk checks plus our rate limit and Turnstile on the support sheet ([bot protection](../guides/bot-protection.md)); self-support (a creator supporting their own channel) refused.
 - A creator with a dispute rate above the provider's threshold is paused by a job and flagged for an admin.
 
@@ -157,11 +156,11 @@ Each source is cited inline with its date. Where scholars differ, this page says
 
 ### 4.1 We are not a money transmitter, if we never touch the money
 
-- FinCEN defines a money transmitter as someone who accepts funds from one person and transmits them to another (31 CFR 1010.100(ff)(5), [eCFR](https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1010/subpart-A/section-1010.100), accessed 2026-11-22). If the supporter pays the creator's own provider account and we never receive, hold, pool or direct the money, the provider (a licensed institution) does the transmitting.
+- FinCEN defines a money transmitter as someone who accepts funds from one person and transmits them to another (31 CFR 1010.100(ff)(5), [eCFR](https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1010/subpart-A/section-1010.100), accessed 2026-11-22). If the supporter pays the creator's own PayGood merchant account and we never receive, hold, pool or direct the money, PayGood and its processor Finix do the transmitting.
 - **Gifts weaken one usual defence.** FinCEN's payment-processor exemption needs "the purchase of goods or services". A gift has none. So our position rests on **never touching funds**, not on that exemption. State "agent of the payee" exemptions also assume a purchase (narrowly read, for example [California DFPI opinion](https://dfpi.ca.gov/rules-enforcement/laws-and-regulations/opinion-letters-by-law-subject/opinion-letter-payment-processing-service-not-exempt-as-agent-of-payee-or-factoring), accessed 2026-11-22).
 - Between 31 and 35 states have adopted the Money Transmission Modernization Act; sources disagree ([CSBS](https://www.csbs.org/node/231461), Sep 2026; [Womble Bond Dickinson](https://www.womblebonddickinson.com/us/node/21361), Aug 2026).
 - **Things we must never build**, because each would make us a transmitter: a platform bank account in the flow; balances, credits or wallets; paying creators ourselves; holding back or scheduling payouts; refunds or transfers from our own money; escrow.
-- **Read the provider contract.** Platform programmes often make the platform liable for creators' negative balances or chargebacks. That is credit risk, not transmission, but the lawyer reviews it ([§14.1](#141-us-lawyer)).
+- **Read the provider contract.** PayGood's terms (Delaware law) and any partner agreement must be checked for liability for creators' negative balances or chargebacks. That is credit risk, not transmission, but the lawyer reviews it ([§14.1](#141-us-lawyer)).
 
 ### 4.2 Who is the merchant
 
@@ -170,7 +169,7 @@ Each source is cited inline with its date. Where scholars differ, this page says
 | Payment facilitator (PayFac) | The platform signs merchants and receives settlement for them ([Visa PF model](https://usa.visa.com/dam/VCOM/global/support-legal/documents/visa-payment-facilitator-model.pdf), accessed 2026-11-22) | No: heavy obligations, and we would touch funds |
 | Marketplace (card network sense) | The platform is the merchant for sellers' sales ([Visa risk guide](https://usa.visa.com/content/dam/VCOM/regional/na/us/partner-with-us/documents/visa-payment-facilitator-and-marketplace-risk-guide.pdf), accessed 2026-11-22) | No |
 | Merchant of record (Paddle, FastSpring, Dodo, Creem) | The vendor resells to the buyer and takes a fee | **No.** Their rules ban donations and tips (Paddle (`https://www.paddle.com/help/start/account-verification/what-am-i-not-allowed-to-sell-on-paddle`), Dodo (`https://docs.dodopayments.com/miscellaneous/prohibited-businesses-and-locations`), Creem (`https://docs.creem.io/faq/prohibited-products`), accessed 2026-11-22), and a resale conflicts with a gift |
-| **Direct: the creator is the merchant** | The creator's own provider account receives the money; we build the checkout | **Yes.** This design |
+| **Direct: the creator is the merchant** | The creator's own PayGood merchant account receives the money; we start the hosted checkout | **Yes.** This design. PayGood's acceptable-use policy forbids "third party" payments, so we must never collect for creators |
 
 ### 4.3 Sanctions and high-risk countries
 
@@ -215,55 +214,58 @@ See [§2.5](#25-minors): 18+ to support and to receive.
 
 **Al Ummah Now takes 0%.** All fees below are vendors' or governments'.
 
-### 5.1 Provider fees
+### 5.1 PayGood fees
 
-| | PayGood (US/Canada creators) | PayPal multiparty (creator's own PayPal) |
-|---|---|---|
-| Card | 2.9% + 30¢; nonprofit preset 1.9% + 30¢ ([paygood.com](https://paygood.com), accessed 2026-11-22) | US 3.49% + $0.49 (PayPal merchant fees (`https://www.paypal.com/webapps/mpp/merchant-fees`), 19 May 2026, via search) |
-| Cross-border card | none published (**Unverified**) | +1.50% (**Unverified**, search snippet) |
-| Bank (ACH) | 0.5%, capped at $5 | — |
-| Payout to the creator's bank | none published (**Unverified**) | Instant to PayPal balance; withdrawal fees vary by country (**Unverified**) |
-| Currency exchange | supporter's card issuer, 0–3% | PayPal conversion spread, about 3–4% (**Unverified**) |
-| Chargeback | per merchant agreement (**Unverified**) | dispute fee exists, amount **Unverified** |
-| Monthly or platform fee | none published (**Unverified**) | none published (**Unverified**) |
-| Platform fee (ours) | $0 | $0 (partner fee omitted) |
+All from PayGood's site and docs, accessed 2026-11-22 ([paygood.com](https://paygood.com), [docs](https://docs.paygood.com/introduction)).
+
+| | PayGood |
+|---|---|
+| Card | 2.9% + 30¢; a nonprofit preset of 1.9% + 30¢ exists in onboarding; interchange-plus pricing on request |
+| Bank (ACH) | 0.5%, capped at $5 |
+| Cross-border card surcharge | none published (**Unverified**) |
+| Currencies | USD and CAD only. A supporter paying in another currency pays their card issuer's foreign-transaction fee (often 0–3%) |
+| Payout to the creator's bank | none published (**Unverified**); US or Canadian bank only |
+| Chargeback | "as outlined in your merchant agreement" (amount **Unverified**) |
+| Monthly or account fee | none published (**Unverified**) |
+| Supporter covers the fee | "Customer can choose to cover the processing fee" exists for invoices; for subscriptions **Unverified** |
+| Platform fee (ours) | $0 |
 
 ### 5.2 Worked examples: $5.00 a month, 0% platform fee
 
-US-based creator (the only fee schedules confirmed). Taxes: none, because a gift with nothing in return is outside VAT/GST ([§6](#6-taxes)); the creator owes income tax on what they receive.
+The creator is in the **US or Canada** (the only places PayGood pays out, [§7](#7-international-and-sending-funds)). Taxes: none, because a gift with nothing in return is outside VAT/GST ([§6](#6-taxes)); the creator owes income tax on what they receive.
 
-| Supporter in | PayGood: creator receives | PayPal: creator receives | Supporter-side currency cost (not deducted) |
-|---|---|---|---|
-| US | **$4.56** (fee $0.45) | **$4.34** (fee $0.66) | none |
-| UK | $4.56 | $4.26 (fee $0.74) | GBP→USD, 0–4% |
-| Germany | $4.56 | $4.26 | EUR→USD, 0–4% |
-| Egypt | $4.56 | $4.26 | EGP cards often limited for USD (**Unverified**) |
-| Pakistan | $4.56 | $4.26 (card only; no PayPal accounts in Pakistan) | PKR→USD |
-| Indonesia | $4.56 | $4.26 | IDR→USD |
-| Saudi Arabia | $4.56 | $4.26 | mada cards may not work cross-border (**Unverified**) |
-| Malaysia | $4.56 | $4.26 | MYR→USD |
-| Nigeria | $4.56 | $4.26 | NGN card limits common (**Unverified**) |
+| Supporter in | PayGood fee | Creator receives | Supporter covers fees: pays | Supporter-side cost (not deducted) |
+|---|---|---|---|---|
+| US | $0.45 | **$4.56** | $5.46 | none |
+| UK | $0.45 | **$4.56** | $5.46 | card issuer's foreign-transaction fee, GBP→USD, 0–3% |
+| Germany | $0.45 | **$4.56** | $5.46 | EUR→USD, 0–3% |
+| Egypt | $0.45 | **$4.56** | $5.46 | EGP cards often limited for USD spend (**Unverified**) |
+| Pakistan | $0.45 | **$4.56** | $5.46 | PKR→USD; international card limits (**Unverified**) |
+| Indonesia | $0.45 | **$4.56** | $5.46 | IDR→USD |
+| Saudi Arabia | $0.45 | **$4.56** | $5.46 | mada debit cards may not work cross-border (**Unverified**) |
+| Malaysia | $0.45 | **$4.56** | $5.46 | MYR→USD |
+| Nigeria | $0.45 | **$4.56** | $5.46 | NGN card limits common (**Unverified**) |
 
-PayGood assumes no cross-border surcharge (none published). **With "supporter covers fees"** the supporter pays $5.46 (PayGood) or $5.69 in the US / $5.78 abroad (PayPal), and the creator receives $5.00. **A non-US creator on PayPal** pays their own country's receiving rate and a conversion spread when withdrawing: roughly $4.00–4.25 of $5 (**Unverified**). Source for all: provider research, 2026-11-22.
+Assumes PayGood accepts foreign cards with no surcharge (none published; ask PayGood, [§12.1](#121-paygood-what-it-can-and-cant-do)). A creator who is a registered nonprofit on the 1.9% + 30¢ preset receives $4.61. **A creator in any of those other countries can't receive through PayGood today** ([§7](#7-international-and-sending-funds)).
 
-**Small amounts hurt.** The fixed 30¢ or 49¢ is 6–10% of $5. Hence the recommended $3 minimum and presets from $5 ([§15](#15-owner-decisions)).
+**Small amounts hurt.** The fixed 30¢ is 6% of $5. Hence the recommended $3 minimum and presets from $5 ([§15](#15-owner-decisions)).
 
 ### 5.3 Fixed costs against the $500/month cap
 
 | Item | Monthly |
 |---|---|
-| PayGood, PayPal platform fees | $0 (none published, **Unverified**: confirm in writing) |
+| PayGood platform or account fees | $0 (none published, **Unverified**: confirm in writing) |
 | Workers, D1 rows, queue messages for support | within today's plan; under $5 at S2 scale |
-| KYC, sanctions screening | $0 (the provider's, inside its fees) |
-| Rejected options for comparison | Mangopay from €249; Tipalti from $249; Trolley $49 + $1–4 a payout (about $1,100–4,100 at 1,000 creators); Adyen minimums |
+| KYC, sanctions screening | $0 (PayGood's and Finix's, inside the card fee; **Unverified**) |
+| Per-creator secrets (if creators connect their own API keys, [§12.1](#121-paygood-what-it-can-and-cant-do)) | $0: encrypted in D1 with a key from Secrets Store, not one Secrets Store entry per creator |
 
 **Outside the infrastructure cap** (business costs, owner decision [S3](AUN-SUBS-subscriptions-plan.md)): entity formation, registered agent, insurance, lawyer and accountant ([§12](#12-partners-and-vendors)).
 
-If a provider ever adds per-account fees, the options are: pass them to the creator in Studio as a plain line ("PayPal charges $X a month for your account"), or let the supporter cover them through "cover the fees". Never a platform margin.
+If PayGood ever adds per-account fees, the options are: show them to the creator in Studio as a plain line ("PayGood charges $X a month for your account"), or let the supporter cover them through "cover the fees". Never a platform margin.
 
 ### 5.4 The breakdown before paying
 
-`SupportProvider.quote()` returns the provider fee, currency exchange estimate and tax for the supporter's country and the creator's account, before checkout. The sheet shows every line ([§11.2](#112-breakdown-before-paying-always-shown)), including "Al Ummah Now takes: $0.00". The receipt shows the final amounts from the provider's event. If the quote can't be computed (provider down), the sheet says so and does not let the person pay blind.
+`SupportProvider.quote()` returns the provider fee, currency exchange estimate and tax for the supporter's country and the creator's account, before checkout. The sheet shows every line ([§11.2](#112-breakdown-before-paying-always-shown)), including "Al Ummah Now takes: $0.00". The receipt shows the final amounts from the provider's event. If the quote can't be computed (PayGood unreachable), the sheet says so and does not let the person pay blind.
 
 ## 6. Taxes
 
@@ -271,7 +273,7 @@ If a provider ever adds per-account fees, the options are: pass them to the crea
 
 - **A gift with nothing in return is outside VAT** in the EU: in *Tolsma* (C-16/93, 1994), money given to a street musician was not consideration ([BAILII](https://mansfield.bailii.org/eu/cases/EUECJ/1994/C1693.html)). **UK HMRC:** donations "freely given … who receives nothing in return" are outside VAT ([VCHAR9200](https://www.gov.uk/hmrc-internal-manuals/vat-charities-manual/vchar9200)); optional tips are outside scope ([VATSC06130](https://www.gov.uk/hmrc-internal-manuals/vat-supply-and-consideration/vatsc06130)) (accessed 2026-11-22).
 - **US sales tax** reaches sales of property and listed services; a gift is generally not a sale. **Elsewhere** (Saudi Arabia, UAE, Egypt, India, Indonesia, Malaysia, Nigeria, Turkey, Pakistan, Bangladesh, Canada, Australia) VAT/GST also needs a supply for consideration; likely the same, **Unverified** per country.
-- **What breaks it:** any perk, badge, shout-out, early access or tier named after a benefit. Then the payment is consideration for a digital service and VAT applies at the supporter's location. The EU deemed-supplier rule (Art. 9a, Implementing Regulation 282/2011) would then likely make **us** the seller, **even at 0%**, because the test is control (setting terms, authorising the charge), not fees ([legislation.gov.uk](https://www.legislation.gov.uk/eur/2011/282/article/9a/data.htm); *Fenix* C-695/20, [DLA Piper](https://www.dlapiper.com/en-jp/insights/publications/2023/03/validity-of-article-9a-of-council-implementing-regulation-282-2011-confirmed)). Some US marketplace-facilitator laws catch a platform that "makes payment processing available" ([MTC white paper](https://www.mtc.gov/wp-content/uploads/2023/02/Wayfair-and-Marketplace-White-Paper-FINAL-7-8-2021.pdf)). This is the biggest reason perks are off ([§10](#10-optional-paid-perks-designed-not-scheduled)).
+- **What breaks it:** any perk, badge, shout-out, early access or tier named after a benefit. Then the payment is consideration for a digital service and VAT applies at the supporter's location. The EU deemed-supplier rule (Art. 9a, Implementing Regulation 282/2011) would then likely make **us** the seller, **even at 0%**, because the test is control (setting terms, authorising the charge), not fees (legislation.gov.uk (`https://www.legislation.gov.uk/eur/2011/282/article/9a/data.htm`); *Fenix* C-695/20, [DLA Piper](https://www.dlapiper.com/en-jp/insights/publications/2023/03/validity-of-article-9a-of-council-implementing-regulation-282-2011-confirmed)). Some US marketplace-facilitator laws catch a platform that "makes payment processing available" ([MTC white paper](https://www.mtc.gov/wp-content/uploads/2023/02/Wayfair-and-Marketplace-White-Paper-FINAL-7-8-2021.pdf)). This is the biggest reason perks are off ([§10](#10-optional-paid-perks-designed-not-scheduled)).
 - With a 0% cut we sell nothing to creators either, so there is no VAT on a platform commission.
 
 ### 6.2 Who is the seller of record
@@ -294,29 +296,29 @@ With 0% revenue, the platform has no income from support. The accountant is aske
 
 ### 7.1 Where creators can receive
 
-Direct to the creator's own account (the only model that keeps us out of the money). Source: [PayPal countries and supported features](https://developer.paypal.com/payouts/supported-features.md) (10 Sep 2026); PayGood US/Canada only ([docs](https://docs.paygood.com/introduction), accessed 2026-11-22); [Adyen for Platforms countries](https://docs.adyen.com/marketplaces.md) (accessed 2026-11-22).
+**PayGood serves businesses in the United States and Canada only**, in USD and CAD, and pays out to a US or Canadian bank account ([paygood.com](https://paygood.com), [docs](https://docs.paygood.com/introduction), accessed 2026-11-22).
 
-| Creator country | PayGood | PayPal | Adyen for Platforms (rejected) |
-|---|---|---|---|
-| US, Canada | **Yes** | Yes | Yes |
-| UK, EU | No | **Yes** | Yes |
-| Turkey | No | Yes (domestic service restricted since 2016 per press: **Unverified**) | No |
-| Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman | No | **Yes** | No |
-| Jordan, Morocco, Senegal | No | **Yes** | No |
-| Indonesia, Malaysia | No | **Yes** (Malaysia with MYR limits) | No |
-| India | No | Receive and withdraw only | No |
-| Nigeria | No | Limited: via Paga since Jan 2026 (TechCabal (`https://techcabal.com/2026/01/27/paypal-returns-to-nigeria-after-two-decades-this-time-through-paga/`)) | No |
-| Egypt | No | Limited: withdraw to an Egyptian Visa card or a US bank only | No |
-| Pakistan, Bangladesh, Algeria, Tunisia, Lebanon, Iraq, Palestine, Somalia, Yemen, Afghanistan | No | **No** | No |
-| Iran, Syria, Sudan, Cuba, North Korea, Crimea/DNR/LNR | No | No (sanctions or provider policy) | No |
+| Creator country | Through PayGood |
+|---|---|
+| US, Canada | **Yes** (a US or Canadian business or sole proprietor with a local bank; sole proprietors **Unverified**: PayGood's text says "small businesses") |
+| UK, EU, Turkey, the Gulf, Jordan, Morocco, Senegal, Egypt, Pakistan, Bangladesh, Indonesia, Malaysia, India, Nigeria, Algeria, Tunisia, Lebanon, Iraq, Palestine, Somalia, Yemen, Afghanistan, every other country | **No** |
+| Iran, Syria, Sudan, Cuba, North Korea, Crimea/DNR/LNR | No (sanctions or provider policy, [§4.3](#43-sanctions-and-high-risk-countries)) |
 
-**Payout rails:** PayGood pays the creator's US or Canadian bank. PayPal credits the creator's PayPal balance at once; the creator withdraws to a local bank or card on their own schedule, at their country's fee. Minimums and schedules per country are **Unverified** (PayPal's fee pages refuse automated reads).
+**Supporters** can be anywhere PayGood accepts the card (foreign cards **Unverified**) and that isn't blocked by sanctions or the Countries page.
 
-### 7.2 Countries neither covers
+**Payout rails:** bank only (US ACH, Canadian EFT). Schedule and minimum **Unverified**. No wallets (JazzCash, Easypaisa, bKash, GoPay, Vodafone Cash) and no foreign banks.
 
-No non-Stripe provider was found that pays creators directly in Pakistan, Bangladesh, Algeria, Tunisia, Lebanon, Iraq, Palestine, Somalia, Yemen or Afghanistan **without the platform collecting first**. Payout-only services (Wise, which reaches JazzCash and Easypaisa; Payoneer; Tipalti; Trolley) all pay from a balance the platform funds, which breaks "never hold funds"; Payoneer also bans gifts and donations ([Payoneer prohibited list](https://www.payoneer.com/legal/prohibited-transaction-list/), accessed 2026-11-22). Regional processors (Paymob, Paystack, Flutterwave, Xendit, Tap, Moyasar, PayTabs) need a local entity and make the platform the contracting merchant.
+**This is the biggest gap.** Most Muslim creators live outside the US and Canada. PayGood can't pay them today. This page doesn't swap providers; it asks PayGood and lists the choices as an owner decision ([MEM-D2](#15-owner-decisions)).
 
-**Recommended:** an **external support link** on the channel page for creators in those countries: the creator's own LaunchGood page, bank details shown on request, or another service they already use. We show the link with "You'll leave Al Ummah Now. This page is run by {site}." and take nothing. It costs nothing and satisfies Apple's gift rule because nothing is unlocked ([§8](#8-app-stores)). Behind its own switch, `supportExternalLinks`, default off; admins review each link once. The Countries page marks these countries "external link only".
+### 7.2 Creators outside the US and Canada
+
+What we can do **without another provider**:
+
+- **Ask PayGood** about international merchants and payouts. The team behind it runs LaunchGood, which already pays campaigners worldwide by USD wire ($12–20, [LaunchGood payouts](https://support.launchgood.com/support/solutions/articles/35000013654), 4 Feb 2026), so they know the need (MEM-1).
+- **A creator with a US or Canadian entity and bank** (for example a US LLC owned by a non-US creator, or a Canadian masjid) can use PayGood today if PayGood accepts them. Studio says so plainly; we give no tax or formation advice.
+- **External support link** for the rest: the creator's own LaunchGood page, bank details shown on request, or another service they already use. We show it with "You'll leave Al Ummah Now. This page is run by {site}." and take nothing. It costs nothing, keeps us out of the money and satisfies Apple's gift rule because nothing is unlocked ([§8](#8-app-stores)). Behind its own switch, `supportExternalLinks`, default off; admins review each link once. The Countries page marks these countries "external link only".
+
+Adding a second provider for those countries is listed only as a non-recommended option under MEM-D2, because it would change P1.
 
 ## 8. App stores
 
@@ -350,7 +352,7 @@ Support with nothing in return and **100% of the funds to the creator** is the c
 
 AUN-SUBS already shipped a payments framework, off by default: one `PaymentProvider` interface, `billing_events` (idempotent by provider, mode and event id), the `billing.webhook` admin job, sweeps, Settings › Billing and the admin Payments page ([payments.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/features/payments.md)). That framework sells **tiers to the platform**: the platform is the merchant.
 
-Creator support is different: the **creator** is the merchant. So support gets its own adapter interface, `SupportProvider`, next to `PaymentProvider`, and its own tables. It reuses:
+Creator support is different: the **creator** is the merchant, with their own PayGood merchant id, API access and webhook endpoint. So support gets its own adapter interface, `SupportProvider`, next to `PaymentProvider`, and its own tables. It reuses:
 
 - the webhook route shape (`POST /webhooks/support/:provider`), raw-body signature check and the `admin_jobs` queue with its backoff (10 s × 2ⁿ up to 300 s, 5 tries, then `failed` and the DLQ);
 - Secrets Store for credentials (write-only, "Set / Not set");
@@ -361,7 +363,8 @@ Creator support is different: the **creator** is the merchant. So support gets i
 ```ts
 interface SupportProvider {
   id: SupportProviderId;
-  // Creator onboarding: the provider hosts KYC, bank details and tax forms.
+  // Creator onboarding: PayGood hosts KYC, bank details and tax forms. Today this is our
+  // merchant referral link plus the creator connecting their own merchant (§12.1).
   createAccountLink(creator: CreatorRef, returnUrl: string): Promise<{ url: string; expiresAt: string }>;
   getAccount(accountId: string): Promise<SupportAccountState>;      // status, country, currency, requirements due, payouts on/off
   // Supporter checkout, hosted by the provider (PCI SAQ A on our side).
@@ -370,7 +373,7 @@ interface SupportProvider {
   refund(paymentId: string, amount?: Money): Promise<RefundResult>;  // from the creator's account, never ours
   quote(input: QuoteInput): Promise<FeeQuote>;                       // vendor fees + tax + FX, before paying (§5.4)
   verifyWebhook(req: Request, rawBody: ArrayBuffer): Promise<ProviderEvent[]>;
-  listPayouts(accountId: string, since: string): Promise<ProviderPayout[]>;
+  listPayouts?(accountId: string, since: string): Promise<ProviderPayout[]>; // PayGood's public API has none today
 }
 ```
 
@@ -386,7 +389,7 @@ No table holds a balance. Amounts are integers in minor units with an ISO 4217 c
 | `support_payments` | charge (one-time or a monthly renewal) | `id`, `pledge_id?`, `supporter_user_id`, `channel_id`, `provider_payment_id`, `gross`, `currency`, `provider_fee`, `tax`, `fx_rate?`, `net_to_creator` (as the provider reports it), `status` (`succeeded`, `failed`, `refunded`, `partially_refunded`, `disputed`, `dispute_lost`, `dispute_won`), `message?` (moderated), `anonymous`, `supporter_country`, `created_at` |
 | `support_refunds` | refund | `id`, `payment_id`, `amount`, `reason`, `requested_by` (`creator`, `admin`, `provider`), `status`, `provider_refund_id` |
 | `support_disputes` | chargeback / dispute | `id`, `payment_id`, `provider_dispute_id`, `reason`, `amount`, `fee`, `status`, `evidence_due_at`, `outcome` |
-| `support_payouts` | provider payout to the creator's bank or wallet (mirror, read-only) | `id`, `support_account_id`, `provider_payout_id`, `amount`, `currency`, `rail`, `status`, `arrival_date`, `failure_reason?` |
+| `support_payouts` | provider payout to the creator's bank (mirror, read-only; empty until PayGood exposes payouts) | `id`, `support_account_id`, `provider_payout_id`, `amount`, `currency`, `rail`, `status`, `arrival_date`, `failure_reason?` |
 | `support_events` | provider webhook event (the ledger) | `provider`, `mode`, `event_id` (unique together), `type`, `received_at`, `payload` (emptied on erasure), `job_id`, `status`, `error?` |
 | `support_country_rules` | country | `country`, `supporters` (`allowed`, `blocked`), `creators` (`allowed`, `blocked`, `waitlist`), `reason` (`sanctions`, `provider_unsupported`, `legal_review`, `admin`), `changed_by`, `changed_at` |
 | `support_reports` | abuse / fraud report on a creator or payment | `id`, `target_kind`, `target_id`, `reporter_user_id`, `reason`, `status` |
@@ -402,13 +405,13 @@ Every admin change writes `admin_audit` with the old and new value. Creator-side
 | Job | When | What it does |
 |---|---|---|
 | `support.account-sync` | after onboarding returns; on account events; daily | Reads the account state and requirements from the provider. |
-| `support.payout-sync` | on payout events; daily | Mirrors payouts and failures. A failed payout flags the creator and the admin. |
+| `support.payout-sync` | on payout events; daily (once PayGood exposes payouts, MEM-D16) | Mirrors payouts and failures. A failed payout flags the creator and the admin. |
 | `support.reconcile` | hourly for pledges whose renewal is late; daily for all yesterday's payments | Compares our mirror with the provider's list. A gap is flagged on Errors with Retry. |
 | `support.dispute-deadline` | daily | Flags disputes whose evidence is due within 3 days. |
 | `support.sanctions-recheck` | when a sanctions list changes (provider event) and weekly | Re-reads screening results; a hit pauses the account (§4.3). |
 | `support.country-apply` | when an admin blocks a country | Pauses pledges from or to that country through the provider, notifies the people affected. |
 
-Every failure that needs a person shows on **Errors** with a reason in words and **Retry** ("Couldn't read Amina's payout account from PayPal: the provider answered 503. Retry"). Nothing silently drops.
+Every failure that needs a person shows on **Errors** with a reason in words and **Retry** ("Couldn't read Amina's PayGood account: PayGood answered 503. Retry"). Nothing silently drops.
 
 ### 9.5 Server-side checks on every app
 
@@ -432,8 +435,8 @@ Perks (§10) add one more key, `supportPerks`, also server-checked. Nothing is u
 | Creators | each creator's account: status, country, what the provider still needs, payouts on/off, sanctions status | Re-sync, pause support for this channel, open the provider's own record id (copyable) | `support:read`, pause needs `support:manage` |
 | Payments | every payment with fees, tax, net to the creator, status, the event trail | Refund (full or part), with step-up | `support:refund` (super admins) |
 | Monthly support | pledges | Cancel, with step-up | `support:manage` |
-| Disputes | open disputes with due dates, evidence the provider asks for | Upload evidence through the provider's API, or mark "creator handles it" | `support:manage` |
-| Payouts | mirrored payouts and failures | Re-sync | `support:read` |
+| Disputes | disputes we learn of, with due dates | Download our records for the creator; upload evidence through PayGood's API once it has one (MEM-D16) | `support:manage` |
+| Payouts | mirrored payouts and failures, once PayGood exposes them (MEM-D16); until then a link to the creator's PayGood dashboard | Re-sync | `support:read` |
 | Countries | the country table (§4.3) | Block / allow supporters or creators per country, with a reason | `support:countries` (super admins) |
 | Jobs | each support job with state, attempts, next retry, log lines | Retry now, cancel | `support:manage` |
 | Settings | provider credentials (write-only), test/live, amount limits, presets | – | `support:providers` (super admins) |
@@ -561,38 +564,60 @@ Copy follows the [Copy Tone Guide](../guides/copy-tone.md), the [Numbers and dat
 
 ## 12. Partners and vendors
 
-### 12.1 Recommended stack
+### 12.1 PayGood: what it can and can't do
 
-**Primary: "PayGood + PayPal, the creator is the merchant".**
+Read from PayGood's public site, docs and API reference on 2026-11-22 ([docs index](https://docs.paygood.com/llms.txt)) and from our adapter (`apps/api-videos/src/lib/billing/paygood.ts`, AlUmmahNow PR 1653).
 
-- **PayGood** for creators in the US and Canada: the owner's chosen vendor ([P1](decisions.md#p1-first-paid-providers)), from the LaunchGood team, lowest card fee found (2.9% + 30¢; 1.9% + 30¢ for nonprofits), donations allowed under its rules (MCC 8398 charitable and 8661 religious organisations offered at onboarding), a "customer covers the fee" option, recurring subscriptions, hosted checkout ([PayGood docs](https://docs.paygood.com/guides/subscriptions.md), accessed 2026-11-22). It runs on Finix and is in soft launch. Each creator is their own PayGood merchant; its rules forbid processing "third party" payments, so the platform must never collect for creators.
-- **PayPal Complete Payments Platform (multiparty)** for everyone else: the creator's own PayPal account is the payee, the partner fee is omitted, coverage reaches the Gulf, Jordan, Morocco, Senegal, Turkey, Indonesia, Malaysia, the UK and EU ([PayPal platforms](https://developer.paypal.com/platforms/overview.md), accessed 2026-11-22).
-- **External support links** for countries neither covers ([§7.2](#72-countries-neither-covers)).
+| Need | PayGood today | What it means here |
+|---|---|---|
+| Creator is the merchant; platform never holds funds | **Yes.** Each business is its own PayGood merchant (Finix underneath) and is paid to its own bank. PayGood is not a merchant of record. | Fits. Each creator onboards as a PayGood merchant. |
+| A platform onboarding many merchants (connected or sub-merchant accounts) | **Not in the public API.** API keys belong to one merchant ("Server-to-server integration surface for merchant API keys"); there is no platform/OAuth connect flow. There is a **merchant referral** API (a stable referral code per merchant). | We can send creators to PayGood with our referral code. To create checkouts for them we need either a partner arrangement from PayGood, or each creator's own API key. **Owner decision MEM-D1.** |
+| One-time support | **Yes**: catalog one-time prices, invoices with hosted checkout. | |
+| Monthly support | **Yes**: fixed-amount subscriptions (daily, weekly, monthly, yearly) with hosted checkout ([subscriptions guide](https://docs.paygood.com/guides/subscriptions.md)). A new amount needs a new price and offering. | Presets per creator; "Other" amounts create a price on demand (PayGood dedupes equal prices). |
+| Cancel | **Immediate** at PayGood, no cancel-at-period-end. | Fine for gifts: stopping means no more charges. |
+| Refunds | **Yes**, full or partial, synchronous through Finix; event `payments.PaymentRefunded`. | Refunds come out of the creator's merchant account. |
+| Disputes and chargebacks | **No dispute endpoints** in the public API; fee per merchant agreement. | Creators answer disputes in their PayGood dashboard; our Disputes page shows what we know and hands them our records. Ask PayGood for dispute webhooks. |
+| Payout list | **No payout endpoints** in the public API. | Studio links to the creator's PayGood dashboard for payouts; we don't mirror them. Ask PayGood. |
+| Webhooks | **Yes**, per merchant endpoint, signed (`Merchant-Webhook-*`, HMAC-SHA256, 5-minute window), redelivery API. | One endpoint per creator merchant, registered through their key or by them. Each has its own signing secret. |
+| Countries | **US and Canada** merchants; USD and CAD. | [§7](#7-international-and-sending-funds). **Owner decision MEM-D2.** |
+| Foreign supporters' cards | Not stated (**Unverified**). | Ask PayGood. |
+| Individuals (sole proprietors) | Not stated; text says "small businesses"; onboarding asks for every owner with 25% or more (**Unverified** for individuals). | Ask PayGood. |
+| Donations and religious organisations | **Allowed.** The acceptable-use policy restricts weapons, drugs, adult content, gambling, investment schemes and deceptive fundraising claims; onboarding offers MCC 8398 (charitable) and 8661 (religious organisations). It forbids "third party" payments. | Creator support by the creator's own merchant fits; collecting for others doesn't. |
+| KYC and sanctions | PayGood/Finix onboard and verify merchants (owners, bank). Sanctions screening of merchants and payers is **Unverified** in public text. | We still geo-block and keep the Countries page ([§4.3](#43-sanctions-and-high-risk-countries)). Ask PayGood. |
+| Tax | Not a merchant of record; invoices can carry merchant-calculated tax. 1099-K filer **Unverified** (likely PayGood/Finix as payment settlement entity). | Gifts carry no tax; creators handle income tax ([§6](#6-taxes)). Ask PayGood who issues 1099-K. |
+| Supporter covers the fee | Yes for invoices ("Customer can choose to cover the processing fee"); subscriptions **Unverified**. | Otherwise we gross up the amount ourselves and show it. |
+| Customer portal | None. | Settings › Support is the place to stop, as with tiers today. |
 
-Why: it is the only combination found that keeps us out of the money everywhere, costs about $0 a month, follows the owner's PayGood choice, and reaches most Muslim-majority creator countries.
+### 12.2 Recommended stack (PayGood only)
 
-**Fallback: "PayPal only".** One integration, one set of webhooks, all supported countries including the US and Canada. Higher fees for US creators ($4.34 vs $4.56 of $5) and no LaunchGood-team values fit. Use it if PayGood can't onboard individual creators through a platform.
+- **PayGood**, with each creator as their own PayGood merchant, the creator as payee and **no platform fee**. Our adapter starts hosted checkouts for the creator's merchant, receives the creator's merchant webhooks, and never sees card or bank data.
+- **How we act for a creator's merchant** (owner decision MEM-D1, recommended first):
+  1. **"PayGood partner access"**: ask PayGood for a platform arrangement (referral onboarding plus a scoped key or OAuth per referred merchant). Cleanest; depends on PayGood.
+  2. **"Creator connects their PayGood key"**: works with today's public API. The creator creates a PayGood API key in their dashboard and pastes it into Studio once. We encrypt it (key from Secrets Store, ciphertext in D1), never show it back, and use it only for checkout, subscriptions, refunds and webhook setup on their merchant. Revocable by the creator at PayGood at any time.
+  3. **"Creator pastes checkout links"**: no API; the creator makes PayGood checkout links and pastes them. No breakdown, no tracking, no cancel in Settings. Last resort.
+- **Outside the US and Canada:** the creator's own external support link ([§7.2](#72-creators-outside-the-us-and-canada)) until PayGood serves more countries.
 
-**Rejected:** merchants of record (ban donations and marketplaces), payout-only services (we would hold funds; fixed costs break the cap at about 1,000 creators), Adyen for Platforms (Western creators only, enterprise minimums), Mangopay (€249/month, holds wallets), Braintree Marketplace (discontinued, Braintree (`https://braintreepayments.com/legal/policy-updates`)), anything on Stripe.
+### 12.3 Other providers researched (for the record, not recommended)
 
-### 12.2 What each partner covers, costs, and needs
+Recorded only so the owner sees what exists; P1 stands. PayPal Complete Payments (creator's own PayPal as payee, wide Muslim-majority coverage but not Pakistan, Bangladesh, North Africa beyond Morocco, Levant beyond Jordan); Adyen for Platforms (Western creators only, minimums); Mangopay (€249/month, holds wallets); payout-only services (Wise, Payoneer, Tipalti, Trolley: the platform would hold funds; Payoneer bans gifts); merchants of record (Paddle, Dodo, Creem: ban donations); anything on Stripe (never, [T2](decisions.md#t2-billing-provider)).
+
+### 12.4 What each partner covers, costs, and needs
 
 | Partner | Covers | Cost | Setup steps | Only the owner can do |
 |---|---|---|---|---|
-| **PayGood** | US/CA creators' checkout, subscriptions, KYC, payouts, 1099-K | Card 2.9% + 30¢ paid by creator; platform $0 (**confirm**) | Ask PayGood: can a platform onboard individual creators through referral/partner keys; cross-border surcharge; payout and chargeback fee schedule; written OK for creator support | Sign the partner agreement; hold the platform account; provide the entity and bank details |
-| **PayPal (multiparty)** | Non-US creators' checkout, subscriptions, KYC, sanctions screening, payouts, 1099-K | Creator pays PayPal's rate; platform $0 (**confirm**) | Apply for live credentials; written approval for "creator support, nothing in return, recurring"; confirm subscriptions on behalf of sellers | Apply as the business, sign, pass PayPal's own KYC of the platform |
+| **PayGood** | Creators' checkout, subscriptions, refunds, KYC, payouts to US/CA banks | Card 2.9% + 30¢ paid from the gift; platform $0 (**confirm**) | Written answers to the questions in [§12.1](#121-paygood-what-it-can-and-cant-do): partner access for referred merchants; individuals; foreign cards and surcharges; dispute and payout webhooks; sanctions screening; 1099-K filer; international plans; written OK for creator support with nothing in return | Talk to PayGood as the business; sign any partner agreement; hold the platform's own PayGood account |
 | **Apple App Review, Google Play policy** | Store approval of support outside in-app purchase | $0 | Written pre-clearance questions ([§8](#8-app-stores)) | Send from the developer accounts |
 | **US lawyer** (fintech, consumer, sanctions, privacy), licensed where the entity is formed | Questions in [§14.1](#141-us-lawyer); creator agreement and supporter terms | Estimate $3,000–10,000 one-off for the review and terms (**Unverified**, get quotes) | Brief with this page | Engage and pay; sign the engagement |
 | **Accountant / tax adviser** with US and cross-border digital-platform experience | Questions in [§14.2](#142-accountant-or-tax-adviser) | Estimate $1,000–5,000 one-off, then yearly bookkeeping (**Unverified**) | Brief with this page | Engage |
 | **Scholar (mufti)** or a recognised fatwa body | Questions in [§14.3](#143-scholar-mufti) | Often an honorarium (**Unverified**) | Send the questions | Choose the scholar; accept the ruling |
-| **Business entity** (US) | Contracting party for PayGood, PayPal, stores, insurance | LLC filing about $50–500 by state; Delaware LLC tax $300/yr; Wyoming report from $60/yr (**Unverified**) | Choose state and type with the lawyer | Form it; sign; get an EIN (free, [IRS](https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online)) |
+| **Business entity** (US) | Contracting party for PayGood, the stores, insurance | LLC filing about $50–500 by state; Delaware LLC tax $300/yr; Wyoming report from $60/yr (**Unverified**) | Choose state and type with the lawyer | Form it; sign; get an EIN (free, [IRS](https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online)) |
 | **Registered agent** | Legal address in the formation state | About $50–300/yr (**Unverified**) | — | Appoint |
-| **Business bank account** | Receives nothing from support (we take 0%); pays vendors, and receives any provider fee refunds | Often $0–15/month | — | Open it in the entity's name |
+| **Business bank account** | Receives nothing from support (we take 0%); pays vendors | Often $0–15/month | — | Open it in the entity's name |
 | **Insurance** | General liability, cyber/privacy, tech E&O plus media liability | About $500–5,000/yr each (**Unverified**, get quotes) | Broker quotes | Buy |
 | **Bookkeeping** | Our own expenses; no support money passes through us | Free to $30/month tools | — | Choose |
 | **DMCA designated agent** | Safe harbour for user content (already relevant) | $6 at the Copyright Office ([DMCA directory](https://www.copyright.gov/dmca-directory/)) | — | Register |
 
-**Not needed:** a tax engine (no taxable supply while support is a gift), a separate sanctions vendor (the providers screen their customers; we geo-block), a payout partner (the providers pay creators directly), a money-transmitter licence (we never touch funds; lawyer confirms).
+**Not needed:** a tax engine (no taxable supply while support is a gift), a separate sanctions vendor (PayGood/Finix screen their merchants, **confirm**; we geo-block), a payout partner (PayGood pays creators directly), a money-transmitter licence (we never touch funds; lawyer confirms).
 
 **The agent never signs in anywhere as the owner and never creates vendor accounts.** Every row in the last column is the owner's.
 
@@ -600,11 +625,11 @@ Why: it is the only combination found that keeps us out of the money everywhere,
 
 The whole design is specified; this is the order to build it, not a cut in scope.
 
-1. **Owner and professionals first** (no code waits on them except going live): entity, lawyer, accountant, scholar, PayGood and PayPal written answers, Apple and Google pre-clearance (MEM-1).
+1. **Owner and professionals first** (no code waits on them except going live): entity, lawyer, accountant, scholar, PayGood's written answers ([§12.1](#121-paygood-what-it-can-and-cant-do)), Apple and Google pre-clearance (MEM-1).
 2. **Server foundation:** `SupportProvider` interface, the test provider for QA and local only, data model, webhook route and jobs, reconciliation, Errors and Jobs pages, the `creatorSupport` switch and server checks, the Countries table seeded with sanctions blocks, and the end-to-end tests on the local stack (MEM-2 to MEM-5, MEM-21).
 3. **Web:** Studio › Support onboarding, the support sheet with the breakdown, Settings › Support, emails (MEM-6, MEM-7, MEM-9).
 4. **Admin Support pages** (MEM-8).
-5. **Providers:** PayGood adapter, then PayPal multiparty adapter, each in test mode against sandboxes (MEM-10, MEM-11).
+5. **PayGood:** the creator connection the owner picks under MEM-D1 (MEM-11), then the PayGood support adapter against PayGood's sandbox (MEM-10).
 6. **Legal pages and help** (MEM-16, MEM-17).
 7. **Apps:** Core, then Apple, Android, Desktop/Tizen, after the store answers (MEM-12 to MEM-15).
 8. **External support links** (MEM-18), then the **charity route** (MEM-19).
@@ -618,17 +643,18 @@ Visual stories go through the frames → audit → gallery → owner path. Non-v
 
 ### 14.1 US lawyer
 
-1. With the creator as payee (PayGood merchant or PayPal multiparty payee) and no platform fee, does any step make us a money transmitter under FinCEN or any state, given gifts have no "goods or services" for the processor or agent-of-payee exemptions?
-2. Do the PayGood and PayPal platform agreements make us liable for creators' negative balances or chargebacks? Is that acceptable, and how do we limit it?
+1. With the creator as their own PayGood merchant and payee and no platform fee, does any step make us a money transmitter under FinCEN or any state, given gifts have no "goods or services" for the processor or agent-of-payee exemptions?
+2. Does PayGood's merchant agreement, or any partner agreement, make us liable for creators' negative balances or chargebacks? Is that acceptable, and how do we limit it?
 3. Are recurring voluntary gifts covered by ROSCA, California's automatic renewal law, New York GBL 527-a or other state laws? Is our flow ([§2.2](#22-stopping-reminders-and-refunds), [§4.5](#45-consumer-law)) enough?
 4. EU and UK: is a supporter-to-creator gift a consumer contract? Does the 14-day right or the UK subscription regime apply? What changes with perks?
 5. Sanctions: which regions must we block (Cuba, Iran, North Korea, Crimea/DNR/LNR; Russia, Belarus?); the post-2025 Syria position under OFAC, export controls, UK and EU; is provider screening enough for creators and supporters?
 6. Minors: age floors to support and to receive; COPPA; state child-influencer laws; guardian-held payout accounts.
-7. Draft or review the creator agreement and supporter terms ([§4.8](#48-terms)); notice periods; governing law; disputes.
-8. Entity type and state, insurance, BOI status.
-9. GDPR: is a supporter relationship with an Islamic creator special-category data? Do we need a DPIA? Transfer mechanism?
-10. Wording: any charitable-solicitation registration risk from "sadaqa", "zakat" or "donation", on the support route and the charity route?
-11. The external support link ([§7.2](#72-countries-neither-covers)): any liability for linking to third-party payment pages?
+7. If creators connect their own PayGood API keys to us (MEM-D1), what must the creator agreement say about that access, and what is our liability?
+8. Draft or review the creator agreement and supporter terms ([§4.8](#48-terms)); notice periods; governing law; disputes.
+9. Entity type and state, insurance, BOI status.
+10. GDPR: is a supporter relationship with an Islamic creator special-category data? Do we need a DPIA? Transfer mechanism?
+11. Wording: any charitable-solicitation registration risk from "sadaqa", "zakat" or "donation", on the support route and the charity route?
+12. The external support link ([§7.2](#72-countries-neither-covers)): any liability for linking to third-party payment pages?
 
 ### 14.2 Accountant or tax adviser
 
@@ -663,8 +689,8 @@ Each decision has named options; the recommendation is first.
 
 | ID | Decision | Options (recommended first) |
 |---|---|---|
-| MEM-D1 | Payment providers | **"PayGood + PayPal"**: PayGood for US/CA creators, PayPal for the rest · "PayPal only" · "PayGood only" (US and Canadian creators only) |
-| MEM-D2 | Countries no provider covers | **"Creator's own support link"** (admin-reviewed, switch `supportExternalLinks`) · "Not available there" |
+| MEM-D1 | How we act for each creator's PayGood merchant | **"PayGood partner access"** (ask PayGood for referral onboarding plus scoped access per referred merchant) · **"Creator connects their PayGood key"** (works with today's API; recommended until partner access exists) · "Creator pastes checkout links" (no API, no breakdown or tracking) |
+| MEM-D2 | Creators outside the US and Canada (PayGood can't pay them today) | **"Creator's own support link until PayGood expands"** (admin-reviewed, switch `supportExternalLinks`; ask PayGood about international merchants) · "Not available outside the US and Canada" · "Add a second provider for other countries" (not recommended: changes [P1](decisions.md#p1-first-paid-providers)) |
 | MEM-D3 | Who pays the provider fee | **"Creator absorbs, supporter may cover"** (checkbox shown, unticked) · "Supporter always covers" · "Creator always absorbs, no checkbox" |
 | MEM-D4 | Minimum and presets | **"$3 minimum; presets $5, $10, $25"** · "$1 minimum; presets $3, $5, $10" |
 | MEM-D5 | Who may receive | **"A tier capability, owner 18+, channel in good standing"** (admins tick "Can receive support" per tier) · "Every channel owner 18+" |
@@ -678,6 +704,7 @@ Each decision has named options; the recommendation is first.
 | MEM-D13 | Perks | **"Designed, switch stays off"** ([§10](#10-optional-paid-perks-designed-not-scheduled)) · "Build perks after support" |
 | MEM-D14 | Business costs and the $500 cap | **"Outside the infrastructure cap"** (same as [S3](AUN-SUBS-subscriptions-plan.md)) · "Inside the cap" |
 | MEM-D15 | When apps get the button | **"After written Apple and Google answers"** · "Web only for now" |
+| MEM-D16 | Disputes and payouts PayGood's API doesn't expose | **"Creator handles them in PayGood; we show what we know and hand over our records"** · "Wait for PayGood dispute and payout webhooks before launch" |
 
 What doesn't need the owner and is decided here: 0% to the platform; never holding funds; hosted checkout only; the creator is the merchant; no public perks; queues with retry, DLQ and Errors with Retry; per-country and emergency stops; the switch default off.
 
@@ -694,8 +721,8 @@ What doesn't need the owner and is decided here: 0% to the platform; never holdi
 | MEM-7 | [AUN-619](https://linear.app/hamzalabs/issue/AUN-619) | Support sheet, breakdown, checkout and Settings › Support (§2.1, §2.2, §5.4, §11) | AlUmmahNow | visual |
 | MEM-8 | [AUN-620](https://linear.app/hamzalabs/issue/AUN-620) | Videos admin › Support pages (§9.6) | AlUmmahNow | visual |
 | MEM-9 | [AUN-621](https://linear.app/hamzalabs/issue/AUN-621) | Support emails and notifications (§2.2) | AlUmmahNow | visual |
-| MEM-10 | [AUN-622](https://linear.app/hamzalabs/issue/AUN-622) | PayGood support adapter (US and Canadian creators) (§12.1) | AlUmmahNow | non-visual |
-| MEM-11 | [AUN-623](https://linear.app/hamzalabs/issue/AUN-623) | PayPal multiparty support adapter (§12.1) | AlUmmahNow | non-visual |
+| MEM-10 | [AUN-622](https://linear.app/hamzalabs/issue/AUN-622) | PayGood support adapter (§12.1) | AlUmmahNow | non-visual |
+| MEM-11 | [AUN-623](https://linear.app/hamzalabs/issue/AUN-623) | PayGood creator connection (partner access or the creator's own key) (§12.1, §12.2) | AlUmmahNow | non-visual |
 | MEM-12 | [AUN-624](https://linear.app/hamzalabs/issue/AUN-624) | Core: support API and features keys (§9.5) | AlUmmahNowCore | non-visual |
 | MEM-13 | [AUN-625](https://linear.app/hamzalabs/issue/AUN-625) | Apple apps: Support on the channel page (§8) | AlUmmahNowApple | visual |
 | MEM-14 | [AUN-626](https://linear.app/hamzalabs/issue/AUN-626) | Android apps: Support on the channel page (§8) | AlUmmahNowAndroid | visual |
