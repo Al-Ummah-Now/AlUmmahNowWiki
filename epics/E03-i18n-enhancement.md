@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E03` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **in progress**: both languages shipped on every app in `v2026.11.08.4`; the O38 wording and Arabic number pass is open: [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665), [AlUmmahNowUI#141](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/141), [AlUmmahNowDesktop#69](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/69), [AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), [AlUmmahNowApple#78](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/78), [AlUmmahNow#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729) |
-| **Last updated** | 2026-11-22 |
+| **Status** | **in progress**: both languages shipped on every app in `v2026.11.08.4`; the O38 wording and Arabic number pass is open: [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665), [AlUmmahNowUI#141](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/141), [AlUmmahNowDesktop#69](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/69), [AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), [AlUmmahNowApple#78](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/78), [AlUmmahNow#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729); Arabic shipped on every Auth admin page in [AlUmmahNowAuth#484](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/484) |
+| **Last updated** | 2026-11-23 |
 
 > #80, #81, #82 closed by #339.
 
@@ -28,6 +28,7 @@ Bilingual player strings with plurals, locale formatting and language validation
 | 3.1 | Dynamic pluralization (#82) | Done (#339). |
 | 3.2 | Locale date/time formatting (#80) | Done (#339). |
 | 3.3 | Runtime language validation (#81) | Done (#339). |
+| 3.4 | Auth admin fully Arabic on `?lang=ar` ([AUN-634](https://linear.app/hamzalabs/issue/AUN-634/auth-admin-fully-arabic-on-langar-every-admin-page)) | Shipped 2026-11-23 in [AlUmmahNowAuth#484](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/484). All 15 admin pages, the account menu and the sign-in screens in both languages; en/ar key sets kept equal by test; WebKit Arabic hydration check on every page. Stored data (permission descriptions, client names) and shared validator messages stay as written. |
 
 ## Decisions and constraints
 
