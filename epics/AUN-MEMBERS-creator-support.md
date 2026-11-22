@@ -350,7 +350,7 @@ Support with nothing in return and **100% of the funds to the creator** is the c
 
 ### 9.2 Building on what exists
 
-AUN-SUBS already shipped a payments framework, off by default: one `PaymentProvider` interface, `billing_events` (idempotent by provider, mode and event id), the `billing.webhook` admin job, sweeps, Settings › Billing and the admin Payments page ([payments.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/features/payments.md)). That framework sells **tiers to the platform**: the platform is the merchant.
+AUN-SUBS already shipped a payments framework, off by default: one `PaymentProvider` interface, `billing_events` (idempotent by provider, mode and event id), the `billing.webhook` admin job, sweeps, Settings › Billing and the admin Payments page (AlUmmahNow `docs/features/payments.md`). That framework sells **tiers to the platform**: the platform is the merchant.
 
 Creator support is different: the **creator** is the merchant, with their own PayGood merchant id, API access and webhook endpoint. So support gets its own adapter interface, `SupportProvider`, next to `PaymentProvider`, and its own tables. It reuses:
 
