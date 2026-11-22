@@ -30,7 +30,7 @@ Advanced search, trending and better navigation (#40, #39).
 | 7.3 | Content navigation | Related videos from `/api/recommendations` done (#337); personal Recommended (history + subscriptions, privacy-gated) in #1718. |
 | 7.4 | Discovery ranking job and rails (#990, #354, #685 for discovery lists) | D1 rails computed by the `discovery.rank` admin job; keyset cursors, full pages, localized titles and channel names (#418, #408). AlUmmahNow#1718. |
 | 7.5 | Admin curation: pins, exclusions, home rail order | Videos admin → Discovery: pin videos/channels into rails, exclude, order and switch home rails, run now, preview; audited. AlUmmahNow#1721. |
-| 7.6 | Web home rails and labels | Home page rails from `/api/discovery/home`; Explore and rails show the label the rail reports (en + ar). Continue watching is one playlist-style card on home (owner 2026-11-21). AlUmmahNow#1723. |
+| 7.6 | Web home rails and labels | Home page rails from `/api/discovery/home`; Explore and rails show the label the rail reports (en + ar). Home has a "Your library" row: Continue watching, Watch later and Liked videos as playlist-style cards (owner 2026-11-21, 2026-11-22). AlUmmahNow#1723. |
 
 
 ## Discovery ranking
@@ -55,10 +55,17 @@ Owner brief 2026-11-21: correct at scale **and** good with no users today (one r
 
 **Web.** The home page shows the rails between the hero and the full grid, server-rendered in the page language and fetched after hydration when the API was slow. Each heading is the rail's `label` (cold start: *New this week*, *Featured*, *Top in <category>*); a rail scrolls sideways with snap, page buttons on pointer devices and a peeking card on phones; *See all* opens Explore, every video, the category search or the sections page. Explore's Trending and the sections page take their heading from the same label and show no trending ranks while a list is not trending. Copy in shared-types `i18n-rails.ts` (en + ar).
 
-**Continue watching on home (owner 2026-11-21).** One playlist-style card, never a row of video cards:
-- **What it shows.** The card uses the same frame as playlist cards. The cover is the newest unfinished video's thumbnail. It carries a compact count of unfinished videos («٢٣ مرئيًا»; from 1K, cut to one decimal) and that video's progress bar. The title is "Continue watching" / «متابعة المشاهدة». The meta line is the video's title and "38% watched", joined with «،» in Arabic.
-- **Where it leads.** The card opens the history page's Continue watching view (`/history?view=continue`): unfinished videos only, a link back to the whole history, and no Clear all. A separate *Resume* / «تابِع» link on the cover opens the newest video, which resumes from its saved position.
-- **When it appears.** Only for a signed-in viewer with watch history on and at least one unfinished video (`GET /api/watch-history?completed=false&limit=1`). A failed load shows nothing.
+**"Your library" on home (owner 2026-11-21, 2026-11-22).** One row under a rail-style heading ("Your library" / «مكتبتك», *See all* opens the You page) with up to three playlist-style cards, in this order. A single Continue watching card looked lonely, so Watch later and Liked videos joined it:
+- **The cards.** All three use the playlist card frame: a stacked cover, a compact count badge («٢٣ مرئيًا»; from 1K, cut to one decimal), the list's name as the title, and a meta line with the cover video's title and, below it, its channel or how far it was watched.
+  - *Continue watching* / «متابعة المشاهدة». The cover is the newest unfinished video, with its progress bar. The card opens the history page's Continue watching view (`/history?view=continue`: unfinished videos only, a link back to the whole history, no Clear all). *Resume* / «تابِع» on the cover opens that video, which resumes from its saved position. Left out while watch history is paused.
+  - *Watch later* / «المشاهدة لاحقًا». The cover is the first video in the list's saved order. The card opens `/library/watch-later`, and *Play all* plays the list in place from that video (list `WL` at its stored index).
+  - *Liked videos* / «المرئيات التي أعجبتك». The cover is the newest like. The card opens `/library/liked`, and *Play all* plays newest first (list `LL`).
+  - Each *Play all* is named for its list for screen readers ("Play all in Watch later" / «تشغيل الكل في المشاهدة لاحقًا»).
+- **Empty lists.** A list with nothing in it has no card, and the others share the row. With none, or for a signed-out visitor, there is no row. Each list loads on its own (`GET /api/watch-history?completed=false&limit=4`, `/api/library/watch-later?limit=4`, `/api/library/liked?limit=4`). A failed load leaves only that card out, and the row appears once all three have settled, so it never grows card by card.
+- **Layout.** The row's own width decides (container queries):
+  - Three cards sit side by side once the row is 760px wide (desktop and tablet). Narrower, they swipe, like the rails on phones: on a phone one card and the next peeking. A swipe row keeps the three cards the same size; a 2 + 1 grid would make the third twice as large and push the hero further down.
+  - One or two cards share the row from 560px. A card whose cell is at least 520px wide lays its cover beside the text and adds *Up next* / «التالي»: the list's next videos (three when it has the row to itself, two beside another card). So one card alone, or two on a wide screen, is larger and shows more of the list, not just a bigger picture. On a phone, two cards swipe and one takes the full width.
+  - In narrow cells (three across on a tablet) the action pill is compact, still a 24px target.
 
 **Cost.** Idle: a few thousand D1 reads an hour, near-zero writes. At 100k videos about 72M rows read a month (included quota 25B). Views: about one write per qualified viewer-day. No AI.
 
