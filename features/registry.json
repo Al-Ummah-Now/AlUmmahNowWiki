@@ -2173,9 +2173,10 @@
         "AlUmmahNowTools#50",
         "AlUmmahNowTools#51",
         "AlUmmahNow#1736",
-        "AlUmmahNowTools#52"
+        "AlUmmahNowTools#52",
+        "AlUmmahNow#1738"
       ],
-      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages. Merged: the admin-api import surface (TA-3 to TA-7) and the app's sign-in and shell (TA-10), the bulk import engine, its local work queue and the error reports (TA-11); in review: the Import page that drives them (TA-11), and local encoding with the server's verdict (TA-12)."
+      "note": "Desktop staff app (Windows, macOS, Linux) signed in through Auth, working only through admin-api: bulk import into any channel without tier limits, local-first transcoding, transcription and suggestions (the server verifies), sidecar captions/chapters/thumbnails/metadata, translated caption tracks, bilingual SEO keywords, social import as community posts with scheduled sync, and a Suggest action on the site's edit pages. Merged: the admin-api import surface (TA-3 to TA-7) and the app's sign-in and shell (TA-10), the bulk import engine, its local work queue and the error reports (TA-11); the server side of local encoding (TA-12); in review: the Import page that drives them (TA-11), the app's local encoding with the server's verdict (TA-12), and the videos admin Imports view with each job's attempts, next try, log and Cancel (TA-8)."
     },
     {
       "id": "discovery-ranking",
