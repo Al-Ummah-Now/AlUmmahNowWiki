@@ -2368,7 +2368,7 @@
         "AlUmmahNow#1721",
         "AlUmmahNow#1723"
       ],
-      "note": "Ranked rails over the whole library from a queued job (retry, DLQ, Errors page Run now): Trending day/week/month, global Popular, New, Featured, per category and language, with keyset pages. Cold start first: a quality and freshness prior, engagement blended in by distinct viewers with minimum volumes, honest labels (Trending becomes New this week without enough viewers). Owner, staff, test accounts, bots and autoplay never count. Admin pins, exclusions and home rail order. Personal Recommended only when watch history is on. No AI. On the web home, a \"Your library\" row shows Continue watching, Watch later and Liked videos as playlist-style cards (count, Resume or Play all, progress on Continue watching); empty lists are left out, and one or two cards grow wider with an Up next list."
+      "note": "Ranked rails over the whole library from a queued job (retry, DLQ, Errors page Run now): Trending day/week/month, global Popular, New, Featured, per category and language, with keyset pages. Cold start first: a quality and freshness prior, engagement blended in by distinct viewers with minimum volumes, honest labels (Trending becomes New this week without enough viewers). Owner, staff, test accounts, bots and autoplay never count. Admin pins, exclusions and home rail order. Personal Recommended only when watch history is on. No AI. On the web home, a \"Your library\" row shows Continue watching, Watch later and Liked videos as playlist-style cards (count, Resume or Play all, progress on Continue watching); empty lists are left out, one or two cards grow wider, and a lone card lists Up next."
     },
     {
       "id": "index-backed-lists",
