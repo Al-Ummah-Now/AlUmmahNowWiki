@@ -24,7 +24,7 @@ Admin cost/usage dashboard with register-based alerts, built from the CloudFlare
 | P2 | Alert engine | Done — both audits agree: AlUmmahNow#1400 (merged): budget, spike, forecast and digest alerts; AlUmmahNow#1400 |
 | P3 | Full dashboard | Done — both audits agree: AlUmmahNow#1400 (merged): Costs budget, forecast, products, environments, trends and movers; AlUmmahNow#1400 |
 | P4 | Resend cost, invoice reconciliation | Resend cost by plan from the emails sent ([#1400](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1400)); invoice reconciliation: billing model reconciled to the 2026-11-21 invoice, billed vs list on Costs ([#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729), in review); reading the bill itself needs Billing Read (owner's OK) — #272 |
-| COST-GAPS | Every cost source; Operations usage only | [#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729) in review: billed meters, fixed and other costs, spend moved from Operations, env switch E2E |
+| COST-GAPS | Every cost source; Operations usage only | [#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729) in review (screenshot audit passed 2026-11-21; waits for #1665 and CI): billed meters, fixed and other costs, spend moved from Operations, env switch E2E; every tile adds up to the cent (products = invoice lines, resources and environments split by largest remainder), "Data as of" ignores refused runs and Containers freezes with the rest when Cloudflare refuses, open jump alerts listed on the Budget card, chart days are UTC days |
 
 ## Decisions and constraints
 
