@@ -2681,6 +2681,27 @@
       ],
       "wiki": "epics/E20-system-parental-controls.md",
       "note": "Owner decision O45, 2026-11-24: no in-app Kids Mode; parents use the device's own controls. Store age ratings, a date of birth in the profile (Auth) with only an age band shared with our apps, age-restricted videos for signed-in 18+ accounts, made-for-kids videos without comments, chat or personalization, and a parents' guide. Behind the ageRules and parentsGuide switches (both off by default). All owner decisions (E20-D1 to E20-D11) are made."
+    },
+    {
+      "id": "auth-admin-arabic",
+      "name": {
+        "en": "Accounts admin in Arabic",
+        "ar": "إدارة الحسابات بالعربية"
+      },
+      "status": "live",
+      "apps": [
+        "auth-admin"
+      ],
+      "wiki": "epics/E03-i18n-enhancement.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 45223133096,
+        "sha": "d20392d2116139542207d1036d35901a74305129"
+      },
+      "prs": [
+        "AlUmmahNowAuth#484"
+      ],
+      "note": "Every Auth admin page in Arabic on ?lang=ar: right-to-left, Eastern Arabic (Hindi) numerals, compact counts. Linear AUN-634."
     }
   ]
 }
