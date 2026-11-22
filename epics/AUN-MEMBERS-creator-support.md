@@ -30,8 +30,9 @@ The feature is one switch on the Features page, **off by default**, and it can b
 - **Channel roles live in videos**, not Auth RBAC ([O16](decisions.md#o16-channel-roles-separate-from-site-roles-only-super-admins-transfer-ownership), [roles](../guides/roles.md)). Only the channel **owner** connects a payout account, because the money is theirs.
 - **Creators are invite-only** with admin-assigned tiers ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md)). Receiving support is a tier capability that admins set per tier.
 - **Cost cap** $500/month for the whole platform ([O1](decisions.md#o1-whole-platform-cost-cap)). This design adds about $0 a month in vendor costs ([§5.3](#53-fixed-costs-against-the-500month-cap)).
-- **No legal entity exists yet** ([SM-4](decisions.md#sm-4-legal-entity)). Payment partners will want one ([§12](#12-partners-and-vendors)).
-- **Production has one user today** (the owner). The first live run is the owner's own channel with the owner as supporter ([§13](#13-build-order)).
+- **No legal entity exists yet** ([SM-4](decisions.md#sm-4-legal-entity)). The platform will be held by a **waqf / nonprofit organisation**, formed through the lawyer engagement (owner, 2026-11-22). **Until it exists, creator support stays switched off.** Payment partners contract with that organisation ([§12](#12-partners-and-vendors)).
+- **The owner never touches money** (owner, 2026-11-22). The owner is a tech employee of the organisation with no access to its money, and keeps the code rights; the organisation licenses the code. No flow on this page has the owner personally holding, signing for or receiving money: vendor contracts, accounts, payments and refunds are the organisation's, done by people it authorises.
+- **Production has one user today** (the owner). The first live run uses the organisation's own channel and PayGood merchant, never the owner's ([§13](#13-build-order)).
 - Numbers follow [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) and [Numbers and dates](../guides/numbers-and-dates.md): money in Arabic is «٥٫٠٠ دولار أمريكي», never «US$».
 
 ## 1. What "support" means here
@@ -259,7 +260,7 @@ Assumes PayGood accepts foreign cards with no surcharge (none published; ask Pay
 | KYC, sanctions screening | $0 (PayGood's and Finix's, inside the card fee; **Unverified**) |
 | Per-creator secrets (if creators connect their own API keys, [§12.1](#121-paygood-what-it-can-and-cant-do)) | $0: encrypted in D1 with a key from Secrets Store, not one Secrets Store entry per creator |
 
-**Outside the infrastructure cap** (business costs, owner decision [S3](AUN-SUBS-subscriptions-plan.md)): entity formation, registered agent, insurance, lawyer and accountant ([§12](#12-partners-and-vendors)).
+**Business costs** (entity formation, registered agent, insurance, lawyer and accountant, [§12.4](#124-what-each-partner-covers-costs-and-needs)) are paid by the organisation. Whether they count against the $500 cap is **owner decision [MEM-D14](#15-owner-decisions)**, with the numbers.
 
 If PayGood ever adds per-account fees, the options are: show them to the creator in Studio as a plain line ("PayGood charges $X a month for your account"), or let the supporter cover them through "cover the fees". Never a platform margin.
 
@@ -605,27 +606,27 @@ Recorded only so the owner sees what exists; P1 stands. PayPal Complete Payments
 
 | Partner | Covers | Cost | Setup steps | Only the owner can do |
 |---|---|---|---|---|
-| **PayGood** | Creators' checkout, subscriptions, refunds, KYC, payouts to US/CA banks | Card 2.9% + 30¢ paid from the gift; platform $0 (**confirm**) | Written answers to the questions in [§12.1](#121-paygood-what-it-can-and-cant-do): partner access for referred merchants; individuals; foreign cards and surcharges; dispute and payout webhooks; sanctions screening; 1099-K filer; international plans; written OK for creator support with nothing in return | Talk to PayGood as the business; sign any partner agreement; hold the platform's own PayGood account |
-| **Apple App Review, Google Play policy** | Store approval of support outside in-app purchase | $0 | Written pre-clearance questions ([§8](#8-app-stores)) | Send from the developer accounts |
-| **US lawyer** (fintech, consumer, sanctions, privacy), licensed where the entity is formed | Questions in [§14.1](#141-us-lawyer); creator agreement and supporter terms | Estimate $3,000–10,000 one-off for the review and terms (**Unverified**, get quotes) | Brief with this page | Engage and pay; sign the engagement |
-| **Accountant / tax adviser** with US and cross-border digital-platform experience | Questions in [§14.2](#142-accountant-or-tax-adviser) | Estimate $1,000–5,000 one-off, then yearly bookkeeping (**Unverified**) | Brief with this page | Engage |
-| **Scholar (mufti)** or a recognised fatwa body | Questions in [§14.3](#143-scholar-mufti) | Often an honorarium (**Unverified**) | Send the questions | Choose the scholar; accept the ruling |
-| **Business entity** (US) | Contracting party for PayGood, the stores, insurance | LLC filing about $50–500 by state; Delaware LLC tax $300/yr; Wyoming report from $60/yr (**Unverified**) | Choose state and type with the lawyer | Form it; sign; get an EIN (free, [IRS](https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online)) |
-| **Registered agent** | Legal address in the formation state | About $50–300/yr (**Unverified**) | — | Appoint |
-| **Business bank account** | Receives nothing from support (we take 0%); pays vendors | Often $0–15/month | — | Open it in the entity's name |
-| **Insurance** | General liability, cyber/privacy, tech E&O plus media liability | About $500–5,000/yr each (**Unverified**, get quotes) | Broker quotes | Buy |
-| **Bookkeeping** | Our own expenses; no support money passes through us | Free to $30/month tools | — | Choose |
-| **DMCA designated agent** | Safe harbour for user content (already relevant) | $6 at the Copyright Office ([DMCA directory](https://www.copyright.gov/dmca-directory/)) | — | Register |
+| **PayGood** | Creators' checkout, subscriptions, refunds, KYC, payouts to US/CA banks | Card 2.9% + 30¢ paid from the gift; platform $0 (**confirm**) | Written answers to the questions in [§12.1](#121-paygood-what-it-can-and-cant-do): partner access for referred merchants; individuals; foreign cards and surcharges; dispute and payout webhooks; sanctions screening; 1099-K filer; international plans; written OK for creator support with nothing in return | The organisation talks to PayGood, signs any partner agreement and holds the platform's own PayGood account |
+| **Apple App Review, Google Play policy** | Store approval of support outside in-app purchase | $0 | Written pre-clearance questions ([§8](#8-app-stores)) | Send from the developer accounts, held by the organisation |
+| **US lawyer** (fintech, consumer, sanctions, privacy), licensed where the entity is formed | Questions in [§14.1](#141-us-lawyer); creator agreement and supporter terms | Estimate $3,000–10,000 one-off for the review and terms (**Unverified**, get quotes) | Brief with this page; the first engagement forms the organisation | The organisation's founders or board engage, sign and pay |
+| **Accountant / tax adviser** with US and cross-border digital-platform experience | Questions in [§14.2](#142-accountant-or-tax-adviser) | Estimate $1,000–5,000 one-off, then yearly bookkeeping (**Unverified**) | Brief with this page | The organisation engages |
+| **Scholar (mufti)** or a recognised fatwa body | Questions in [§14.3](#143-scholar-mufti) | Often an honorarium (**Unverified**) | Send the questions | The organisation chooses the scholar and accepts the ruling |
+| **Waqf / nonprofit organisation** | Holds the platform; contracting party for PayGood, the stores, insurance; licenses the code from the owner | Per the lawyer engagement: state nonprofit filing (often under $150) and, if it seeks 501(c)(3), IRS Form 1023 ($600) or 1023-EZ ($275) (**Unverified**, lawyer confirms) | Form and structure chosen with the lawyer ([MEM-D11](#15-owner-decisions)) | Its founders form it, appoint its board and officers, get an EIN (free, [IRS](https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online)); the owner is not a signatory |
+| **Registered agent** | Legal address in the formation state | About $50–300/yr (**Unverified**) | — | The organisation appoints |
+| **Business bank account** | Receives nothing from support (we take 0%); pays vendors | Often $0–15/month | — | The organisation opens it in its own name; the owner has no access |
+| **Insurance** | General liability, cyber/privacy, tech E&O plus media liability | About $500–5,000/yr each (**Unverified**, get quotes) | Broker quotes | The organisation buys |
+| **Bookkeeping** | Our own expenses; no support money passes through us | Free to $30/month tools | — | The organisation chooses |
+| **DMCA designated agent** | Safe harbour for user content (already relevant) | $6 at the Copyright Office ([DMCA directory](https://www.copyright.gov/dmca-directory/)) | — | The organisation registers |
 
 **Not needed:** a tax engine (no taxable supply while support is a gift), a separate sanctions vendor (PayGood/Finix screen their merchants, **confirm**; we geo-block), a payout partner (PayGood pays creators directly), a money-transmitter licence (we never touch funds; lawyer confirms).
 
-**The agent never signs in anywhere as the owner and never creates vendor accounts.** Every row in the last column is the owner's.
+**The agent never signs in anywhere as the owner or the organisation and never creates vendor accounts.** Every row in the last column is the organisation's, done by people it authorises; none is the owner's personally.
 
 ## 13. Build order
 
 The whole design is specified; this is the order to build it, not a cut in scope.
 
-1. **Owner and professionals first** (no code waits on them except going live): entity, lawyer, accountant, scholar, PayGood's written answers ([§12.1](#121-paygood-what-it-can-and-cant-do)), Apple and Google pre-clearance (MEM-1).
+1. **Organisation and professionals first** (no code waits on them except going live): the waqf / nonprofit organisation through the lawyer engagement, lawyer, accountant, scholar, PayGood's written answers ([§12.1](#121-paygood-what-it-can-and-cant-do)), Apple and Google pre-clearance (MEM-1).
 2. **Server foundation:** `SupportProvider` interface, the test provider for QA and local only, data model, webhook route and jobs, reconciliation, Errors and Jobs pages, the `creatorSupport` switch and server checks, the Countries table seeded with sanctions blocks, and the end-to-end tests on the local stack (MEM-2 to MEM-5, MEM-21).
 3. **Web:** Studio › Support onboarding, the support sheet with the breakdown, Settings › Support, emails (MEM-6, MEM-7, MEM-9).
 4. **Admin Support pages** (MEM-8).
@@ -633,7 +634,7 @@ The whole design is specified; this is the order to build it, not a cut in scope
 6. **Legal pages and help** (MEM-16, MEM-17).
 7. **Apps:** Core, then Apple, Android, Desktop/Tizen, after the store answers (MEM-12 to MEM-15).
 8. **External support links** (MEM-18), then the **charity route** (MEM-19).
-9. **First live run** on production: the owner's own channel, the owner supporting it with real money once, then refunding through the admin. Then the switch stays off until the owner turns it on.
+9. **First live run** on production, only once the organisation exists: a channel the organisation holds, paid into the organisation's own PayGood merchant, with one real gift from a supporter it names, refunded by someone the organisation authorises. The owner's own channel and accounts are never the payee or the refunder. Then the switch stays off until the organisation decides to turn it on.
 
 **Perks** ([§10](#10-optional-paid-perks-designed-not-scheduled), MEM-20) are not in this order.
 
@@ -651,7 +652,7 @@ Visual stories go through the frames → audit → gallery → owner path. Non-v
 6. Minors: age floors to support and to receive; COPPA; state child-influencer laws; guardian-held payout accounts.
 7. If creators connect their own PayGood API keys to us (MEM-D1), what must the creator agreement say about that access, and what is our liability?
 8. Draft or review the creator agreement and supporter terms ([§4.8](#48-terms)); notice periods; governing law; disputes.
-9. Entity type and state, insurance, BOI status.
+9. The waqf / nonprofit form (nonprofit corporation, charitable trust or another waqf structure), state, tax-exempt route, insurance and BOI status; the code licence from the owner to the organisation; how to keep the owner, a tech employee, out of every money flow and signature.
 10. GDPR: is a supporter relationship with an Islamic creator special-category data? Do we need a DPIA? Transfer mechanism?
 11. Wording: any charitable-solicitation registration risk from "sadaqa", "zakat" or "donation", on the support route and the charity route?
 12. The external support link ([§7.2](#72-countries-neither-covers)): any liability for linking to third-party payment pages?
@@ -699,14 +700,14 @@ Each decision has named options; the recommendation is first.
 | MEM-D8 | Refund policy | **"Gift, not refundable; 7-day mistake window with the creator's agreement; admins refund fraud and errors"** · "Creator decides alone" · "Refund on request within 14 days" |
 | MEM-D9 | Ages | **"18+ to support and to receive"** · "16+ to support with a guardian's confirmation" |
 | MEM-D10 | Payment methods | **"Cards, debit, wallets and bank transfer; never BNPL or instalments"** (pending the scholar) · "Debit and bank transfer only" |
-| MEM-D11 | Legal entity | **"LLC in the owner's home state"** (lawyer confirms) · "Delaware C-corp" (if outside investment is planned) · "Wyoming LLC" |
+| MEM-D11 | Legal entity | **"Per the lawyer engagement: the waqf / nonprofit organisation"** (owner direction 2026-11-22; form and state chosen with the lawyer). Until it exists, creator support stays switched off. The owner never holds, signs for or receives money. |
 | MEM-D12 | Charity route | **"Separate route behind `charityDonations`; zakat tag only after review"** · "No charity route" |
 | MEM-D13 | Perks | **"Designed, switch stays off"** ([§10](#10-optional-paid-perks-designed-not-scheduled)) · "Build perks after support" |
-| MEM-D14 | Business costs and the $500 cap | **"Outside the infrastructure cap"** (same as [S3](AUN-SUBS-subscriptions-plan.md)) · "Inside the cap" |
+| MEM-D14 | Business costs and the $500 cap (no default; owner decides) | Numbers from [§12.4](#124-what-each-partner-covers-costs-and-needs), all **Unverified** estimates. **One-off:** lawyer $3,000–10,000, accountant $1,000–5,000, formation under $150 plus $275–600 if seeking 501(c)(3), DMCA agent $6: about **$4,300–15,800**. **Yearly:** insurance $500–5,000 for each of 3 policies, registered agent $50–300: about **$1,550–15,300**, i.e. **$130–1,280/month**. **Monthly tools:** bank $0–15, bookkeeping $0–30. Recurring total about **$130–1,325/month**. Options: "Outside the infrastructure cap" (as [S3](AUN-SUBS-subscriptions-plan.md)) · "Inside the cap" (the upper end alone exceeds $500/month) |
 | MEM-D15 | When apps get the button | **"After written Apple and Google answers"** · "Web only for now" |
 | MEM-D16 | Disputes and payouts PayGood's API doesn't expose | **"Creator handles them in PayGood; we show what we know and hand over our records"** · "Wait for PayGood dispute and payout webhooks before launch" |
 
-What doesn't need the owner and is decided here: 0% to the platform; never holding funds; hosted checkout only; the creator is the merchant; no public perks; queues with retry, DLQ and Errors with Retry; per-country and emergency stops; the switch default off.
+What doesn't need the owner and is decided here: 0% to the platform; never holding funds; the owner never holds, signs for or receives money; hosted checkout only; the creator is the merchant; no public perks; queues with retry, DLQ and Errors with Retry; per-country and emergency stops; the switch default off.
 
 ## 16. Stories
 
