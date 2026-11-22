@@ -201,7 +201,7 @@ None when idle: no messages in the queues; one hourly cron tick in api-videos fi
 - TA-12: AlUmmahNow PR #1736 (renditions through admin-api) merged 2026-11-22 and live in production (release v2026.11.22, server side). Tools PR #52 (local encode) merged 2026-11-22.
 - TA-8: AlUmmahNow PR #1738 (Imports view, job log, Cancel; visual) in review.
 - TA-9: AlUmmahNow PR #1741 (social import sources, scheduled sync, origin line on posts; visual) in review.
-- TA-13: AlUmmahNow PR #1745 (the Quran verse index served to the app through admin-api, `GET /api/admin/import/quran-index`, private and never cached) in review. AlUmmahNowCore PR #52 (whisper on the GPU, Metal and Vulkan, CPU fallback; release 0.4.0-rc.4) in review. The app's transcribe step (Tools) follows on that Core release.
+- TA-13: AlUmmahNow PR #1745 (the Quran verse index served to the app through admin-api, `GET /api/admin/import/quran-index`, private and never cached) merged 2026-11-22. AlUmmahNowCore PR #52 (whisper on the GPU, Metal and Vulkan, CPU fallback; release 0.4.0-rc.4) in review. The app's transcribe step (Tools) follows on that Core release.
 - Linear: epic [AUN-571](https://linear.app/hamzalabs/issue/AUN-571), stories TA-1…TA-16 = AUN-572…AUN-587, TA-17 = AUN-588, TA-18 = AUN-589, TA-19 = AUN-590, TA-20 = AUN-591, TA-21 = AUN-592.
 
 ## Sources
