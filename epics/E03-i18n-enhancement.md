@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E03` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
-| **Status** | **shipped** |
-| **Last updated** | 2026-11-08 |
+| **Status** | **in progress**: both languages shipped on every app in `v2026.11.08.4`; the O38 wording and Arabic number pass is open: [AlUmmahNow#1665](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1665), [AlUmmahNowUI#141](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/141), [AlUmmahNowDesktop#69](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/69), [AlUmmahNowApple#75](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/75), [AlUmmahNowApple#78](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/78), [AlUmmahNow#1729](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1729) |
+| **Last updated** | 2026-11-22 |
 
 > #80, #81, #82 closed by #339.
 

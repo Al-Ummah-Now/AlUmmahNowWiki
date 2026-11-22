@@ -6,12 +6,12 @@
 |---|---|
 | **ID** | `AUN-SUBS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (plans live in admin-api D1). It also touches [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) and [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **building**: the payments framework is in review, off by default ([#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418), [#1419](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1419)); the rest of the proposal waits on the owner |
-| **Last updated** | 2026-11-15 |
+| **Status** | **building**: the payments framework shipped off by default in release `v2026.11.19.4` ([AlUmmahNow#1415](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1415), [AlUmmahNow#1418](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1418), [AlUmmahNow#1419](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1419)), and PayGood as the only provider in `v2026.11.20.1` ([AlUmmahNow#1653](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1653)); the rest of the proposal waits on the owner |
+| **Last updated** | 2026-11-22 |
 
 > Full proposal: [`docs/plans/SUBSCRIPTIONS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/3c0327b4735c8c82840b66af36411222baadfc5e/docs/plans/SUBSCRIPTIONS.md) (merged in [#834](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/834)).
 
-## Payments framework (building)
+## Payments framework (shipped, off by default)
 
 The owner, 2026-11-14: *"build the framework, no need to enable now, this is for payment, as i said, now its request. if a provider is enabled in admin it switches to pay flow and so on"*.
 

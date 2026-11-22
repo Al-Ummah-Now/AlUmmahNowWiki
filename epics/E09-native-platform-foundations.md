@@ -32,6 +32,7 @@ Make the backend safe and complete for public native clients on every platform.
 | 9.7 | In-app account deletion & data export (Apple 5.1.1(v), Play policy) | openauth#20, AlUmmahNowAuth#233 merged; monorepo PR #433 open; #437. |
 | 9.8 | Client telemetry ingest (consent-gated, QoE) | Open PRs #432/#433; Core PR #18 merged. |
 | 9.9 | Watch-state sync & Continue watching | In Progress — split one step: partially built, acceptance not fully met: Kimi: AlUmmahNow#406 and Core#19 ship first-generation sync, but Core#13 still requires client stamps, tombstones/change feed and continue-watching support.; GLM: #406 shipped working watch-state + continue-watching endpoints; Core#13 asks for exactness refinements (client stamps, change feed) on top of a working slice. |
+| 9.10 | Features hidden when off: apps hide what a user can't use instead of showing errors ([rule](../guides/product-rules.md#hidden-when-off)) | Web done: GET /api/me/features and feature_off (#1494), then #1498, #1501, #1509, #1510, shared header AlUmmahNowUI#123 and Auth AlUmmahNowAuth#426, all released. Android (AlUmmahNowAndroid#27) and Apple (AlUmmahNowApple#56) merged. Desktop (AlUmmahNowDesktop#54) was closed and needs a new PR. |
 
 Full story text and acceptance criteria are in the source spec. Bilingual (en/ar, RTL) and Epic 1 accessibility are implicit ACs for every UI story.
 
