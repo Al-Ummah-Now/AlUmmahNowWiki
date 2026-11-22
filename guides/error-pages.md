@@ -6,7 +6,7 @@ Every Al Ummah Now app shows the same error pages: one family for **404** (page 
 
 ## What a visitor sees
 
-One **frosted-glass card with a gold edge and glow** on the lantern street, inside the app's own header and footer, in Light and Dark, English and Arabic (right to left).
+One **solid card with a gold edge and glow** on the lantern street, inside the app's own header and footer, in Light and Dark, English and Arabic (right to left). The street never shows through the card (owner, 2026-11-22). The header is the shared header with the theme's own material in every app: Fawanees is a gradient with a gold underline.
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -15,7 +15,7 @@ One **frosted-glass card with a gold edge and glow** on the lantern street, insi
 │ We couldn’t find this page. The link may be  │
 │ wrong, or the page may have moved.           │
 │ [ Search Al Ummah Now ............ ][Search] │  404/410, where the app has a search
-│ ┌ Reference  ERR-XXXX-XXXX   Copy reference ┐│  500/crash, where a reference exists
+│ ┌ Reference  ERR-XXXX-XXXX   Copy reference ┐│  500/503/crash, where a reference exists
 │ └ Quote this reference if you contact us…   ┘│
 │──────────────────────────────────────────────│
 │ Still stuck? Contact us [Go back] [Home page]│  main action last, filled (gold)
@@ -26,9 +26,10 @@ One **frosted-glass card with a gold edge and glow** on the lantern street, insi
 - **Code line**: "Error 404" / «خطأ ٤٠٤», with Eastern Arabic digits in Arabic ([Numbers and dates](numbers-and-dates.md)). Client-only screens (offline, new version, session ended) have no code.
 - **Actions**: the family's own buttons (`.ep-btn-primary` / `.ep-btn-secondary` in the shared sheet), never an app's button classes, so the gold, the 44px pill shape, the height and the type (the page's own font, 15px/600) are the same in every app. The main action is filled and sits at the end edge; the others are outlined. On a phone they stack full width, main action on top.
   - 404 and 410: **Go back** (only when there is history) and **Home page** (main), plus **Search** above them (videos site and www, which have a site search).
-  - 500, 503 and a crashed page: **Home page** and **Try again** (main: the boundary's reset, or the same page; always a path on the app's own origin), and the **reference** with a copy button where the app reports errors (videos, admin, Auth). No Go back.
+  - 500, 503 and a crashed page: **Home page** and **Try again** (main: the boundary's reset, or the same page; always a path on the app's own origin), and the **reference** with a copy button (videos, admin, Auth, and www, where it is the request's `cf-ray`, or a random id that the Worker logs with the page's kind and path). No Go back.
+  - The help line and the buttons share one row on desktop, in both languages: the line wraps inside its own space, so it never sits alone above the buttons.
   - **Still stuck? Contact us** links to the videos site's Contact us (www's `/contact` redirects there), with `?ref=` when there is a reference.
-- **Words**: balanced lines (`text-wrap: balance` on the title and body, and a no-break space before the last word where a line could still end on it), so a heading or sentence never ends on one lone word.
+- **Words**: balanced lines (`text-wrap: balance` on the title, body, help line and reference hint, and a no-break space before the last word where a line could still end on it), so a heading or sentence never ends on one lone word. "Al Ummah Now" is kept on one line (no-break spaces).
 - **Never**: a stack trace, a raw error message, a framework URL, a timestamp, or a pulsing/animated illustration.
 
 ## Words
@@ -40,7 +41,7 @@ Shared copy, the same in every app (canonical: `ERROR_SCREEN_STRINGS` in AlUmmah
 | 404 | **Page not found** — We couldn’t find this page. The link may be wrong, or the page may have moved. | **الصفحة غير موجودة** — لم نعثر على هذه الصفحة. ربما الرابط غير صحيح أو نُقلت الصفحة. |
 | 410 | **This was removed** — It’s no longer on Al Ummah Now. Search for something else, or go to the home page. | **حُذف هذا المحتوى** — لم يعد موجودًا على الأمة الآن. ابحث عن شيء آخر أو انتقل إلى الصفحة الرئيسية. |
 | 500 | **We could not load this page** — Our server had a problem with this request. It has been reported. Please try again in a moment. ("It has been reported" only where the app reports errors.) | **تعذّر تحميل هذه الصفحة** — واجه الخادم مشكلة في هذا الطلب، وقد أُبلغ عنها. يُرجى المحاولة بعد قليل. |
-| 503 | **Page temporarily unavailable** — Our server is not responding right now. Try again in a few minutes. (www and scholar sites: "Our content service is not responding."; Auth: **Sign-in is temporarily unavailable**; CMS: **The CMS is temporarily unavailable**: they say which service is down.) | **الصفحة غير متاحة مؤقتًا** — الخادم لا يستجيب حاليًا. حاول مرة أخرى بعد دقائق. (Auth: «تسجيل الدخول غير متاح مؤقتًا»؛ CMS: «نظام إدارة المحتوى غير متاح مؤقتًا») |
+| 503 | **We’ll be back shortly** — Our server is not responding right now. Try again in a few minutes. (The same words on the videos site, admin, www and scholar sites. Auth: **Sign-in is temporarily unavailable**; CMS: **The CMS is temporarily unavailable**: those two say which service is down.) | **سنعود بعد قليل** — الخادم لا يستجيب حاليًا. حاول مرة أخرى بعد دقائق. (Auth: «تسجيل الدخول غير متاح مؤقتًا»؛ CMS: «نظام إدارة المحتوى غير متاح مؤقتًا») |
 | Crash | **Something went wrong** — This part of the page ran into a problem. Try again, and if it keeps happening, let us know. | **حدث خطأ ما** — واجه هذا الجزء من الصفحة مشكلة… |
 | Actions | Home page, Go back, Search, Try again, Copy reference, Still stuck? Contact us | الصفحة الرئيسية، رجوع، بحث، حاول مرة أخرى، انسخ الرقم المرجعي، ما زلت تواجه المشكلة؟ تواصل معنا |
 | Tab title | {title} \| Al Ummah Now (every app, e.g. "Page not found \| Al Ummah Now") | {title} \| الأمة الآن |
@@ -53,13 +54,13 @@ Tone follows the [Copy Tone Guide](copy-tone.md): plain, no hype, «مرئي/م�
 - Every error page is **noindex, nofollow**, with exactly one robots meta. www, scholar sites, Auth and the CMS send `<meta name="robots" content="noindex, nofollow">`. On the videos site and admin (Next.js), the one meta is Next's own `noindex`, which Next adds to every 4xx/5xx page, and `X-Robots-Tag: noindex, nofollow` carries the rest; search engines combine the two. The error routes set no robots of their own (`notFoundMetadata`), and the Workers drop any extra robots meta but never rewrite the one they keep: React adopts a server meta on hydration only when its content is unchanged, so a rewritten one gets a second `noindex` beside it. The videos site's sign-in failed page (`/auth/error`) is noindex too. Error pages have no canonical or hreflang.
 - **410 Gone** (decision D-SEO-4, [AUN-SEO](../epics/AUN-SEO-search-visibility.md)): a deleted video, Short, playlist or channel is 404 during its 30-day restore window and 410 once purged. The videos Worker (`apps/web/src/lib/seo/gone.ts`) turns the 404 into a 410 and, with `HTMLRewriter`, rewrites the one card's badge icon, code line, title, body and tab title to the 410 words (the page has a single heading block; there is no hidden second block). www has no 410: D-SEO-4 covers videos content only, and www pages that go away are redirected or 404.
 - **Tab title on the videos site and admin**: the error card sets it for as long as it is up (`useErrorTabTitle`), on any route and for every kind, and sets it again if the route's metadata title streams in later. When the card goes (Try again, navigation), the route's title comes back. A content route's 404 (missing video, playlist, channel, profile, post) carries the 404 page's title in its server HTML too.
-- **503**: the videos Worker's 503 (`unavailable.ts`) tells the page its status (`window.__aunHttpStatus`), so the card shows **Page temporarily unavailable** rather than the 500 words.
+- **503**: the videos Worker's 503 (`unavailable.ts`) tells the page its status (`window.__aunHttpStatus`), so the card shows **We’ll be back shortly** rather than the 500 words.
 
 ## Accessibility
 
 - One `h1` per page (the dev site's bilingual 404: English `h1`, Arabic `h2`); the card is a `section` labelled by its heading. Auth's sign-in card wordmark (an `h1`) is not drawn on its error pages: the header carries the brand.
 - Crash and 500 screens are `role="alert"`; 404/410 are a plain page.
-- No animation at all (nothing to reduce); a near-opaque card when `backdrop-filter` is not supported or with `prefers-reduced-transparency`.
+- No animation at all (nothing to reduce), and no transparency: the card is solid, so nothing changes with `prefers-reduced-transparency`.
 - axe WCAG 2.2 AA clean in every app, en and ar, Light and Dark (checked in the review frames and the apps' E2E).
 
 ## Where it lives
@@ -67,14 +68,14 @@ Tone follows the [Copy Tone Guide](copy-tone.md): plain, no hype, «مرئي/م�
 | App | Pages | Code |
 |---|---|---|
 | Videos site | 404/410 (`app/not-found.tsx`, `[locale]/not-found.tsx`), crash/500 (`[locale]/error.tsx`, upload, live, `global-error.tsx`), sign-in failed (`/[locale]/auth/error`) | `components/errors/ErrorScreen.tsx`; `NotFoundPage`, `FriendlyError` and `AuthErrorPage` use it |
-| Admin | `not-found.tsx`, `error.tsx`, `(protected)/error.tsx`, `global-error.tsx` | `components/FriendlyError.tsx` |
+| Admin | `not-found.tsx`, `error.tsx`, `(protected)/error.tsx`, `global-error.tsx` | `components/FriendlyError.tsx`; the signed-out 404 uses `PublicShell top`, so the card sits at the top on phones like every other app's |
 | www | `404.astro`, `500.astro`, CMS-unavailable pages | `components/ErrorView.astro` → `packages/render/src/error-page.ts` |
 | Scholar sites | `404.astro` (pages, posts and videos that are not there rewrite to it) | same renderer, in the site's own theme (Nahas has no lantern street by design: [Theming](theming.md) "A theme without a street compiles `--fanous-street-on: 0`", and its check "that other themes draw no street"; only Fawanees draws the street) |
 | Dev site | `404.astro` (both languages: the address has no language) | same renderer |
-| Auth | 500/503 (`ui/error-page.ts`), 404 for unknown pages opened in a browser | the family card itself on Auth's themed page and street, with the shared header |
+| Auth | 500/503 (`ui/error-page.ts`), 404 for unknown pages opened in a browser | the family card itself on Auth's themed page, with the shared header. The lantern street is the sign-in pages' tile street (AlUmmahNowAuth#383): the server's variant on `<html>` |
 | CMS | 404, 500 (`renderErrorStatus`) | `admin/ui/gate.tsx` family variant |
 
-**The card's sheet** is one file: AlUmmahNow `packages/fanous-tokens/errors/aun-error-page.css`, used as is by the videos site and admin and vendored byte for byte by UI (`packages/render/src/styles/aun-error-page.css`) and the CMS (`src/admin/theme/error-page-css.vendored.ts`). `--fanous-*` tokens only; the glass reads the [Surfaces](../epics/E10-fanous-design-system.md) primitive's `--aun-glass-*` tokens when an app has them and falls back to the theme's surface, translucent. Auth vendors it too (`apps/auth/src/ui/error-page-css.vendored.ts`) and draws the family card itself, not its sign-in card.
+**The card's sheet** is one file: AlUmmahNow `packages/fanous-tokens/errors/aun-error-page.css`, used as is by the videos site and admin and vendored byte for byte by UI (`packages/render/src/styles/aun-error-page.css`) and the CMS (`src/admin/theme/error-page-css.vendored.ts`). `--fanous-*` tokens only. The card's surface is one solid colour worked out from the page's background with relative colour syntax: dark pages are lifted 11.9% toward white, light pages get 80% white (Fawanees: #263139 dark, #fdfcfa light, the same as the videos site's cards). Browsers without relative colours use the theme's surface. No `backdrop-filter`. Auth vendors it too (`apps/auth/src/ui/error-page-css.vendored.ts`) and draws the family card itself, not its sign-in card.
 
 ## PRs
 
