@@ -41,11 +41,11 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUTH-R6 / npm/Docker/Helm (HLB-536): In Progress** — both audits agree: openauth#27, #42 (merged): tag-based package releases; AlUmmahNowAuth issues #19 and #20 (open): Docker/Helm and semantic-release follow-ups; @al-ummah-now/openauth (npm)
-- **AUTH-R6 / Audit, pen test, GDPR (HLB-538): In Progress** — both audits agree: AlUmmahNowAuth#225 and #230 (merged): security hardening; AlUmmahNowAuth issue #297 (closed): Dependabot triage; AlUmmahNowAuth#233 (merged): GDPR deletion/export; AlUmmahNow issue #349 (open): independent compliance sign-offs including penetration testing; apps/auth/src/routes/account-routes.ts; AlUmmahNow#349
-- **AUTH-R6 (HLB-535): In Progress** — both cross-checks agree: npm releases and performance/security work have shipped, but Docker/Helm and independent compliance sign-offs remain open, so AUTH-R6 is underway.; Mixed finals: community/support Done, npm+audit+performance In Progress.
-- **AUTH-R6 / Performance (HLB-539): In Progress** — both cross-checks agree: #315/#321/#333/#353 optimize real paths while #311/#314 leave database scaling work open.; Auth#315/#321/#333/#353 merged with #311/#314 open — underway, not complete.
-- **AUTH-R6 / Community & support (HLB-540): Done** — both cross-checks agree: CONTRIBUTING.md, CODE_OF_CONDUCT.md and .github issue/PR templates exist and #21 is closed, meeting the community-docs acceptance.; Auth#21 closed with CONTRIBUTING/CoC/PR templates (#4, #27) merged — thin but the tracking item is done.
+- **AUTH-R6 / npm/Docker/Helm (AUN-141): In Progress** — both audits agree: openauth#27, #42 (merged): tag-based package releases; AlUmmahNowAuth issues #19 and #20 (open): Docker/Helm and semantic-release follow-ups; @al-ummah-now/openauth (npm)
+- **AUTH-R6 / Audit, pen test, GDPR (AUN-143): In Progress** — both audits agree: AlUmmahNowAuth#225 and #230 (merged): security hardening; AlUmmahNowAuth issue #297 (closed): Dependabot triage; AlUmmahNowAuth#233 (merged): GDPR deletion/export; AlUmmahNow issue #349 (open): independent compliance sign-offs including penetration testing; apps/auth/src/routes/account-routes.ts; AlUmmahNow#349
+- **AUTH-R6 (AUN-140): In Progress** — both cross-checks agree: npm releases and performance/security work have shipped, but Docker/Helm and independent compliance sign-offs remain open, so AUTH-R6 is underway.; Mixed finals: community/support Done, npm+audit+performance In Progress.
+- **AUTH-R6 / Performance (AUN-144): In Progress** — both cross-checks agree: #315/#321/#333/#353 optimize real paths while #311/#314 leave database scaling work open.; Auth#315/#321/#333/#353 merged with #311/#314 open — underway, not complete.
+- **AUTH-R6 / Community & support (AUN-145): Done** — both cross-checks agree: CONTRIBUTING.md, CODE_OF_CONDUCT.md and .github issue/PR templates exist and #21 is closed, meeting the community-docs acceptance.; Auth#21 closed with CONTRIBUTING/CoC/PR templates (#4, #27) merged — thin but the tracking item is done.
 ## Open questions
 
 - None recorded in the sources.

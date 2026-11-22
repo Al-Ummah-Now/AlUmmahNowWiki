@@ -49,9 +49,9 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUN-COST / Collector worker, costs D1, minimal overview (HLB-440): Done** — both audits agree: AlUmmahNow#974, #976 (merged): collector and Operations page; AlUmmahNow#1400 (merged): queued collector and Costs page; AlUmmahNow#974; AlUmmahNow#976; AlUmmahNow#1400
-- **AUN-COST / Alert engine (HLB-441): Done** — both audits agree: AlUmmahNow#1400 (merged): budget, spike, forecast and digest alerts; AlUmmahNow#1400
-- **AUN-COST / Full dashboard (HLB-442): Done** — both audits agree: AlUmmahNow#1400 (merged): Costs budget, forecast, products, environments, trends and movers; AlUmmahNow#1400
+- **AUN-COST / Collector worker, costs D1, minimal overview (AUN-3): Done** — both audits agree: AlUmmahNow#974, #976 (merged): collector and Operations page; AlUmmahNow#1400 (merged): queued collector and Costs page; AlUmmahNow#974; AlUmmahNow#976; AlUmmahNow#1400
+- **AUN-COST / Alert engine (AUN-4): Done** — both audits agree: AlUmmahNow#1400 (merged): budget, spike, forecast and digest alerts; AlUmmahNow#1400
+- **AUN-COST / Full dashboard (AUN-5): Done** — both audits agree: AlUmmahNow#1400 (merged): Costs budget, forecast, products, environments, trends and movers; AlUmmahNow#1400
 ## Open questions
 
 - None recorded in the sources.

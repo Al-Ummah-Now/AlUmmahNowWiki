@@ -66,11 +66,11 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E11 / Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) (HLB-659): Done** — both audits agree: AlUmmahNowCore#2 (merged): workspace, UniFFI facade and binding smoke tests; AlUmmahNowCore#2
-- **E11 / API client from the api-videos OpenAPI (HLB-660): Done** — both audits agree: AlUmmahNowCore#3 (merged): OpenAPI-generated API client; AlUmmahNowCore#3
-- **E11 / i18n shared bundles, plurals, runtime locale (HLB-662): Done** — both audits agree: AlUmmahNowCore#17 (merged): shared i18n catalogues, CLDR plurals, formatting and bidi; AlUmmahNowCore#17; AlUmmahNowCore#48
-- **E11 / Player behaviour spec + conformance tests (HLB-663): Done** — both audits agree: AlUmmahNowCore#5 (merged): player behaviour model and conformance suite; AlUmmahNowCore#5
-- **E11 / Analytics & consent (HLB-665): Done** — both audits agree: AlUmmahNowCore#18 (merged): consent-gated telemetry and QoE; AlUmmahNowCore#18
+- **E11 / Workspace & bindings (UniFFI Swift/Kotlin, uniffi-bindgen-cs) (AUN-280): Done** — both audits agree: AlUmmahNowCore#2 (merged): workspace, UniFFI facade and binding smoke tests; AlUmmahNowCore#2
+- **E11 / API client from the api-videos OpenAPI (AUN-281): Done** — both audits agree: AlUmmahNowCore#3 (merged): OpenAPI-generated API client; AlUmmahNowCore#3
+- **E11 / i18n shared bundles, plurals, runtime locale (AUN-283): Done** — both audits agree: AlUmmahNowCore#17 (merged): shared i18n catalogues, CLDR plurals, formatting and bidi; AlUmmahNowCore#17; AlUmmahNowCore#48
+- **E11 / Player behaviour spec + conformance tests (AUN-284): Done** — both audits agree: AlUmmahNowCore#5 (merged): player behaviour model and conformance suite; AlUmmahNowCore#5
+- **E11 / Analytics & consent (AUN-286): Done** — both audits agree: AlUmmahNowCore#18 (merged): consent-gated telemetry and QoE; AlUmmahNowCore#18
 ## Open questions
 
 - None recorded in the sources.

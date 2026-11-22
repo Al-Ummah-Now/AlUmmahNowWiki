@@ -53,8 +53,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E24 (HLB-770): In Progress** — both audits agree: E24 / Premium membership (IAP + web checkout): Backlog → In Progress; AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
-- **E24 / Premium membership (IAP + web checkout) (HLB-772): In Progress** — both audits agree: AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
+- **E24 (AUN-393): In Progress** — both audits agree: E24 / Premium membership (IAP + web checkout): Backlog → In Progress; AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
+- **E24 / Premium membership (IAP + web checkout) (AUN-395): In Progress** — both audits agree: AlUmmahNow#1418 (merged): web pay flow and Billing, off by default; AlUmmahNow#1419 (merged): providers, prices, tax and subscriptions, off by default; AlUmmahNow#1418; AlUmmahNow#1419
 ## Open questions
 
 - None recorded in the sources.

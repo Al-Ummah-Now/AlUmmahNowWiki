@@ -65,11 +65,11 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E30 (HLB-837): Done** — both audits agree: E30 / Probe & analyse: Backlog → Done; E30 / Proxies & thumbnails: Backlog → Done; E30 / Text rendering (HarfBuzz, bidi): Backlog → Done; E30 / Upload handoff: Backlog → Done; AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4 (merged): thumbnails and media analysis
-- **E30 / Probe & analyse (HLB-838): Done** — both audits agree: AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4
-- **E30 / Proxies & thumbnails (HLB-840): Done** — both audits agree: AlUmmahNowCore#4 (merged): thumbnails and media analysis; AlUmmahNowCore#4; AlUmmahNowCore#16
-- **E30 / Text rendering (HarfBuzz, bidi) (HLB-843): Done** — both audits agree: AlUmmahNowCore#10 (merged): HarfBuzz/bidi-aware text shaping and line breaking; AlUmmahNowCore#10
-- **E30 / Upload handoff (HLB-844): Done** — both audits agree: AlUmmahNowCore#12 (merged): upload handoff; AlUmmahNowCore#12
+- **E30 (AUN-461): Done** — both audits agree: E30 / Probe & analyse: Backlog → Done; E30 / Proxies & thumbnails: Backlog → Done; E30 / Text rendering (HarfBuzz, bidi): Backlog → Done; E30 / Upload handoff: Backlog → Done; AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4 (merged): thumbnails and media analysis
+- **E30 / Probe & analyse (AUN-462): Done** — both audits agree: AlUmmahNowCore#4 (merged): probe, analysis and waveforms; AlUmmahNowCore#4
+- **E30 / Proxies & thumbnails (AUN-464): Done** — both audits agree: AlUmmahNowCore#4 (merged): thumbnails and media analysis; AlUmmahNowCore#4; AlUmmahNowCore#16
+- **E30 / Text rendering (HarfBuzz, bidi) (AUN-467): Done** — both audits agree: AlUmmahNowCore#10 (merged): HarfBuzz/bidi-aware text shaping and line breaking; AlUmmahNowCore#10
+- **E30 / Upload handoff (AUN-468): Done** — both audits agree: AlUmmahNowCore#12 (merged): upload handoff; AlUmmahNowCore#12
 ## Open questions
 
 - None recorded in the sources.

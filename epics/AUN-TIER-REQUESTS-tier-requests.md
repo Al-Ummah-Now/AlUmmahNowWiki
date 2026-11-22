@@ -143,7 +143,7 @@ again.
 
 ### Reconciled 2026-11-21
 
-- **AUN-TIER-REQUESTS (HLB-456): Done** — both audits agree: AlUmmahNow#1415 (merged): /upgrade tier requests, Member tier and admin queue; AlUmmahNow#1415; apps/web/src/app/[locale]/upgrade
+- **AUN-TIER-REQUESTS (AUN-54): Done** — both audits agree: AlUmmahNow#1415 (merged): /upgrade tier requests, Member tier and admin queue; AlUmmahNow#1415; apps/web/src/app/[locale]/upgrade
 ## Open questions
 
 - None. The owner decides later, in the tier editor, whether Member may create pages.

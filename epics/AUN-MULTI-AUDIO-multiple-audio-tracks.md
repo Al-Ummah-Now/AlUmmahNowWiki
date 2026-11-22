@@ -137,7 +137,7 @@ The video editor gets an **Audio tracks** panel below Subtitles:
 
 ### Reconciled 2026-11-21
 
-- **AUN-MULTI-AUDIO (HLB-446): Done** — both audits agree: AlUmmahNow#1397 (merged): audio-track API, jobs, packaging and review; AlUmmahNow#1412 (merged): player Audio menu, Studio panel and admin fields; AlUmmahNow#1397; AlUmmahNow#1412
+- **AUN-MULTI-AUDIO (AUN-37): Done** — both audits agree: AlUmmahNow#1397 (merged): audio-track API, jobs, packaging and review; AlUmmahNow#1412 (merged): player Audio menu, Studio panel and admin fields; AlUmmahNow#1397; AlUmmahNow#1412
 ## Sources
 
 - [Bunny Stream: multi audio](https://docs.bunny.net/stream/multi-audio) · [Bunny blog: multi-audio support](https://bunny.net/blog/hop-to-new-territories-with-bunny-streams-new-multi-audio-support/)

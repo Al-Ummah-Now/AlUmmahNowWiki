@@ -196,7 +196,7 @@ None when idle: no messages in the queues; one hourly cron tick in the processor
 ## Status evidence
 
 - Spec: this page.
-- Linear: epic [HLB-947](https://linear.app/hamzalabs/issue/HLB-947), stories TA-1…TA-16 = HLB-948…HLB-963, TA-17 = HLB-964, TA-18 = HLB-965, TA-19 = HLB-966, TA-20 = HLB-967, TA-21 = HLB-968.
+- Linear: epic [AUN-571](https://linear.app/hamzalabs/issue/AUN-571), stories TA-1…TA-16 = AUN-572…AUN-587, TA-17 = AUN-588, TA-18 = AUN-589, TA-19 = AUN-590, TA-20 = AUN-591, TA-21 = AUN-592.
 
 ## Sources
 

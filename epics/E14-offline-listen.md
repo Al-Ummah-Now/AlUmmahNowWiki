@@ -56,8 +56,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E14 (HLB-695): In Progress** — both cross-checks agree: Core aun-sync explicitly implements offline-library state, notes and queued writes; the story is partially built, so E14 is In Progress.; 14.5 finalizes In Progress on the aun-sync foundation; downloads/listen/CarPlay remain unbuilt.
-- **E14 / Offline-first library sync (HLB-700): In Progress** — both cross-checks agree: crates/aun-sync/src/lib.rs:1-12 implements offline-library history/notes/likes/downloads and queued sync; server gaps remain in Core#13.; The LWW sync engine (Core#19) and offline write queue (Core#3) exist, but no offline-first library UI or download store.
+- **E14 (AUN-316): In Progress** — both cross-checks agree: Core aun-sync explicitly implements offline-library state, notes and queued writes; the story is partially built, so E14 is In Progress.; 14.5 finalizes In Progress on the aun-sync foundation; downloads/listen/CarPlay remain unbuilt.
+- **E14 / Offline-first library sync (AUN-321): In Progress** — both cross-checks agree: crates/aun-sync/src/lib.rs:1-12 implements offline-library history/notes/likes/downloads and queued sync; server gaps remain in Core#13.; The LWW sync engine (Core#19) and offline write queue (Core#3) exist, but no offline-first library UI or download store.
 ## Open questions
 
 - None recorded in the sources.

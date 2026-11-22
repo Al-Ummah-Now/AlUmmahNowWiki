@@ -41,10 +41,10 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUTH-R1 / Session management (HLB-506): Done** — both audits agree: AlUmmahNowAuth#196, #232, #237, #286, #287, #386 (merged): SSO, revocation, persistent sessions and per-device sign-out; apps/auth/src/routes/admin-session-routes.ts; AlUmmahNowAuth commit 7c95b58
-- **AUTH-R1 / Token security (JWT, rotation) (HLB-507): Done** — both audits agree: AlUmmahNowAuth#237, #240, #244, #266, #389, #390 (merged): revocation, short lifetimes, refresh and signing-key rotation; openauth#30, #51 (merged): atomic refresh rotation and signing-key rotation; AlUmmahNowAuth commit cc4f901; openauth refresh-token
-- **AUTH-R1 / Rate limiting & brute force (HLB-509): Done** — both audits agree: AlUmmahNowAuth#264, #268 (merged): attempt limits and Workers Rate Limiting; openauth#35 (merged): atomic rate-limit counters; apps/auth/src/middleware/rate-limit.ts
-- **AUTH-R1 / Audit logging (HLB-510): Done** — both audits agree: AlUmmahNowAuth#60, #72, #241 (merged): audit events, retry/DLQ and production consumer; apps/auth/src/audit-events.ts; apps/admin/app/routes/audit.tsx
+- **AUTH-R1 / Session management (AUN-111): Done** — both audits agree: AlUmmahNowAuth#196, #232, #237, #286, #287, #386 (merged): SSO, revocation, persistent sessions and per-device sign-out; apps/auth/src/routes/admin-session-routes.ts; AlUmmahNowAuth commit 7c95b58
+- **AUTH-R1 / Token security (JWT, rotation) (AUN-112): Done** — both audits agree: AlUmmahNowAuth#237, #240, #244, #266, #389, #390 (merged): revocation, short lifetimes, refresh and signing-key rotation; openauth#30, #51 (merged): atomic refresh rotation and signing-key rotation; AlUmmahNowAuth commit cc4f901; openauth refresh-token
+- **AUTH-R1 / Rate limiting & brute force (AUN-114): Done** — both audits agree: AlUmmahNowAuth#264, #268 (merged): attempt limits and Workers Rate Limiting; openauth#35 (merged): atomic rate-limit counters; apps/auth/src/middleware/rate-limit.ts
+- **AUTH-R1 / Audit logging (AUN-115): Done** — both audits agree: AlUmmahNowAuth#60, #72, #241 (merged): audit events, retry/DLQ and production consumer; apps/auth/src/audit-events.ts; apps/admin/app/routes/audit.tsx
 ## Open questions
 
 - None recorded in the sources.

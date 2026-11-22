@@ -43,7 +43,7 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **OA-ADMIN-APIS (HLB-918): In Progress** — both cross-checks agree: openauth dynamic-provider and middleware are built but not adopted by Auth, so phases 4 and 6 remain incomplete.; Phases 4 and 6 are built in openauth but unmounted (Auth uses its own requireAdmin) — the epic's stories are mixed, so not Done.
+- **OA-ADMIN-APIS (AUN-542): In Progress** — both cross-checks agree: openauth dynamic-provider and middleware are built but not adopted by Auth, so phases 4 and 6 remain incomplete.; Phases 4 and 6 are built in openauth but unmounted (Auth uses its own requireAdmin) — the epic's stories are mixed, so not Done.
 ## Open questions
 
 - None recorded in the sources.

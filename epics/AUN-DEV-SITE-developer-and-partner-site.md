@@ -145,4 +145,4 @@ Donations or payments, a blog or news feed on this site, analytics or cookies, a
 
 ### Reconciled 2026-11-21
 
-- **AUN-DEV-SITE (HLB-445): Done** — both audits agree: AlUmmahNowUI#110 (merged 2026-11-15): alummahnow.dev project site; AlUmmahNowUI#110
+- **AUN-DEV-SITE (AUN-34): Done** — both audits agree: AlUmmahNowUI#110 (merged 2026-11-15): alummahnow.dev project site; AlUmmahNowUI#110

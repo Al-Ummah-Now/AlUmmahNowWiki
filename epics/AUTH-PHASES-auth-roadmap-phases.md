@@ -40,7 +40,7 @@ Platform-wide constraints that apply to every epic:
 
 ### Reconciled 2026-11-21
 
-- **AUTH-PHASES / Scale & performance (HLB-503): In Progress** — both cross-checks agree: Auth#315/#321/#333/#353/#356 ship scaling work while #311/#314 leave D1 performance work open; Phase 3 is partially built.; Auth#315/#321/#333/#353/#356 shipped latency/D1/KV/audit-capping work; #311/#314 remain open.
+- **AUTH-PHASES / Scale & performance (AUN-108): In Progress** — both cross-checks agree: Auth#315/#321/#333/#353/#356 ship scaling work while #311/#314 leave D1 performance work open; Phase 3 is partially built.; Auth#315/#321/#333/#353/#356 shipped latency/D1/KV/audit-capping work; #311/#314 remain open.
 ## Open questions
 
 - None recorded in the sources.

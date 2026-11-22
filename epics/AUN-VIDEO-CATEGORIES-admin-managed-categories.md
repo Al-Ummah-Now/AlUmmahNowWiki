@@ -44,7 +44,7 @@ Video categories were a fixed list in code (`VIDEO_CATEGORIES`, the 15 categorie
 
 ### Reconciled 2026-11-21
 
-- **AUN-VIDEO-CATEGORIES (HLB-457): Done** — both audits agree: AlUmmahNow#1423 (merged): admin add, rename, reorder and retire video categories; AlUmmahNow#1423; apps/admin-web/src/app/(protected)/categories/CategoriesAdmin.tsx
+- **AUN-VIDEO-CATEGORIES (AUN-56): Done** — both audits agree: AlUmmahNow#1423 (merged): admin add, rename, reorder and retire video categories; AlUmmahNow#1423; apps/admin-web/src/app/(protected)/categories/CategoriesAdmin.tsx
 ## Open questions
 
 - None recorded.

@@ -74,8 +74,8 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 
 ### Reconciled 2026-11-21
 
-- **E27 / Admin tooling: Plans & Billing (HLB-801): Canceled** — both cross-checks agree: E27 is explicitly superseded: #427/#428 closed unmerged and the wiki moves Plans & Billing to creator tiers plus AUN-SUBS.; Wiki marks E27 superseded (creator tiers are the plans; payments under AUN-SUBS) and the plans PRs #427/#428 were closed unmerged 11-15 — explicitly superseded.
-- **E27 / Pluggable payment providers (T2, resolved: never Stripe) (HLB-802): Canceled** — both cross-checks agree: E27 is explicitly superseded and payment providers moved to AUN-SUBS (#1418/#1419), so this story is Canceled rather than active E27 work.; Same supersession: the merged payments work (#1418/#1419) is AUN-SUBS scope, and Paddle removal (0067) confirms the model moved.
+- **E27 / Admin tooling: Plans & Billing (AUN-424): Canceled** — both cross-checks agree: E27 is explicitly superseded: #427/#428 closed unmerged and the wiki moves Plans & Billing to creator tiers plus AUN-SUBS.; Wiki marks E27 superseded (creator tiers are the plans; payments under AUN-SUBS) and the plans PRs #427/#428 were closed unmerged 11-15 — explicitly superseded.
+- **E27 / Pluggable payment providers (T2, resolved: never Stripe) (AUN-425): Canceled** — both cross-checks agree: E27 is explicitly superseded and payment providers moved to AUN-SUBS (#1418/#1419), so this story is Canceled rather than active E27 work.; Same supersession: the merged payments work (#1418/#1419) is AUN-SUBS scope, and Paddle removal (0067) confirms the model moved.
 ## Open questions
 
 - First paid providers (P1) open until monetisation is decided (D4).
