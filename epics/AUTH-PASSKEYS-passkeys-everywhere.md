@@ -7,7 +7,7 @@
 | **ID** | `AUTH-PASSKEYS` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) (issuer, profile, account hub, auth admin), [openauth](../repos/openauth.md) (fork: passkey provider, `amr`), [AlUmmahNow](../repos/AlUmmahNow.md) (admin-api, admin-web), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) (CMS admin), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
 | **Status** | **in progress**: passkey sign-in, autofill and the hub list are live in Auth (run 43523373072, AlUmmahNowAuth #366); native passkeys for Studio and Admin since run 43566695131 (#372, #376). Requiring passkeys for staff is shipped in Auth, the videos admin (AlUmmahNow v2026.11.13.10) and the CMS (v2026.11.13.6), off by default behind a super admin switch. The clearer staff card is in review (#381). Spec v2 (2026-11-13) below |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-22 |
 
 Read from AlUmmahNowAuth `origin/main` [`b7b0d53`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/tree/b7b0d53) and openauth `origin/master` [`2d74b49`](https://github.com/Al-Ummah-Now/openauth/tree/2d74b49) on 2026-11-13. Comes from [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) decision AD6 and step-up decision AD5. Also closes [AlUmmahNowAuth#361](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/361).
 
@@ -159,6 +159,19 @@ New **Passkeys** section on `profile.auth.…`: each passkey with its name, "Syn
 | Native admin apps | Same as admin-web, through admin-api's answers | Apple/Android/Desktop (when built) |
 
 **High-risk admin-api actions (step-up):** suspending, unsuspending or deleting a user (moderation requests to Auth), permanent deletes, granting or removing staff roles, revealing a minor item and approving an escalated item (AUN-VIDEO-REVIEW).
+
+### Accounts with no sign-in method yet ([AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442), in review)
+
+An invited account whose passkey was skipped or failed has no password and no passkey. It is never asked for a password it doesn't have:
+
+- **Sign-in page.** Once the email is typed, the page asks `POST /sign-in/method` (same origin; PASSWORD_IP_LIMITER per IP, PASSWORD_EMAIL_LIMITER per email hash). For an email with no password, the password field steps aside for **Email me a sign-in link** and **Add a password**.
+  - The link (`POST /sign-in/link`, CSRF cookie, SEND_CODE_LIMITER per IP and per email hash) is the invite's single-use link, sent in its own short email. It signs the account in and shows the passkey card again.
+  - **Add a password** is register with `setup=1`: own title, email prefilled, and the emailed code proves the inbox.
+  - An unknown email gets the same options and the same "Check your inbox" page. The lookup and send run after the response. Whether an email has a password was already public through register's "email taken".
+- **Invite passkey card.** After a failure or Skip it says: "No passkey yet. Next time, sign in with the link we email you, or add a password. You can add a passkey any time in Account → Passkeys." (also in Arabic). After two failures the second button reads **Continue without a passkey**.
+- **A failure is not a "no" (PK1).** Only a plain Not now / Skip with no failure starts the 30-day pause.
+- **Audit.** Each failure records `passkey.add_failed` with the reason (failed, cancelled, network, expired) and a coarse browser and OS from the User-Agent. Auth admin → user → Passkeys lists the last 10 under **Failed passkey attempts** (local time with zone, UTC on hover) and links to the audit log.
+- **Failure wording** (same PR): each failure case on the card and on `/passkeys/setup` says what happened and what to do. Expired registrations answer `{ error: 'expired' }`.
 
 ### Recovery
 
@@ -331,6 +344,7 @@ Two to three D1 reads and one write per passkey sign-in, no external service. Un
 | Fix: hub Passkeys card error on sessions from before 15-minute tokens, card spacing, accurate copy (device, password manager, phone, security key), card E2E | [AlUmmahNowAuth#370](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/370) | in review |
 | Copy: admin passkey screens and help guide | [AlUmmahNow#1316](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1316) | in review |
 | Copy: CMS passkey-needed page | [AlUmmahNowCMS#127](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/127) | in review |
+| Auth: clearer passkey failures; accounts with no sign-in method get a sign-in link or Add a password; failures audited and shown in auth admin | [AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442) | in review (held for the owner's screenshot review) |
 | Enforcement on QA/stage | — | off; waits on [AlUmmahNowAuth#367](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/367) |
 | Enforcement on production | — | off; **waiting for the owner** to register a passkey on `auth.alummahnow.net` (account hub → Passkeys → Add a passkey), then switch it on in the auth admin → Security |
 

@@ -1761,6 +1761,23 @@
       "note": "Shipped in Auth, the videos admin and the CMS, with enforcement off by default (a super admin switch); the clearer staff card (AlUmmahNowAuth#381) is in review."
     },
     {
+      "id": "sign-in-without-method",
+      "name": {
+        "en": "Sign in with no password or passkey yet",
+        "ar": "تسجيل الدخول دون كلمة مرور أو مفتاح مرور بعد"
+      },
+      "status": "building",
+      "apps": [
+        "auth",
+        "auth-admin"
+      ],
+      "wiki": "epics/AUTH-PASSKEYS-passkeys-everywhere.md",
+      "prs": [
+        "AlUmmahNowAuth#442"
+      ],
+      "note": "An invited account with no password or passkey gets Email me a sign-in link or Add a password on the sign-in page instead of a password field. Passkey failures say what went wrong, never count as Not now, and are audited (reason, browser, OS) in auth admin. Held for the owner's screenshot review."
+    },
+    {
       "id": "account-hub",
       "name": {
         "en": "Your account: app launcher and your apps",
