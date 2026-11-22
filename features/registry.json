@@ -129,7 +129,9 @@
       ],
       "wiki": "epics/E29-core-web-experience.md",
       "prs": [
-        "AlUmmahNow#1379"
+        "AlUmmahNow#1379",
+        "AlUmmahNow#1511",
+        "AlUmmahNow#1518"
       ],
       "note": "Channel owners edit or delete a post from its card, schedule it for later (or publish a scheduled one now), and subscribers get a notification when a post goes live (per-channel bell and a Posts notification category)."
     },
@@ -324,7 +326,8 @@
         "AlUmmahNow#660",
         "AlUmmahNow#715",
         "AlUmmahNow#1363",
-        "AlUmmahNow#1373"
+        "AlUmmahNow#1373",
+        "AlUmmahNow#1626"
       ],
       "note": "A Tiers item in the admin menu (AlUmmahNow#1363) is in review. Live streaming per tier (allowed, hours a month, streams at once, longest stream) is in review in AlUmmahNow#1373."
     },
