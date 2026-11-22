@@ -22,6 +22,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [T1](decisions.md#t1-plans-are-admin-managed) | Plans are admin-managed | **decided** | 2026-11-07 | Epic 27, every tiered feature |
 | [T2](decisions.md#t2-billing-provider) | Billing provider | **decided** | 2026-11-07 | 27.7, Epic 24 |
 | [P1](decisions.md#p1-first-paid-providers) | First paid providers | **decided** | 2026-11-19 | 27.7 |
+| [QF1](decisions.md#qf1-quran-foundation-content-use) | Quran Foundation content use (QF's answers 2026-11-21 and 2026-11-22; the derived index is never used for ML training or evaluation) | **decided** | 2026-11-22 | AUN-CAPTIONS, TOOLS-ADMIN, DISCOVERY, any feature that shows Quran text |
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions plan (decisions S1–S18) | **pending** | 2026-11-11 | Epic 27, Epic 24, every tiered feature, P1 |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (decisions AD1–AD14) | **decided** | 2026-11-13 | AUN-ADMIN-NATIVE build (held until the owner says go) |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | Multiple audio tracks (decisions MA1–MA10: demuxed HLS alternate audio from R2, tier limit per video, review of each track) | **decided** | 2026-11-14 | AUN-MULTI-AUDIO build |
@@ -494,6 +495,26 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 **Blocks / affects:** Social media management
 
 **Sources:** [docs/specs/social-media-management.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/social-media-management.md)
+
+## Quran Foundation terms ([AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md))
+
+### QF1: Quran Foundation content use
+
+**Status:** decided · **Date:** 2026-11-22
+
+**Decision (Quran Foundation's written answers, 2026-11-21 and 2026-11-22):**
+- **Captions:** store verse keys and our own timestamps only. Text and translation are loaded when a track is served, from the Content API or from our Content Sync copy, which is synced at least every 7 days. Nothing else from QF is kept for more than a week.
+- **The derived index** (normalised words + locations, built from the Content Sync copy) is allowed for matching. **It is never used to train, fine-tune or evaluate a machine-learning or AI model.** The same applies to the synced text and QF timings. Tests and evals use synthetic fixtures only.
+- **`mushafs:4`** (Uthmani Hafs) is synced. Its `mushaf_word` rows, linked by `word_id`, cut verses into words and are not stored twice.
+- **Subtitle downloads:** a viewer may download one video's subtitle file. The verse text is filled at download time, unaltered, and the attribution and edition go inside the file.
+- **Offline device copies** are allowed when refreshed from our synced backend at least every 7 days. A copy expires only when a refresh is missed.
+- **Web pages and JSON-LD** may carry verse text that is rendered fresh.
+- **Every call to QF:** on HTTP 429, back off and honour `Retry-After`. Use granular scopes, and access QF only from the backend.
+- **Attribution** wherever the text appears: "Quran data provided by Quran Foundation (https://quran.foundation/)", with the translation edition by name.
+
+**Blocks / affects:** AUN-CAPTIONS, TOOLS-ADMIN, DISCOVERY, any feature that shows Quran text
+
+**Sources:** AlUmmahNow spec `docs/specs/TRANSCRIPTION-TRANSLATION.md` §9.5–9.6; [AlUmmahNow#1716](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1716), [AlUmmahNow#1722](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1722), [AlUmmahNow#1734](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1734)
 
 ## Owner decisions and standing rules recorded only in chat (O-series, wiki IDs)
 
