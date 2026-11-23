@@ -1,9 +1,15 @@
 name: Check links
 
+# Pull requests check only the Markdown files they change, so a GitHub outage on
+# thousands of unrelated links can't turn every PR red. The full check runs on
+# pushes to main, nightly, and on demand, with a cache.
+
 on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -15,16 +21,44 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Pick files to check
+        id: files
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            changed=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' | sed "s/.*/'&'/" | tr '\n' ' ')
+            echo "inputs=$changed" >> "$GITHUB_OUTPUT"
+          else
+            echo "inputs='./**/*.md'" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Restore lychee cache
+        if: steps.files.outputs.inputs != ''
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: .lycheecache
+          key: lychee-${{ github.sha }}
+          restore-keys: lychee-
+
       - name: Check Markdown links
+        if: steps.files.outputs.inputs != ''
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           args: >-
             --no-progress
+            --cache
+            --max-cache-age 1d
             --max-concurrency 8
             --max-retries 3
             --retry-wait-time 5
-            --accept 200,206,429,502,503,504
-            './**/*.md'
+            --accept 200,206,429
+            ${{ steps.files.outputs.inputs }}
           fail: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
