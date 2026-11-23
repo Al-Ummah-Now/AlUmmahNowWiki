@@ -67,7 +67,7 @@ Merged since 2026-11-09:
 
 ## Epics for this repo
 
-10 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+11 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
 
 | Epic | Status |
 |---|---|
