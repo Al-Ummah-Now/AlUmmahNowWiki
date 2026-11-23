@@ -133,7 +133,7 @@ Quran Foundation's reply binds every story here (importer and site): captions, t
 - **Importer, local transcription (TA-13):** Quran spans in a local transcript become verse-key references in the app **before anything is saved to disk or uploaded**. The app matches against the verse index the server serves to it (built from Content Sync, served through admin-api); it holds no Quran Foundation credentials and calls no Quran Foundation API itself.
 - **Translation (TA-7, TA-20):** never touches Quran spans. The translated track carries the same verse keys; the edition is chosen per channel and rendered at play time.
 - **Suggestions and keywords (TA-17, TA-18, TA-21):** may name the surah or topic in our own words (*Ayat al-Kursi*, «آية الكرسي», *Surah al-Kahf*), never reproduce verse text. The matcher drops Quran spans before scoring; Workers AI never receives them.
-- **Attribution** wherever Quran text shows (player captions, transcript view): "Quran data provided by Quran Foundation (https://quran.foundation/)" and the edition's name.
+- **Attribution** wherever Quran text shows (player captions, transcript view): the short credit "Source: Quran Foundation" / «المصدر: مؤسسة القرآن», linked to https://quran.foundation/ (QF 2026-11-23). The full line, "Quran data provided by Quran Foundation (https://quran.foundation/)", with each edition's name, is on the web Credits page and inside downloaded files ([QF1](decisions.md#qf1-quran-foundation-content-use)).
 - Rate limits: on 429, back off and honour `Retry-After` (server side only).
 - The QF-COMPLY work audits and fixes the existing stores; these stories build on its results (its verse-key caption format and render path), not a second copy.
 

@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-PLAYER-LINKS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **planned**. Phase 0 (the Quran Foundation credit) is being built on `feat/qf-short-credit`, with no PR yet; every other phase waits for the owner's answers in [§16](#16-owner-decisions) |
+| **Status** | **planned**. Phase 0 (the Quran Foundation credit) is in review in [AlUmmahNow#1767](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1767), held for the owner's screenshots; every other phase waits for the owner's answers in [§16](#16-owner-decisions) |
 | **Last updated** | 2026-11-23 |
 | **Origin** | Owner request 2026-11-23: in-video links that work like YouTube's: info cards, end screens and fixed credits. The first one is the linked "Source: Quran Foundation" credit that Quran Foundation (QF) requires next to its text ([QF1](decisions.md#qf1-quran-foundation-content-use)) |
 | **Linear** | No Linear tool was available when this page was written. The stories are in [§15](#15-stories), ready to import |
@@ -594,6 +594,8 @@ ALTER TABLE channel ... -- links_suspended_at, links_suspended_reason (on the ch
 ## 13. Rollout
 
 ### Phase 0: the Quran Foundation credit (in progress)
+
+**Built in [AlUmmahNow#1767](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1767)** (2026-11-23): the shared-types credit helpers; the short credit in served cues; the web player's `PlayerLinkOverlay` (a data-driven slot: label, href, screen-reader name, language, direction, placement `caption-end`) with `useQuranCaptionCredit`, which lifts the line, measures the cue box and places the link directly under it at the cue's end side (70% of the cue size, at least 11px, the cue's colours), held while focused or hovered; the captions-menu row; Studio's linked credit; the Credits page with `GET /api/v1/quran/credits`; unit tests and the player harness spec `e2e/player/quran-credit.spec.ts`. **Not in it yet** (follow-ups): the `playerCredits` switch, `SYSTEM_CREDITS` in `player-links.ts`, and the watch page's fixed "Sources: Quran Foundation" line with `sources` on the video view.
 
 Built on `feat/qf-short-credit`, made the first `credit` element:
 
