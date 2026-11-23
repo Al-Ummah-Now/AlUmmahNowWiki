@@ -901,7 +901,8 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 | MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | merged 2026-11-22 |
 | MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | merged 2026-11-22 |
 | MEM-23 payout batches: plan, approve, fund, send, status | AlUmmahNow#1763 | merged 2026-11-22; MEM-D21's reserve option is not built (AlUmmahNow#1762) |
-| MEM-22 payee onboarding (hosted at the rail, tax form on file only) | AlUmmahNow#1764 | open |
+| MEM-22 payee onboarding (hosted at the rail, tax form on file only) | AlUmmahNow#1764 | merged 2026-11-23 |
+| Features switch wiring: `creatorSupport` read from the Features page, the turn-on precondition, routes in `FEATURE_ROUTES` | AlUmmahNow#1766 | merged 2026-11-23 |
 
 **Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
 
@@ -920,4 +921,5 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
-- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3), AlUmmahNow#1761 (MEM-4) and AlUmmahNow#1763 (MEM-23) merged; AlUmmahNow#1764 (MEM-22) open.
+- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3), AlUmmahNow#1761 (MEM-4), AlUmmahNow#1763 (MEM-23) and AlUmmahNow#1764 (MEM-22) merged.
+- 2026-11-23: AlUmmahNow#1766 merged. `creatorSupport` now reads the Features page switch, which is off and fails closed. The Features page refuses to turn it on (409 `feature_precondition`) until the organisation is recorded as formed, the finance list has MEM-D24's approvers, every owner decision is recorded, and a collector and the chosen payout rail exist. The test collector and test rail exist only on QA and the local stack.
