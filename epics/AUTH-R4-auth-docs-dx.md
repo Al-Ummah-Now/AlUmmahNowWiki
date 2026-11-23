@@ -31,8 +31,8 @@ Two audiences:
 | Library docs site | [`www`](https://github.com/Al-Ummah-Now/openauth/tree/master/www), live on [GitHub Pages](https://al-ummah-now.github.io/openauth/) | Upstream's text: installs `@openauthjs/openauth`, edits link to `toolbeam/openauth`. No page for the device grant, native clients, passkeys, PKCE rules, confidential clients, key rotation or revocation. |
 | Examples | [`examples`](https://github.com/Al-Ummah-Now/openauth/tree/master/examples) | Next.js, React, SvelteKit, Astro, API and issuer examples. Not type-checked or run in CI. |
 | Developer site | [`apps/dev`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/dev), [alummahnow.dev](https://alummahnow.dev) | System design, including an [identity page](https://alummahnow.dev/en/system-design/identity/) ([AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md)). It explains how sign-in is built. Nothing says how to use it. |
-| Key management | Auth admin → [Clients](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/apps/admin/app/routes/clients.tsx) | Staff create clients, rotate secrets and delete them. No self-service, by design today. |
-| Usage analytics | [`utils/analytics.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/apps/auth/src/utils/analytics.ts) | Writes events when `AUTH_ANALYTICS` is bound. No environment binds it. |
+| Key management | Auth admin → [Clients](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/apps/admin/app/routes/clients.tsx) | Staff create clients, rotate secrets and delete them. No self-service (AR4-D1). |
+| Usage analytics | [`utils/analytics.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/apps/auth/src/utils/analytics.ts) | Writes events to an Analytics Engine dataset (`AUTH_ANALYTICS`), bound in every environment's Wrangler config. Nothing reads them: no query, no page. |
 
 ## Stories
 
@@ -40,7 +40,7 @@ Each is one PR. Back end and library first, then docs, then the site.
 
 | Story | Repo | What | Done when |
 |---|---|---|---|
-| **R4-1 Discovery tells the truth** | openauth | Both discovery documents list only what the issuer supports: `code` and `token`, the enabled grants, the endpoints that exist, `S256`, the client authentication methods, the prompts it handles. `service_documentation` becomes an issuer option and is left out when unset. `/userinfo` answers an invalid token with 401 and `WWW-Authenticate` (RFC 6750). Today a token of the wrong kind gets 200 with an error body, and one that fails verification throws into the issuer's error handler, which reports it as a server error | A test walks every URL a discovery document lists and gets something other than 404 |
+| **R4-1 Discovery tells the truth** | openauth | Both discovery documents list only what the issuer supports: `code` and `token`, the enabled grants, the endpoints that exist, `S256`, the client authentication methods, the prompts it handles. `service_documentation` becomes an issuer option and is left out when unset. `/userinfo` answers an invalid token with 401 and `WWW-Authenticate` (RFC 6750). Today a token of the wrong kind gets 200 with an error body, and any other bad token, or a failure to read our own keys, gets a 400 HTML page that tells the caller to start signing in again. A key-read failure becomes 500 | A test walks every URL a discovery document lists and gets something other than 404 |
 | **R4-2 TypeScript client completes the flows** | openauth | `createClient` gains `clientCredentials`, `device` (start and poll with `slow_down`), `revoke` and `userinfo`, with typed results and no thrown network surprises. Existing methods don't change | Tests run each against a real in-memory issuer |
 | **R4-3 Python and Go examples** | openauth | `examples/client/python` and `examples/client/go`, on standard libraries: sign-in with PKCE, refresh, access-token verification from the published keys, client credentials | CI starts the test issuer and runs both against it |
 | **R4-4 Complete OpenAPI spec** | Auth | `openapi.yaml` (3.1) covers every route, each marked `x-audience`: `public`, `app` (first-party apps and their servers) or `admin`. A test reads the mounted routes and fails on a route missing from the spec, or a spec path no route serves | Drift test and spec validation in the existing Auth unit tests |
@@ -49,7 +49,7 @@ Each is one PR. Back end and library first, then docs, then the site.
 | **R4-7 Auth section on alummahnow.dev** | UI | `/{en,ar}/auth/`: overview and choosing a flow; web, native, TV and server quickstarts; tokens and how to verify them; sign-out and revocation; errors and limits; sequence figures using the existing diagram kit | Every page in both languages; diagram gate, axe and copy tests green; frames audited |
 | **R4-8 API reference on alummahnow.dev** | UI | `/{en,ar}/auth/reference/`: generated at build time from the Auth spec at a pinned commit. `public` and `app` operations only. Live filter, copyable curl, TypeScript, Python and Go samples | A build test fails if an operation lacks either language's summary |
 | **R4-9 Developer tools on alummahnow.dev** | UI | `/{en,ar}/auth/tools/`: an authorize-request builder that makes a PKCE pair, and an access-token inspector. Both run in the browser only and send nothing | Unit and E2E tests, including that no request leaves the page |
-| **R4-10 Developer portal** | Auth, UI | Self-service apps, keys and usage | Waits for AR4-D1 |
+| **R4-10 Developer portal** | – | Self-service apps, keys and usage | **Not built** (AR4-D1). R4-7 to R4-9 are the developer pages, and the Auth admin manages keys |
 
 Two roadmap items stay as they are: **example apps** exist in `openauth/examples` (R4-3 adds languages), and **key management** for our own apps is the Auth admin's Clients page.
 
@@ -62,14 +62,14 @@ No database change. No new server endpoint. R4-1 changes the content of two publ
 | Platform | Needs |
 |---|---|
 | Web | R4-2 client; R4-7 web quickstart |
-| Auth admin | Nothing until AR4-D1 |
+| Auth admin | Nothing |
 | Apple, Android, Desktop | Documentation of the native flow they already use (system browser, PKCE, passkey, `install_id`). No app change |
 | TV | Documentation of the device grant |
 | Servers | R4-2 `clientCredentials`; R4-3 examples |
 
 ## Feature switch and tiers
 
-None. These are public docs, a library and static pages. The developer tools call no API, so there is nothing to switch off. R4-10, if built, is a user-facing feature: it goes behind a switch on the admin Features page, off by default and enforced by the server.
+None. These are public docs, a library and static pages. The developer tools call no API, so there is nothing to switch off.
 
 ## Languages
 
@@ -95,19 +95,11 @@ Nothing per video or per view. Static pages on Workers static assets are free to
 
 ## Owner decisions
 
-1. **AR4-D1: May developers outside Al Ummah Now sign people in with our accounts?**
-   - A. No, our own apps only (today). Staff create clients.
-   - B. Yes, by staff approval.
-   - C. Yes, self-service developer portal (keys and usage for anyone).
-   - **Recommended: A.** B and C need a consent screen, per-app scopes, developer terms, abuse reports and a way to switch an app off. None exist, and nobody has asked for it. R4-1 to R4-9 don't depend on the answer.
-2. **AR4-D2: Python and Go: tested examples or published packages?**
-   - A. Tested examples on standard OAuth libraries.
-   - B. Our own packages on PyPI and Go modules.
-   - **Recommended: A.** Nothing we run uses Python or Go against Auth. Our own security-sensitive packages would need releases and fixes in two more languages. R4-3 ships A, and B can start from it.
-3. **AR4-D3: Publish `@al-ummah-now/openauth` on the public npm registry?**
-   - A. Stay on GitHub Packages, which needs a GitHub token even to install a public package.
-   - B. Publish to npmjs.com as well.
-   - **Recommended: A while AR4-D1 is A.** Every consumer is our own CI, which has a token. Choose B with AR4-D1 B or C.
+All decided on 2026-11-23.
+
+1. **AR4-D1 (owner): no outside developers.** Only our own apps and scholar sites use our sign-in. Staff create clients. The options were A (our own only), B (staff approval) and C (self-service portal). B and C need a consent screen, per-app scopes, developer terms, abuse reports and a way to switch an app off.
+2. **AR4-D2 (orchestrator, routine): tested Python and Go examples** on standard OAuth libraries, no packages of our own.
+3. **AR4-D3 (orchestrator, routine): GitHub Packages only** for `@al-ummah-now/openauth`.
 
 ## Constraints
 
