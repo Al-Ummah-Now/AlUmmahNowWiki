@@ -90,11 +90,11 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O40](decisions.md#o40-server-written-error-messages) | Server-written error messages: one envelope (`code`, localized `message`, `action`, `retryAfter`, `helpUrl`, `reference`) and one en/ar catalogue; unknown codes show the server's message; `feature_off` carries a message, shown once when an action still reaches an off feature (amends Hidden when off) | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), every client |
 | [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float); paid perks only as a separate optional section, default off. "Never hold funds" replaced by [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
-| [TP-D1](decisions.md#tp-d1-delete-the-winappdriver-uitests-stub) | Delete the archived WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) |
-| [TP-D2](decisions.md#tp-d2-follow-maktaba-encoder-policy) | Follow Maktaba's encoder policy in Tools (OS-scoped hardware-first, 0.2 s test-encode probe, `refusedSession` handling, runtime fallback to `libx264`/`libopenh264`, local output verification) | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-12, TA-19) |
-| [TP-D3](decisions.md#tp-d3-keep-1080p-default-with-off-by-default-720p-lecture-cap-setting) | Keep 1080p now; add an admin setting to cap lectures at 720p, off by default, for use only when storage passes ~10 TB or costs near the cap | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md), [AUN-COST](AUN-COST-cost-monitoring.md), `apps/media` |
-| [TP-D4](decisions.md#tp-d4-remove-legacy-bunny-client-code-from-tools-now) | Remove the old Bunny client code from `AlUmmahNowTools` now (do not wait for TA-14) in a dedicated PR after auditing callers | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
-| [TP-D5](decisions.md#tp-d5-cross-platform-folder-watcher-without-localdb) | Cross-platform folder watcher (Windows, macOS, Linux, nothing extra to install); drop SQL Server LocalDB | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
+| [TP-D1](decisions.md#tp-d1-delete-the-winappdriver-uitests-stub) | Delete the archived WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-2`, `TP-3`) |
+| [TP-D2](decisions.md#tp-d2-follow-maktaba-encoder-policy) | Follow Maktaba's encoder policy in Tools (OS-scoped hardware-first incl. Linux VA-API `/dev/dri/renderD*`, 0.2 s test-encode probe, `refusedSession` cooldown + 30 s fallback window) plus Windows AMF/MF, `libopenh264`, and local output verification | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-12, TA-19) |
+| [TP-D3](decisions.md#tp-d3-keep-1080p-default-with-off-by-default-720p-lecture-cap-setting) | Keep 1080p now; add an admin setting to cap lectures at 720p, off by default, for use only when storage passes ~10 TB or costs near the cap | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [AUN-COST](AUN-COST-cost-monitoring.md), `apps/media` |
+| [TP-D4](decisions.md#tp-d4-remove-legacy-bunny-client-code-from-tools-now) | Remove the old Bunny client code from `AlUmmahNowTools` now (do not wait for TA-14) in a dedicated PR after auditing callers | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-5`, `TP-6`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
+| [TP-D5](decisions.md#tp-d5-cross-platform-folder-watcher-without-localdb) | Cross-platform folder watcher (Windows, macOS, Linux, nothing extra to install); drop SQL Server LocalDB | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-7`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -1031,21 +1031,21 @@ Proposed: 18 months history, 13 months raw events, consent re-asked every 6 mont
 
 **Status:** decided · **Date:** 2026-11-23
 
-Delete the archived WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub project and standardize on cross-platform xUnit ViewModel tests (`AlUmmahNow.VisualImporterUno.Tests`) plus `TOOLS_DEMO` / `TOOLS_SCREENSHOT` headless smoke tests across Windows, macOS, and Linux.
+Delete the archived WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub project and standardize on cross-platform xUnit ViewModel tests (`AlUmmahNow.VisualImporterUno.Tests`) plus `TOOLS_DEMO` / `TOOLS_SCREENSHOT` headless smoke tests (Ubuntu `xvfb-run` on PR CI; packaged Windows, macOS, and Linux smoke in `release.yml`).
 
 **Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-2`, `TP-3`)
 
-**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#63](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/63)
+**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#63](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/63) (merged)
 
 ### TP-D2: Follow Maktaba encoder policy
 
 **Status:** decided · **Date:** 2026-11-23
 
-Adopt Maktaba's encoder policy in `AlUmmahNow.ToolsCore/Import/Renditions.cs`: OS-scoped hardware-first encoder selection (macOS `h264_videotoolbox`, Linux `h264_nvenc` → `h264_qsv` → `h264_vaapi`, Windows `h264_nvenc` → `h264_qsv` → `h264_amf` → `h264_mf`, then `libx264` → `libopenh264`), header-safe `-encoders` parsing, 0.2 s black-frame null test-encode probing (`-allow_sw 0` for VideoToolbox, `/dev/dri/renderD*` discovery for Linux VAAPI), `TOOLS_ENCODER` override, transient `refusedSession` vs. permanent hardware failure handling, runtime fallback down the chain, and local `ffprobe` output verification before staging.
+Adopt Maktaba's current (`origin/main`) encoder policy in `AlUmmahNow.ToolsCore/Import/Renditions.cs`: OS-scoped hardware-first ordering (macOS `h264_videotoolbox`, Linux `h264_nvenc` → `h264_qsv` → `h264_vaapi` with `/dev/dri/renderD*` probing, Windows `h264_nvenc` → `h264_qsv`), `check.go:parseCodecs` `------` legend skipping, 0.2 s black-frame null test-encode probing (`-allow_sw 0 -realtime 1` for VideoToolbox), `TOOLS_ENCODER` override, and transient `refusedSession` 30 s cooldown + 30 s `fallbackWindow`. Extend for Tools / TA-19 with Windows `h264_amf` → `h264_mf`, LGPL `libopenh264` fallback, per-file candidate-chain retry (committing permanent blacklisting only after a fallback succeeds), and local pre-upload verification aligned with `apps/media/container/prebuilt.mjs` (`verifyRenditions`).
 
 **Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-12, TA-19)
 
-**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60)
+**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60) (open)
 
 ### TP-D3: Keep 1080p default with off-by-default 720p lecture cap setting
 
@@ -1063,16 +1063,16 @@ Keep 1080p as the default encoding ladder now. Add an admin setting to cap lectu
 
 Remove the old Bunny client code (`AlUmmahNow.BunnyBulkUploader`, `BunnyStorageClient`, `BunnyRetry`, `BunnyStreamClient`, `BunnyVideo`, `BunnyCDN.Net.Storage`, and `VideoImporter.ImportFromBunnyApiAsync`) from `AlUmmahNowTools` now rather than waiting for `TOOLS-ADMIN` TA-14, after auditing callers across Tools and open PRs (`#54`, `#59`–`#62`) and keeping the app building and all tests passing in a dedicated PR.
 
-**Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-5`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14)
+**Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-5`, `TP-6`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14)
 
-**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#64](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/64)
+**Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#64](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/64) (open)
 
 ### TP-D5: Cross-platform folder watcher without LocalDB
 
 **Status:** decided · **Date:** 2026-11-23
 
-The folder watcher must be cross-platform, working identically on Windows, macOS, and Linux with nothing extra to install, and must **drop the SQL Server LocalDB dependency**. Recommended implementation ([Tools folder watcher research](../guides/tools-folder-watcher-research.md)): an in-process watcher in `AlUmmahNow.ToolsCore` using .NET `FileSystemWatcher` + periodic polling fallback for network drives, Maktaba-style debounce + size/mtime settling, SQLite (WAL) for state, and catch-up scan on app start (with optional launch-at-login / per-user agent in Phase 2 once builds are code-signed).
+The folder watcher must be cross-platform, working identically on Windows, macOS, and Linux with nothing extra to install, and must **drop the SQL Server LocalDB dependency**. Recommended implementation ([Tools folder watcher research](../guides/tools-folder-watcher-research.md)): an in-process watcher in `AlUmmahNow.ToolsCore` using .NET `FileSystemWatcher` + periodic polling fallback for network drives, Maktaba-style debounce + size/mtime settling, SQLite (WAL) for state, and catch-up scan on app start (with optional launch-at-login / per-user agent in Phase 2 once builds are code-signed). Scheduled as story `TP-7` after `TOOLS-ADMIN` TA-14 (superseding interim `TP-1` daemon hardening).
 
-**Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-1`, `TP-D5`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14)
+**Blocks / affects:** [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-7`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14)
 
 **Sources:** Owner decision relayed via orchestrator, 2026-11-23; [Tools folder watcher research](../guides/tools-folder-watcher-research.md)
