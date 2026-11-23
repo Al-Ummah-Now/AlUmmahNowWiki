@@ -897,19 +897,20 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 
 | Story | PR | State |
 |---|---|---|
-| MEM-2 interfaces, test adapters, money rules | AlUmmahNow#1757 | open (back end only) |
-| MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | open, stacked on #1757 |
+| MEM-2 interfaces, test adapters, money rules | AlUmmahNow#1757 | merged 2026-11-22 |
+| MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | open (back end only) |
+| MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | open, stacked on #1758 |
 
 **Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
 
 | Decision | Setting | Code it touches |
 |---|---|---|
 | MEM-D17 payout rail | `primaryRail`, `fallbackRail` | api-videos `lib/support/adapters.ts` `railForPayee`; `supportReadiness` (a rail must be available) |
-| MEM-D18 hold | `holdDays` | `support_payments.available_at`, set when a gift is booked; release job (MEM-23) |
+| MEM-D18 hold | `holdDays` | `lib/support/events.ts`: `available_at` stays empty while it is open; `releaseDueGifts` |
 | MEM-D19 threshold and schedule | `payoutThresholdUsdMinor`, `payoutDayOfMonth`, `creatorMayRaiseThreshold` | payout plan job (MEM-23); `support_settings.payout_threshold` |
-| MEM-D20 payout and FX fees | `payoutFeeBearer` | `lib/support/ledger.ts` `payoutPaidLines` |
+| MEM-D20 payout and FX fees | `payoutFeeBearer` | `lib/support/ledger.ts` `payoutPaidLines`; `events.ts` `applyRailEvents` |
 | MEM-D21 chargebacks after a payout | `negativeBalancePolicy` (+ `reserveBasisPoints`, `reserveDays`) | `lib/support/ledger.ts` `debitCreator` (refunds, disputes) |
-| MEM-D22 dormant balances | `dormantPolicy`, `dormantReminderMonths` | dormant job (MEM-4) |
+| MEM-D22 dormant balances | `dormantPolicy`, `dormantReminderMonths` | `lib/support/jobs.ts` `runSupportDormantJob` (only lists the balances while the decision is open) |
 | MEM-D23 gifts before the payee is active | `collectBeforePayeeActive` | server checks for `supportReceive` (MEM-5) |
 | MEM-D24 approvers | `batchApprovers`, `adjustmentApprovers` | `supportReadiness` (finance list size); batch approval and ledger adjustments (MEM-8, MEM-23) |
 
@@ -917,4 +918,4 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
-- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2) and AlUmmahNow#1758 (MEM-3).
+- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3) and AlUmmahNow#1761 (MEM-4).
