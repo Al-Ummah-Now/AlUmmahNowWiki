@@ -885,6 +885,78 @@
       "note": "The new owner is picked by name, @handle or email with the shared autocomplete; team members first, banned accounts cannot be picked."
     },
     {
+      "id": "channel-move-complete",
+      "name": {
+        "en": "Complete channel move",
+        "ar": "نقل القناة كاملًا"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin",
+        "api",
+        "videos"
+      ],
+      "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
+      "prs": [
+        "AlUmmahNow#1784",
+        "AlUmmahNow#1789",
+        "AlUmmahNow#1792",
+        "AlUmmahNow#1808"
+      ],
+      "note": "A move takes every record that names the owner (deleted videos, handle, posts, schedules, live keys, subscriptions), verifies itself and is checked again for 48 hours; both owners are told."
+    },
+    {
+      "id": "channel-transfer-options",
+      "name": {
+        "en": "Channel transfer reason and options",
+        "ar": "سبب نقل القناة وخياراته"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
+      "prs": [
+        "AlUmmahNow#1795"
+      ],
+      "note": "Required reason (sent to the previous owner); keep the previous owner as channel admin or the contact email. The badge stays with the channel."
+    },
+    {
+      "id": "channel-handle-tools",
+      "name": {
+        "en": "Admin handle tools",
+        "ar": "أدوات المعرّف للمشرفين"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
+      "prs": [
+        "AlUmmahNow#1805",
+        "AlUmmahNow#1809"
+      ],
+      "note": "Super admins give a channel an official handle (taking it back from a holder) or release a handle."
+    },
+    {
+      "id": "channel-owner-moves",
+      "name": {
+        "en": "Owners move channels to their admins",
+        "ar": "نقل المالكين قنواتهم إلى مشرفيها"
+      },
+      "status": "building",
+      "apps": [
+        "api",
+        "videos",
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
+      "prs": [
+        "AlUmmahNow#1833"
+      ],
+      "note": "Behind the channelMove switch: an owner offers the channel to one of its admins, who accepts; the move runs at once."
+    },
+    {
       "id": "remote-config-editor",
       "name": {
         "en": "Remote config and feature flags for the apps",
