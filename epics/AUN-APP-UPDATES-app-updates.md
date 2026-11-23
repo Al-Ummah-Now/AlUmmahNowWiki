@@ -30,7 +30,7 @@ Every native and desktop app knows, without a store release of its own, when a n
 - **Hidden when off** ([Product rules](../guides/product-rules.md)): no "updates are disabled" text anywhere for users. The Settings **Updates** section on desktop shows only while the switch is on and the build can self-update.
 - **Arabic** uses ٠–٩ through each app's shared digit formatter ([Numbers and dates](../guides/numbers-and-dates.md)), Arabic commas «،», and «مرئي/مرئيات» where videos are named.
 - **Never store or ask for secrets in agents.** Every key and certificate below is an owner item; the orchestrator collects it. Every release workflow already builds unsigned when a secret is missing, with a `::notice::`; the update path follows the same rule, failing closed: until a repo has its signing keys, its downloaded builds get **no** update notice at all; store builds still get theirs, because the store is the channel ([§5.5](#55-before-a-repo-has-its-signing-keys)).
-- **Cost cap** $500/month for the platform ([O1](decisions.md#o1-whole-platform-cost-cap)). This epic adds about **$0** ([§10](#10-costs)).
+- **Costs**: about $0 a month ([§10](#10-costs)).
 
 ## 1. What exists today
 
@@ -60,10 +60,12 @@ So the server half of "minimum version and forced update" exists; what is missin
 
 | Repo | Tag | Version the app reports | Example |
 |---|---|---|---|
-| Desktop | `vX.Y.Z`, `vX.Y.Z-preview.N` | `X.Y.Z[-preview.N]` | `1.4.2`, `1.5.0-preview.3` |
-| Apple | `vX.Y.Z[-N]` | `X.Y.Z.N`: `CFBundleShortVersionString` plus the rebuild number `N` (the last two digits of `CFBundleVersion`, `scripts/release-version.sh`; 0 when absent) | `1.2.3.0`, `1.2.3.2` (tag `v1.2.3-2`) |
+| Desktop | `vX.Y.Z`, `vX.Y.Z-preview.N`; Admin for Windows `admin-windows-vX.Y.Z` | `X.Y.Z[-preview.N]` | `1.4.2`, `1.5.0-preview.3` |
+| Apple | `vX.Y.Z[-N]`; staff Admin app `admin-vX.Y.Z[-N]` | `X.Y.Z.N`: `CFBundleShortVersionString` plus the rebuild number `N` (the last two digits of `CFBundleVersion`, `scripts/release-version.sh`; 0 when absent) | `1.2.3.0`, `1.2.3.2` (tag `v1.2.3-2`) |
 | Tools | `vYYYY.MM.DD[.N]` | `YYYY.MM.DD[.N]` | `2026.11.22`, `2026.11.22.2` |
 | Android | `vYYYY.MM.DD[.N]` | `versionName` without the `-qa` suffix | `2026.11.14.2` |
+
+**Release tags** have one of three prefixes, read by one shared parser (shared-types `parseAppReleaseTag`, aun-core `parse_release_tag`, the release tool; shared cases in AlUmmahNowCore `spec/app-updates/tags.json`): `v` (any app), `admin-v` (AlUmmahNowApple's staff Admin app) and `admin-windows-v` (AlUmmahNowDesktop's Admin for Windows). A manifest whose tag has an `admin-` prefix may list only `admin` builds, and an `admin` build only comes from an `admin-` tag. The version is the tag without its prefix, with a trailing `-N` of one or two digits read as the 4th part (`admin-v1.2.3-2` → `1.2.3.2`).
 
 `APP_CONFIG_SEMVER` and `compareAppVersions` are widened ([APPUPD-1](#11-stories)) to **3 or 4 numeric parts** (a missing 4th part is 0, so `2026.11.22` = `2026.11.22.0` < `2026.11.22.2`) and **semver pre-release precedence** (`1.5.0-preview.2` < `1.5.0-preview.10` < `1.5.0`). Build metadata after `+` is ignored. `-qa` is not a pre-release: QA builds call the QA API, whose own `APP_CONFIG` KV and release index list QA builds, and they strip `-qa` before sending.
 
