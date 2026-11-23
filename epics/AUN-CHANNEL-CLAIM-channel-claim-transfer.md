@@ -179,22 +179,29 @@ CREATE TABLE IF NOT EXISTS channel_transfer_locks (
   created_at TEXT NOT NULL
 ) WITHOUT ROWID;
 
-CREATE TABLE IF NOT EXISTS channel_move_offers (     -- Phase B
+-- Phase B, as built (migration 0082). Moves of channels that accept payments will add the
+-- workflow request link when AUN-WORKFLOWS exists; until then they are refused.
+CREATE TABLE IF NOT EXISTS channel_move_offers (
   id TEXT PRIMARY KEY,
   channel_id TEXT NOT NULL,
   from_user_id TEXT NOT NULL,
   to_user_id TEXT NOT NULL,
   options_json TEXT NOT NULL DEFAULT '{}',
-  status TEXT NOT NULL,          -- offered | accepted | awaiting_approval | cancelled | expired | moved | refused | stopped
-  approval_request_id TEXT,      -- the workflow request, for a channel that accepts payments
+  -- offered | moved | declined | cancelled | expired | stopped | refused
+  status TEXT NOT NULL,
   job_id TEXT,
-  created_at INTEGER NOT NULL,
-  accepted_at INTEGER,
-  updated_at INTEGER NOT NULL
+  created_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  responded_at TEXT,
+  updated_at TEXT NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS idx_channel_move_offers_open
-  ON channel_move_offers (channel_id) WHERE status IN ('offered','accepted','awaiting_approval');
+-- One open offer per channel
+CREATE UNIQUE INDEX IF NOT EXISTS idx_channel_move_offers_open ON channel_move_offers (channel_id) WHERE status = 'offered';
+-- Offers to me, offers I made
 CREATE INDEX IF NOT EXISTS idx_channel_move_offers_to ON channel_move_offers (to_user_id, status);
+CREATE INDEX IF NOT EXISTS idx_channel_move_offers_from ON channel_move_offers (from_user_id, status);
+-- The 30-day limit: the channel's last completed move
+CREATE INDEX IF NOT EXISTS idx_channel_move_offers_channel ON channel_move_offers (channel_id, status, responded_at);
 
 -- Phase C: a claim is an approval workflow request (AUN-WORKFLOWS); its proof files live in the
 -- existing private upload storage. This epic stores only the link from the request to the channel

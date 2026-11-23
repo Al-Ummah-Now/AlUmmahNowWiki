@@ -946,15 +946,13 @@
       },
       "status": "building",
       "apps": [
-        "api",
-        "videos",
-        "videos-admin"
+        "api"
       ],
       "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
       "prs": [
         "AlUmmahNow#1833"
       ],
-      "note": "Behind the channelMove switch: an owner offers the channel to one of its admins, who accepts; the move runs at once."
+      "note": "Server side so far, behind the channelMove switch: an owner offers the channel to one of its admins, who accepts; the move runs at once. The web screens follow (CC-7)."
     },
     {
       "id": "remote-config-editor",
