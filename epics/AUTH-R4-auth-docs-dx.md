@@ -27,7 +27,7 @@ Two audiences:
 | Integration guide | [`CLIENT-INTEGRATION-GUIDE.md`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/plans/CLIENT-INTEGRATION-GUIDE.md) | Documents `@alummahnow/auth-client`, a package that was planned and never built. The story was marked Done; it is not. |
 | SDK, JavaScript and TypeScript | `@al-ummah-now/openauth/client` ([`client.ts`](https://github.com/Al-Ummah-Now/openauth/blob/master/packages/openauth/src/client.ts)) | Authorize, exchange, refresh and verify. No client credentials, device grant, revocation or userinfo, so each caller writes its own `fetch`. |
 | SDK, Python and Go | none | – |
-| Discovery | [`enterprise/issuer.ts`](https://github.com/Al-Ummah-Now/openauth/blob/master/packages/openauth/src/enterprise/issuer.ts) `/.well-known/openid-configuration` | Advertises a `/register` endpoint that no route serves, `id_token` and the implicit grant that the issuer doesn't support, and no revocation or introspection endpoint. `service_documentation` points at `/docs`, which redirects to the profile app. `/.well-known/oauth-authorization-server` lists neither PKCE nor the client authentication methods. A standard OAuth library configures itself wrongly from either. |
+| Discovery | [`enterprise/issuer.ts`](https://github.com/Al-Ummah-Now/openauth/blob/master/packages/openauth/src/enterprise/issuer.ts) `/.well-known/openid-configuration` | Advertises a `/register` endpoint that no route serves, `id_token` responses the issuer doesn't support, and no revocation or introspection endpoint. `service_documentation` points at `/docs`, which redirects to the profile app. `/.well-known/oauth-authorization-server` lists neither PKCE nor the client authentication methods. A standard OAuth library configures itself wrongly from either. |
 | Library docs site | [`www`](https://github.com/Al-Ummah-Now/openauth/tree/master/www), live on [GitHub Pages](https://al-ummah-now.github.io/openauth/) | Upstream's text: installs `@openauthjs/openauth`, edits link to `toolbeam/openauth`. No page for the device grant, native clients, passkeys, PKCE rules, confidential clients, key rotation or revocation. |
 | Examples | [`examples`](https://github.com/Al-Ummah-Now/openauth/tree/master/examples) | Next.js, React, SvelteKit, Astro, API and issuer examples. Not type-checked or run in CI. |
 | Developer site | [`apps/dev`](https://github.com/Al-Ummah-Now/AlUmmahNowUI/tree/main/apps/dev), [alummahnow.dev](https://alummahnow.dev) | System design, including an [identity page](https://alummahnow.dev/en/system-design/identity/) ([AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md)). It explains how sign-in is built. Nothing says how to use it. |
@@ -111,7 +111,7 @@ Nothing per video or per view. Static pages on Workers static assets are free to
 
 ## Constraints
 
-- Keep unit costs low ([D2](D2-video-delivery.md)).
+- Cost-conscious design: prefer low unit costs ([O1](decisions.md#o1-cost-conscious-design)).
 - alummahnow.dev shows only what runs today, spells out abbreviations and carries no citation lists ([AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md)).
 - Sign-in and profile pages default to English unless `?lang=ar` ([O21](decisions.md#o21-english-default-on-sign-in-and-profile)).
 
