@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-MEMBERS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (terms pages), [AlUmmahNowWiki](https://github.com/Al-Ummah-Now/AlUmmahNowWiki) |
-| **Status** | **planned** (spec only, no code) |
+| **Status** | **building**, behind the `creatorSupport` switch, which stays **off** in every environment until the organisation exists and the lawyer, PayGood, Wise and PayPal sign off |
 | **Last updated** | 2026-11-22 (revision 2: PayGood collects only; payouts through a separate rail) |
 | **Origin** | Owner request 2026-11-22: "spec members supporting creators, legality, fees, taxes, international, sending funds, partners and vendors needed". Same-day changes: **no paid perks now** (support only; perks are a separate optional section behind their own switch, default off); **the platform takes nothing** (0% cut, no fee, no margin, no float); the platform is held by a **waqf / nonprofit organisation** and the owner never touches money; and (revision 2) "how others do it, youtube patreon, **we will not use paygood to pay creators**". |
 | **Linear** | [AUN-612](https://linear.app/hamzalabs/issue/AUN-612/aun-members-supporting-creators-one-time-and-monthly-support-0percent) (stories AUN-613 to AUN-633, AUN-635 and AUN-636) |
@@ -891,7 +891,30 @@ What doesn't need the owner and is decided here: 0% to the platform; PayGood col
 
 MEM-20 (perks) stays in Backlog and is not in the [build order](#13-build-order).
 
+## Build status
+
+Building started 2026-11-22 on the owner's instruction: everything goes behind the `creatorSupport` switch ([AUN-FEATURES](AUN-FEATURES-feature-switches.md), registry entry in AlUmmahNow#1753), which stays off. Tests use only the test collector and the test rail. No live vendor adapter exists, and none is called.
+
+| Story | PR | State |
+|---|---|---|
+| MEM-2 interfaces, test adapters, money rules | AlUmmahNow#1757 | open (back end only) |
+| MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | open, stacked on #1757 |
+
+**Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
+
+| Decision | Setting | Code it touches |
+|---|---|---|
+| MEM-D17 payout rail | `primaryRail`, `fallbackRail` | api-videos `lib/support/adapters.ts` `railForPayee`; `supportReadiness` (a rail must be available) |
+| MEM-D18 hold | `holdDays` | `support_payments.available_at`, set when a gift is booked; release job (MEM-23) |
+| MEM-D19 threshold and schedule | `payoutThresholdUsdMinor`, `payoutDayOfMonth`, `creatorMayRaiseThreshold` | payout plan job (MEM-23); `support_settings.payout_threshold` |
+| MEM-D20 payout and FX fees | `payoutFeeBearer` | `lib/support/ledger.ts` `payoutPaidLines` |
+| MEM-D21 chargebacks after a payout | `negativeBalancePolicy` (+ `reserveBasisPoints`, `reserveDays`) | `lib/support/ledger.ts` `debitCreator` (refunds, disputes) |
+| MEM-D22 dormant balances | `dormantPolicy`, `dormantReminderMonths` | dormant job (MEM-4) |
+| MEM-D23 gifts before the payee is active | `collectBeforePayeeActive` | server checks for `supportReceive` (MEM-5) |
+| MEM-D24 approvers | `batchApprovers`, `adjustmentApprovers` | `supportReadiness` (finance list size); batch approval and ledger adjustments (MEM-8, MEM-23) |
+
 ## Status evidence
 
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
+- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2) and AlUmmahNow#1758 (MEM-3).
