@@ -2328,6 +2328,21 @@
       ]
     },
     {
+      "id": "app-updates",
+      "name": {
+        "en": "App updates",
+        "ar": "تحديثات التطبيقات"
+      },
+      "status": "planned",
+      "apps": [
+        "native",
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "epics/AUN-APP-UPDATES-app-updates.md",
+      "note": "Spec written 2026-11-23: every native and desktop app checks GET /api/v1/app-config for a new version and shows a dismissible notice in English or Arabic; builds below an admin-set minimum show a forced update screen; desktop builds we distribute (Desktop on Windows, Tools on Windows and macOS via Velopack, Studio for Mac via Sparkle) download, verify an ed25519-signed release manifest and install. Behind the appUpdates switch, default off."
+    },
+    {
       "id": "approval-workflows",
       "name": {
         "en": "Approval workflows for admin changes",
