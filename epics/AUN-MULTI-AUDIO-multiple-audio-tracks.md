@@ -52,7 +52,7 @@ Built to these recommendations; the owner may change any of them.
 - After a re-transcode (new rev), the package is rebuilt for the new rev from the stored tracks before the old rev is deleted.
 - The uploaded file is normalised once to `audio/<videoId>/<trackId>/track.m4a` in the originals bucket, which is private, and packaging copies from that file. Uploaded parts are deleted after the file is normalised. Deleting the video deletes the tracks.
 
-## Cost (within the $500/month budget)
+## Cost
 
 | Item | Estimate |
 |---|---|

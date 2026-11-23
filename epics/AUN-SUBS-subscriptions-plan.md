@@ -45,13 +45,13 @@ Each feature was inventing its own tiers: creator tiers, the [Epic 27](E27-plans
 - **Add-ons** are additive grants: caption minutes, storage, upload hours, live hours, X posts.
 - **Payments:** never Stripe. Candidates are listed but not decided. Lemon Squeezy, Gumroad and Polar are excluded because they run on Stripe.
 
-## Cost against the $500 cap ([O1](decisions.md#o1-whole-platform-cost-cap))
+## Cost at scale ([O1](decisions.md#o1-cost-conscious-design))
 
 | Scale | Viewers / month | Library | Everything on | Notes |
 |---|---|---|---|---|
-| S1 Launch | 20k | 500 h | ≈ $110 | Far inside the cap |
-| S2 Growth | 300k | 2,500 h | ≈ $460 | Near the cap |
-| S3 Target | 2M | 5,000 h | ≈ $1,425 | ≈ $660 with the levers; $500 needs budget stops and decision S3 |
+| S1 Launch | 20k | 500 h | ≈ $110 | Baseline launch scale |
+| S2 Growth | 300k | 2,500 h | ≈ $460 | Growth scale without levers |
+| S3 Target | 2M | 5,000 h | ≈ $1,425 | ≈ $660 with the levers; per-feature budget stops reduce platform-funded spend further (decision S3) |
 
 Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from storage, transcoding, AI moderation, X posting, live and Workers Logs.
 
@@ -61,7 +61,7 @@ Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from sto
 |---|---|---|
 | S1 | One plans system; creator tiers fold into plans | Yes |
 | S2 | Lowest creator tier: A, B or C | B at launch, then C |
-| S3 | Does the $500 cap count subscriber-paid usage? | No: the cap covers platform-funded spend; paid usage is tracked outside it |
+| S3 | Should platform cost controls count subscriber-paid usage? | No: controls cover platform-funded spend; paid usage is tracked separately |
 | S4 | Rename "Free" to "Member", with no creator allowances | Yes |
 | S5 | Tier names | Accept as seeds |
 | S6 | The plan belongs to the user, not to each channel | Yes |
@@ -69,7 +69,7 @@ Egress is free on R2 + CDN ([D2](D2-video-delivery.md)). The costs come from sto
 | S8 | The key matrix (§3.4) as seeds | Accept |
 | S9 | Viewers stay free with no plan until Epic 24 | Yes |
 | S10 | Defer the organisation entity; a user holds Institution | Yes |
-| S11 | X on Pro and up only; platform X cap $500 → $50 | Yes |
+| S11 | X on Pro and up only; lower platform X cap to $50 | Yes |
 | S12 | 1080p on paid tiers; delete originals after 30 days; cold videos at 480p | Yes |
 | S13 | Budget stops for transcode, moderation and live | Yes |
 | S14 | Sample Workers Logs in production (~10%) | Yes |

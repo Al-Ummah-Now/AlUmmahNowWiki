@@ -163,12 +163,12 @@ An NSFW-only check (no audio) costs about $0.015.
 | Spec scale | 500 | 250 h | $19 + $2 |
 | High | 3,000 | 1,500 h | $112 + $5 |
 
-This is a new line under the $500/month cap. Human review time is the larger cost: at 10% held and 5 minutes each, 500 uploads a month means about 4 hours of review.
+Human review time is the larger cost: at 10% held and 5 minutes each, 500 uploads a month means about 4 hours of review.
 
 **Latency.** The automated pass is estimated at 1–3 minutes after the transcode for a 30-minute video. Shadow mode will measure the real figure.
 
 **Self-hosting fallback only:**
-- **ShieldGemma 2 on a GPU.** Cloudflare Containers have no GPU. An always-on L4-class GPU costs about $450–580 a month, which breaks the cap. A scale-to-zero GPU costs about $0.01–0.03 per video.
+- **ShieldGemma 2 on a GPU.** Cloudflare Containers have no GPU. An always-on L4-class GPU costs about $450–580 a month. A scale-to-zero GPU costs about $0.01–0.03 per video.
 - **CPU ViT classifier.** `Falconsai/nsfw_image_detection` (Apache-2.0) costs about $0.002 per video. It detects nudity only, has no gore class, and publishes no accuracy figures.
 
 ## Environments, testing and rollout

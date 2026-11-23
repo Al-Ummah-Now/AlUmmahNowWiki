@@ -7,14 +7,14 @@
 | **Epic** | [TOOLS-PLANS](../epics/TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-5`) |
 | **Applies to** | [AlUmmahNowTools](../repos/AlUmmahNowTools.md), [AUN-R2-MIGRATION](../epics/AUN-R2-MIGRATION-r2-video-migration.md), [AUN-COST](../epics/AUN-COST-cost-monitoring.md), [TOOLS-ADMIN](../epics/TOOLS-ADMIN-admin-import-tool.md) |
 | **Date** | 2026-11-23 |
-| **Cost constraint** | Whole platform ≤ $500/month ([O1](../epics/decisions.md#o1-whole-platform-cost-cap)) |
+| **Cost goal** | Cost-conscious design: prefer low per-video and per-view unit costs ([O1](../epics/decisions.md#o1-cost-conscious-design)) |
 | **Source baseline** | [`AlUmmahNowTools/BUNNY_NET_API_ANALYSIS.md`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/BUNNY_NET_API_ANALYSIS.md) (October 2025) |
 
 ## Executive recommendation
 
 1. **Remove all direct Bunny.net client code from `AlUmmahNowTools` now (owner decision `TP-D4` in [decisions.md](../epics/decisions.md), decided 2026-11-23) — do not implement Phases 2–4 of the 2025 Bunny roadmap in Tools.** Every remaining requirement (TUS resumable uploads, upload progress, SHA-256 verification, transcode status polling, and Bunny/R2 cost monitoring) has already been built in the right place: `AlUmmahNow.ToolsCore` (talking strictly to `admin-api`) and the monorepo (`apps/cost-monitor` and `apps/api-videos`).
 2. **Legacy Bunny removal implemented in [Tools#64](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/64):** deletes `AlUmmahNow.BunnyBulkUploader`, `BunnyStorageClient`, `BunnyRetry`, `BunnyStreamClient`, `BunnyVideo`, `BunnyCDN.Net.Storage`, `RestSharp`, `VideoImporter.ImportFromBunnyApiAsync`, and the dead Bunny DI registrations in `App.xaml.cs` (`ImportView` already runs on `BulkImportViewModel` → `ToolsCore` → `admin-api`). Operator Bunny/R2 keys on staff machines should still be revoked as part of `TOOLS-ADMIN` TA-14.
-3. **Complete the platform migration from Bunny Stream to Cloudflare R2 + Cloudflare CDN ([D2](../epics/D2-video-delivery.md), [AUN-R2-MIGRATION](../epics/AUN-R2-MIGRATION-r2-video-migration.md)).** At Medium-to-Large viewership, Bunny's per-GB delivery egress ($0.005/GB Volume tier down to $0.002/GB above 1 PB; $0.01/GB NA/EU Standard, and $0.03–$0.06/GB in Asia/MENA/Africa Standard zones) exceeds the $500/month whole-platform cost cap — reaching **$2,800–$5,100/month** at 500k viewer-hours and **~$6,700–$18,600+/month** at 2M viewer-hours — whereas R2 + Cloudflare CDN egress is **$0** (leaving R2 storage and lifecycle rules, not bandwidth, as the cost lever to manage under O1).
+3. **Complete the platform migration from Bunny Stream to Cloudflare R2 + Cloudflare CDN ([D2](../epics/D2-video-delivery.md), [AUN-R2-MIGRATION](../epics/AUN-R2-MIGRATION-r2-video-migration.md)).** At Medium-to-Large viewership, Bunny's per-GB delivery egress ($0.005/GB Volume tier down to $0.002/GB above 1 PB; $0.01/GB NA/EU Standard, and $0.03–$0.06/GB in Asia/MENA/Africa Standard zones) grows steeply — reaching **$2,800–$5,100/month** at 500k viewer-hours and **~$6,700–$18,600+/month** at 2M viewer-hours — whereas R2 + Cloudflare CDN egress is **$0** (leaving R2 storage and lifecycle rules, not bandwidth, as the primary cost lever under [O1](../epics/decisions.md#o1-cost-conscious-design)).
 
 ---
 
@@ -53,20 +53,20 @@ The October 2025 analysis (`BUNNY_NET_API_ANALYSIS.md`) was written when Bunny w
 
 ### Monthly cost at four traffic tiers (**month-12 accumulated library snapshot**)
 
-> **Snapshot caveat:** Storage columns reflect a **month-12 library snapshot**. At Large scale (1,000 h/month), R2 storage keeps growing by ~$36/month past month 12, so staying under the $500/month whole-platform cap (O1) past year 1 requires R2 lifecycle/retention rules and/or a 720p cap (`TP-D3`) alongside pre-encoding.
+> **Snapshot caveat:** Storage columns reflect a **month-12 library snapshot**. At Large scale (1,000 h/month), R2 storage keeps growing by ~$36/month past month 12, so keeping storage costs low past year 1 ([O1](../epics/decisions.md#o1-cost-conscious-design)) calls for R2 lifecycle/retention rules and/or a 720p cap (`TP-D3`) alongside pre-encoding.
 
 | Scale (month 12) | Monthly uploads / viewer-hours | Monthly delivery egress | **Bunny Stream total** *(Volume tiers – NA/EU Std; MENA/Asia Std higher)* | **R2 + Server encode** *(100% server)* | **R2 + Tools local pre-encode** *(100% Tools share, best case)* | **Dual-write trial (both)** |
 |---|---|---|---|---|---|---|
 | **Small** (today) | 20 h / 2k viewer-h | 1.8 TB | **~$21–$30** ($12 storage + $9–$18 egress) | **~$16** ($6 encode + $9 storage + <$1 ops) | **~$11** | ~$40 |
-| **Medium** | 200 h / 50k viewer-h | 45 TB | **~$340–$565** ($115 storage + $225–$450 egress) | **~$147** ($60 encode + $86 storage + ~$1 ops) | **~$93** | ~$490–$710 *(over cap)* |
-| **Large** | 1,000 h / 500k viewer-h | 450 TB | **~$2,826–$5,076** ($576 storage + $2,250–$4,500 egress) | **~$740** ($300 encode + $430 storage + ~$10 ops) | **~$470** *(tight: ~$30 headroom; crosses cap at mo 13)* | Not viable |
-| **Millions of viewers** | 1,000 h / 2M viewer-h | 1,800 TB | **~$6,676–$18,576+** ($576 storage + **$6,100** Volume tiered egress¹ to **$18,000** NA/EU Std; MENA/Asia Std far higher²) | **~$778** ($300 encode + $430 storage + ~$48 ops³) | **~$508** *(at/above cap at mo 12; ~$313 with universal 720p cap)* | Not viable |
+| **Medium** | 200 h / 50k viewer-h | 45 TB | **~$340–$565** ($115 storage + $225–$450 egress) | **~$147** ($60 encode + $86 storage + ~$1 ops) | **~$93** | ~$490–$710 |
+| **Large** | 1,000 h / 500k viewer-h | 450 TB | **~$2,826–$5,076** ($576 storage + $2,250–$4,500 egress) | **~$740** ($300 encode + $430 storage + ~$10 ops) | **~$470** | Not viable |
+| **Millions of viewers** | 1,000 h / 2M viewer-h | 1,800 TB | **~$6,676–$18,576+** ($576 storage + **$6,100** Volume tiered egress¹ to **$18,000** NA/EU Std; MENA/Asia Std far higher²) | **~$778** ($300 encode + $430 storage + ~$48 ops³) | **~$508** *(~$313 with universal 720p ladder)* | Not viable |
 
 ¹ *Bunny Volume network tiers at 1,800 TB:* `500 TB × $0.005 ($2,500) + 500 TB × $0.004 ($2,000) + 800 TB × $0.002 ($1,600) = $6,100` egress (+ $576 storage ≈ **$6,676/month**).
 ² *$18,576/month is NOT an upper bound:* `$0.01/GB` is Bunny's Standard rate for Europe and North America only. Because Al Ummah Now serves global Muslim audiences including Asia ($0.03/GB), South America ($0.045/GB), and MENA/Africa ($0.06/GB), a mixed global audience on Standard routing sits well above $18.6K/month at 1,800 TB.
 ³ *2M viewer-hours R2 Class B reads:* `2M × 72 reads/viewer-h = 144M reads`; `(144M − 10M free) × $0.36/M ≈ $48/month` (replaces the ~$10 ops figure in the Large row rather than stacking on top of it).
 
-**Key takeaway:** Bunny's "free encoding" is vastly outweighed by per-GB egress as viewership grows. At the Standard NA/EU $0.01/GB rate, Bunny delivery alone crosses the **$500/month** cap around **55k–110k viewer-hours/month** (and the top end of the Medium row at $565 already breaches $500), and climbs into thousands of dollars per month even on Volume tiered pricing (~$6.7K/month at 2M viewer-hours). Moving to R2 + Cloudflare CDN eliminates the bandwidth cliff completely, keeping total monthly spend more than **13×–36× lower** than Bunny at 2M viewer-hours so storage lifecycle rules and pre-encoding can keep the platform within O1.
+**Key takeaway:** Bunny's "free encoding" is vastly outweighed by per-GB egress as viewership grows. At the Standard NA/EU $0.01/GB rate, Bunny delivery alone reaches hundreds of dollars per month by **55k–110k viewer-hours/month**, and climbs into thousands of dollars per month even on Volume tiered pricing (~$6.7K/month at 2M viewer-hours). Moving to R2 + Cloudflare CDN eliminates the bandwidth cliff completely, keeping total monthly spend more than **13×–36× lower** than Bunny at 2M viewer-hours while storage lifecycle rules and pre-encoding keep unit costs low ([O1](../epics/decisions.md#o1-cost-conscious-design)).
 
 ---
 

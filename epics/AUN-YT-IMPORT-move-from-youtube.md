@@ -128,7 +128,7 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 - **Queue** `al-ummah-now-yt-import[-qa|-stage]`, consumer in api-videos (batch 1, 5 retries with backoff, the shared DLQ `al-ummah-now-dlq[-env]`, whose dead letters the processor stores). Every step is idempotent (upserts keyed by import and YouTube id; a playlist is created once and remembered; a thumbnail or caption already applied is skipped), and resumable (listing walks one page per message and queues the next).
 - **Tables** (SEARCH_DB, migration `0041_youtube_import.sql`): imports, items, OAuth consent states and staged captions; `creator_tiers.import_counts_limits`.
 - **Settings** in `global_settings` `youtube-import/settings.json`. The client secret set on the admin page is sealed like the cost dashboard's keys (COST-1): AES-256-GCM under a key derived (HKDF-SHA256) from `INTERNAL_API_KEY`, in `global_settings` `youtube-import/client-secret.json`, opened only by api-videos. Without one, the Secrets Store binding `GOOGLE_OAUTH_CLIENT_SECRET` is read (the placeholder `unset` counts as none).
-- **Running cost:** none when idle (a queue with no messages, no cron). Per import: a few hundred queue messages and the uploads' normal cost (originals and transcodes, as any upload). Within the [$500/month cap](decisions.md#o1-whole-platform-cost-cap).
+- **Running cost:** none when idle (a queue with no messages, no cron). Per import: a few hundred queue messages and the uploads' normal cost (originals and transcodes, as any upload).
 
 ## Tests
 
@@ -145,7 +145,7 @@ Studio wizard ──OAuth──▶ api-videos /api/youtube-import/oauth/* ──
 
 - [O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers): uploads are invitation-only through creator tiers; imports follow the same gate.
 - [O26](decisions.md#o26-always-async-with-admin-visible-errors): every background step is queued with retry and a DLQ, failures reach the Errors page.
-- [O1](decisions.md#o1-whole-platform-cost-cap): no idle cost.
+- [O1](decisions.md#o1-cost-conscious-design): no idle cost.
 
 ## Needs from the owner (outside the code)
 

@@ -162,7 +162,7 @@ None. Validation, serving and rendering run synchronously in the request; video 
 
 - Pages are typed blocks, never HTML ([O34](decisions.md#o34-pages-are-built-from-typed-blocks-never-html)): "add elements like squarespace, not pure html" (owner, 2026-11-14).
 - Themes are real per-component design, not a recolour: blocks read Fanous tokens and materials, and a site's active theme is never changed by the editor's preview ([O20](decisions.md#o20-buildable-theme-packages-in-admin)).
-- Platform-wide: cost cap ≤ $500/month ([O1](decisions.md#o1-whole-platform-cost-cap)); bilingual en/ar with RTL; always async with admin-visible errors ([O26](decisions.md#o26-always-async-with-admin-visible-errors)).
+- Platform-wide: cost-conscious design ([O1](decisions.md#o1-cost-conscious-design)); bilingual en/ar with RTL; always async with admin-visible errors ([O26](decisions.md#o26-always-async-with-admin-visible-errors)).
 
 ## Status evidence
 

@@ -202,7 +202,7 @@ Ref: [QF FAQ: what attribution or copyright information should I show](https://a
 
 ## Decisions and constraints
 
-- [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
+- [O1](decisions.md#o1-cost-conscious-design): Cost-conscious design (decided)
 - [D10](decisions.md#d10-transcription-location): Transcription location (decided 2026-11-14: server by default, on-device option in desktop Studio)
 - [QF1](decisions.md#qf1-quran-foundation-content-use): Quran Foundation content use (decided 2026-11-22: index never for ML, one-video downloads, `mushafs:4`)
 - The open owner decisions O1–O15 (O12: QF granular scopes work, Search scope pending; **O13: answered by QF 2026-11-21, see [QF terms](#qf-terms-2026-11-21)**; O14: creator confirms Quran) (ElevenLabs/DeepL keys, tier minutes, budget, viewer-side titles, Quran editions) are in spec §14.

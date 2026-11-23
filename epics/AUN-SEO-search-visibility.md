@@ -535,7 +535,7 @@ It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUm
 | Scale | Library | Extra storage | Storage $/mo ($0.015/GB) | Reads (CDN-cached; ≤ 10 M Class B) | Total |
 |---|---|---|---|---|---|
 | S1 | 500 h | 0.23 TB | $3.4 | ≤ $3.6 | **≈ $7** |
-| S2 (near the $500 cap) | 2,500 h | 1.1 TB | $17 | ≤ $3.6 | **≈ $21** |
+| S2 | 2,500 h | 1.1 TB | $17 | ≤ $3.6 | **≈ $21** |
 | S3 | 5,000 h | 2.25 TB | $34 | ≤ $3.6 | **≈ $38** |
 
 Transcode cost is negligible, because the MP4 is a remux of an existing rung.

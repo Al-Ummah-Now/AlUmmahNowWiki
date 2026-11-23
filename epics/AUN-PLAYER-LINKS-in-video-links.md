@@ -463,7 +463,7 @@ Registry entries in `feature-registry.ts`, all in the **grow** group:
 - Embeds send nothing before play and then follow the viewer's consent choice ([Epic 25 §25.4](E25-sharing-embeds.md)).
 - External URLs get **no tracking parameters** (no `utm_*`) and never pass through our server ([PL-D12](#16-owner-decisions)).
 
-**Cost:** one batched message per playback that shows a link, so about 3 queue operations per playback ($0.40 per million operations, [Cloudflare Queues pricing](https://developers.cloudflare.com/queues/platform/pricing/)), plus rolled-up D1 rows per element per day. At 1 million such playbacks a month that is about **$1.20 a month**, about $0.0000012 per playback, within [O1](decisions.md#o1-whole-platform-cost-cap) at scale. No paid scanner is used.
+**Cost:** one batched message per playback that shows a link, so about 3 queue operations per playback ($0.40 per million operations, [Cloudflare Queues pricing](https://developers.cloudflare.com/queues/platform/pricing/)), plus rolled-up D1 rows per element per day. At 1 million such playbacks a month that is about **$1.20 a month**, about $0.0000012 per playback, within [O1](decisions.md#o1-cost-conscious-design) at scale. No paid scanner is used.
 
 ## 12. Data model and API
 

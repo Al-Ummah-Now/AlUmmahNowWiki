@@ -28,7 +28,7 @@ Next to that, one error envelope for every API we own. Each error carries a stab
 - [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000): Arabic numbers are never grouped, Arabic separates values with «،», and times in the admin are local with the zone and a UTC tooltip, using the shared formatter.
 - [O18](decisions.md#o18-four-themes-fawanees-default) and the [Fawanees solid surfaces](../guides/theming.md) rule: the page is designed in all four themes, dark first, en and ar, phone and desktop.
 - [QF1](decisions.md#qf1-quran-foundation-content-use): `viewerCaptionDownload` is the first new switch. It is **off**: the owner decided on 2026-11-22 that there are no caption downloads for viewers.
-- [O1](decisions.md#o1-whole-platform-cost-cap): no new paid service. Switches live in the search D1, which is already bound to every worker that needs them.
+- [O1](decisions.md#o1-cost-conscious-design): no new paid service. Switches live in the search D1, which is already bound to every worker that needs them.
 
 ## 1. What exists today (inventory, 2026-11-22)
 

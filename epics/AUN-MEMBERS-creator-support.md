@@ -32,7 +32,7 @@ The feature is one switch on the Features page, **off by default**, and it stays
 - **Always async** ([O26](decisions.md#o26-always-async-with-admin-visible-errors)): every money event and every payout goes through a queue with retry and a DLQ; failures flag the videos admin **Errors** page with **Retry**. Troubleshooting is done from the admin, never from Cloudflare or a vendor's dashboard.
 - **Channel roles live in videos**, not Auth RBAC ([O16](decisions.md#o16-channel-roles-separate-from-site-roles-only-super-admins-transfer-ownership), [roles](../guides/roles.md)). Only the channel **owner** sets up payouts, because the money is theirs.
 - **Creators are invite-only** with admin-assigned tiers ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md)). Receiving support is a tier capability that admins set per tier.
-- **Cost cap** $500/month for the whole platform ([O1](decisions.md#o1-whole-platform-cost-cap)). The recommended rails add about $0 a month in fixed vendor costs ([§5.3](#53-fixed-costs-against-the-500month-cap)).
+- **Cost-conscious design** ([O1](decisions.md#o1-cost-conscious-design)). The recommended rails add about $0 a month in fixed vendor costs ([§5.3](#53-fixed-vendor-costs)).
 - **Production has one user today** (the owner). The first live run uses the organization's own channel and payee, never the owner's ([§13](#13-build-order)).
 - Numbers follow [O38](decisions.md#o38-numbers-never-grouped-in-arabic-counts-compact-from-1000) and [Numbers and dates](../guides/numbers-and-dates.md): money in Arabic is «٥٫٠٠ دولار أمريكي», never «US$».
 
@@ -253,7 +253,7 @@ All from PayGood's site and docs, accessed 2026-11-22 ([paygood.com](https://pay
 | **PayPal Payouts** (fallback) | $0 | US via API $0.25; international 2%, max $20 ([fees](https://pep.paypal.com/us/business/paypal-business-fees)) | 4% spread if the creator receives another currency; none if paid in USD |
 | Trolley (upgrade) | $2,399/yr (+ $2,399/yr tax forms) | $1 ACH, $4 SEPA/FPS, $10 wire with FX, $25 USD wire ([pricing](https://trolley.com/pricing/)) | 2% |
 
-### 5.3 Fixed costs against the $500/month cap
+### 5.3 Fixed vendor costs
 
 | Item | Monthly |
 |---|---|
@@ -264,7 +264,7 @@ All from PayGood's site and docs, accessed 2026-11-22 ([paygood.com](https://pay
 | Workers, D1 rows, queue messages for support | within today's plan; under $5 at S2 scale |
 | Trolley, only if chosen later | about $200/month (Pay) to $500/month (Pay + Tax + Trust) |
 
-**Business costs** (entity formation, registered agent, insurance, lawyer and accountant, [§12.4](#124-what-each-partner-covers-costs-and-needs)) are paid by the organization. Whether they count against the $500 cap is **owner decision [MEM-D14](#15-owner-decisions)**, with the numbers.
+**Business costs** (entity formation, registered agent, insurance, lawyer and accountant, [§12.4](#124-what-each-partner-covers-costs-and-needs)) are paid by the organization. How they are tracked alongside infrastructure costs is **owner decision [MEM-D14](#15-owner-decisions)**, with the numbers.
 
 Vendor fees are never paid from creators' money for anyone else, and never marked up.
 
@@ -415,7 +415,7 @@ Can a creator living there be paid? Y yes · P partial (USD SWIFT only, or a pra
 
 **Primary: Wise Business** ([MEM-D17](#15-owner-decisions)).
 - Reaches the most target countries of the low-cost rails, including Egypt, Pakistan, Bangladesh and Nigeria in local currency, which PayPal can't.
-- $31 once, no monthly fee, mid-market FX: fits the $500/month cap at any volume we expect.
+- $31 once, no monthly fee, mid-market FX: keeps fixed vendor cost at $0/month at any expected volume.
 - A registered US nonprofit is an allowed customer.
 - **What it costs us in work:** Wise does no payee onboarding, so we build it: Studio collects the creator's bank details and sends them straight to Wise's recipient API (we keep only Wise's recipient id, never the account number); we collect W-9 / W-8BEN ourselves through an e-signed form, stored encrypted and readable only by the organization's finance list; we screen payees against OFAC and the other lists before each payout (a screening API, or the rail's, [§4.3](#43-sanctions-and-high-risk-countries)); and the organization files year-end forms ([§6.3](#63-creators-income-tax-and-reporting)).
 - **Blocker:** Wise's AUP excludes money-service businesses transmitting for third parties. The organization describes the model to Wise in writing before signing (MEM-1). Under the charitable model ([§4.1](#41-money-transmission-the-organization-now-touches-the-money)) the organization pays its own grants, which fits Wise's rules best.
@@ -809,7 +809,7 @@ Visual stories go through the frames → audit → gallery → owner path. Non-v
 7. How does the organization book creator money: as funds held for others (a liability) or as restricted contributions and grants? Effect on Form 990, public-support tests and audits.
 8. The chart of accounts for the ledger and the daily three-way reconciliation ([§9.3](#93-data-model-search-d1-admin-api-owned-migrations)); which controls (two-person approval, segregation of duties) a nonprofit auditor will expect.
 9. What may we tell creators about their tax without giving advice? US "no tax on tips" eligibility for creator support?
-10. Our own tax and funding with 0% revenue; who pays the payout rail's fixed costs ([§5.3](#53-fixed-costs-against-the-500month-cap)).
+10. Our own tax and funding with 0% revenue; who pays the payout rail's fixed costs ([§5.3](#53-fixed-vendor-costs)).
 11. How long must we keep the payment, ledger and payout records (US and EU)?
 
 ### 14.3 Scholar (mufti)
@@ -847,7 +847,7 @@ Each decision has named options; the recommendation is first. Revision 2 (2026-1
 | MEM-D11 | Legal entity | **"Per the lawyer engagement: the waqf / nonprofit organization"** (owner direction 2026-11-22; form and state chosen with the lawyer). Until it exists, creator support stays switched off. The owner never holds, signs for, approves or receives money. |
 | MEM-D12 | Charity route | **"Separate route behind `charityDonations`; zakat tag only after review"** · "No charity route" |
 | MEM-D13 | Perks | **"Designed, switch stays off"** ([§10](#10-optional-paid-perks-designed-not-scheduled)) · "Build perks after support" |
-| MEM-D14 | Business costs and the $500 cap (no default; owner decides) | Numbers from [§12.4](#124-what-each-partner-covers-costs-and-needs), all **Unverified** estimates. **One-off:** lawyer $3,000–10,000, accountant $1,000–5,000, formation under $150 plus $275–600 if seeking 501(c)(3), Wise $31, DMCA agent $6: about **$4,300–15,850**. **Yearly:** insurance $500–5,000 for each of 4 policies (now with crime/fidelity cover), registered agent $50–300: about **$2,050–20,300**, i.e. **$170–1,690/month**. **Monthly tools:** two bank accounts $0–30, bookkeeping $0–30. Recurring total about **$170–1,750/month**; Trolley would add $200–500/month. Options: "Outside the infrastructure cap" (as [S3](AUN-SUBS-subscriptions-plan.md)) · "Inside the cap" (the upper end alone exceeds $500/month) |
+| MEM-D14 | How business costs are tracked alongside infrastructure costs (no default; owner decides) | Numbers from [§12.4](#124-what-each-partner-covers-costs-and-needs), all **Unverified** estimates. **One-off:** lawyer $3,000–10,000, accountant $1,000–5,000, formation under $150 plus $275–600 if seeking 501(c)(3), Wise $31, DMCA agent $6: about **$4,300–15,850**. **Yearly:** insurance $500–5,000 for each of 4 policies (now with crime/fidelity cover), registered agent $50–300: about **$2,050–20,300**, i.e. **$170–1,690/month**. **Monthly tools:** two bank accounts $0–30, bookkeeping $0–30. Recurring total about **$170–1,750/month**; Trolley would add $200–500/month. Options: "Tracked separately from infrastructure costs" (as [S3](AUN-SUBS-subscriptions-plan.md)) · "Tracked together with infrastructure costs" |
 | MEM-D15 | When apps get the button | **"After written Apple and Google answers"** · "Web only for now" |
 | MEM-D16 | ~~Disputes and payouts PayGood's API doesn't expose~~ | **Withdrawn 2026-11-22:** the organization is the merchant and answers disputes in PayGood ([§2.3](#23-chargebacks-disputes-and-fraud)); payouts go through the rail. |
 | MEM-D17 | Payout rail | **"Wise Business primary, PayPal Payouts fallback; Trolley when volume pays for it"** ([§7.5](#75-recommendation-wise-primary-paypal-payouts-fallback)) · "Trolley from the start" ($2,399–5,997/yr: hosted onboarding, tax forms, Iraq and Palestine) · "PayPal Payouts only" (no Egypt, Pakistan, Bangladesh, Nigeria) · "Own bank wires only" ($25–50 each) |
