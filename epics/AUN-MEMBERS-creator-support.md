@@ -899,14 +899,15 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 |---|---|---|
 | MEM-2 interfaces, test adapters, money rules | AlUmmahNow#1757 | merged 2026-11-22 |
 | MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | merged 2026-11-22 |
-| MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | open |
-| MEM-23 payout batches: plan, approve, fund, send, status | AlUmmahNow#1763 | open, stacked on #1761; MEM-D21's reserve option is not built (AlUmmahNow#1762) |
+| MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | merged 2026-11-22 |
+| MEM-23 payout batches: plan, approve, fund, send, status | AlUmmahNow#1763 | merged 2026-11-22; MEM-D21's reserve option is not built (AlUmmahNow#1762) |
+| MEM-22 payee onboarding (hosted at the rail, tax form on file only) | AlUmmahNow#1764 | open |
 
 **Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
 
 | Decision | Setting | Code it touches |
 |---|---|---|
-| MEM-D17 payout rail | `primaryRail`, `fallbackRail` | api-videos `lib/support/adapters.ts` `railForPayee`; `supportReadiness` (a rail must be available); `payouts.ts` refuses to plan while open |
+| MEM-D17 payout rail | `primaryRail`, `fallbackRail` | api-videos `lib/support/adapters.ts` `railForPayee`; `payees.ts` (onboarding refused while open); `supportReadiness` (a rail must be available); `payouts.ts` refuses to plan while open |
 | MEM-D18 hold | `holdDays` | `lib/support/events.ts`: `available_at` stays empty while it is open; `releaseDueGifts` |
 | MEM-D19 threshold and schedule | `payoutThresholdUsdMinor`, `payoutDayOfMonth`, `creatorMayRaiseThreshold` | `lib/support/payouts.ts` `planBatch`; `jobs.ts` `queueSupportCron` (the payout day); `support_settings.payout_threshold` |
 | MEM-D20 payout and FX fees | `payoutFeeBearer` | `lib/support/ledger.ts` `payoutPaidLines`; `events.ts` `applyRailEvents` |
@@ -919,4 +920,4 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
-- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3, merged), AlUmmahNow#1761 (MEM-4) and AlUmmahNow#1763 (MEM-23).
+- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3), AlUmmahNow#1761 (MEM-4) and AlUmmahNow#1763 (MEM-23) merged; AlUmmahNow#1764 (MEM-22) open.
