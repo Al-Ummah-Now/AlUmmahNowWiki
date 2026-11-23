@@ -39,7 +39,7 @@ Credentials are configured per developer through .NET User Secrets. See the [REA
 
 ## Deployment
 
-[`dotnet-test.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/.github/workflows/dotnet-test.yml) runs tests on PRs and pushes. There is no release or deployment workflow: these tools are built and run by operators.
+[`dotnet-test.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/.github/workflows/dotnet-test.yml) runs tests on PRs and pushes. [`release.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/.github/workflows/release.yml) releases the staff app (Al Ummah Now Tools) on a `vYYYY.MM.DD[.N]` tag on `master`: Windows, macOS and Linux packages, each launched in CI, on a GitHub release ([Release process](../guides/release-process.md#alummahnowtools), [docs/RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/docs/RELEASE.md)).
 
 ## Key docs
 

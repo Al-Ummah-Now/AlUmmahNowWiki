@@ -93,6 +93,16 @@ Full steps: [docs/RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/
 
 The first Microsoft Store submission of each app is made by hand in Partner Center (pricing Free and markets; category Photo & video; privacy and IARC answers and the `runFullTrust` justification from `store/microsoft/privacy.md`; the MSIX from the run's `msix-*` artifact; en-us and ar-sa listings from the repo and screenshots from the Store screenshots workflow). After that CI uploads each release. Flathub, Snap and winget are documented, not automated.
 
+### AlUmmahNowTools
+
+The staff import app's GitHub releases ([docs/RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/docs/RELEASE.md)). Same names and values as Desktop and Apple; set them on AlUmmahNowTools too (or once as organization secrets). Each is optional: without it the files ship unsigned with a warning in the notes.
+
+| Secret | Same value as | Used for |
+|---|---|---|
+| `WINDOWS_CERT_PFX_BASE64`, `WINDOWS_CERT_PASSWORD` | AlUmmahNowDesktop | Authenticode on the exe and the `.msi` |
+| `DEVELOPER_ID_P12` (base64 `.p12` of the *Developer ID Application* certificate), `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID` | AlUmmahNowApple | Signing the macOS app and `.dmg` (hardened runtime) |
+| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | AlUmmahNowApple | Notarizing and stapling the `.dmg` |
+
 ## 5. Cloudflare: one worker secret
 
 | Secret | Worker | Where to get it |
