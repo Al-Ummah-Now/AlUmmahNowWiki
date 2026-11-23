@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-CHANNEL-CLAIM` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress**. The admin transfer exists ([§2](#2-what-exists-today-inventory-2026-11-23)). Phase A (complete the admin transfer, handle tools) is built and in review. The owner answered CC-D1 to CC-D12 on 2026-11-23 ([§13](#13-owner-decisions)); Phase B's approval step and Phase C's review run on the approval workflow system ([AUN-WORKFLOWS](README.md)), which is being built |
+| **Status** | **in progress**. The admin transfer exists ([§2](#2-what-exists-today-inventory-2026-11-23)). Phase A (complete the admin transfer, handle tools) is built and in review as a PR stack ([§14](#14-stories)). The owner answered CC-D1 to CC-D12 on 2026-11-23 ([§13](#13-owner-decisions)); Phase B's approval step and Phase C's review run on the approval workflow system ([AUN-WORKFLOWS](README.md)), which is being built |
 | **Last updated** | 2026-11-23 |
 | **Replaces** | The draft spec in [AlUmmahNow#460](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460) (2026-11-08). Most of its design is kept here; the parts that were built differently follow the code |
 
@@ -282,12 +282,12 @@ All answered by the owner on 2026-11-23.
 
 | Story | Phase | Repo | What |
 |---|---|---|---|
-| CC-1 | A | AlUmmahNow | Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check at request and job time, Go live refused during a move, support guard (`channel_has_support`), verify step and 48-hour re-verify |
-| CC-2 | A | AlUmmahNow | New `account` notification keys for both owners, move emails, live channel-list reload on web |
-| CC-3 | A | AlUmmahNow | Required reason (sent to the old owner), options (keep old owner as channel admin, keep contact email), channel-limit refusal; admin-web form and result |
-| CC-4 | A | AlUmmahNow | Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) |
-| CC-5 | A | Apple, Android, Desktop, Core | Render the new `account` keys once the apps have a notification center; refetch channels at launch |
-| CC-6 | B | AlUmmahNow | `channelMove` switch, offers table, receiver autocomplete limited to channel admins, offer/accept/decline/cancel/stop API; payment channels refused until the workflow approval step lands, then routed to it |
+| CC-1 | A | AlUmmahNow | Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check at request and job time, Go live refused during a move, support guard (`channel_has_support`), verify step and 48-hour re-verify — [#1784](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1784); subscriptions, invites, verify [#1789](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1789); 48-hour re-verify [#1808](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1808) |
+| CC-2 | A | AlUmmahNow | New `account` notification keys for both owners, move emails, live channel-list reload on web — [#1792](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1792) (emails follow) |
+| CC-3 | A | AlUmmahNow | Required reason (sent to the old owner), options (keep old owner as channel admin, keep contact email), channel-limit refusal; admin-web form and result — [#1795](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1795) |
+| CC-4 | A | AlUmmahNow | Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) — API [#1805](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1805), admin card [#1809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1809) |
+| CC-5 | A | Apple, Android, Desktop, Core | Render the new `account` keys once the apps have a notification center; refetch channels at launch — nothing to build yet: the native viewer apps have no notification center (2026-11-23) |
+| CC-6 | B | AlUmmahNow | `channelMove` switch, offers table, receiver autocomplete limited to channel admins, offer/accept/decline/cancel/stop API; payment channels refused until the workflow approval step lands, then routed to it — server side [#1833](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1833); payment channels are refused until the workflow approval exists |
 | CC-7 | B | AlUmmahNow | Web: Move channel in settings, offer page, pending offers |
 | CC-8 | B | Apple, Android, Desktop, Core | Offers in Studio with Accept/Decline |
 | CC-9 | C | AlUmmahNow, Tools | `channelClaim` switch, `claimable` on channels, import tick box |
