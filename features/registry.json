@@ -2304,7 +2304,7 @@
         "en": "Supporting creators",
         "ar": "دعم صنّاع المحتوى"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "videos",
         "videos-admin",
@@ -2313,7 +2313,11 @@
         "www"
       ],
       "wiki": "epics/AUN-MEMBERS-creator-support.md",
-      "note": "Spec written 2026-11-22 (revision 2): one-time and monthly support collected by PayGood into the organisation's account and paid to creators monthly through a separate payout rail (Wise, PayPal Payouts fallback), 0% to the platform, off by default and off until the organisation exists; paid perks designed separately and off."
+      "note": "Spec written 2026-11-22 (revision 2): one-time and monthly support collected by PayGood into the organisation's account and paid to creators monthly through a separate payout rail (Wise, PayPal Payouts fallback), 0% to the platform, off by default and off until the organisation exists; paid perks designed separately and off. Building since 2026-11-22 behind the creatorSupport switch, which stays off in every environment until the organisation exists and the lawyer, PayGood, Wise and PayPal sign off; only test adapters exist.",
+      "prs": [
+        "AlUmmahNow#1757",
+        "AlUmmahNow#1758"
+      ]
     }
   ]
 }

@@ -4,6 +4,15 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-22: supporting creators: building starts behind a switch that stays off (AUN-MEMBERS)
+
+- **AlUmmahNow:** server foundation for [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md). Everything sits behind the `creatorSupport` switch, which stays off in every environment until the organisation exists and the lawyer, PayGood, Wise and PayPal sign off. [#1757](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1757) adds:
+  - money as integer minor units with an explicit currency, and fees with explicit rounding;
+  - the collector and payout-rail interfaces, with test versions that move no money;
+  - the open owner decisions as settings that start undecided.
+
+  [#1758](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1758) adds the data model, an append-only double-entry ledger, the settings store and erasure. No user-visible change.
+
 ## 2026-11-22: supporting creators, revision 2: PayGood collects, a payout rail pays (AUN-MEMBERS)
 
 - **AlUmmahNowWiki:** [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md) revised after the owner's "we will not use paygood to pay creators" ([O42](../epics/decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail)). PayGood only collects gifts into the organisation's merchant account; the organisation holds them in a separate non-interest account and pays creators monthly through a payout rail: Wise primary, PayPal Payouts fallback, Trolley later; never Stripe. New research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails with a country grid; Iraq, Palestine, Somalia, Sudan, Afghanistan, Syria and Iran stay uncovered. New ledger, hold, threshold and payout jobs with retry, DLQ and admin Errors; money permissions only for the organisation's finance list, never the owner. Decisions MEM-D17 to MEM-D24 added, MEM-D1 and MEM-D16 withdrawn. Money transmission and PayGood's "third party payments" rule are the main open legal questions. Research, not legal advice. Linear AUN-612. No code yet.
