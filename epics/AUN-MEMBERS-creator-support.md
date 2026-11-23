@@ -898,8 +898,8 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 | Story | PR | State |
 |---|---|---|
 | MEM-2 interfaces, test adapters, money rules | AlUmmahNow#1757 | merged 2026-11-22 |
-| MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | open (back end only) |
-| MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | open, stacked on #1758 |
+| MEM-3 data model, ledger, settings, erasure | AlUmmahNow#1758 | merged 2026-11-22 |
+| MEM-4 webhooks, jobs, reconciliation | AlUmmahNow#1761 | open |
 
 **Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
 
@@ -918,4 +918,4 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
-- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3) and AlUmmahNow#1761 (MEM-4).
+- 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3, merged) and AlUmmahNow#1761 (MEM-4).
