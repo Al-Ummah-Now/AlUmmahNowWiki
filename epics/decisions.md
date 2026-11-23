@@ -633,6 +633,8 @@ Production gets a tested stage slot then a switch; CI tests for every app; data 
 
 Deploy production only from main through CI, using tags to control when.
 
+Exception (2026-11-23): AlUmmahNowAuth releases on every merge to `main` ([AUTH-R6](AUTH-R6-auth-release.md), AR6-D2). openauth publishes on merge to `master`.
+
 **Blocks / affects:** Release pipeline
 
 **Sources:** [AlUmmahNow#286](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/286)

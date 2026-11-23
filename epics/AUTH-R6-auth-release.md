@@ -58,8 +58,6 @@ Each is one PR. Nothing here is a user-facing feature, so none needs a feature s
 | **R6-6 Faster sign-in** | openauth, Auth | The enterprise `subject()` makes about eight D1 round trips one after another ([Auth#314](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/314)). Batch the independent writes; the code is still written last, so a code never points at a missing session | A test counts the round trips and proves the order; the timing log shows fewer on stage |
 | **R6-7 Contributor docs** | Auth | Code of conduct, SUPPORT.md, issue-template links, CONTRIBUTING setup, CICD.md and `docs/release-pipeline.md` as the pipeline works today. ROADMAP.md points to this wiki | Docs check: no link to the old repo or the `workers.dev` host in these files |
 | **R6-8 QA test accounts** | Auth | More than 40,000 old test accounts on QA slow its database ([Auth#312](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/312)): the daily sweep also removes test-domain accounts older than 24 hours that aren't pinned, through the deletion service, in small batches | The sweep reports counts; QA only; pinned and seed accounts are proven untouched by a test |
-| **R6-9 Docker, Helm, self-hosting** | Auth | [Auth#19](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/19), [Auth#171](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/171) | Waits for AR6-D1 |
-| **R6-10 Outside security test and legal review** | – | Needs people ([AlUmmahNow#349](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/349)) | Waits for AR6-D3 |
 
 Not in this epic: the TypeScript client, the API spec, the docs sites and publishing to the public npm registry belong to [AUTH-R4](AUTH-R4-auth-docs-dx.md) (R4-2, R4-4 to R4-8, AR4-D3). Monitoring and backups belong to [AUTH-R5](AUTH-R5-auth-cicd.md).
 
@@ -98,21 +96,14 @@ Nothing per video or per view. GitHub Actions, attestations and release assets a
 - R6-8 deletes only on QA and refuses to run anywhere else.
 - Independent penetration testing and legal review can't be replaced by automation; until then no page may claim either.
 
-## Owner decisions
+## Decisions
 
-1. **AR6-D1: Should others be able to run our auth server themselves (Docker image, Helm chart, VPS)?**
-   - A. No. Cloudflare only; close [Auth#19](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/19) and [Auth#171](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/171).
-   - B. A Docker image for local development and tests only.
-   - C. Full self-hosting (image, Helm chart, upgrade support).
-   - **Recommended: A.** The server depends on D1, KV, Queues, Secrets Store and Workers rate limiting. Replacing them means a second, separately secured product, and nobody has asked for it. Local development and other repos' tests already run the released bundle.
-2. **AR6-D2: Should Auth production keep releasing on every merge, or wait for a release tag like the other sites?**
-   - A. Every merge (today).
-   - B. Tag only ([Auth#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217), matching [O11](decisions.md#o11-production-only-from-tags-on-main)).
-   - **Recommended: A, recorded as an exception to O11.** Each merge already has to pass stage and a 0% production check, small releases are easier to roll back, and security fixes don't wait. R6-4 gives the one thing tags would add: a record of what went live and when. If you prefer B, R6-4's naming already matches.
-3. **AR6-D3: When should an outside firm test sign-in security and a lawyer review privacy?**
-   - A. Before the public launch.
-   - B. Later, at a date you choose.
-   - **Recommended: A,** one engagement covering Auth, the videos API and the admin. It needs a vendor and a contact person from you. Nothing else here waits for it.
+Decided 2026-11-23.
+
+1. **AR6-D1: Should others be able to run our auth server themselves (Docker image, Helm chart, VPS)? No, Cloudflare only.** The server depends on D1, KV, Queues, Secrets Store and Workers rate limiting. Replacing them means a second, separately secured product. Local development and other repos' tests already run the released bundle. [Auth#19](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/19) and [Auth#171](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/171) are closed as not planned. Not chosen: a Docker image for local use, full self-hosting.
+2. **AR6-D2: Should Auth production keep releasing on every merge? Yes,** an exception to [O11](decisions.md#o11-production-only-from-tags-on-main). Each merge already has to pass stage and a 0% production check, small releases are easier to roll back, and security fixes don't wait. R6-4 records what went live and when. Not chosen: release on a tag ([Auth#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217), closed as not planned).
+
+Outside the code: an independent penetration test and a legal privacy review are tracked in [AlUmmahNow#349](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/349). They are not part of this epic's build.
 
 ## Constraints
 
