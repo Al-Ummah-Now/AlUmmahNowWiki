@@ -97,7 +97,7 @@ Open: 10 issues and one draft PR, the shared nav contract for the header and acc
 
 ## Epics for this repo
 
-12 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+13 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
 
 | Epic | Status |
 |---|---|
@@ -110,6 +110,7 @@ Open: 10 issues and one draft PR, the shared nav contract for the header and acc
 | [www home timeline (CMS-managed feed)](../epics/CMS-HOME-TIMELINE-www-home-timeline.md) | shipped |
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
 | [Release pipeline, tagged releases and skew protection](../epics/AUN-RELEASE-release-pipeline-skew.md) | shipped |
+| [Auth v1.0 roadmap: Documentation & developer experience](../epics/AUTH-R4-auth-docs-dx.md) | in progress |
 | [Contact us page and admin inbox](../epics/CHAT-CONTACT-contact-us.md) | shipped |
 | [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
 | [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |

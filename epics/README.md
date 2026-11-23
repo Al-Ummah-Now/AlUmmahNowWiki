@@ -160,7 +160,7 @@ An epic appears under every repo that owns part of it.
 
 ### AlUmmahNowUI
 
-[Epic 25](E25-sharing-embeds.md) (in progress), [Epic 26](E26-ummah-comments.md) (in progress), [LR-2.3](LR-2.3-legacy-portal-frontend.md) (shipped), [CMS-WWW-V1](CMS-WWW-V1-cms-www-v1.md) (shipped), [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) (in progress), [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md) (shipped), [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md) (in progress), [CMS-HOME-TIMELINE](CMS-HOME-TIMELINE-www-home-timeline.md) (shipped), [AUN-THEMES](AUN-THEMES-themes.md) (in progress), [AUN-RELEASE](AUN-RELEASE-release-pipeline-skew.md) (shipped), [AUN-SEO](AUN-SEO-search-visibility.md) (in progress), [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) (in progress), [AUN-FEATURES](AUN-FEATURES-feature-switches.md) (in progress), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) (in progress), [CHAT-CONTACT](CHAT-CONTACT-contact-us.md) (shipped), [CHAT-SECURITY](CHAT-SECURITY-public-repo-security.md) (shipped), [CHAT-SSO](CHAT-SSO-sso-everywhere.md) (shipped)
+[Epic 25](E25-sharing-embeds.md) (in progress), [Epic 26](E26-ummah-comments.md) (in progress), [LR-2.3](LR-2.3-legacy-portal-frontend.md) (shipped), [CMS-WWW-V1](CMS-WWW-V1-cms-www-v1.md) (shipped), [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) (in progress), [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md) (shipped), [AUN-CMS-PAGE-BUILDER](AUN-CMS-PAGE-BUILDER-cms-page-builder.md) (in progress), [CMS-HOME-TIMELINE](CMS-HOME-TIMELINE-www-home-timeline.md) (shipped), [AUN-THEMES](AUN-THEMES-themes.md) (in progress), [AUN-RELEASE](AUN-RELEASE-release-pipeline-skew.md) (shipped), [AUN-SEO](AUN-SEO-search-visibility.md) (in progress), [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) (in progress), [AUN-FEATURES](AUN-FEATURES-feature-switches.md) (in progress), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) (in progress), [AUTH-R4](AUTH-R4-auth-docs-dx.md) (in progress), [CHAT-CONTACT](CHAT-CONTACT-contact-us.md) (shipped), [CHAT-SECURITY](CHAT-SECURITY-public-repo-security.md) (shipped), [CHAT-SSO](CHAT-SSO-sso-everywhere.md) (shipped)
 
 ### AlUmmahNowAuth
 
@@ -168,7 +168,7 @@ An epic appears under every repo that owns part of it.
 
 ### openauth
 
-[Epic 9](E09-native-platform-foundations.md) (in progress), [LR-1.3](LR-1.3-legacy-sso.md) (shipped), [AUTH-IDP](AUTH-IDP-identity-platform.md) (shipped), [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) (in progress), [AUTH-ENTERPRISE](AUTH-ENTERPRISE-openauth-enterprise-features.md) (shipped), [OA-ADMIN-APIS](OA-ADMIN-APIS-openauth-admin-apis.md) (shipped), [OA-THEME](OA-THEME-openauth-theme-unification.md) (in progress), [AUN-THEMES](AUN-THEMES-themes.md) (in progress), [CHAT-SECURITY](CHAT-SECURITY-public-repo-security.md) (shipped), [CHAT-SSO](CHAT-SSO-sso-everywhere.md) (shipped)
+[Epic 9](E09-native-platform-foundations.md) (in progress), [LR-1.3](LR-1.3-legacy-sso.md) (shipped), [AUTH-R4](AUTH-R4-auth-docs-dx.md) (in progress), [AUTH-IDP](AUTH-IDP-identity-platform.md) (shipped), [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) (in progress), [AUTH-ENTERPRISE](AUTH-ENTERPRISE-openauth-enterprise-features.md) (shipped), [OA-ADMIN-APIS](OA-ADMIN-APIS-openauth-admin-apis.md) (shipped), [OA-THEME](OA-THEME-openauth-theme-unification.md) (in progress), [AUN-THEMES](AUN-THEMES-themes.md) (in progress), [CHAT-SECURITY](CHAT-SECURITY-public-repo-security.md) (shipped), [CHAT-SSO](CHAT-SSO-sso-everywhere.md) (shipped)
 
 ### AlUmmahNowTools
 
