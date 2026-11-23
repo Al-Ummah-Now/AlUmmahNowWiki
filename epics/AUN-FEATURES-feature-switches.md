@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-FEATURES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www) |
-| **Status** | **spec** (phase 1 of 3: spec, design, build) |
-| **Last updated** | 2026-11-22 |
+| **Status** | **build** (phase 3 of 3; design runs alongside). FEAT-1 merged; FEAT-3, FEAT-4 and FEAT-2 in review |
+| **Last updated** | 2026-11-23 |
 | **Origin** | Owner request 2026-11-22: "enable and disable features, from videos admin on one page for all features with help text, enforced on web and native apps, spec -> design -> build and keep it tracked." Addition the same day: a generic server error, so that "errors coming from the server can be shown even when a client doesn't support them yet". |
 | **Linear** | [AUN-594](https://linear.app/hamzalabs/issue/AUN-594/aun-features-feature-switches-one-features-page-enforced-everywhere) (stories AUN-595 to AUN-611) |
 
@@ -206,7 +206,7 @@ Owner, 2026-11-22: errors from the server must be shown properly "even when a cl
 
 **The type.** `ApiErrorBody` and `parseApiError(status, body)` live in `packages/shared-types/src/errors/`. The parser never throws: a body without the envelope gives `{ code: 'http_<status>', message: undefined }`, so the client uses its own offline or generic text.
 
-**Choosing the language.** The server reads `Accept-Language`, where the first of `ar` or `en` wins. If the header is missing, it reads the `X-App-Locale` header the apps send. Otherwise it uses English. Apps send their in-app language, not the device language. The answer carries `lang` and `Vary: Accept-Language, X-App-Locale`.
+**Choosing the language.** The language the user chose in the app, never the browser's (owner rule, 2026-11-22: English unless the user chose Arabic). The server reads `X-App-Locale` (`en` or `ar`), else the request's own `?lang=` or `/ar/`·`/en/` path prefix, else English. `Accept-Language` is never read, so a user on the English interface with an Arabic browser gets English. Every client sends its in-app language in `X-App-Locale` on every call (FEAT-9 to FEAT-16). The answer carries `lang`, `Content-Language` and `Vary: X-App-Locale`.
 
 **The catalogue.** `packages/shared-types/src/errors/catalogue.ts` maps each code to `{ status, action, en, ar }`, plus a fallback per status class. Examples:
 
@@ -409,3 +409,4 @@ Order: FEAT-1 → FEAT-3 → FEAT-4 → FEAT-2 → FEAT-5, FEAT-6, FEAT-7. Then 
 ## Status evidence
 
 - 2026-11-22: spec written (this page), with decisions [O39](decisions.md#o39-one-features-page-server-enforced) and [O40](decisions.md#o40-server-written-error-messages). Server stories split out on the owner's instruction the same day.
+- 2026-11-23: FEAT-1 merged ([AlUmmahNow#1753](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1753)): the registry in shared-types, with the four creator support switches (AUN-MEMBERS; off, super admin, `creatorSupport` required by the other three). The error language rule was changed to the app's choice only (above). FEAT-3 ([#1754](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1754)), FEAT-4 ([#1755](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1755)) and FEAT-2 ([#1756](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1756)) are in review.
