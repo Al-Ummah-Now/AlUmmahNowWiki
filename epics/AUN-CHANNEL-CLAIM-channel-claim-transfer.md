@@ -102,9 +102,10 @@ New owner: the channel arrives as main only if they have no channel. Old owner: 
 
 - The existing `channel.transfer` admin job stays the engine. It gains the steps in §3.1, each idempotent, run in order: `channel → links → videos → live → schedules → playlists → posts → subscriptions → team → notify → verify`.
 - **Lock:** one unfinished move per channel. `admin_jobs` gets a partial unique index on `(target_kind, target_id) WHERE kind = 'channel.transfer' AND status IN ('queued','running','retrying')`. A second request gets `409 transfer_in_progress`; handle edits on that channel do too.
-- **Live check:** refused with `409 channel_is_live` while a broadcast is on air.
+- **Live check:** refused with `409 channel_is_live` while a broadcast is on air. The request check is not enough on its own, because a broadcast can start between the request and the job: the job checks again just before it flips the owner and, if the channel is live, waits for a later retry; and Go live is refused (`409 transfer_in_progress`) while a move of the channel is open. A test covers the race.
+- **Creator support:** until [CC-D10](#13-owner-decisions) is decided, a move of a channel that has an active support payee or active pledges is refused (`409 channel_has_support`, [AlUmmahNow#1812](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1812)). The switch is off and no channel has support today.
 - **Verify** re-reads R2: channel owner, handle entry, both profiles, and no `content_ownership` row for the channel with another owner. A mismatch re-runs the step, up to three times, then the job fails into the Errors page with **Retry** (existing). The daily api-videos cron re-verifies moves finished in the last 48 hours, to catch an old-owner edit that raced the flip.
-- Large channels: the job already resumes across queue deliveries; each step keeps a cursor in the job params.
+- Large channels: today `runTransfer` is one handler that either finishes or throws, and a retry runs every step again from the start (each step skips records already moved). That is correct but repeats reads on a very large channel. Per-step cursors in the job params are not built; they are added only if a real channel needs them.
 
 ### 3.4 Old owner
 
@@ -118,7 +119,7 @@ The old owner loses all access unless the mover ticks **Keep the previous owner 
 
 ### 3.6 Notifications and live refresh
 
-New notification category `account`: always delivered, no settings toggle, rendered in the reader's language, `dedupeKey` `move:{jobId}:{side}`.
+The notices use the existing always-on `account` category (`packages/shared-types/src/notifications.ts`, already used by warnings, reviews, team and tier notices, and queued through `notifyTeam` in `channelTeam.ts`): new keys only, rendered in the reader's language, `dedupeKey` `move:{jobId}:{side}`.
 
 | Key | To | English | Arabic |
 |---|---|---|---|
@@ -127,7 +128,7 @@ New notification category `account`: always delivered, no settings toggle, rende
 | `channelMovedIn` | New owner | You are now the owner of {channel}. | أصبحت الآن مالك القناة {channel}. |
 | `channelHandleChangedByTeam` | Owner | The Al Ummah Now team changed the handle of {channel} to @{handle}. | غيّر فريق الأمة الآن معرّف القناة {channel} إلى @{handle}. |
 
-The acting admin's name is never shown. A move also sends an email to both owners (one language, chosen per [email rules](../guides/email-templates.md)), because the old owner may not open the app. Realtime event `channels_changed` on `user:{id}` for both owners makes web reload the channel list; native apps refetch `GET /api/me/channels` on the event or on next launch.
+The acting admin's name is never shown. A move also sends an email to both owners (one language, chosen per [email rules](../guides/email-templates.md)), because the old owner may not open the app. No separate realtime event: the notice itself arrives on the owner's `user:{id}` socket, and web reloads the live channel list when a move, role-change or removal notice arrives; native apps refetch the list at launch.
 
 ### 3.7 Audit
 
@@ -236,7 +237,7 @@ User routes return `404 feature_off` when their switch is off (`requireFeature`)
 | Platform | Phase A | Phase B (move) | Phase C (claim) |
 |---|---|---|---|
 | Admin web | Preview, reason, options, handle tools, verify result | — | Claimable toggle, claims queue |
-| Web | `account` notifications, `channels_changed` reload | Move channel (settings), offer page, pending offers | Claim button and form, my claims |
+| Web | New `account` notices; channel list reloads on them | Move channel (settings), offer page, pending offers | Claim button and form, my claims |
 | Apple / Android / Desktop | Render `account` notifications; refetch channels | Show offers with Accept/Decline (Studio), owner offer opens the web page in v1 | Claim opens the web page in v1 |
 | Native admin | — | — | Claims queue after AUN-ADMIN-NATIVE ships its queue screens |
 
@@ -295,11 +296,11 @@ The old spec's questions 1–3 were answered in chat but the answers were not wr
 
 | Story | Phase | Repo | What |
 |---|---|---|---|
-| CC-1 | A | AlUmmahNow | Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check, verify step and 48-hour re-verify |
-| CC-2 | A | AlUmmahNow | `account` notifications, move emails, `channels_changed` realtime, web reload |
+| CC-1 | A | AlUmmahNow | Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check at request and job time, Go live refused during a move, support guard (`channel_has_support`), verify step and 48-hour re-verify |
+| CC-2 | A | AlUmmahNow | New `account` notification keys for both owners, move emails, live channel-list reload on web |
 | CC-3 | A | AlUmmahNow | Admin transfer preview, required reason, options (keep old owner, contact email, badge, release handle, official to non-staff); admin-web form and result |
 | CC-4 | A | AlUmmahNow | Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) |
-| CC-5 | A | Apple, Android, Desktop, Core | Render `account` notifications; refetch channels on `channels_changed` |
+| CC-5 | A | Apple, Android, Desktop, Core | Render the new `account` keys once the apps have a notification center; refetch channels at launch |
 | CC-6 | B | AlUmmahNow | `channelMove` switch, tier setting, offers table, offer/accept/decline/cancel API, hold and due-runner cron |
 | CC-7 | B | AlUmmahNow | Web: Move channel in settings, offer page, pending offers |
 | CC-8 | B | Apple, Android, Desktop, Core | Offers in Studio with Accept/Decline |
