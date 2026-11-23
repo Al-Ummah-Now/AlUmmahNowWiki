@@ -2272,7 +2272,10 @@
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
       "note": "Build started 2026-11-23: the feature registry (shared-types) is merged; the error envelope, switch storage and the server gate are in review (AlUmmahNow#1754, #1755, #1756); the Features page design is with the auditors.",
       "prs": [
-        "AlUmmahNow#1753"
+        "AlUmmahNow#1753",
+        "AlUmmahNow#1754",
+        "AlUmmahNow#1755",
+        "AlUmmahNow#1756"
       ]
     },
     {
@@ -2290,7 +2293,10 @@
         "native"
       ],
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
-      "note": "One error envelope with en/ar messages in the language the user chose in the app (X-App-Locale, never the browser's); clients show messages for codes they don't know yet. Server side in review (AlUmmahNow#1754)."
+      "note": "One error envelope with en/ar messages in the language the user chose in the app (X-App-Locale, never the browser's); clients show messages for codes they don't know yet. Server side in review (AlUmmahNow#1754).",
+      "prs": [
+        "AlUmmahNow#1754"
+      ]
     },
     {
       "id": "creator-support",
