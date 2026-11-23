@@ -506,9 +506,9 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 
 ### QF1: Quran Foundation content use
 
-**Status:** decided · **Date:** 2026-11-22
+**Status:** decided · **Date:** 2026-11-22 (attribution format updated 2026-11-23)
 
-**Decision (Quran Foundation's written answers, 2026-11-21 and 2026-11-22):**
+**Decision (Quran Foundation's written answers, 2026-11-21, 2026-11-22 and 2026-11-23):**
 - **Captions:** store verse keys and our own timestamps only. Text and translation are loaded when a track is served, from the Content API or from our Content Sync copy, which is synced at least every 7 days. Nothing else from QF is kept for more than a week.
 - **The derived index** (normalised words + locations, built from the Content Sync copy) is allowed for matching. **It is never used to train, fine-tune or evaluate a machine-learning or AI model.** The same applies to the synced text and QF timings. Tests and evals use synthetic fixtures only.
 - **`mushafs:4`** (Uthmani Hafs) is synced. Its `mushaf_word` rows, linked by `word_id`, cut verses into words and are not stored twice.
@@ -517,7 +517,7 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 - **Offline device copies** are allowed when refreshed from our synced backend at least every 7 days. A copy expires only when a refresh is missed.
 - **Web pages and JSON-LD** may carry verse text that is rendered fresh.
 - **Every call to QF:** on HTTP 429, back off and honour `Retry-After`. Use granular scopes, and access QF only from the backend.
-- **Attribution** wherever the text appears: "Quran data provided by Quran Foundation (https://quran.foundation/)", with the translation edition by name.
+- **Attribution** (QF 2026-11-23, replacing the full line everywhere): next to the captions (and wherever QF text shows), the short credit "Source: Quran Foundation" / «المصدر: مؤسسة القرآن», linked to https://quran.foundation/. The full line, "Quran data provided by Quran Foundation (https://quran.foundation/)", with the name of each translation edition used, goes on a page viewers can easily reach: the web Credits page (`/{locale}/credits`), and inside downloaded files. QF's words: "Yes, a shorter format is fine. Next to the captions, a short credit such as 'Source: Quran Foundation', linked to https://quran.foundation/, is enough. Please show the full line, 'Quran data provided by Quran Foundation (https://quran.foundation/)', together with the name of each translation edition you use, on a page viewers can easily reach, such as your FAQ or the page footer." ([QF FAQ](https://api-docs.quran.foundation/docs/tutorials/faq#what-attribution-or-copyright-information-should-i-show); [AlUmmahNow#1767](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1767))
 
 **Blocks / affects:** AUN-CAPTIONS, TOOLS-ADMIN, DISCOVERY, any feature that shows Quran text
 
