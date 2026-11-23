@@ -32,8 +32,14 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           if [ "$EVENT" = "pull_request" ]; then
-            changed=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' | sed "s/.*/'&'/" | tr '\n' ' ')
-            echo "inputs=$changed" >> "$GITHUB_OUTPUT"
+            # Three-dot diff: only this PR's own changes, not main's since it branched.
+            # Only plain paths (letters, digits, / . _ -) go to lychee, so no filename
+            # can inject shell into the action's eval; anything else fails loudly.
+            changed=$(git diff --name-only --diff-filter=ACMR "${BASE}...${HEAD}" -- '*.md')
+            if printf '%s\n' "$changed" | grep -qvE '^([A-Za-z0-9._/-]+)?$'; then
+              echo "::error::Unsupported characters in a changed Markdown filename"; exit 1
+            fi
+            echo "inputs=$(echo $changed)" >> "$GITHUB_OUTPUT"
           else
             echo "inputs='./**/*.md'" >> "$GITHUB_OUTPUT"
           fi
@@ -43,7 +49,7 @@ jobs:
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: .lycheecache
-          key: lychee-${{ github.sha }}
+          key: lychee-${{ github.ref_name }}-${{ github.run_id }}
           restore-keys: lychee-
 
       - name: Check Markdown links
@@ -60,5 +66,6 @@ jobs:
             --accept 200,206,429
             ${{ steps.files.outputs.inputs }}
           fail: true
+          failIfEmpty: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
