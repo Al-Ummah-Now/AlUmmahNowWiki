@@ -26,6 +26,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [AUN-SUBS](AUN-SUBS-subscriptions-plan.md) | Site-wide subscriptions plan (decisions S1–S18) | **pending** | 2026-11-11 | Epic 27, Epic 24, every tiered feature, P1 |
 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md#15-owner-decisions) | Supporting creators (decisions MEM-D2–MEM-D24; D1 and D16 withdrawn: payout rail, hold, payout threshold and schedule, payout fees, chargebacks after payout, unclaimed balances, payout approvals, countries no rail covers, who pays fees, minimum, who may receive, supporter visibility, messages, refunds, ages, payment methods, legal entity, charity route, perks, business costs, apps) | **pending** | 2026-11-22 | AUN-MEMBERS build, [Epic 24](E24-creator-support-premium.md) story 24.1 |
 | [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md#16-owner-decisions) | In-video links (decisions PL-D1–PL-D20: caps, who may add external links, allowlist only, interstitial, the QF credit tied to Quran text, no payment links, affiliate, creator credits, Up next hand-off, TV, kids and flagged videos, scanning, tier defaults) | **pending** (phase 0 built to PL-D4 and PL-D5) | 2026-11-23 | AUN-PLAYER-LINKS phases 1–5 |
+| [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md#13-owner-decisions) | Channel claim, transfer and self-service move (decisions CC-D1–CC-D12: self-service moves vs O16, tiers, 72-hour hold, old owner access, claim reviewers and proof, what moves, badges, official handles, creator support, notices, channel limit) | **pending** (Phase A built to CC-D7–CC-D12) | 2026-11-23 | AUN-CHANNEL-CLAIM phases B and C |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (decisions AD1–AD14) | **decided** | 2026-11-13 | AUN-ADMIN-NATIVE build (held until the owner says go) |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | Multiple audio tracks (decisions MA1–MA10: demuxed HLS alternate audio from R2, tier limit per video, review of each track) | **decided** | 2026-11-14 | AUN-MULTI-AUDIO build |
 | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) | Passkeys everywhere, required for staff (from AD6; PK1–PK8 built to recommendation, owner may change) | **built to recommendation** | 2026-11-13 | AUTH-PASSKEYS, AUN-ADMIN-NATIVE step 0b |
@@ -689,7 +690,7 @@ Owners can add admins but not transfer ownership; channel roles are unrelated to
 
 **Status:** decided · **Date:** 2026-11-09
 
-Spec only (PR #460, open).
+Spec rev 2 is the [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) page (2026-11-23); the admin transfer exists and handle tools are Phase A.
 
 **Blocks / affects:** Channel claim
 
