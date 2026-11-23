@@ -56,10 +56,10 @@ Four new entries in `packages/shared-types/src/feature-registry.ts`, each **defa
 
 | Key | Group | Server gate |
 |---|---|---|
-| `liveChat` | `community` | every `/api/live-streams/:id/chat*` route; WebSocket `live:<id>` subscribe |
+| `liveChat` | `people` | every `/api/live-streams/:id/chat*` route; WebSocket `live:<id>` subscribe |
 | `livePremieres` | `create` | `POST /api/videos/:id/premiere`; starting a premiere |
-| `liveReminders` | `community` | `/api/live-streams/:id/reminders`; sending reminders |
-| `liveEvents` | `video` | setting `eventType`; the `eventType` filter |
+| `liveReminders` | `people` | `/api/live-streams/:id/reminders`; sending reminders |
+| `liveEvents` | `create` | setting `eventType`; the `eventType` filter |
 
 None of the four `requires` the existing `live` switch. `live` stops **new streams**; streams on air and recordings continue (`feature-routes.ts`), and a premiere needs no live provider.
 
