@@ -137,37 +137,11 @@ It operates on three existing contracts in `AlUmmahNowTools`:
 
 ## 10. Owner decisions
 
-1. **TP-D1 — Retire the stub `AlUmmahNow.VisualImporterUno.UITests` project (WinAppDriver / Uno.UITest)?**
-   - **Options:**
-     - **(A) Delete `AlUmmahNow.VisualImporterUno.UITests`** and standardize on cross-platform xUnit ViewModel tests + `TOOLS_DEMO`/`TOOLS_SCREENSHOT` headless smoke runs on Linux, macOS, and Windows.
-     - **(B) Keep the stub project** in the repo for potential future Windows UI Automation.
-     - **(C) Build a Windows-only FlaUI/Appium E2E suite** alongside cross-platform smoke runs.
-   - **Recommendation:** **(A).** Microsoft archived WinAppDriver in 2021, the project is not in `AlUmmahNow.sln`, every initializer throws `NotImplementedException`, and it cannot test the macOS or Linux Skia builds. `release.yml` already proves real packaged startup on all three OSes via `TOOLS_DEMO=1` + `TOOLS_SCREENSHOT`.
-
-2. **TP-D2 — Local pre-encoding encoder order (`Renditions.cs`): keep `libx264` first or prefer hardware encoders first?**
-   - **Options:**
-     - **(A) Keep `libx264` first** when a user-installed GPL FFmpeg is present (current TA-12 behavior; matches the server's `libx264` CRF/VBV settings for highest verification pass rate), falling back automatically to hardware encoders and OpenH264 once TA-19 bundles LGPL FFmpeg.
-     - **(B) Prefer hardware encoders first today** (`h264_videotoolbox`, `h264_nvenc`, `h264_qsv`, `h264_amf`, `h264_vaapi`, `h264_mf`, then `libx264`, then `libopenh264`) for 3–8× faster local encodes and lower laptop heat/battery use.
-   - **Recommendation:** **(A)** until TA-19 bundles LGPL FFmpeg and we measure real server-verification pass rates across VideoToolbox, NVENC, QSV, and VAAPI (some hardware encoders need tuning on VBV/keyframe placement to pass `apps/media` verification cleanly).
-
-3. **TP-D3 — Add an optional 720p cap ("Lecture mode") for audio-led / static-slide videos to protect the $500/month cap at Large scale?**
-   - **Options:**
-     - **(A) Keep 1080p default now; add an opt-in 720p lecture cap** once R2 rendition storage crosses ~10 TB (~$150/month).
-     - **(B) Cap audio-led lectures at 720p now** across Tools and server transcoding.
-     - **(C) Always encode up to 1080p** and revisit AV1 or lifecycle rules later.
-   - **Recommendation:** **(A).** At Small and Medium scale, 1080p storage is $9–$86/month. At Large scale (1,000 h/month, month 12), a universal 720p cap cuts rendition storage by ~$185/month ($430 → $245) and total monthly spend by ~$195/month ($470 → $275); an opt-in cap for audio-led/static-slide lectures saves proportionally to their share of uploads with minimal visual loss, and pairs with R2 lifecycle rules to keep steady-state costs under the cap.
-
-4. **TP-D4 — Freeze legacy Bunny clients (`BunnyStorageClient`, `BunnyStreamClient`, `AlUmmahNow.BunnyBulkUploader`) in `AlUmmahNowTools`?**
-   - **Options:**
-     - **(A) Freeze as security/bugfix-only** (do not implement `BUNNY_NET_API_ANALYSIS.md` P2–P4 in Tools) and remove them in `TOOLS-ADMIN` TA-14 after the first admin-API bulk import succeeds.
-     - **(B) Continue building `IBunnyStreamClient`, Polly DI, Bunny TUS, and Bunny cost tracking in Tools.**
-   - **Recommendation:** **(A).** Everything valuable in P2–P4 already exists in `AlUmmahNow.ToolsCore` (TUS uploads, SHA-256, `CheckStep`) and `AlUmmahNow/apps/cost-monitor` (Bunny + R2 cost monitoring). Keeping direct Bunny code in Tools contradicts `TOOLS-ADMIN`'s admin-API-only security model.
-
-5. **TP-D5 — Future of `AlUmmahNow.FileScanService` after `TOOLS-ADMIN` TA-14?**
-   - **Options:**
-     - **(A) Keep `FileScanService` as a separate consolidated SignalR daemon** on Windows/macOS/Linux, migrating its upload worker from direct Bunny/R2 to `admin-api` in TA-14.
-     - **(B) Move folder watching and approvals in-process into `AlUmmahNow.ToolsCore`** (using `aun-core`'s folder watch + local SQLite/JSON) and retire the separate `FileScanService` process and its SQL Server LocalDB dependency in TA-14.
-   - **Recommendation:** **(B)** for TA-14. SQL Server LocalDB does not run on macOS or Linux, so an in-process watcher in `ToolsCore` gives identical behavior on all three desktop platforms with one process to install and run. Until TA-14 lands, TP-1 finishes and tests the consolidated `FileScanService`.
+1. **`TP-D1` — Retire the stub `AlUmmahNow.VisualImporterUno.UITests` project (WinAppDriver / Uno.UITest):** **decided (2026-11-23)** — delete the WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub and standardize on cross-platform xUnit ViewModel tests (`AlUmmahNow.VisualImporterUno.Tests`) plus `TOOLS_DEMO`/`TOOLS_SCREENSHOT` headless smoke tests across Windows, macOS, and Linux ([decisions.md](decisions.md#tp-d1-delete-the-winappdriver-uitests-stub); implemented in [AlUmmahNowTools#63](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/63)).
+2. **`TP-D2` — Local pre-encoding encoder policy (`Renditions.cs`):** **decided (2026-11-23)** — follow **Maktaba's encoder policy**: OS-scoped hardware-first ordering (macOS `h264_videotoolbox`, Linux `h264_nvenc` → `h264_qsv` → `h264_vaapi`, Windows `h264_nvenc` → `h264_qsv` → `h264_amf` → `h264_mf`, then `libx264` → `libopenh264`), header-safe `-encoders` parsing, 0.2 s black-frame null test-encode probe (`-allow_sw 0` for VideoToolbox, `/dev/dri/renderD*` discovery for VAAPI), `TOOLS_ENCODER` override, transient `refusedSession` vs. permanent hardware failure handling, runtime fallback down to `libx264`/`libopenh264`, and local `ffprobe` output verification before staging ([decisions.md](decisions.md#tp-d2-follow-maktaba-encoder-policy); implemented in [AlUmmahNowTools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60)).
+3. **`TP-D3` — 720p lecture cap for storage control:** **decided (2026-11-23)** — keep **1080p** default now; add an **admin setting to cap lectures at 720p, off by default**, for use only when R2 rendition storage passes ~10 TB (~$150/month) or total monthly costs near the $500/month cap ([decisions.md](decisions.md#tp-d3-keep-1080p-default-with-off-by-default-720p-lecture-cap-setting)).
+4. **`TP-D4` — Legacy Bunny clients in `AlUmmahNowTools`:** **decided (2026-11-23)** — **remove the old Bunny client code from `AlUmmahNowTools` now** (do not wait for `TOOLS-ADMIN` TA-14), after auditing callers across Tools and open PRs (`#54`, `#59`–`#62`), moving or removing dead callers cleanly in a separate PR while keeping the app building and all tests passing ([decisions.md](decisions.md#tp-d4-remove-legacy-bunny-client-code-from-tools-now); implemented in [AlUmmahNowTools#64](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/64)).
+5. **`TP-D5` — Cross-platform folder watcher (drop SQL Server LocalDB):** **decided (2026-11-23)** — the folder watcher must work identically on Windows, macOS, and Linux with nothing extra to install and must **drop SQL Server LocalDB** ([decisions.md](decisions.md#tp-d5-cross-platform-folder-watcher-without-localdb)). Full research and recommendation in [Tools cross-platform folder watcher research](../guides/tools-folder-watcher-research.md): in-process watcher in `AlUmmahNow.ToolsCore` using .NET `FileSystemWatcher` + periodic polling fallback for network drives, Maktaba-style debounce + size/mtime settling, SQLite (WAL) for state, and catch-up scan on app start (with optional launch-at-login / per-user agent in Phase 2 once builds are code-signed).
 
 ## Status evidence
 
