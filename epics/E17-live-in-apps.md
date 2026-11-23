@@ -108,13 +108,14 @@ CREATE TABLE IF NOT EXISTS live_stream_metadata (
   source_version INTEGER NOT NULL DEFAULT 0,
   -- kept by D1, never projected from R2:
   reminder_count INTEGER NOT NULL DEFAULT 0,
-  heads_up_for INTEGER
+  heads_up_for INTEGER,
+  purge_pending INTEGER NOT NULL DEFAULT 0
 ) WITHOUT ROWID;
 ```
 
-Indexes: `(status, scheduled_start_at)`, `(event_type, status, scheduled_start_at)`, `(channel_id, status, scheduled_start_at)`, `(owner_id)`, and partial `(premiere_video_id) WHERE premiere_video_id IS NOT NULL`.
+Indexes: `(status, scheduled_start_at)`, `(event_type, status, scheduled_start_at)`, `(channel_id, status, scheduled_start_at)`, and partial `(premiere_video_id) WHERE premiere_video_id IS NOT NULL` and `(stream_id) WHERE purge_pending = 1`.
 
-**Source of truth.** R2 `livestream:<id>` is. The table is a projection of it, except `reminder_count` and `heads_up_for`.
+**Source of truth.** R2 `livestream:<id>` is. The table is a projection of it, except `reminder_count`, `heads_up_for` and `purge_pending`.
 
 **Who writes it.** Only these, all beside the `content_ownership` write they already make:
 
@@ -184,7 +185,7 @@ No "sent" columns: the unique `(user_id, dedupe_key)` index on `notifications` i
 
 ### 4.4 Deletion, erasure, export
 
-- **A stream record is deleted** (owner delete, create rollback, account or channel erasure: every delete of a `livestream:` key in api-videos goes through `syncStreamInline`). It reads the metadata row, deletes it, and when the stream has chat, reminders or a premiere video it queues the admin job `live.purge-stream` with `{ streamId, premiereVideoId }`. The job deletes chat and reminders 500 rows at a time and clears the video's `premiereHold` if it still names this stream. Retries and failures show on the Errors page like every admin job.
+- **A stream record is deleted** (owner delete, create rollback, account or channel erasure: every delete of a `livestream:` key in api-videos goes through `syncStreamInline`). Its row turns `visibility = 'deleted'`, `purge_pending = 1` at once, so nothing can be read, and the admin job `live.purge-streams` is kicked. The job deletes that stream's chat and reminders 500 rows at a time, clears the source video's `premiereHold` if it still names the stream (added in E17-3), then deletes the row. The row goes last, and the hourly cron kicks the job when any row waits, so a lost message or a failed step loses nothing. Failures show on the Errors page like every admin job.
 - **Account erasure** deletes all of the person's chat rows and reminders, in bounded batches, and recounts nothing. Their streams go through the delete path above.
 - **Takeout** exports both, paged by key until done (no row limit that truncates).
 - **Retention:** a daily job deletes `held` and `removed` rows older than 30 days, 500 at a time, at most 20 batches a run.
