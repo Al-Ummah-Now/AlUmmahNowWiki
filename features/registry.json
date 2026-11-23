@@ -2321,6 +2321,22 @@
         "AlUmmahNow#1763",
         "AlUmmahNow#1764"
       ]
+    },
+    {
+      "id": "player-links",
+      "name": {
+        "en": "In-video links: credits, info cards and end screens",
+        "ar": "الروابط داخل المرئي: ذكر المصادر وبطاقات المعلومات والشاشات الختامية"
+      },
+      "status": "planned",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/AUN-PLAYER-LINKS-in-video-links.md",
+      "note": "Specified 2026-11-23. Phase 0, the linked Quran Foundation credit in the player, is being built; cards, end screens and external links wait for the owner's decisions PL-D1 to PL-D20."
     }
   ]
 }
