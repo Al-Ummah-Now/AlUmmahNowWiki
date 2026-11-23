@@ -12,11 +12,11 @@
 
 ## Executive recommendation
 
-1. **Keep the local-first pre-encode + server-verify architecture ([D11](../epics/decisions.md#d11-who-encodes-renditions), `TOOLS-ADMIN` TA-12).** Encoding renditions on the staff computer before upload cuts Cloudflare Containers transcode spend by **80–90%** ($0.005/video-minute down to ~$0.0005–$0.001/video-minute for server verification), which is what keeps Large-scale monthly spend under the **$500/month** cap ($470/month vs. $740/month server-encoded).
+1. **Keep server-default encoding with optional desktop pre-encode + server verification ([D11](../epics/decisions.md#d11-who-encodes-renditions), `TOOLS-ADMIN` TA-12).** Under D11, web and app creator uploads encode on the server by default, while Tools and Desktop Studio can pre-encode locally before upload. For pre-encoded uploads, local encoding reduces Cloudflare Containers transcode spend by an **assumed 80–90%** ($0.005/video-minute down to an assumed ~$0.0005–$0.001/video-minute for verification, pending measurement in `apps/cost-monitor`). At Large scale (1,000 h/month), month-12 spend is ~$740/month if 100% server-encoded vs. ~$470/month if 100% pre-encoded — still leaving only ~$30/month for all other platform services at month 12 and crossing $500 around month 13 as storage keeps growing (~$36/month), so **R2 lifecycle/retention rules and/or a 720p cap are required for steady-state compliance under O1**.
 2. **Stay on H.264 + AAC in fMP4 HLS (`360p`/`480p`/`720p`/`1080p`, 6 s segments, 2 s GOP, CRF 23, 30 fps cap).** Do not add HEVC (commercial patent-pool exposure) or AV1 (10–100× slower software encode blows container budgets) in v1/v2. Revisit AV1 only if R2 rendition storage exceeds ~15 TB ($225/month) and Apple/TV hardware decode coverage passes 95%.
 3. **Keep `aun-media` (Rust in `AlUmmahNowCore`) and `apps/media` (`ladder.mjs`) as the single source of truth.** Do not build a second independent transcoding pipeline on `FFMpegCore` inside `AlUmmahNowTools`. Retire the legacy `FFMpegCore` dependency in Tools once `TOOLS-ADMIN` TA-14 removes direct Bunny/R2 uploads.
-4. **Clear small wins to ship now:** add Linux `h264_vaapi` hardware encoder support (named in TA-19) to `AlUmmahNow.ToolsCore/Import/Renditions.cs` alongside existing VideoToolbox, NVENC, QSV, AMF, Media Foundation, and OpenH264 support.
-5. **Storage lever for Large scale (owner decision `TP-D3`):** keep 1080p default today; add an opt-in 720p cap ("Lecture mode") for audio-led or static-slide lectures once R2 rendition storage passes 10 TB (~$150/month), cutting rendition storage by ~45% (~$195/month saved at 1,000 h/month).
+4. **Clear small win shipped in [Tools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60):** add Linux `h264_vaapi` hardware encoder support (named in TA-19) to `AlUmmahNow.ToolsCore/Import/Renditions.cs` alongside VideoToolbox, NVENC, QSV, AMF, Media Foundation, and OpenH264, with a 1-frame probe encode across hardware candidates (including `/dev/dri/renderD*` nodes on dual-GPU Linux machines) and runtime fallback down the list before falling back to the server.
+5. **Storage levers for Large scale (owner decision `TP-D3` + lifecycle rules):** keep 1080p default today; pair **R2 lifecycle/retention rules** (dropping or archiving cold 1080p rungs on older low-view videos, as noted in `R2-DELIVERY-PLAN.md`) with an opt-in **720p cap ("Lecture mode")** for audio-led or static-slide lectures once R2 rendition storage passes 10 TB (~$150/month).
 
 ---
 
@@ -26,38 +26,58 @@ The October 2025 research report (`VIDEO_ENCODING_RESEARCH.md`) proposed four ph
 
 | 2025 Phase | Original proposal | Current state (2026-11-23) | Verdict |
 |---|---|---|---|
-| **P1: Foundation** | Add `FFMpegCore`, metadata probing, pre-upload validation | **Built.** `FFMpegCore` 5.2.0 added to `AlUmmahNow.Data` and `AlUmmahNow.FileScanService` ([Tools#21](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/21)): `MediaProbe.cs`, `VideoThumbnailService.cs`, `FFmpegManagerService.cs`, `MetadataExtractor.cs`. In `TOOLS-ADMIN`, `AlUmmahNow.ToolsCore/Import/Renditions.cs` (`FfmpegMediaTools.ProbeAsync`) probes directly via `ffprobe` JSON with rotation, frame rate, audio detection, and duration. | **Complete.** Do not duplicate in `FFMpegCore`; prefer `ToolsCore` direct `ffprobe` invocation. |
-| **P2: Thumbnails** | Automatic snapshot extraction + upload | **Built.** `VideoThumbnailService.cs`, `ThumbnailShape.cs` ([Tools#40](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/40)), `FileScanService/Services/ThumbnailService.cs`. On the active R2 path, `apps/media` automatically generates `thumb.jpg`, `thumb_640.jpg`, and `preview.webp`, while Tools attaches custom sidecar thumbnails via `AttachStep`. | **Complete.** No further thumbnail pipeline needed in Tools. |
+| **P1: Foundation** | Add `FFMpegCore`, metadata probing, pre-upload validation | **Built.** `FFMpegCore` 5.2.0 added to `AlUmmahNow.Data` and `AlUmmahNow.FileScanService` ([Tools#21](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/21)): `AlUmmahNow.Data/Video/MediaProbe.cs`, `AlUmmahNow.Data/Video/VideoThumbnailService.cs`, `AlUmmahNow.Data/Services/FFmpegManagerService.cs`, and `AlUmmahNow.FileScanService/Services/MetadataExtractor.cs`. In `TOOLS-ADMIN`, `AlUmmahNow.ToolsCore/Import/Renditions.cs` (`FfmpegMediaTools.ProbeAsync`) probes directly via `ffprobe` JSON with rotation, frame rate, audio detection, and duration. | **Complete.** Do not duplicate in `FFMpegCore`; prefer `ToolsCore` direct `ffprobe` invocation. |
+| **P2: Thumbnails** | Automatic snapshot extraction + upload | **Built.** `AlUmmahNow.Data/Video/VideoThumbnailService.cs`, `ThumbnailShape.cs` ([Tools#40](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/40)), `FileScanService/Services/ThumbnailService.cs`. On the active R2 path, `apps/media` automatically generates `thumb.jpg`, `thumb_640.jpg`, and `preview.webp`, while Tools attaches custom sidecar thumbnails via `AttachStep`. | **Complete.** No further thumbnail pipeline needed in Tools. |
 | **P3: Performance** | Parallel uploads with `SemaphoreSlim` + queue | **Built.** `AlUmmahNow.ToolsCore/Import/WorkQueue.cs` ([Tools#50](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/50)): crash-safe disk queue, per-step concurrency (Hash 1–8, Encode 1–4, Upload 1–5, Attach 1–8), pause/resume, backoff retry, and resumable TUS via `TusClient`. | **Complete.** Resolves overlap with `aun-upload` ([Epic 11](../epics/E11-aun-core.md)). |
-| **P4: Transcoding & hardware accel** | Format conversion, ABR ladder, GPU acceleration | **Built.** `AlUmmahNow.ToolsCore/Import/Renditions.cs` ([Tools#52](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/52), TA-12) fetches the server's ladder from `GET /api/admin/import/encoding`, decodes once to per-rung MP4s, packages fMP4 HLS via `AlUmmahNowCore` (`HlsPackageMp4`), uploads to staging before the original, and verifies the server's verdict (`CheckStep`). Server fallback runs automatically on any local failure. | **Complete** except Linux `h264_vaapi` (small win) and LGPL FFmpeg bundling (`TOOLS-ADMIN` TA-19). |
+| **P4: Transcoding & hardware accel** | Format conversion, ABR ladder, GPU acceleration | **Built.** `AlUmmahNow.ToolsCore/Import/Renditions.cs` ([Tools#52](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/52), TA-12) fetches the server's ladder from `GET /api/admin/import/encoding`, decodes once to per-rung MP4s, packages fMP4 HLS via `AlUmmahNowCore` (`HlsPackageMp4`), uploads to staging before the original, and verifies the server's verdict (`CheckStep`). Server fallback runs automatically on any local failure. Linux `h264_vaapi`, 1-frame hardware probing, and runtime encoder fallback added in [Tools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60). | **Complete** except LGPL FFmpeg bundling (`TOOLS-ADMIN` TA-19). |
 
 ---
 
 ## 2. Cost analysis: local pre-encoding vs. server encoding
 
-All unit costs come from [`AlUmmahNow/docs/media-delivery/R2-DELIVERY-PLAN.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/R2-DELIVERY-PLAN.md) and `apps/cost-monitor/src/pricing.ts` (Workers Paid list prices, 2026-11):
+Unit prices verified against public Cloudflare pages (retrieved **2026-11-23**: [Cloudflare R2 pricing](https://developers.cloudflare.com/r2/pricing/), [Cloudflare Containers pricing](https://developers.cloudflare.com/containers/pricing/)) and [`AlUmmahNow/docs/media-delivery/R2-DELIVERY-PLAN.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/main/docs/media-delivery/R2-DELIVERY-PLAN.md) / `apps/cost-monitor/src/pricing.ts`:
 
 - **Server transcoding (`apps/media`, Cloudflare Containers `standard-4`, 4 vCPU / 12 GiB RAM):**
   - Speed: ~0.75× real time (~45 container-seconds per video-minute).
-  - Rate: ~$0.0001/instance-second (active CPU only; upper bound) → **~$0.005/video-minute** (**$0.30/video-hour**), billed once per upload. Workers Paid includes 375 vCPU-minutes/month.
-- **Local-first pre-encoding in Tools (`TA-12`, D11):**
+  - Rate: $0.000020/vCPU-s + $0.0000025/GiB-s + $0.00000007/GB-s ≈ **$0.000111/instance-second** (active CPU only) → **~$0.005/video-minute** (**$0.30/video-hour**), billed once per upload. Workers Paid includes 375 vCPU-minutes/month.
+  - **Container egress note (to verify in billing):** Cloudflare Containers lists outbound network egress at $0.025/GB in NA/EU after 1 TB included/month. At Large scale (~2.4 TB/month of rendition output), if traffic from the container through Worker outbound handlers to R2 is billed as container egress rather than free Worker-intercepted traffic, that adds **~$35/month**. Confirm in `apps/cost-monitor` once Large-scale container traffic runs.
+- **Optional local pre-encoding in Tools / Studio (`TA-12`, D11):**
   - Staff computer encodes the ladder ($0 Cloudflare compute) and stages fMP4 HLS segments before the original upload completes.
-  - Cloudflare Container runs **verification only** (ladder/codec/segment decode + spot picture/audio checks against the source): ~5–15% of full encode time → **~$0.0005–$0.001/video-minute** (**$0.03–$0.06/video-hour**), an **80–90% reduction** in container spend.
+  - **Verification cost (unmeasured assumption):** Cloudflare Container runs TA-12 verification (decoding every segment of every rung plus spot picture/audio checks against the source). The table below assumes **10–20% of full encode time** → **~$0.0005–$0.001/video-minute** (**$0.03–$0.06/video-hour**; $30/month at 1,000 h/month), an 80–90% reduction vs. full server transcode. **This figure is unmeasured until `apps/cost-monitor` records real TA-12 verification container-seconds.** Note also that any local encode that fails verification (for example, a hardware encoder violating VBV or keyframe bounds) incurs **both** verification cost and a full server re-encode (`~$0.0055–$0.006/video-min`).
   - Extra staging writes: ~40 R2 Class A writes/video-minute at $4.50/M = **$0.00018/video-minute** (negligible). R2 ingress is **$0**.
-- **R2 storage for the 4-rung ladder (`360p`/`480p`/`720p`/`1080p`):**
+- **R2 storage & operations for the 4-rung ladder (`360p`/`480p`/`720p`/`1080p`):**
   - Combined bitrate caps: 0.8 + 1.4 + 2.8 + 5.0 Mbps video + audio ≈ 10.5 Mbps peak; with CRF 23 on lectures, typical stored size is **~40 MB/video-minute** (~2.4 GB/video-hour). Static-slide or talking-head lectures often compress to **15–25 MB/video-minute**.
   - R2 storage rate: **$0.015/GB-month**, egress **$0**.
+  - **Cache-hit assumption for R2 Class B reads ($0.36/M after 10M free):** following `R2-DELIVERY-PLAN.md`, ~72 R2 Class B reads per viewer-hour reach origin after Cloudflare CDN caching (~36M reads at 500k viewer-hours → **~$10/month**).
 
-### Monthly cost comparison (12-month accumulated storage)
+### Monthly cost comparison (**month-12 accumulated library snapshot**)
 
-| Scale | Uploads / viewer-hours | Server transcode (`apps/media`) | Tools local pre-encode + server verify | R2 storage (12 mo, 1080p ladder) | R2 ops + CDN delivery | **Total (Server encode)** | **Total (Local pre-encode)** | **Savings** |
+> **Important:** The storage column reflects a **12-month library snapshot**, not steady state. At Large scale (1,000 h/month), R2 storage continues growing by **~$36/month** (`1,000 h × 2.4 GB × $0.015`) every month after month 12 — crossing $500/month around month 13 (~$506/month even with 100% local pre-encoding and $0 for all other platform services) and reaching ~$650+/month by month 18 unless retention/lifecycle rules or bitrate caps are applied.
+
+| Scale (at month 12) | Uploads / viewer-hours | Server transcode (`apps/media`) | Local pre-encode + server verify *(100% Tools/Studio share, assumed)* | R2 storage (month 12) | R2 ops + CDN delivery | **Total (100% Server encode)** | **Total (100% Local pre-encode)** | **Savings** |
 |---|---|---|---|---|---|---|---|---|
-| **Small** (today) | 20 h / 2k viewer-h | $6 | ~$1 | $9 | <$1 | **~$16/mo** | **~$11/mo** | ~$5/mo |
-| **Medium** | 200 h / 50k viewer-h | $60 | ~$6 | $86 | ~$1 | **~$147/mo** | **~$93/mo** | ~$54/mo |
-| **Large** | 1,000 h / 500k viewer-h | $300 | ~$30 | $430 | ~$10 | **~$740/mo** *(over cap)* | **~$470/mo** *(under cap)* | **~$270/mo** |
-| **Large + 720p lecture cap** | 1,000 h / 500k viewer-h | $190 | ~$20 | ~$245 | ~$10 | **~$445/mo** | **~$275/mo** | **~$465/mo vs. baseline** |
+| **Small** (today) | 20 h / 2k viewer-h | $6 | ~$1 | $9 | <$1 | **~$16/mo** | **~$11/mo** | ~$5/mo vs. server |
+| **Medium** | 200 h / 50k viewer-h | $60 | ~$6 | $86 | ~$1 | **~$147/mo** | **~$93/mo** | ~$54/mo vs. server |
+| **Large (1080p)** | 1,000 h / 500k viewer-h | $300 | ~$30 | $430 | ~$10 | **~$740/mo** *(over cap)* | **~$470/mo** *(~$30 headroom; crosses cap at mo 13)* | ~$270/mo vs. server |
+| **Large (universal 720p cap, 100% of uploads)** | 1,000 h / 500k viewer-h | $190 | ~$20 | ~$245 | ~$10 | **~$445/mo** | **~$275/mo** *(~$225 headroom at mo 12)* | ~$195/mo vs. 1080p local; ~$465/mo vs. 1080p server |
 
-**Key takeaway:** At Large scale (1,000 hours uploaded/month), **server-only encoding breaches the $500/month cap** ($740/month). Local-first pre-encoding in Tools brings the exact same workload down to **~$470/month**, and pairing it with an optional 720p cap for audio-led lectures brings it down to **~$275/month**, leaving comfortable headroom for Workers, D1, KV, and captions within the $500/month cap.
+### Sensitivity to Tools/Studio pre-encode share at Large scale (month 12, 1080p)
+
+Because D11 keeps **server encoding as the default** for web/app creator uploads, actual Large-scale spend depends on what fraction of the 1,000 h/month arrives pre-encoded from Tools or Desktop Studio:
+
+| Pre-encoded share (Tools / Studio) | Container encode + verify | R2 storage (month 12) | R2 ops | **Month-12 total** |
+|---|---|---|---|---|
+| **0%** (all web/app server-encoded) | $300 | $430 | ~$10 | **~$740/mo** |
+| **25%** | ~$233 | $430 | ~$10 | **~$673/mo** |
+| **50%** | ~$165 | $430 | ~$10 | **~$605/mo** |
+| **75%** | ~$98 | $430 | ~$10 | **~$538/mo** |
+| **100%** (best case, all Tools/Studio) | ~$30 | $430 | ~$10 | **~$470/mo** |
+
+**Key takeaways for the $500/month whole-platform cap (O1):**
+1. **Local pre-encoding alone is necessary but not sufficient past month 12 at Large scale.** Even at 100% pre-encode share, month-12 storage ($430) leaves only ~$30/month for Workers, D1, KV, captions, and live, and grows ~$36/month thereafter.
+2. **Steady-state compliance requires storage levers:**
+   - **R2 lifecycle / retention rules** (from `R2-DELIVERY-PLAN.md`): prune or down-tier cold 1080p rungs on older low-view videos (keeping 360p/480p/720p playable, or capping active 1080p storage at ~15–20 TB).
+   - **720p cap (`TP-D3`):** a universal 720p cap across 100% of uploads drops month-12 storage from ~$430 to ~$245 (cutting monthly growth from ~$36/mo to ~$20/mo). An opt-in cap limited to audio-led/static-slide lectures saves proportionally to their share of uploads (e.g., 50% lectures saves ~$95–$100/month at month 12).
 
 ---
 
@@ -74,13 +94,13 @@ All unit costs come from [`AlUmmahNow/docs/media-delivery/R2-DELIVERY-PLAN.md`](
 
 ## 4. Hardware acceleration, encoder priority, and TA-19 licensing
 
-In `AlUmmahNow.ToolsCore/Import/Renditions.cs`, `H264Encoders.Preferred` currently selects encoders in this order:
+In `AlUmmahNow.ToolsCore/Import/Renditions.cs`, `H264Encoders.Preferred` selects encoders in this order:
 
-`libx264` → `h264_videotoolbox` (macOS) → `h264_nvenc` (NVIDIA) → `h264_qsv` (Intel) → `h264_amf` (AMD) → `h264_mf` (Windows Media Foundation) → `libopenh264` (software fallback).
+`libx264` → `h264_videotoolbox` (macOS) → `h264_nvenc` (NVIDIA) → `h264_qsv` (Intel) → `h264_amf` (AMD) → `h264_vaapi` (Linux VAAPI, added in [Tools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60)) → `h264_mf` (Windows Media Foundation) → `libopenh264` (software fallback).
 
 Findings:
 
-1. **Missing Linux VAAPI (`h264_vaapi`):** `TOOLS-ADMIN` TA-19 explicitly lists **VAAPI** alongside NVENC for LGPL Linux hardware encoding (covering AMD and Intel GPUs on Linux), but `H264Encoders.Preferred` does not yet include `h264_vaapi`. Adding `h264_vaapi` with proper `-vaapi_device /dev/dri/renderD128` / `format=nv12,hwupload` filter support is a clear small win.
-2. **LGPL bundling compatibility (TA-19):** When Tools bundles an **LGPL** FFmpeg build (without GPL `libx264`), `H264Encoders.Pick` automatically skips `libx264` and picks the first available hardware encoder, falling back to Cisco's `libopenh264` (downloaded on first use per Cisco's patent license).
-3. **`libx264` vs. hardware-first priority (owner decision `TP-D2`):** Keeping `libx264` first when a staff member already has a system GPL FFmpeg produces bitstreams closest to `apps/media`'s `libx264` verifier (maximizing first-pass acceptance). Switching to hardware-first cuts encode time 3–8× on Apple Silicon / NVIDIA laptops, but should be benchmarked against `apps/media`'s strict keyframe/VBV verifier before changing the default.
+1. **Linux VAAPI (`h264_vaapi`) + hardware probing & fallback (added in [Tools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60)):** `TOOLS-ADMIN` TA-19 explicitly lists **VAAPI** alongside NVENC for LGPL Linux hardware encoding (covering AMD and Intel GPUs on Linux). Because static LGPL FFmpeg builds list `h264_nvenc`, `h264_qsv`, `h264_amf`, and `h264_vaapi` even when the matching GPU or `libva` driver is absent (and dual-GPU Linux machines may put the VAAPI-capable iGPU on `renderD129` rather than `renderD128`), `FfmpegMediaTools` probes hardware candidates with a fast 1-frame null encode (trying all `/dev/dri/renderD*` nodes for VAAPI) and `EncodeStep` invalidates any hardware encoder that fails at runtime and retries with the next candidate down the list before falling back to the server.
+2. **LGPL bundling compatibility (TA-19):** When Tools bundles an **LGPL** FFmpeg build (without GPL `libx264`), `H264Encoders` automatically skips `libx264`, probes hardware encoders in order, and falls back to Cisco's `libopenh264` (downloaded on first use per Cisco's patent license).
+3. **`libx264` vs. hardware-first priority (owner decision `TP-D2`):** Keeping `libx264` first when a staff member already has a system GPL FFmpeg produces bitstreams closest to `apps/media`'s `libx264` verifier (maximizing first-pass acceptance). Switching to hardware-first cuts encode time 3–8× on Apple Silicon / NVIDIA laptops, but hardware encoders (including `h264_vaapi` on real Linux GPUs) should be benchmarked against `apps/media`'s strict keyframe/VBV verifier before changing the default so failed verifications do not double transcode cost.
 4. **Overlap resolved with `AlUmmahNowCore` (`aun-media`, Epic 30):** `ToolsCore` calls `AlUmmahNow.Core.AunCoreMethods.HlsPackageMp4` for fMP4 segmentation rather than writing its own muxer, and reads the exact ladder parameters from `GET /api/admin/import/encoding`. Both Tools and Desktop Studio therefore share one packaging engine and one ladder definition.
