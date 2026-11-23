@@ -836,13 +836,13 @@ Each decision has named options; the recommendation is first. Revision 2 (2026-1
 |---|---|---|
 | MEM-D1 | ~~How we act for each creator's PayGood merchant~~ | **Withdrawn 2026-11-22:** PayGood no longer pays creators; the organization is the one merchant ([O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail)). |
 | MEM-D2 | Creators the payout rails can't reach (Iraq, Palestine, Somalia, Sudan, Afghanistan, Syria; Lebanon in practice) | **"Creator's own support link where the law allows; no gifts collected for them"** (admin-reviewed, switch `supportExternalLinks`) · "Add Iraq and Palestine by Trolley or bank wire after a legal review" · "Not available" |
-| MEM-D3 | Who pays the PayGood fee | **"Creator absorbs, supporter may cover"** (checkbox shown, unticked) · "Supporter always covers" · "Creator always absorbs, no checkbox" |
-| MEM-D4 | Minimum and presets | **"$3 minimum; presets $5, $10, $25"** · "$1 minimum; presets $3, $5, $10" |
-| MEM-D5 | Who may receive | **"A tier capability, owner 18+, channel in good standing, payee active"** (admins tick "Can receive support" per tier) · "Every channel owner 18+" |
+| MEM-D3 | Who pays the PayGood fee | **Decided 2026-11-23 ([O43](decisions.md#o43-creator-support-fees-amounts-receivers-and-ages-are-settings)):** the fee is always shown before paying; the supporter may cover it with a box that is unticked by default, and no dark patterns. Fee rates (collector and payout rail) are admin settings with an effective date, changed by the finance list and audited. A vendor's live quote wins over the setting; with neither, nobody can pay. |
+| MEM-D4 | Minimum and presets | **Decided 2026-11-23 ([O43](decisions.md#o43-creator-support-fees-amounts-receivers-and-ages-are-settings)):** an admin setting per currency, with no fixed default. Support can't be switched on until it's set. |
+| MEM-D5 | Who may receive | **Decided 2026-11-23 ([O43](decisions.md#o43-creator-support-fees-amounts-receivers-and-ages-are-settings)):** per tier ("Can receive support", ticked by admins), plus owner 18+, channel in good standing and an active payee. |
 | MEM-D6 | Supporter visibility | **"Private to the creator; supporter may hide their name"** · "Supporter count shown publicly on the channel" · "Public supporter list" (risks Apple 3.2.1(vii) and GDPR special-category data) |
 | MEM-D7 | Messages with support | **"Allowed, private to the creator, moderated"** · "No messages" |
 | MEM-D8 | Refund policy | **"Gift, not refundable; 7-day mistake window with the creator's agreement; the organization refunds fraud and errors"** · "Creator decides alone" · "Refund on request within 14 days" |
-| MEM-D9 | Ages | **"18+ to support and to receive"** · "16+ to support with a guardian's confirmation" |
+| MEM-D9 | Ages | **Decided 2026-11-23 ([O43](decisions.md#o43-creator-support-fees-amounts-receivers-and-ages-are-settings)):** 18+ to support and 18+ to receive. |
 | MEM-D10 | Payment methods | **"Cards, debit, wallets and bank transfer; never BNPL or instalments"** (pending the scholar) · "Debit and bank transfer only" |
 | MEM-D11 | Legal entity | **"Per the lawyer engagement: the waqf / nonprofit organization"** (owner direction 2026-11-22; form and state chosen with the lawyer). Until it exists, creator support stays switched off. The owner never holds, signs for, approves or receives money. |
 | MEM-D12 | Charity route | **"Separate route behind `charityDonations`; zakat tag only after review"** · "No charity route" |

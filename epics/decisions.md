@@ -90,6 +90,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O40](decisions.md#o40-server-written-error-messages) | Server-written error messages: one envelope (`code`, localized `message`, `action`, `retryAfter`, `helpUrl`, `reference`) and one en/ar catalogue; unknown codes show the server's message; `feature_off` carries a message, shown once when an action still reaches an off feature (amends Hidden when off) | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), every client |
 | [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float); paid perks only as a separate optional section, default off. "Never hold funds" replaced by [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
+| [O43](decisions.md#o43-creator-support-fees-amounts-receivers-and-ages-are-settings) | Creator support: the card fee is always shown and the supporter may cover it (unticked); collector and payout-rail fee rates are admin settings with effective dates, changed by the finance list and audited, with a vendor's live quote taking priority; minimum and presets are admin settings per currency; receivers are per tier ("Can receive support"), 18+, in good standing with an active payee; 18+ to send and to receive | **decided** | 2026-11-23 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -999,6 +1000,26 @@ Consequences in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) revision 2: a doub
 **Blocks / affects:** [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [Epic 24](E24-creator-support-premium.md)
 
 **Sources:** owner message relayed by the orchestrator thread, 2026-11-22
+
+### O43: Creator support fees, amounts, receivers and ages are settings
+
+**Status:** decided · **Date:** 2026-11-23
+
+The owner answered AUN-MEMBERS decisions MEM-D3, MEM-D4, MEM-D5 and MEM-D9 (relayed by the orchestrator thread, 2026-11-23). Every answer stays an admin setting; none is written into the code.
+
+- **MEM-D3, the card fee:** the collector's fee is always shown before paying. The supporter may tick "cover the fees"; it is **unticked by default**, with no dark patterns.
+- **Fee rates are admin settings:** "we need to be able to change the fee if there are changes in terms."
+  - The collector's rate (percent plus a fixed amount, per currency and payment method) and the payout rail's fees are kept in the admin Support settings, with an **effective date**.
+  - They are changed only by people on the organization's finance list (never tech staff), and every change is in the audit log.
+  - Where PayGood or the rail returns a live quote, the live quote is used and the setting is the fallback. With neither, the support sheet refuses to take a payment.
+  - Today's published rates are offered as presets: PayGood 2.9% + 30¢, and the nonprofit rate of 1.9% + 30¢.
+- **MEM-D4, minimum and presets:** an admin setting per currency, with no fixed default. Until a currency has its minimum and presets, support can't be switched on.
+- **MEM-D5, who may receive:** per creator tier ("Can receive support", ticked by admins), plus owner 18+, channel in good standing and an active payee.
+- **MEM-D9, ages:** 18+ to send support, and 18+ to receive it.
+
+**Blocks / affects:** [AUN-MEMBERS](AUN-MEMBERS-creator-support.md)
+
+**Sources:** owner messages relayed by the orchestrator thread, 2026-11-23
 
 ### LIC: Repo licence for Core and the app repos
 
