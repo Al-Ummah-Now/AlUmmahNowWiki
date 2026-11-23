@@ -2261,7 +2261,7 @@
         "en": "Feature switches (one Features page)",
         "ar": "مفاتيح الميزات (صفحة الميزات)"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "videos-admin",
         "videos",
@@ -2270,7 +2270,10 @@
         "native"
       ],
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
-      "note": "Spec written 2026-11-22; design and build follow."
+      "note": "Build started 2026-11-23: the feature registry (shared-types) is merged; the error envelope, switch storage and the server gate are in review (AlUmmahNow#1754, #1755, #1756); the Features page design is with the auditors.",
+      "prs": [
+        "AlUmmahNow#1753"
+      ]
     },
     {
       "id": "server-error-messages",
@@ -2278,7 +2281,7 @@
         "en": "Server-written error messages",
         "ar": "رسائل أخطاء يكتبها الخادم"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "videos",
         "videos-admin",
@@ -2287,7 +2290,7 @@
         "native"
       ],
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
-      "note": "One error envelope with en/ar messages; clients show messages for codes they don't know yet."
+      "note": "One error envelope with en/ar messages in the language the user chose in the app (X-App-Locale, never the browser's); clients show messages for codes they don't know yet. Server side in review (AlUmmahNow#1754)."
     },
     {
       "id": "creator-support",
