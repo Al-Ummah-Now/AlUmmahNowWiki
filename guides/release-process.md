@@ -15,7 +15,7 @@
 | [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) | QA build flavour | `vYYYY.MM.DD[.N]` tag on `main`: Studio APKs and AAB on a GitHub release (pre-release key until the upload key exists); Play internal once its inputs are set ([Android#10](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/10)) |
 | [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) | QA build default; `vX.Y.Z-<suffix>` tag publishes a QA pre-release | `vX.Y.Z` tag creates a draft release (MSI, portable zip, `.deb`, Flatpak, Tizen) that a person publishes ([Desktop#27](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/27)) |
 | [AlUmmahNowApple](../repos/AlUmmahNowApple.md) | QA build | `vX.Y.Z` tag on `main`: notarized Studio Mac downloads on a GitHub release and iOS/iPadOS to TestFlight ([Apple#19](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/19)); no release cut yet |
-| [AlUmmahNowTools](../repos/AlUmmahNowTools.md) | Not applicable | No release workflow; CI runs tests only |
+| [AlUmmahNowTools](../repos/AlUmmahNowTools.md) | One build; the app picks QA, stage or production at sign-in | `vYYYY.MM.DD[.N]` tag on `master`: tests, Windows `.msi`/`.zip`, macOS `.dmg` (arm64, x64), Linux `.deb`/`.tar.gz`, each installed and launched, then a published GitHub release ([Tools#56](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/56); [below](#alummahnowtools)) |
 
 ## AlUmmahNow, www and CMS: tag releases
 
@@ -101,6 +101,16 @@ Every released Auth commit also publishes a **local-stack bundle** (the prebuilt
 ## Libraries and native apps
 
 Each repo's page describes its pipeline. The common rule is that nothing goes to a package registry or app store by hand.
+
+### AlUmmahNowTools
+
+The staff import app ([TOOLS-ADMIN](../epics/TOOLS-ADMIN-admin-import-tool.md) TA-15). Full steps: [docs/RELEASE.md](https://github.com/Al-Ummah-Now/AlUmmahNowTools/blob/master/docs/RELEASE.md).
+
+1. `master` green, and `packaging/SERVER-REQUIREMENTS.md` lists every page in the release with the first videos release that serves it (the notes print it; a page works in an environment only once that environment runs that videos release).
+2. `tag=v$(TZ=America/New_York date +%Y.%m.%d)` (`.2`, `.3`, … if taken); `git tag "$tag" origin/master && git push origin "$tag"`. Never move a tag; re-run a failed run instead.
+3. The `Release` workflow refuses a tag that is not on `master`, runs the tests, builds and launches every package, then publishes the release with installers, `SHA256SUMS.txt`, the licences zip and the notes. Share the release link with staff; the app has no update check yet ([TA-22](https://github.com/Al-Ummah-Now/AlUmmahNowTools/issues/57)).
+
+Signing secrets (optional; unsigned `*-unsigned.*` files and a notice without them): [store release checklist](store-release-checklist.md#alummahnowtools).
 
 ## Older instructions
 
