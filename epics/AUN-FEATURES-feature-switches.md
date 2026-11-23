@@ -370,7 +370,7 @@ On `feature_off`, the client shows the toast or inline message once, re-reads th
 
 ### 6.4 Old app versions
 
-The server refuses them in the same way whatever they show (§5.1, tested in §5.6). Each version that ships the generic component shows the server's message for any code added after it. Versions older than that still fail closed, which is today's behaviour. For anything a refusal can't cover, the existing app-config minimum version forces an update. Version 1 adds the forced-update screen to Apple, Android and Desktop, because none of them reads app-config today.
+The server refuses them in the same way whatever they show (§5.1, tested in §5.6). Each version that ships the generic component shows the server's message for any code added after it. Versions older than that still fail closed, which is today's behaviour. For anything a refusal can't cover, the existing app-config minimum version forces an update. The forced-update screen for Apple, Android, Desktop and Tools is built once in [AUN-APP-UPDATES](AUN-APP-UPDATES-app-updates.md) (APPUPD-8 to -10, with the update notices), not in FEAT-12 to FEAT-14 (moved 2026-11-23).
 
 ## 7. Client and admin tests
 
@@ -397,9 +397,9 @@ The server refuses them in the same way whatever they show (§5.1, tested in §5
 | FEAT-9 | [AUN-603](https://linear.app/hamzalabs/issue/AUN-603) | Generic error component: design (phase 2), web and admin-web `ApiErrorView` (§6.3) | AlUmmahNow | visual |
 | FEAT-10 | [AUN-604](https://linear.app/hamzalabs/issue/AUN-604) | Web enforcement: polling, the player's caption download behind its key, off-state E2E (§6.1) | AlUmmahNow | visual where entry points move |
 | FEAT-11 | [AUN-605](https://linear.app/hamzalabs/issue/AUN-605) | Core: `Error::Api` envelope, generated features operation with ETag, app-config path fix | AlUmmahNowCore | non-visual |
-| FEAT-12 | [AUN-606](https://linear.app/hamzalabs/issue/AUN-606) | Apple: features in every app, foreground and periodic reads, saved answer, generic error view, forced update | AlUmmahNowApple | visual |
+| FEAT-12 | [AUN-606](https://linear.app/hamzalabs/issue/AUN-606) | Apple: features in every app, foreground and periodic reads, saved answer, generic error view (forced update moved to AUN-APP-UPDATES APPUPD-10) | AlUmmahNowApple | visual |
 | FEAT-13 | [AUN-607](https://linear.app/hamzalabs/issue/AUN-607) | Android: the same, every key used, re-read after `feature_off` | AlUmmahNowAndroid | visual |
-| FEAT-14 | [AUN-608](https://linear.app/hamzalabs/issue/AUN-608) | Desktop: saved answer, viewer gating, generic error view, forced update | AlUmmahNowDesktop | visual |
+| FEAT-14 | [AUN-608](https://linear.app/hamzalabs/issue/AUN-608) | Desktop: saved answer, viewer gating, generic error view (forced update moved to AUN-APP-UPDATES APPUPD-8) | AlUmmahNowDesktop | visual |
 | FEAT-15 | [AUN-609](https://linear.app/hamzalabs/issue/AUN-609) | Tools: features read, import queue pause, generic error view | AlUmmahNowTools | visual |
 | FEAT-16 | [AUN-610](https://linear.app/hamzalabs/issue/AUN-610) | www: the `newsletter` switch through `/public/features`, the generic message on the form, off-state E2E | AlUmmahNowUI | non-visual |
 | FEAT-17 | [AUN-611](https://linear.app/hamzalabs/issue/AUN-611) | Docs: product rules, API docs, the alummahnow.dev registry entry, repo pages | AlUmmahNowWiki | non-visual |
