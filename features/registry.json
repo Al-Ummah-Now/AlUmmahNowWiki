@@ -2495,6 +2495,28 @@
         "AlUmmahNowCore#53"
       ],
       "note": "Owner decisions E14-D1 to E14-D8 recorded 2026-11-23. Signed-in-only audio-first Listen mode (web and native, reusing existing HLS audio streams) and plain unencrypted R2 video.mp4 downloads (native offline library plus a web plain Download button via the media Worker /dl/ route with Content-Disposition: attachment and no browser offline library), same rights for every viewer under an admin-configurable per-user rate limit, creator opt-out, hidden and refused in Kids Mode via E20's verified kids:viewer token scope (403 kids_mode_restricted), next-sync cleanup plus Worker-Cache-API-backed videoId-only revocations feed on CSAM/urgent legal takedowns, CarPlay and Android Auto behind store-approval flags, and offline-first sync. Ships behind listenMode and offlineDownloads switches (both off by default)."
+    },
+    {
+      "id": "ummah-kids",
+      "name": {
+        "en": "Ummah Kids and parental controls",
+        "ar": "أطفال الأمة والرقابة الأبوية"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E20-ummah-kids.md",
+      "note": "In progress 2026-11-23 behind the ummahKids switch (off by default). Staff catalog curation & admin UI are Phase 2A (E20-1 to E20-3); parental PIN/enforcement (E20-4), child-facing surfaces (E20-5 to E20-9), and turning the switch on wait for the 16 active owner decisions (KIDS-D1 to KIDS-D8, KIDS-D10 to KIDS-D17; KIDS-D9 dropped) and legal counsel sign-off.",
+      "prs": [
+        "AlUmmahNow#1778",
+        "AlUmmahNow#1780",
+        "AlUmmahNow#1794",
+        "AlUmmahNow#1801"
+      ]
     }
   ]
 }

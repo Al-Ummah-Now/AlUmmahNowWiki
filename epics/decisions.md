@@ -13,6 +13,8 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [D3](decisions.md#d3-live-provider) | Live provider | **pending** | 2026-11-10 | Epic 17, 18.7, 19.7, 29.17 chat, 28.12, live-streaming Phase 2 |
 | [D4](decisions.md#d4-monetisation) | Monetisation | **decided** | 2026-11-08 | Epic 24, 27.6 provider management, 27.7, P1 |
 | [D5](decisions.md#d5-kids-content-policy) | Kids content policy | **open** | 2026-11-08 | Epic 20 |
+| [E20-PLAYLISTS](decisions.md#e20-playlists-curated-kids-playlists-replace-learning-paths) | Curated Kids playlists replace learning paths | **decided** | 2026-11-23 | Epic 20 (`E20-2`, `E20-3`, `E20-5`) |
+| [E21-NO-INSTRUMENTS](decisions.md#e21-no-instruments-drop-instrument-free-and-madhab-filters) | Drop instrument-free and madhab content filters | **decided** | 2026-11-23 | Epic 20 (`KIDS-D9` dropped), Epic 21 (`#218`) |
 | [D6](decisions.md#d6-fonts) | Fonts | **open** | 2026-11-08 | 10.2, 30.6 |
 | [D7](decisions.md#d7-prayer-time-data) | Prayer-time data | **decided** | 2026-11-23 | 21.1 (Epic 21 decision E21-D1) |
 | [D8](decisions.md#d8-brand-naming) | Brand naming | **open** | 2026-11-08 | Epics 10, 12, 15, 20 |
@@ -149,6 +151,26 @@ Recommendation: moderator-curated allow-list, age bands 3–6 and 7–12.
 **Blocks / affects:** Epic 20
 
 **Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md)
+
+### E20-PLAYLISTS: Curated Kids playlists replace learning paths
+
+**Status:** decided · **Date:** 2026-11-23
+
+The owner dropped standalone `kids_learning_paths` tables, APIs, and admin UI in favor of ordinary platform playlists built on staff-owned editorial channels (`kids_policy_settings.staff_channel_ids_json`) and explicitly allowlisted in `kids_catalog_items`. Kids playlist reads return sanitized metadata (`approvedCoverUrl`, `approvedVideosCount`, links stripped, no unapproved video IDs) and serve only individually approved, visible videos within the active age band.
+
+**Blocks / affects:** [Epic 20](E20-ummah-kids.md) (`E20-2`, `E20-3`, `E20-5`)
+
+**Sources:** E20 owner directive relayed by orchestrator during [AlUmmahNowWiki#209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209) review, 2026-11-23
+
+### E21-NO-INSTRUMENTS: Drop instrument-free and madhab filters
+
+**Status:** decided · **Date:** 2026-11-23
+
+The owner dropped instrument-free (`no_instruments` / `instrument_free`) and madhab content filters across both Ummah Kids and the Islamic experience. In Epic 20, `KIDS-D9` is marked dropped and excluded from `KIDS_DECISION_IDS` readiness checks with zero `no_instruments` column/tag/filter; Epic 21 (`#218`) will align separately.
+
+**Blocks / affects:** [Epic 20](E20-ummah-kids.md), [Epic 21](E21-islamic-experience.md)
+
+**Sources:** Owner directive relayed by orchestrator thread, 2026-11-23
 
 ### D6: Fonts
 
