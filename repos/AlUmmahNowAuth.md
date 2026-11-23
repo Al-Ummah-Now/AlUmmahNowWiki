@@ -100,7 +100,7 @@ Open examples: auth admin following the site theme ([#330](https://github.com/Al
 | [Auth v1.0 roadmap: RBAC & user management](../epics/AUTH-R3-auth-rbac.md) | in progress |
 | [Auth v1.0 roadmap: Documentation & developer experience](../epics/AUTH-R4-auth-docs-dx.md) | in progress |
 | [Auth v1.0 roadmap: CI/CD & infrastructure](../epics/AUTH-R5-auth-cicd.md) | in progress |
-| [Auth v1.0 roadmap: Release & distribution](../epics/AUTH-R6-auth-release.md) | planned |
+| [Auth v1.0 roadmap: Release & distribution](../epics/AUTH-R6-auth-release.md) | in progress |
 | [Auth v1.0 roadmap: milestones and phases](../epics/AUTH-PHASES-auth-roadmap-phases.md) | in progress |
 | [Identity platform: SSO provider, Lanes 1–7](../epics/AUTH-IDP-identity-platform.md) | shipped |
 | [Account hub ("Al Ummah Now Account")](../epics/AUTH-ACCOUNT-HUB-account-hub.md) | in progress |

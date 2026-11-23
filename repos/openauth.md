@@ -40,7 +40,7 @@ This is a library, so it has no environments. [`publish-github.yml`](https://git
 
 **The released version lives in git tags, not in `master`.** The workflow never pushes to `master` ([#27](https://github.com/Al-Ummah-Now/openauth/pull/27)), so `package.json` on `master` doesn't show the current version. Check the [tags](https://github.com/Al-Ummah-Now/openauth/tags) instead.
 
-Details are in [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md), but its steps for committing the version and changelog to `master` predate #27.
+Details are in [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md).
 
 ## Key docs
 
@@ -81,3 +81,4 @@ Merged since 2026-11-09:
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |
 | [Security audit of the public repos](../epics/CHAT-SECURITY-public-repo-security.md) | shipped |
 | [Single sign-on everywhere and sign-out ends SSO](../epics/CHAT-SSO-sso-everywhere.md) | shipped |
+| [Auth v1.0 roadmap: Release & distribution](../epics/AUTH-R6-auth-release.md) | in progress |
