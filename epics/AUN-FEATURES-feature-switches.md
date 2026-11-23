@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-FEATURES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md) (www) |
-| **Status** | **build** (phase 3 of 3; design runs alongside). FEAT-1 merged; FEAT-3, FEAT-4 and FEAT-2 in review |
+| **Status** | **build** (phase 3 of 3; design runs alongside). FEAT-1, FEAT-3 (envelope) and FEAT-4 merged; FEAT-2 and the rest of FEAT-3 in review |
 | **Last updated** | 2026-11-23 |
 | **Origin** | Owner request 2026-11-22: "enable and disable features, from videos admin on one page for all features with help text, enforced on web and native apps, spec -> design -> build and keep it tracked." Addition the same day: a generic server error, so that "errors coming from the server can be shown even when a client doesn't support them yet". |
 | **Linear** | [AUN-594](https://linear.app/hamzalabs/issue/AUN-594/aun-features-feature-switches-one-features-page-enforced-everywhere) (stories AUN-595 to AUN-611) |
@@ -289,6 +289,17 @@ The rule: **every server refuses within 30 seconds, and every surface follows wi
 
 **The endpoint clients read.** `GET /api/me/features` stays the one answer. It is the same contract plus the new key, with the effective switches ANDed in. The ETag is a hash of the body; a matching `If-None-Match` gets `304`. Signed out it returns only the viewer keys (the same for everyone), so the web and the viewer apps can ask without signing in. www keeps `GET /public/features`, now ANDed with the `newsletter` switch.
 
+**As built (FEAT-4, AlUmmahNow#1755, 2026-11-23).** Where the build differs from the plan above:
+
+- Migration `0077_feature_switches.sql` (0073 to 0076 were taken by other epics). The migration also creates the `tierRequests` row from `tier_requests_enabled`, so "Allow tier requests" is decided by its switch row from day one. A test that writes `creator_tier_settings` by SQL must write the `feature_switches` row too.
+- History is ordered and paged by a per-key `version` (unique `(key, version)`), not by time: two changes in the same millisecond keep their order.
+- The change log has a fourth source, `legacy_page`: an old settings page's own toggle moves the row too (`syncLegacySwitch`) until the Features page replaces it.
+- admin-api writes the rows itself (it has the search D1). Readiness and the old settings come from api-videos `GET /internal/admin/features/state` in one call; the newsletter's readiness is decided in admin-api.
+- The audit entry is `site_settings_log` key `feature:<key>`, action `feature.switch`, with the request origin.
+- **Turn-on checks.** `FEATURE_PRECONDITIONS` in `apps/admin-api/src/lib/feature-preconditions.ts`: a switch may need a check before it turns on. A failing check answers `409 feature_precondition` with an en/ar `reason` and the check's `reasonKey`; a check that throws is refused (`precondition_unreadable`). Turning off is never refused. AUN-MEMBERS registers `creatorSupport` (organisation formed, a finance approver).
+- **Old pages keep the switch's rule.** A super-admin-only switch with an old setting can't be changed by a plain admin on the old page either: the Captions settings save refuses a change to viewer caption download without super admin (403, `feature` named).
+- `FEATURES_FORCE_OFF` (`all` or a list of keys) forces switches off in an environment; the page shows them as overridden.
+
 ### 5.4 Background work (FEAT-5)
 
 A switch never drops work and never fails it. A job whose feature is off is **parked**, then resumes when the feature is on again.
@@ -410,3 +421,4 @@ Order: FEAT-1 → FEAT-3 → FEAT-4 → FEAT-2 → FEAT-5, FEAT-6, FEAT-7. Then 
 
 - 2026-11-22: spec written (this page), with decisions [O39](decisions.md#o39-one-features-page-server-enforced) and [O40](decisions.md#o40-server-written-error-messages). Server stories split out on the owner's instruction the same day.
 - 2026-11-23: FEAT-1 merged ([AlUmmahNow#1753](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1753)): the registry in shared-types, with the four creator support switches (AUN-MEMBERS; off, super admin, `creatorSupport` required by the other three). The error language rule was changed to the app's choice only (above). FEAT-3 ([#1754](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1754)), FEAT-4 ([#1755](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1755)) and FEAT-2 ([#1756](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1756)) are in review.
+- 2026-11-23: FEAT-3's envelope merged ([AlUmmahNow#1754](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1754)) and FEAT-4 merged ([#1755](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1755)); §5.3 "As built" records where the build differs from the plan. In review: FEAT-2 ([#1756](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1756)) and FEAT-3's `apiError()` and `check:error-bodies` ([#1760](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1760)).
