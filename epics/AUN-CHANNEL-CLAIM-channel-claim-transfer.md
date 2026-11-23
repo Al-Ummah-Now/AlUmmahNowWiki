@@ -26,7 +26,7 @@ Non-goals: co-owners (a channel has one owner); moving comments, likes or watch 
 
 - [O16](decisions.md#o16-channel-roles-separate-from-site-roles-only-super-admins-transfer-ownership): channel roles are separate from site roles; only super admins transfer ownership (decided 2026-11-09). Relaxed on 2026-11-23 ([CC-D1](#13-owner-decisions)): an owner may hand the channel to one of its own channel admins.
 - [O17](decisions.md#o17-super-admins-claim-and-assign-official-channels): super admins claim and assign official channels (decided).
-- Platform rules: cost kept small ([O1](decisions.md#o1-whole-platform-cost-cap)); never Stripe ([O4](decisions.md#o4-pluggable-payment-providers-never-stripe-admin-managed-plans)); every feature tiered and admin-managed ([T1](decisions.md#t1-plans-are-admin-managed)); new user features sit behind a switch on the [Features page](AUN-FEATURES-feature-switches.md), off by default and [hidden when off](../guides/product-rules.md#hidden-when-off); bilingual en/ar with Eastern Arabic digits.
+- Platform rules: cost kept small ([O1](decisions.md#o1-cost-conscious-design)); never Stripe ([O4](decisions.md#o4-pluggable-payment-providers-never-stripe-admin-managed-plans)); every feature tiered and admin-managed ([T1](decisions.md#t1-plans-are-admin-managed)); new user features sit behind a switch on the [Features page](AUN-FEATURES-feature-switches.md), off by default and [hidden when off](../guides/product-rules.md#hidden-when-off); bilingual en/ar with Eastern Arabic digits.
 
 ## 1. Words
 

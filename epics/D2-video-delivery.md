@@ -6,7 +6,7 @@
 |---|---|
 | **Status** | **Decided**, 2026-11-10 |
 | **Decision** | Cloudflare R2 + Cloudflare CDN |
-| **Cost constraint** | Whole platform ≤ $500/month |
+| **Cost goal** | Cost-conscious design: prefer low per-video and per-view unit costs ([O1](decisions.md#o1-cost-conscious-design)) |
 | **Source** | [AlUmmahNow#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686), which updates [`docs/native-apps/EPICS.md`](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md) §9. Merged 2026-11-10. |
 
 ## Decision
@@ -17,7 +17,7 @@ Cloudflare Support confirmed in writing that the setup is allowed. HLS stored in
 
 ## Ruled out
 
-- **Cloudflare Stream.** It would cost about $50k/month for 50M minutes, far over the cap.
+- **Cloudflare Stream.** It would cost about $50k/month for 50M minutes.
 
 ## Required setup
 
@@ -43,7 +43,7 @@ Cloudflare Support confirmed in writing that the setup is allowed. HLS stored in
 
 ## History
 
-- 2026-11-07/08: listed as an open decision in `EPICS.md`. The options were Bunny (today) and R2 + Cloudflare CDN. The recommendation was "pending Cloudflare confirmation and cost cap (≤ $500/mo)".
+- 2026-11-07/08: listed as an open decision in `EPICS.md`. The options were Bunny (today) and R2 + Cloudflare CDN. The recommendation was "pending Cloudflare confirmation and unit-cost review".
 - 2026-11-10: decided after Cloudflare Support's written confirmation ([#686](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/686)).
 - 2026-11-10: owner chose Cloudflare Containers for transcoding ([O31](decisions.md#o31-transcode-on-cloudflare-containers)) and a side-by-side trial with Bunny before switching ([O32](decisions.md#o32-run-bunny-and-r2-side-by-side-before-switching)).
 - 2026-11-12: R2 delivery live in QA, stage and production ([#948](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/948)); the API picks the source and returns one playback URL ([#1013](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1013)).

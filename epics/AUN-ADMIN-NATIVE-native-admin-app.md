@@ -25,7 +25,7 @@ Admin is web only (admin-web + admin-api). The pre-publication review (AUN-VIDEO
 - **Light and Dark only.** No System option. The first launch follows the device; after that, the last explicit choice.
 - **Media is never stored.** Owner: *"never cache or download on phone or native app ever, only encrypted stream."* See [Media handling](#media-handling).
 - **Tests make no real AI calls** and send no real pushes. Tests use the local stack and the log-only push provider.
-- **$500/month cap at scale.** Judged per review item, not against today's small numbers.
+- **Cost-conscious at scale.** Judged per review item, not against today's small numbers.
 
 ## What exists today
 
@@ -195,7 +195,7 @@ Creators see "usually within 5 minutes" while someone is on call, and the live q
 - **Credentials the owner supplies** (through the secrets flow, never in chat): App Store Connect API key and team id, Admin bundle ids and provisioning (iOS and macOS), the APNs .p8 key and key id, the Play upload key and service account, the Firebase service account, the WNS package secret, and the Windows code-signing certificate.
 - **Release gate:** UI flow tests on CI against the local stack with seeded review items and the log-only push provider. One manual smoke per release per platform against prod with a test video, on the mocked-AI path from AUN-VIDEO-REVIEW.
 
-## Cost against the $500/month cap (AD11)
+## Cost at scale (AD11)
 
 At scale: 5,000 uploads a month, 10% held, 20 reviewers.
 

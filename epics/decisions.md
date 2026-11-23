@@ -54,7 +54,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [SM-4](decisions.md#sm-4-legal-entity) | Legal entity | **decided** | 2026-11-09 | Social media management |
 | [SM-5](decisions.md#sm-5-async-work-and-errors-standing-rule) | Async work and errors (standing rule) | **decided** | 2026-11-09 | Social media management |
 | [SM-6](decisions.md#sm-6-register-a-business-for-meta) | Register a business for Meta? | **decided** | 2026-11-14 | Social media management |
-| [O1](decisions.md#o1-whole-platform-cost-cap) | Whole-platform cost cap | **decided** | 2026-11-07 | D2, every epic's infrastructure |
+| [O1](decisions.md#o1-cost-conscious-design) | Cost-conscious design: prefer low per-video and per-view unit costs | **decided** | 2026-11-07 | D2, every epic's infrastructure |
 | [O2](decisions.md#o2-native-apps-viewer-and-studio) | Native apps, viewer and Studio | **decided** | 2026-11-07 | Epics 9–24 |
 | [O3](decisions.md#o3-embeds-comments-widget-everything-tiered) | Embeds, comments widget, everything tiered | **decided** | 2026-11-07 | Epics 25–27 |
 | [O4](decisions.md#o4-pluggable-payment-providers-never-stripe-admin-managed-plans) | Pluggable payment providers, never Stripe, admin-managed plans | **decided** | 2026-11-07 | Epics 24, 27 |
@@ -110,7 +110,7 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 **Status:** decided · **Date:** 2026-11-10 · **Page:** [D2-video-delivery.md](D2-video-delivery.md)
 
-**R2 + Cloudflare CDN.** Confirmed in writing by Cloudflare Support: HLS stored in R2 and served through a custom domain on our zone meets the CDN Service-Specific Terms on a self-serve plan (Workers Paid / Pro) while R2 is subscribed; no published usage level forces Enterprise. Whole-platform cost cap **≤ $500/month**. Cloudflare Stream ruled out. Details on the [D2 page](D2-video-delivery.md). Chat: the owner set the cap on 2026-11-07 02:09 UTC and pasted Cloudflare's written reply on 2026-11-10 16:55 UTC (positions 1216, 15208).
+**R2 + Cloudflare CDN.** Confirmed in writing by Cloudflare Support: HLS stored in R2 and served through a custom domain on our zone meets the CDN Service-Specific Terms on a self-serve plan (Workers Paid / Pro) while R2 is subscribed; no published usage level forces Enterprise. Cloudflare Stream ruled out. Details on the [D2 page](D2-video-delivery.md). Chat: the owner pasted Cloudflare's written reply on 2026-11-10 16:55 UTC (position 15208).
 
 **Blocks / affects:** Was blocking 9.6 (R2 adapter), Epic 14 (downloads), D3 and through it Epics 17, 18.7 and 19.7, D11, and E4 (embed delivery cost). All unblocked now; the migration itself is AlUmmahNow#687.
 
@@ -120,7 +120,7 @@ Native everywhere: Swift (Apple incl. macOS), Kotlin (Android/TV), C# (Windows W
 
 **Status:** decided · **Date:** 2026-11-11 · **Page:** [D3-live-provider.md](D3-live-provider.md)
 
-**Decided 2026-11-11:** both providers (Bunny Stream Live and self-hosted) ship to production together, new streams are assigned round-robin, and the choice is made on data. Built in [#867](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/867), [#871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/871) and [#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872). Earlier history: **unblocked** once D2 was decided. Recommendation: self-hosted RTMP/SRT ingest → HLS in the same R2 bucket (instead of Bunny Stream Live, which is in preview). **Owner decision pending.** Details on the [D3 page](D3-live-provider.md). Before the cost cap (2026-11-07 02:04 UTC) the assistant had called Bunny Stream Live the best fit.
+**Decided 2026-11-11:** both providers (Bunny Stream Live and self-hosted) ship to production together, new streams are assigned round-robin, and the choice is made on data. Built in [#867](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/867), [#871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/871) and [#872](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/872). Earlier history: **unblocked** once D2 was decided. Recommendation: self-hosted RTMP/SRT ingest → HLS in the same R2 bucket (instead of Bunny Stream Live, which is in preview). **Owner decision pending.** Details on the [D3 page](D3-live-provider.md). Earlier (2026-11-07 02:04 UTC) the assistant had called Bunny Stream Live the best fit.
 
 **Blocks / affects:** Epic 17, 18.7, 19.7, 29.17 chat, 28.12, live-streaming Phase 2
 
@@ -453,7 +453,7 @@ Facebook and X first, then Telegram, Instagram, YouTube, TikTok, Threads, Linked
 
 **Status:** decided · **Date:** 2026-11-09
 
-Default everywhere is the video itself posted natively; on X the watch link is an opt-in reply showing its $0.20 price; platform-wide X spend cap (default $500/month).
+Default everywhere is the video itself posted natively; on X the watch link is an opt-in reply showing its $0.20 price; platform-wide X spend cap (admin-configurable; starts at $0 in code).
 
 **Blocks / affects:** Social media management
 
@@ -526,11 +526,11 @@ For creators who use a scheduler, the owner: *"if someone uses hootsuite or simi
 
 ## Owner decisions and standing rules recorded only in chat (O-series, wiki IDs)
 
-### O1: Whole-platform cost cap
+### O1: Cost-conscious design
 
 **Status:** decided · **Date:** 2026-11-07
 
-"Anything that cost me more than 500 a month on millions of viewers is a no go", for the whole platform. Basis of D2.
+Cost-conscious design: prefer low per-video and per-view unit costs. Basis of D2.
 
 **Blocks / affects:** D2, every epic's infrastructure
 

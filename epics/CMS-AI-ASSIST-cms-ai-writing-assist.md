@@ -19,7 +19,7 @@ All three run on Cloudflare Workers AI by default, through the Worker's AI bindi
 
 ## Scope
 
-- Cost logged per call. A monthly budget per environment (default $50, at most $500) stops new jobs and running jobs once reached (CMS #65).
+- Cost logged per call. A monthly budget per environment (default $50, admin-configurable) stops new jobs and running jobs once reached (CMS #65).
 - Editors can flag a word or sentence of a translation, fix it, re-translate it, and add terms to a glossary that the translate prompt uses (CMS #93, [`docs/TRANSLATION_FLAGS.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/TRANSLATION_FLAGS.md)).
 - Arabic titles get a short English address, with AI translation as the second choice after a linked English title (CMS #91).
 
@@ -40,11 +40,11 @@ All three run on Cloudflare Workers AI by default, through the Worker's AI bindi
 
 ## Decisions and constraints
 
-- [O1](decisions.md#o1-whole-platform-cost-cap): Whole-platform cost cap (decided)
+- [O1](decisions.md#o1-cost-conscious-design): Cost-conscious design (decided)
 
 Platform-wide constraints that apply to every epic:
 
-- Whole-platform infrastructure cost cap of **≤ $500/month** ([O1](decisions.md#o1-whole-platform-cost-cap), [D2](D2-video-delivery.md)).
+- Cost-conscious design: prefer low per-video and per-view unit costs ([O1](decisions.md#o1-cost-conscious-design), [D2](D2-video-delivery.md)).
 - Payments go through pluggable providers; **never Stripe** ([O4](decisions.md#o4-pluggable-payment-providers-never-stripe-admin-managed-plans), [T2](decisions.md#t2-billing-provider)).
 - Every feature is tiered, with plans **custom and admin-managed** ([T1](decisions.md#t1-plans-are-admin-managed)). Uploads and channel creation are invite-only through admin-assigned creator tiers until subscriptions exist ([O25](decisions.md#o25-invite-only-uploads-with-admin-assigned-creator-tiers)).
 - UI is bilingual en/ar with RTL. Sign-in and profile pages default to **English unless `?lang=ar`** ([O21](decisions.md#o21-english-default-on-sign-in-and-profile)).

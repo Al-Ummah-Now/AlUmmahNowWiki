@@ -240,7 +240,7 @@ No repo doc defines these. Each page names the chat thread, with date and time, 
 - [Org wiki and org profile](CHAT-WIKI-org-wiki.md) (in progress)
 - [Single sign-on everywhere and sign-out ends SSO](CHAT-SSO-sso-everywhere.md) (shipped)
 
-Chat is also the only source for some details on documented epics: the Sprint A run on [Epic 29](E29-core-web-experience.md), the D2 cost cap and Cloudflare's reply ([D2](D2-video-delivery.md)), Bunny token signing ([O8](decisions.md#o8-bunny-token-signing)), and every O-series decision in the [decision log](decisions.md).
+Chat is also the only source for some details on documented epics: the Sprint A run on [Epic 29](E29-core-web-experience.md), the D2 video-delivery decision and Cloudflare's reply ([D2](D2-video-delivery.md)), Bunny token signing ([O8](decisions.md#o8-bunny-token-signing)), and every O-series decision in the [decision log](decisions.md).
 
 ## Conflicts found while collecting
 
@@ -250,7 +250,7 @@ Each epic page lists its own conflicts. The cross-cutting ones:
 - **Team roles story number.** Epic 29 and the Epics 5–8 audit call team roles "native 19.6". `EPICS.md` numbers them 19.8, and 19.6 is the analytics deep dive.
 - **Duplicate "Epic 7" headings.** `docs/archive/epics-original.md` has three "Epic 7" headings, and two of them hold the Epic 6 and Epic 8 stories.
 - **Look-alike IDs.** `[Phase N.M]` issues (#45–#71) and `[Phase 2] Task 2.N` issues (#126–#140) look like epic.story IDs but are not.
-- **Cost cap.** The social media spec estimates ≈ $620–720/month with X, and the Tools roadmap budgets $5,000–10,000/month for infrastructure. Both are over the ≤ $500/month whole-platform cap.
+- **Infrastructure cost estimates.** The social media spec estimates ≈ $620–720/month with X, and the Tools roadmap estimates $5,000–10,000/month for infrastructure — both far higher than the rest of the platform's unit costs ([O1](decisions.md#o1-cost-conscious-design)).
 - **Tier models.** Epic 27 seeds Free / Plus / Pro / Institution plans, where Free can upload. The owner's 2026-11-10 chat rule makes uploads invite-only, with admin-assigned creator tiers None / Creator / Unlimited, and that is what is built.
 - **Language defaults.** Sign-in and profile pages are English unless `?lang=ar` (O21). The account hub spec keeps a `lang` cookie and adds a stored-locale default, even though the hub *is* the profile app. AlUmmahNowDesktop says "Arabic default". www and the CMS admin also use a cookie and Accept-Language, but those are different surfaces.
 - **Stale plan statuses in other repos.** The Auth roadmap says 0/5 for every epic, both OpenAuth fork plans say "PLANNING", the Tools consolidation plan says "Proposed", and the CMS roadmap lists shipped work as queued. Each page takes its status from the newer evidence and names the stale doc.
