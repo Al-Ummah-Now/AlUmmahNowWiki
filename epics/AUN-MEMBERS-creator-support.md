@@ -904,9 +904,9 @@ Building started 2026-11-22 on the owner's instruction: everything goes behind t
 | MEM-22 payee onboarding (hosted at the rail, tax form on file only) | AlUmmahNow#1764 | merged 2026-11-23 |
 | Features switch wiring: `creatorSupport` read from the Features page, the turn-on precondition, routes in `FEATURE_ROUTES` | AlUmmahNow#1766 | merged 2026-11-23 |
 | MEM-5 server checks: `support` and `supportReceive` in `/api/me/features` (countries, apps, payee state, pauses, decisions) | AlUmmahNow#1772 | merged 2026-11-23 |
-| MEM-8 admin API: the finance list (two-person, never tech staff), decisions, organization formed, holds, payout batches, countries; step-up and audit | AlUmmahNow#1773 | open |
-| MEM-7 server: the support sheet, breakdown, hosted checkout, monthly consent, Settings › Support (stop at any time) | AlUmmahNow#1774 | open |
-| MEM-21 local-stack E2E: onboarding, one-time and monthly gifts, stop, feature_off when off | AlUmmahNow#1775 | open |
+| MEM-8 admin API: the finance list (two-person, never tech staff), decisions, organization formed, holds, payout batches, countries; step-up and audit | AlUmmahNow#1773 | merged 2026-11-23 |
+| MEM-7 server: the support sheet, breakdown, hosted checkout, monthly consent, Settings › Support (stop at any time) | AlUmmahNow#1774 | merged 2026-11-23 |
+| MEM-21 local-stack E2E: onboarding, one-time and monthly gifts, stop, feature_off when off | AlUmmahNow#1775 | merged 2026-11-23 |
 
 **Open owner decisions are settings, not code.** Each one is a field of `SupportPolicy` (shared-types `support.ts`). It starts as *undecided* (null) and is never defaulted. `creatorSupport` can't be switched on while any of them is open (`supportCanTurnOnHook`, the Features page precondition). Code that depends on an open decision refuses with `decision_open` rather than guessing.
 
@@ -932,5 +932,9 @@ Both are read in `lib/support/eligibility.ts`. MEM-D3, D4 and D9 are settings th
 - 2026-11-22: spec written (revision 1) with Linear epic AUN-612 and stories AUN-613 to AUN-633.
 - 2026-11-22: revision 2 after the owner's "we will not use paygood to pay creators": PayGood collects only; payouts through Wise (primary) and PayPal Payouts (fallback); research on how YouTube, Patreon, Ko-fi, Buy Me a Coffee, Twitch, Substack and LaunchGood pay creators, and on ten payout rails, all accessed 2026-11-22 and cited inline; stories MEM-22 and MEM-23 added. Sources whose sites refuse automated link checks are written as plain-text URLs. No code yet.
 - 2026-11-22: build started behind the switch (off everywhere): AlUmmahNow#1757 (MEM-2, merged), AlUmmahNow#1758 (MEM-3), AlUmmahNow#1761 (MEM-4), AlUmmahNow#1763 (MEM-23) and AlUmmahNow#1764 (MEM-22) merged.
-- 2026-11-23: AlUmmahNow#1772 merged (MEM-5). AlUmmahNow#1773 (MEM-8), #1774 (MEM-7) and #1775 (MEM-21) opened.
+- 2026-11-23: AlUmmahNow#1772 (MEM-5), #1773 (MEM-8), #1774 (MEM-7, server side) and #1775 (MEM-21, local-stack E2E) merged. The server side of creator support is complete behind the switch, which stays off. Still to do:
+  - the visual stories: Studio › Support, the support sheet, Settings › Support, the admin Support pages and emails;
+  - the MEM-D21 reserve option (AlUmmahNow#1762);
+  - the ledger adjustments, refund and dispute admin endpoints;
+  - the real vendor adapters (MEM-10 and MEM-11). These are held until the owner's decisions are in.
 - 2026-11-23: AlUmmahNow#1766 merged. `creatorSupport` now reads the Features page switch, which is off and fails closed. The Features page refuses to turn it on (409 `feature_precondition`) until the organization is recorded as formed, the finance list has MEM-D24's approvers, every owner decision is recorded, and a collector and the chosen payout rail exist. The test collector and test rail exist only on QA and the local stack.
