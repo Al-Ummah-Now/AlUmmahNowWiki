@@ -172,7 +172,7 @@ Behind the switch `channelClaim` (off). Claims are requests on the approval work
 ### 7.1 Storage (`SEARCH_DB`, migrations numbered at build time)
 
 ```sql
--- One unfinished move per channel (built: migration 0080, with idx_live_sessions_channel)
+-- One unfinished move per channel (built: migration 0081, with idx_live_sessions_channel; offers are migration 0082)
 CREATE TABLE IF NOT EXISTS channel_transfer_locks (
   channel_id TEXT PRIMARY KEY,
   job_id TEXT NOT NULL,
