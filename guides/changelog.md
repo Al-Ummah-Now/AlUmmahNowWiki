@@ -11,7 +11,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
   - the collector and payout-rail interfaces, with test versions that move no money;
   - the open owner decisions as settings that start undecided.
 
-  [#1758](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1758) adds the data model, an append-only double-entry ledger, the settings store and erasure. [#1761](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1761) adds the vendor webhooks, the queued jobs and the daily three-way reconciliation. No user-visible change.
+  [#1758](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1758) adds the data model, an append-only double-entry ledger, the settings store and erasure. [#1761](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1761) adds the vendor webhooks, the queued jobs and the daily three-way reconciliation. [#1763](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1763) adds payout batches. A batch is planned, approved by the organisation's finance list, checked for funding, and sent idempotently, with statuses read back afterwards. No user-visible change.
 
 ## 2026-11-22: supporting creators, revision 2: PayGood collects, a payout rail pays (AUN-MEMBERS)
 
