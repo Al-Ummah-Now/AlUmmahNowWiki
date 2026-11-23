@@ -335,7 +335,7 @@ These rules are enforced **when the links are served**. Studio still lists the e
 - **No payment, donation, zakat, sadaqah or crowdfunding links.** The only way to send money to a creator is the platform's own support flow ([AUN-MEMBERS](AUN-MEMBERS-creator-support.md)), behind its own switch. These domains (PayPal.me, GoFundMe, LaunchGood, Patreon, Ko-fi, Buy Me a Coffee and similar) are on the blocklist in the `payments` category.
   - **Why:** charitable solicitation rules, scams that misuse religious giving, and sanctions. A link that sends money to a sanctioned person or organization exposes the platform under [OFAC rules](https://ofac.treasury.gov/faqs/topic/1501). Admins can't allowlist a `payments` domain ([PL-D6](#16-owner-decisions)).
 - **Merch, stores and affiliate links** are not in version 1 ([PL-D7](#16-owner-decisions)).
-  - If allowed later, the creator must tick "Paid or affiliate link" / «رابط مدفوع أو بعمولة». The card then shows a "Paid link" / «رابط مدفوع» label, as the [FTC Endorsement Guides](https://www.ftc.gov/business-guidance/resources/ftcs-endorsement-guides-what-people-are-asking) expect.
+  - If allowed later, the creator must tick "Paid or affiliate link" / «رابط مدفوع أو بعمولة». The card then shows a "Paid link" / «رابط مدفوع» label, as the [FTC Endorsement Guides (16 CFR Part 255)](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-B/part-255) expect.
   - A video already marked `paidPromotion` shows its existing disclosure; the links add nothing to it.
 - **No endorsement by the platform:** the interstitial says the site isn't run by Al Ummah Now. System credits name a source; they don't endorse it.
 
