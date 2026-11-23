@@ -92,7 +92,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [TP-D1](decisions.md#tp-d1-delete-the-winappdriver-uitests-stub) | Delete the archived WinAppDriver `AlUmmahNow.VisualImporterUno.UITests` stub | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-2`, `TP-3`) |
 | [TP-D2](decisions.md#tp-d2-follow-maktaba-encoder-policy) | Follow Maktaba's encoder policy in Tools (OS-scoped hardware-first incl. Linux VA-API `/dev/dri/renderD*`, 0.2 s test-encode probe, `refusedSession` 30 s pause + 30 s fallback window) plus `TOOLS_ENCODER`, Windows AMF/MF, `libopenh264`, and local output verification | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-12, TA-19) |
-| [TP-D3](decisions.md#tp-d3-keep-1080p-default-with-off-by-default-720p-lecture-cap-setting) | Keep 1080p now; add an admin setting to cap lectures at 720p, off by default, for use only when R2 rendition storage passes ~10 TB | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [AUN-COST](AUN-COST-cost-monitoring.md), `apps/media` |
+| [TP-D3](decisions.md#tp-d3-keep-1080p-default-with-off-by-default-720p-lecture-resolution-limit) | Keep 1080p now; add an admin setting to limit lectures to 720p, off by default, for use only when R2 rendition storage passes ~10 TB | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-4`), [AUN-COST](AUN-COST-cost-monitoring.md), `apps/media` |
 | [TP-D4](decisions.md#tp-d4-remove-legacy-bunny-client-code-from-tools-now) | Remove the old Bunny client code from `AlUmmahNowTools` now (do not wait for TA-14) in a dedicated PR after auditing callers | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-5`, `TP-6`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
 | [TP-D5](decisions.md#tp-d5-cross-platform-folder-watcher-without-localdb) | Cross-platform folder watcher (Windows, macOS, Linux, nothing extra to install); drop SQL Server LocalDB | **decided** | 2026-11-23 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) (`TP-7`), [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) (TA-14) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
@@ -1047,7 +1047,7 @@ Adopt Maktaba's current (`origin/main`) encoder policy in `AlUmmahNow.ToolsCore/
 
 **Sources:** Owner decision relayed via orchestrator, 2026-11-23; [AlUmmahNowTools#60](https://github.com/Al-Ummah-Now/AlUmmahNowTools/pull/60) (open)
 
-### TP-D3: Keep 1080p default with off-by-default 720p lecture cap setting
+### TP-D3: Keep 1080p default with off-by-default 720p lecture resolution limit
 
 **Status:** decided · **Date:** 2026-11-23
 
