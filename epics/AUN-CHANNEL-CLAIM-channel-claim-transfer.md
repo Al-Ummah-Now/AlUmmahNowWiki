@@ -151,7 +151,7 @@ Each needs a reason and is audited.
 
 Behind the switch `channelMove` (off). Owner only. Every tier may use it, Free included; it is not a tier capability ([CC-D2](#13-owner-decisions)).
 
-1. **Offer.** Channel settings → **Move channel**. The owner picks the receiving account from a live autocomplete limited to the channel's **current admins** (channel roles); the server refuses anyone else (`409 receiver_not_channel_admin`). A channel can only go to someone who isn't one of its admins through an admin move or a claim. The owner confirms with a fresh sign-in or passkey (within 10 minutes) and types the channel's @handle. Option: keep the public contact email.
+1. **Offer.** Channel settings → **Move channel**. The owner picks the receiving account from a live autocomplete limited to the channel's **current admins** (channel roles); the server refuses anyone else (`409 receiver_not_channel_admin`). A channel can only go to someone who isn't one of its admins through an admin move or a claim. The owner confirms with a fresh sign-in or passkey (within 10 minutes) and types the channel's @handle. Option: keep the public contact email. The page asks for the fresh sign-in **when the owner opens Move channel**, before anything is typed (**Sign in again**, `prompt=login`); someone who comes back signed in as another account sees "This isn't your channel" and nothing has changed (orchestrator, 2026-11-24).
 2. **Accept.** The receiving admin gets a notice and an email, and accepts on `/channel-moves/{offerId}` within 7 days. They must be active, not banned, and have room for another channel in their creator tier ([CC-D12](#13-owner-decisions)).
 3. **Move.** On acceptance the shared job (§3) runs at once, with actor `user:{ownerId}` ([CC-D3](#13-owner-decisions)); both sides are told. The old owner keeps no access unless the new owner adds them back through channel roles ([CC-D4](#13-owner-decisions)). An admin can stop an open offer.
 4. **Channels that accept payments.** If the channel has creator support set up (an active or pending payee, an active pledge, or a balance above zero), acceptance does not run the move: it opens an approval request for admins on the approval workflow system (AUN-WORKFLOWS), and the move runs only when an admin approves; support never moves unless the admin decides how. Until that system can take the request, such offers are refused with a clear message (`409 move_channel_has_support`).
@@ -295,7 +295,9 @@ Channel R2 record gains optional `transferredAt`, `claimable` and `moveStopped` 
 | admin-api | `GET /internal/channel-reports/:id` | Internal key (api-videos) | Whether a report about the channel is under review: `{ underReview }` only, no reporter or reason |
 | admin-api | `PUT /api/content/channels/:id/claimable` | `channels:manage` | Mark or unmark claimable |
 | api-videos | `GET /api/channels/:id/move-receivers?q=`; `POST /api/channels/:id/move-offers`; `DELETE /api/move-offers/:id` | Owner, `channelMove` | The channel's admins (live autocomplete), offer, cancel |
-| api-videos | `GET /api/move-offers` (received and sent); `POST /api/move-offers/:id/accept` and `/decline` | Receiver, `channelMove` | Receive |
+| api-videos | `GET /api/channels/:id/move-offers` | Owner, `channelMove`; 404 for anyone else | The open offer, and from when the owner may move the channel again |
+| api-videos | `GET /api/move-offers/:id` | The offer's two people and the channel's owner, `channelMove`; 404 for anyone else | One offer, open or closed, with the channel and people by name |
+| api-videos | `GET /api/move-offers` (received and sent, open, 20 of each); `POST /api/move-offers/:id/accept` and `/decline` | Receiver, `channelMove` | Receive |
 | api-videos | `POST /api/channels/:id/claims` (opens the workflow request, with proof uploads); `GET /api/me/claims` | Signed in, `channelClaim` | Claim |
 | api-videos | `POST /internal/admin/channels/:id/handle/take`, `/handle/release`, `/claimable`, `/move-offers/:offerId/stop`; the workflow's approve/reject hooks for offers and claims | Internal key + `X-Admin-Actor` | Logic for the admin routes |
 
@@ -371,7 +373,9 @@ All answered by the owner on 2026-11-23.
 | CC-4 | A | AlUmmahNow | Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) — API [#1805](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1805), admin card [#1809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1809) |
 | CC-5 | A | Apple, Android, Desktop, Core | Render the new `account` keys once the apps have a notification center; refetch channels at launch — nothing to build yet: the native viewer apps have no notification center (2026-11-23) |
 | CC-6 | B | AlUmmahNow | `channelMove` switch, offers table, receiver autocomplete limited to channel admins, offer/accept/decline/cancel/stop API; payment channels refused until the workflow approval step lands, then routed to it — server side [#1833](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1833); payment channels are refused until the workflow approval exists |
-| CC-7 | B | AlUmmahNow | Web: Move channel in settings (on `reauth_required`, **Sign in again** sends `prompt=login`), offer page, pending offers |
+| CC-7 | B | AlUmmahNow | Two PRs. API: offers by name, one offer, the channel's open offer, notices open `/channel-moves/{offerId}`. Web: Move channel in settings, offer page (Accept, Decline), pending offers (Withdraw), every `move_*` text, 404 while the switch is off, local E2E |
+| CC-7b | B | AlUmmahNow | Admin: the channel's open offers on its admin page, with the Stop button (the stop route exists) |
+| CC-7c | B | AlUmmahNow | Move emails: the receiver when an offer is made, and both owners when a channel moved (admin moves too, the part of CC-2 that isn't built). One language each |
 | CC-8 | B | Apple, Android, Desktop, Core | Offers in Studio with Accept/Decline |
 | CC-9 | C | AlUmmahNow, Tools | `channelClaim` switch, `claimable` on channels, import tick box |
 | CC-10 | C | AlUmmahNow | Claim type on the approval workflow, proof uploads (private, limited, scanned), approve → move |
