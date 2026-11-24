@@ -1,0 +1,123 @@
+[← Home](../README.md) · [Store release checklist](store-release-checklist.md) · [Product rules](product-rules.md) · [Epic 20](../epics/E20-system-parental-controls.md)
+
+# Store compliance checklist
+
+This page tracks what the App Store and Google Play require of our apps, and where each app stands. The [store release checklist](store-release-checklist.md) covers what the owner pastes into the consoles; this page covers what the apps themselves must do.
+
+**Last full audit:** 2026-11-24, against App Store Review Guidelines "Last Updated: October 16, 2026" and the Play Developer Policy Center (2026-10-29 update). Re-check at every release and whenever a feature adds sign-in, writing, money, a permission, an SDK or a network call.
+
+## Apps
+
+| App | Store | Bundle ID / package |
+|---|---|---|
+| Viewer (iPhone, iPad) | App Store | `net.alummahnow.viewer` |
+| Viewer for Mac | Mac App Store | `net.alummahnow.viewer.mac` |
+| Viewer TV | App Store (tvOS) | `net.alummahnow.viewer.tv` |
+| Studio (iPhone, iPad) | App Store | `net.alummahnow.studio` |
+| Studio for Mac | Developer ID, outside the store | `net.alummahnow.studio.mac` |
+| Admin (iOS, Mac, Android) | Internal testing only | `net.alummahnow.admin`, `.admin.mac` |
+| Viewer (Android) | Google Play | `net.alummahnow.app` |
+| TV (Android TV, Fire TV) | Play, Amazon | `net.alummahnow.tv` |
+| Studio (Android) | Google Play | `net.alummahnow.studio` |
+
+Desktop ships through the Microsoft Store, Flatpak and Samsung, never the Mac App Store.
+
+## Status (2026-11-24)
+
+| Requirement | Apple | Android | Tracked in |
+|---|---|---|---|
+| Report and block in every app that shows other people's content (videos, channels, chat, comments) | Missing in the viewers | Missing in the viewer | [Apple#91](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/91), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61), [#1912](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1912) |
+| Delete the account from inside every app that can create one | Missing in Studio | Missing in Studio | [Apple#92](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/92), [Android#62](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/62) |
+| A web page to delete the account (Play Data safety URL) | — | Missing | [Auth#532](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/532) |
+| A privacy policy page and terms page, linked in the listing and in the app | Missing | Missing | [#1929](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1929), [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93) |
+| Help and contact link in the app | Missing | Missing | [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61) |
+| Privacy manifests with required-reason APIs | In review | — | [Apple#90](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/90) |
+| Studio held comments can be acted on in the app | Read-only | Read-only | [Apple#94](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/94), [Android#63](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/63) |
+| Export compliance answer true for apps that link aun-core | To decide | — | [Apple#95](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/95) |
+| Play declarations: foreground services, financial features | — | In review | [Android#64](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/64) |
+| Switch-gated features visible to App Review | Process to adopt | Same | [#1930](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1930) |
+| Privacy labels and Data safety match the code | Yes (`store/apple/app-privacy.md`) | Yes (`store/play/data-safety.md`) | — |
+| Age rating 13+, answers recorded | Yes (`store/apple/age-rating.md`) | Yes (`store/play/content-rating.md`) | [E20](../epics/E20-system-parental-controls.md) |
+| Target SDK / build SDK | Xcode 27.1 | targetSdk 37, 16 KB pages | — |
+| No payments in the apps | Yes | Yes | — |
+
+When an item is done, update its row in the same PR.
+
+## The checklist
+
+### User-generated content (Apple 1.2, Play UGC)
+
+Applies to any app that **shows** content from users, not only apps where people write. Creators' videos count.
+
+- [ ] Report on every video, channel, comment, chat message and post the app shows, sent to the existing report queue (videos admin → Reports).
+- [ ] Block a user or channel, everywhere people can see each other's content.
+- [ ] Filtering: comment holds, word lists and AI moderation run on the server for content shown in the apps.
+- [ ] Contact: Help and contact in the app's menu.
+- [ ] Before the first post from an app: Terms accepted (Play), date of birth asked (E20 §5.2), and the app's age rating answers changed in the same PR (Apple "Messaging and chat", Play "Users interact").
+- [ ] Content above the app's 13+ rating (age-restricted videos) plays only for a signed-in 18+ account (Apple 1.2.1(a), E20 §5.4). Made-for-kids videos have comments and chat off.
+
+### Accounts
+
+- [ ] Every app that can create an account (the Auth page's "Create account" counts) has **Delete account** inside the app (Apple 5.1.1(v), Play). It deletes the account and its data, not just deactivates it.
+- [ ] A public web page where a person can delete the account without the app; its URL is in Play's Data safety form.
+- [ ] Sign in with Apple is needed only if we add a third-party or social login (Apple 4.8). Email, sign-in link and passkeys are first-party.
+
+### Privacy
+
+- [ ] A privacy policy URL in each store listing and a link inside each app (Apple 5.1.1(i), Play User Data).
+- [ ] App Privacy (`store/apple/app-privacy.{md,json}`) and Data safety (`store/play/data-safety.{md,csv}`) are updated in the same PR as any new network call, sign-in, SDK or push.
+- [ ] Each Apple app target has `Apps/<target>/PrivacyInfo.xcprivacy`. Its required-reason APIs: UserDefaults `CA92.1` everywhere, file timestamps `C617.1` and boot time `35F9.1` where aun-core is linked, and disk space `E174.1` with offline downloads. Its data types match App Privacy. CI checks this.
+- [ ] No tracking: no ads, attribution or analytics SDK, so no App Tracking Transparency prompt.
+
+### Money
+
+- [ ] No purchase, price, upgrade text or link in any native app while creator support and paid tiers are web only. Refusals for a tier or plan hide the feature ([Hidden when off](product-rules.md#hidden-when-off)).
+- [ ] Before any money flow appears in a native app:
+  - read the current Apple 3.1.1, 3.1.3, 3.2.1(vi)/(vii) and Play Payments pages;
+  - get the owner's decision;
+  - get the store's written confirmation for gifts outside in-app purchase.
+- [ ] Never Stripe.
+
+### Review visibility (Apple 2.5.19)
+
+- [ ] App Review Notes list every switch-gated feature in the build, and those switches are on for the reviewer account.
+- [ ] A money or writing feature turns on in an app for the first time only after a reviewed build showed it.
+
+### Platform
+
+- [ ] Background modes only for what the app does: audio for playback in the viewer, remote notifications in Admin.
+- [ ] Play foreground service declaration per type, with a short recording: viewer `mediaPlayback`, Studio `dataSync`.
+- [ ] Photo picker only, no broad media permission. Notifications are asked for in context and are optional.
+- [ ] Apple: built with the SDK Apple currently requires (iOS 26 SDK since 2026-04-28; iOS 27 SDK from April 2027).
+- [ ] Play: targetSdk at or above the required level (36 for phones since 2026-08-31). Native libraries are aligned for 16 KB pages.
+- [ ] Android TV: leanback launcher, touchscreen not required, everything reachable with the D-pad, playback pauses when leaving.
+- [ ] Export compliance: `ITSAppUsesNonExemptEncryption` is true to what the app does (OS TLS only, or not).
+
+### Religious content
+
+- [ ] Quran text is the official text with recognized translations, never machine output (Apple 1.1.5 bans inaccurate quotations of religious texts).
+- [ ] Moderation catches attacks on any faith or group (Apple 1.1.1, Play hate speech).
+
+## Sources
+
+All read 2026-11-24:
+
+| Rule | Page |
+|---|---|
+| App Store Review Guidelines | https://developer.apple.com/app-store/review/guidelines/ |
+| Account deletion (5.1.1(v)) | https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion |
+| Required-reason APIs | https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api |
+| App Privacy details | https://developer.apple.com/app-store/app-privacy-details/ |
+| Export compliance | https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations |
+| Age ratings | https://developer.apple.com/help/app-store-connect/reference/app-information/age-ratings-values-and-definitions |
+| Apple upcoming requirements | https://developer.apple.com/news/upcoming-requirements/ |
+| Play User Generated Content | https://support.google.com/googleplay/android-developer/answer/9876937 |
+| Play account deletion | https://support.google.com/googleplay/android-developer/answer/13327111 |
+| Play Data safety | https://support.google.com/googleplay/android-developer/answer/10787469 |
+| Play Payments, tips | https://support.google.com/googleplay/android-developer/answer/9858738, https://support.google.com/googleplay/android-developer/answer/10281818 |
+| Play US changes | https://support.google.com/googleplay/android-developer/answer/15582165 |
+| Play target API | https://support.google.com/googleplay/android-developer/answer/11926878 |
+| Play foreground services | https://support.google.com/googleplay/android-developer/answer/13392821 |
+| Play photo and video permissions | https://support.google.com/googleplay/android-developer/answer/14115180 |
+| Play Families, target audience | https://support.google.com/googleplay/android-developer/answer/9893335 |
+| Android TV quality | https://developer.android.com/docs/quality-guidelines/tv-app-quality |
