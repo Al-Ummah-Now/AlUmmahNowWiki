@@ -58,7 +58,8 @@
       "apps": [
         "api",
         "videos",
-        "videos-admin"
+        "videos-admin",
+        "native"
       ],
       "wiki": "epics/E17-live-in-apps.md",
       "prs": [
@@ -72,9 +73,13 @@
         "AlUmmahNow#1884",
         "AlUmmahNow#1885",
         "AlUmmahNow#1889",
-        "AlUmmahNow#1893"
+        "AlUmmahNow#1893",
+        "AlUmmahNow#1927",
+        "AlUmmahNowApple#88",
+        "AlUmmahNowAndroid#59",
+        "AlUmmahNowDesktop#79"
       ],
-      "note": "Server, web viewer and Studio, behind the liveChat, livePremieres, liveReminders and liveEvents switches, all off. #1842 carries #1841 (chat). Still to build: the calendar file (waits for AlUmmahNow#1819), the native apps, and seek-back (E17-9)."
+      "note": "Server, web viewer, Studio and the native viewers, behind the liveChat, livePremieres, liveReminders and liveEvents switches, all off. #1842 carries #1841 (chat). Still to build: the calendar file (waits for AlUmmahNow#1819), writing and reporting in the apps (AlUmmahNow#1912), and seek-back (E17-9)."
     },
     {
       "id": "posts-playlists-sections",

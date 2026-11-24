@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server, the web viewer and Studio for chat, premieres, reminders and event tags are on main behind switches that default off; the native apps come next, E17-6 to E17-8) |
+| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server, the web viewer and Studio for chat, premieres, reminders and event tags are on main behind switches that default off; the native viewers are E17-6 to E17-8) |
 | **Last updated** | 2026-11-24 |
 | **Linear** | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337) (stories AUN-338 to AUN-342) |
 
@@ -38,7 +38,7 @@ Viewers on the web, Apple, Android and Desktop can:
 | Comment moderation | `lib/comments.ts`, `lib/channelComments/blocks.ts`, `packages/shared-types/src/channel-roles.ts`, `lib/moderation-scan.ts`, `apps/processor/src/moderation/*` | Roles (`live.manage`, `live.moderate`, `comment.moderate`), silent channel blocks, AI scan that writes a signal. **The AI never hides anything today** (`decide(..., { autoHideAvailable: false })`). |
 | Notifications | `lib/notification-events.ts`, `apps/processor/src/lib/notifications-store.ts`, `apps/processor/src/push/dispatch.ts` | `announceLiveStarted` fans out to channel subscribers, dedupe key `live:<streamId>`, category `live`. |
 | Crons in api-videos | `scheduled()` in `apps/api-videos/src/index.ts` | `* * * * *` in production, every 5 minutes on QA and stage. |
-| Native apps | Apple, Android, Desktop | No live code. |
+| Native apps | Apple, Android, Desktop | No live code before E17-6 to E17-8. |
 
 Faults found on main that this epic fixes, because it builds on them:
 
@@ -296,7 +296,9 @@ In `apps/websocket-server`:
 
 Frames use the standard envelope `{ type, channel, timestamp, data: { type, streamId, … } }`: `live_chat_message` (`message`), `live_chat_removed` (`messageId`, and `userId` when everything that person wrote is removed), `live_chat_pinned` (`message` or null), `live_chat_settings` (`settings`), `live_chat_closed`.
 
-Clients use the socket. They poll `GET /chat?afterId=` only while it is disconnected: every 10 s ± 2 s while live, 30 s while scheduled, never in the background, backing off to 60 s on errors.
+The web uses the socket. It polls `GET /chat?afterId=` only while the socket is disconnected: every 10 s ± 2 s while live, 30 s while scheduled, never in the background, backing off to 60 s on errors.
+
+The native apps have no chat socket yet. They read `GET /chat` every 10 s on air and 30 s before, `/state` every 60 s on air (15 s before, 5 s when a premiere is due), and send the viewer heartbeat every 20 s; nothing of the chat is read in the background, and a failed chat read waits 60 s. **The server sets their pace:** an optional `pollAfterMs` in the state and chat answers (contract: [#1927](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1927); the server does not send it yet) and `Retry-After` on a 429 or 503, kept between 5 seconds and 10 minutes; absent or not a positive number is as if it were not there. So installed apps can be slowed down without an update. A native socket comes after the batched chat frame is decided (CH-1 of the scaling plan), as its own story (CH-1b).
 
 ### 5.4 Premieres
 
@@ -385,13 +387,15 @@ Labels: **Jumu'ah** / **الجمعة**, **Taraweeh** / **التراويح**, **C
 | **Web viewer** | Chat panel, pinned message, slow-mode timer, sign-in prompt, report, moderator menu, replay chat (5a, [#1884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1884)); premiere countdown and synced playback, reminder button, event badges and filter, Upcoming list, return-to-live (5b, [#1889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1889)); held messages above the chat for moderators (5c). |
 | **Web Studio** | Schedule a premiere from a video (search box opens with eligible videos), reschedule, swap, cancel; event type; chat settings, held messages; an optional start for ordinary streams (5c, [#1893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1893)). A held video shows "Premiere, date" and its visibility controls are replaced by a link to the premiere. |
 | **Admin** | Four switches, three tier fields, live-chat share of the AI cap, `live_chat` in AI moderation and Reports, live and its choices named in the tier change log. |
-| **Apple, Android, Desktop** | Live list, watch, chat, premiere, reminder, replay, against the merged server. TV: watch, premiere and reading chat only. |
+| **Apple** (E17-6), **Android** (E17-7) | Live row on home, list with the event filter, watch, premiere, replay, and the chat for reading. The viewers have no sign-in and no push, so there is no message box and no reminder button, and nothing about either. TV: Apple TV has the same; the Android TV app has no screens yet. |
+| **Desktop** (E17-8) | Windows and Linux: the same, and reminders, because they have sign-in; "Write on the website" opens the stream's page. Samsung TV: the row, watch, premiere and reading the chat. |
+| **Writing and reporting in the apps** | Waits for a human check an app can answer: reports always need one, and so does an account's first message ([#1912](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1912)). |
 
 **Playing a premiere** (every client): position is `serverNow - startedAt` by the state's clock; re-sync above 3 seconds, never while buffering; seeking ahead goes back to the moment; only normal speed at the moment. A viewer may pause or go back, then has "Return to live", and may play faster until they catch up. The video is asked for again every 5 s until it is released; at the countdown's end the state is read every 5 s. After it ends the same player goes on.
 
 Streams and premieres have no thumbnail of their own yet: [#1891](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1891).
 
-Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82, Android #56, Desktop #75) were written against routes that do not exist and are closed; their replacements are E17-6 to E17-8.
+The first native PRs (Apple #82, Android #56, Desktop #75) were written against routes that do not exist and are closed; their replacements are E17-6 to E17-8.
 
 ## 7. Roadmap stories
 
@@ -436,7 +440,7 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-5a** ([#1884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1884)) | AlUmmahNow | Web: chat and replay | E17-2 |
 | **E17-5b** ([#1889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1889)) | AlUmmahNow | Web: premieres, reminders (30 minutes), event tags and filter | E17-5a |
 | **E17-5c** ([#1893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1893)) | AlUmmahNow | Web Studio | E17-5b, E17-2c |
-| **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
+| **E17-6** ([AlUmmahNowApple#88](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/88)), **E17-7** ([AlUmmahNowAndroid#59](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/59)), **E17-8** ([AlUmmahNowDesktop#79](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/79)) | Apple / Android / Desktop | Native viewers; the server sets their pace ([#1927](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1927)) | E17-2, E17-3 |
 | **E17-9** | AlUmmahNow | Seek-back on the self-hosted edge: an admin setting, 2 hours unless changed, at most 12 (E17-D8) | E17-8 |
 
 Open PRs that touch the same ground, none of which E17 needs first: #1803 (tickets), #1819 (E22 calendar), #1816 (quiet hours). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
