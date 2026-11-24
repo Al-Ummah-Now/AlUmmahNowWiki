@@ -7,7 +7,7 @@
 | **ID** | `E25` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowUI](../repos/AlUmmahNowUI.md), [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-21 |
+| **Last updated** | 2026-11-23 |
 
 > v1 shipped per `docs/embeds/PLAN.md` (embed routes, oEmbed, share dialog, postMessage API, embed analytics context); 25.1/25.2 extras, 25.5 npm wrapper, 25.6 creator controls, 25.7, 25.8 Studio views are queued (#255–#259).
 
@@ -37,7 +37,8 @@ Every video is shareable and embeddable with the Al Ummah Now player.
 ## Embed layout and social cards (2026-11-12)
 
 - The embed player fills the host's frame and fits the video inside it at its own ratio, on the night colour. The control bar (one row) and the progress bar run across the frame's full width at its bottom, as YouTube does for vertical videos in a landscape player. "Watch on" sits in the frame's corner and shows its icon alone when it would cover the picture or the frame is under 480px wide. Cause and before/after: [AlUmmahNow#1121](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1121) (a Short in X's card had its controls wrapped onto 2–3 rows inside a ~160–250px box).
-- Social cards declare the video's own ratio: a Short is 413x720 in `og:video` and `twitter:player`, and 367x640 in oEmbed. X still draws its player card landscape, so on X a Short is pillarboxed in the card. A re-share may show X's cached card for up to about a week.
+- Social cards declare the video's own ratio as positive integers: a Short is 413×720 in `twitter:player:width`/`height`, and 367×640 in oEmbed (`og:video` was dropped on 2026-11-15 so chat apps show the 1200×630 card image). X still draws its web player card landscape, so on X web a Short is pillarboxed in the card. A re-share may show X's cached card for up to about a week.
+- **X mobile inline playback (2026-11-23):** watch pages (`/{locale}/video/{id}` and `/{locale}/shorts/{id}`) set `twitter:player:stream` to the video's unsigned public R2 progressive MP4 (`https://media[.<env>].alummahnow.net/pub/{videoId}/{rev}/video.mp4`, from [D-SEO-11](AUN-SEO-search-visibility.md#d-seo-11-a-stable-contenturl)) and `twitter:player:stream:content_type` to `video/mp4`, keeping `twitter:player` pointed at the absolute HTTPS `/embed/v/{id}` iframe and the 1200×630 card image as `twitter:image`. Videos without a public MP4 (not ready, Bunny-only, private, unlisted, or restricted) omit both stream tags and keep the player card.
 
 ## Decisions and constraints
 
