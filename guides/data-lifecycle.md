@@ -138,7 +138,7 @@ What is true on `main` today.
 
 - **At once, for good:** the Videos profile, owned channels with everything on them, the person's playlists, posts, watch history, subscriptions, likes and votes. There is no 30-day restore for these.
 - **Kept without the person:** their comments elsewhere (the text is emptied), reports they filed, and what they added to someone else's channel.
-- **The sign-in account** is deleted at once and its record is purged after **30 days**. Until then an Auth admin can restore it, without the Videos data. Refresh tokens stop at once; access tokens already issued are refused within the [revocation time](authentication.md).
+- **The sign-in account** is deleted at once and its record is purged after **30 days**: from then on the hourly cleanup removes it, and sooner only if an Auth admin asks for it. Text for people must say "after 30 days" / «بعد ٣٠ يومًا», never "within" / «خلال». Until then an Auth admin can restore it, without the Videos data. Refresh tokens stop at once; access tokens already issued are refused within the [revocation time](authentication.md).
 - The follow-up messages of an erase (search rows, moderation copies) are queued after it. If queueing fails they aren't sent again today.
 
 #### Media files
