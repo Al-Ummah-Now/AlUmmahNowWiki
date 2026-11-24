@@ -347,7 +347,7 @@ Questions for counsel (to add to the letter already in preparation):
 | **E20-B1u** | Studio, upload and admin fields (with staff lock and Undo) and the web warning page | AlUmmahNow | yes | B1 |
 | **E20-B2** | `ageSignals` switch and precondition, the `age.policy` rule in the `APP_CONFIG` `config` document, Age policy form, OpenAPI | AlUmmahNow | yes | D2–D5 |
 | **E20-B3** | Core: policy types, `evaluate_age`, `due_to_ask`, scrubber keys, UniFFI; release candidate | Core | – | B2 contract |
-| **E20-B4** | Account level: table, API, middleware, route-table test, `GET /api/me/features`, export and erase, expiry job. Ships with `accountLevel` false | AlUmmahNow | – | B2; **turn-on** waits for D6, Q1–Q3, A6 and G5 |
+| **E20-B4** | Account level: table, API and middleware, route-table test. Both fail closed: if the existing `user_age_levels` row can't be read, `PUT /me/age-level` and every checked write answer `503 service_unavailable`, so a failed read is never taken for a first level or a pass. Also `GET /api/me/features`, export and erase, expiry job. Ships with `accountLevel` false | AlUmmahNow | – | B2; **turn-on** waits for D6, Q1–Q3, A6 and G5 |
 | **E20-B5** | `RESCIND_CONSENT` receiver (optional) | AlUmmahNow | – | – |
 | **E20-A2** | Declared Age Range in Viewer and Studio (iOS, iPadOS, macOS): entitlement, adapter, ask rules, hidden features, Communication Limits | Apple | yes | B3 |
 | **E20-A3** | Significant-change flow (PermissionKit, acknowledgment sheet, `ageRatingCode`, iCloud storage) | Apple | yes | A2 |
