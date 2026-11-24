@@ -90,7 +90,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 1 | 5 | 12 | 0 | 18 |
 | [E18](E18-studio-mobile.md) | [AUN-343](https://linear.app/hamzalabs/issue/AUN-343/e18-studio-mobile-ios-ipados-android) | 2 | 3 | 1 | 4 | 0 | 10 |
 | [E19](E19-studio-desktop.md) | [AUN-354](https://linear.app/hamzalabs/issue/AUN-354/e19-studio-desktop-windows-macos-linux) | 3 | 5 | 0 | 1 | 1 | 10 |
-| [E20](E20-ummah-kids.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-ummah-kids-profiles-and-parental-controls) | 0 | 0 | 4 | 6 | 1 | 11 |
+| [E20](E20-ummah-kids.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-system-parental-controls-support) | 0 | 0 | 0 | 0 | 11 | 11 |
 | [E21](E21-islamic-experience.md) | [AUN-371](https://linear.app/hamzalabs/issue/AUN-371/e21-islamic-experience-layer) | 0 | 1 | 8 | 20 | 2 | 31 |
 | [E22](E22-notifications-sharing-circles.md) | [AUN-380](https://linear.app/hamzalabs/issue/AUN-380/e22-notifications-sharing-study-circles) | 0 | 2 | 0 | 1 | 1 | 4 |
 | [E23](E23-release-engineering.md) | [AUN-385](https://linear.app/hamzalabs/issue/AUN-385/e23-release-engineering-and-store-compliance) | 1 | 6 | 0 | 0 | 0 | 7 |
@@ -118,4 +118,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 3 | 0 | 0 | 0 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **110 epics** | **253** | **111** | **59** | **196** | **36** | **655** |
+| **All** | **110 epics** | **253** | **111** | **55** | **190** | **46** | **655** |
