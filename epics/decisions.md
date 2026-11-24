@@ -166,7 +166,7 @@ The owner dropped standalone `kids_learning_paths` tables, APIs, and admin UI in
 
 **Status:** decided · **Date:** 2026-11-23
 
-The owner dropped instrument-free (`no_instruments` / `instrument_free`) and madhab content filters across both Ummah Kids and the Islamic experience. In Epic 20, `KIDS-D9` is marked dropped and excluded from `KIDS_DECISION_IDS` readiness checks with zero `no_instruments` column/tag/filter; Epic 21 (`#218`) will align separately.
+The owner dropped instrument-free (`no_instruments` / `instrument_free`) and madhab content filters across both Ummah Kids and the Islamic experience. In Epic 20, `KIDS-D9` is marked dropped and excluded from `KIDS_DECISION_IDS` readiness checks with zero `no_instruments` column/tag/filter; Epic 21 (`#218`) already dropped those filters in its spec.
 
 **Blocks / affects:** [Epic 20](E20-ummah-kids.md), [Epic 21](E21-islamic-experience.md)
 
