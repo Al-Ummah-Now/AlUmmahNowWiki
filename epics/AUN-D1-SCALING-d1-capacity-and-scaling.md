@@ -81,7 +81,7 @@ Read on 2026-11-24. The page dates are Cloudflare's "last modified" dates.
 | Durable Objects (SQLite) | 10 GB per object; unlimited per account; soft limit of 1,000 requests per second per object | [DO limits](https://developers.cloudflare.com/durable-objects/platform/limits/) (2026-11-13) |
 | Queues | 5,000 messages per second per queue; batches of up to 100; messages up to 128 KB | [Queues limits](https://developers.cloudflare.com/queues/platform/limits/) (2026-10-30) |
 
-Because D1 is single-threaded, each database has only one second of query time per second. In this page, **busy share** is peak queries per second × average query time ÷ 1 second. Above 70% busy, tail latency climbs and "overloaded" errors start.
+Because D1 is single-threaded, each database has only one second of query time per second. In this page, **busy share** is peak queries per second × average query time ÷ 1 second. For notifications it also counts 0.05 ms per row written, because analytics writes many rows per statement. Above 70% busy, tail latency climbs and "overloaded" errors start.
 
 ## Databases today
 
@@ -222,19 +222,19 @@ In GB. The share of the 10 GB limit is in brackets.
 | Database | 10k MAU | 100k MAU | 1M MAU | 10M MAU | Largest part (at 100k) |
 |---|---|---|---|---|---|
 | notifications | 2.5 (25%) | **25.2 (252%)** | 252 | 2,520 | analytics_daily 52%, inbox 39%, discovery_viewers 5% |
-| Auth | 0.35 (4%) | 3.4 (34%) | 34 | 341 | audit_events 86% (token_usage has no producer; with 3 rows per DAU it would add 4.3 GB at 100k) |
+| Auth | 0.34 (3%) | 3.4 (34%) | 34 | 342 | audit_events 87% (token_usage has no producer; with 3 rows per DAU it would add 4.3 GB at 100k) |
 | search | 0.5 (5%) | 5.6 (56%) | 82 | 1,746 | transcripts 64%, live chat 23% |
 | reports | 0.2 | 1.5 | 14.5 | 145 | newsletter_deliveries 56%, moderation_signals 35% (at 1M) |
 | cms / costs / status | < 0.2 | < 0.2 | < 0.2 | < 0.2 | does not grow with users |
-| **Account total** (prod only) | 3.5 | 36 | 383 | 4,770 | Account storage passes 70% of 1 TB at about 1.8M MAU and 1 TB at about 2.4M MAU; the account limit can be raised on request |
+| **Account total** (prod only) | 3.75 | 36 | 383 | 4,752 | Account storage passes 70% of 1 TB at about 1.76M MAU and 1 TB at about 2.46M MAU; the account limit can be raised on request |
 
 ### Peak load per database
 
 | Database | 100k MAU: queries/s, busy | 1M MAU: queries/s, busy | 10M MAU: queries/s, busy | Peak rows written/s at 1M |
 |---|---|---|---|---|
 | search | 34, 5% | 300, **45%** | 2,900, **436%** | 264 |
-| notifications | 12, ~3% | 121, ~30% | 1,210, **~290%** | ~3,000 (analytics alone ~2,750) |
-| Auth | 7, 1% | 70, 6% | 700, 56% | 233 |
+| notifications | 26, 4% | 258, **41%** | 2,582, **407%** | 2,977 |
+| Auth | 7, 1% | 70, 6% | 695, 56% | 24 |
 | reports | 2, 0% | 4, 0% | 12, 1% | 6 |
 
 ### Runway: when each database reaches a limit
@@ -243,13 +243,13 @@ MAU at which each database reaches the limit, with today's code. Each figure ass
 
 | Database | 70% of 10 GB | 100% of 10 GB | 70% busy | 100% busy | First limit |
 |---|---|---|---|---|---|
-| **notifications** | **~28k** | **~40k** | ~2.5M | ~3.5M | size |
+| **notifications** | **~28k** | **~40k** | ~1.72M | ~2.46M | size |
 | **search** | ~122k | ~167k (~330k without caption search) | ~1.6M | ~2.3M | size, then query time |
 | **Auth** | ~205k | ~293k | ~12.5M | ~17.9M | size |
 | reports | ~483k | ~690k | — | — | size |
 | cms, costs, status | never | never | — | — | — |
 
-The notifications busy figures count analytics at 16 queue messages and 46 rows per view ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254)); the Auth figures count no `token_usage` rows ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)). The Auth busy figures still include token writes, so they are on the safe side.
+The notifications busy figures count analytics at 16 queue messages and 46 rows per view ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254)); the Auth figures count no `token_usage` rows ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)). Every figure in these three tables comes from one run of the model (`research/d1-growth-2026-11-24/model.py`, revision 7: `token_usage_per_dau = 0`, 16 messages and 46 rows per view). They are for the whole database, not analytics alone.
 
 Sensitivity of the first limit (notifications, 100%):
 - 37k MAU at 10 views per DAU;
@@ -639,11 +639,11 @@ These are plain unit prices for Workers Paid, from the pages above, plus R2 Stan
 | Analytics archive at 1M MAU | — | ~2.1M dimension-row deletes a day ≈ $63 a month, plus ~93k R2 GET and PUT pairs a day ≈ $13 a month |
 | Popular viewer rows at 1M MAU | 1.25M rows written a day, kept 91 days | the same writes, plus about 1 delete per row once its day closes ≈ $38 a month; reads per ranking run fall about 10× |
 | Notification per inbox row | ~9 rows written ≈ $0.000009 | ~8 rows ≈ $0.000008 |
-| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 383 GB → about 156 GB at 1M MAU |
+| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 383 GB → about 142 GB at 1M MAU |
 | Read replicas | — | $0 extra |
 | Extra databases (D1-5, D1-6, D1-7) | — | $0 (included up to 100,000 databases) |
 
-At 1M MAU, storage falls by about 270 GB, about $200 a month. That is more than the new delete and R2 costs above.
+At 1M MAU, storage falls by about 241 GB, about $181 a month. That is more than the new delete and R2 costs above.
 
 ## Platforms
 
