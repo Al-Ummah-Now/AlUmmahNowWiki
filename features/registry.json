@@ -2474,6 +2474,27 @@
       ],
       "wiki": "epics/AUN-PLAYER-LINKS-in-video-links.md",
       "note": "Specified 2026-11-23. Phase 0, the linked Quran Foundation credit in the player, is being built; cards, end screens and external links wait for the owner's decisions PL-D1 to PL-D20."
+    },
+    {
+      "id": "offline-listen",
+      "name": {
+        "en": "Offline downloads and Listen mode (incl. CarPlay and Android Auto)",
+        "ar": "التنزيل دون اتصال ووضع الاستماع (بما في ذلك CarPlay وAndroid Auto)"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E14-offline-listen.md",
+      "prs": [
+        "AlUmmahNow#1781",
+        "AlUmmahNow#1822",
+        "AlUmmahNowCore#53"
+      ],
+      "note": "Owner decisions E14-D1 to E14-D8 recorded 2026-11-23. Signed-in-only audio-first Listen mode (web and native, reusing existing HLS audio streams) and plain unencrypted R2 video.mp4 downloads (native offline library plus a web plain Download button via the media Worker /dl/ route with Content-Disposition: attachment and no browser offline library), same rights for every viewer under an admin-configurable per-user rate limit, creator opt-out, hidden and refused in Kids Mode via E20's verified kids:viewer token scope (403 kids_mode_restricted), next-sync cleanup plus Worker-Cache-API-backed videoId-only revocations feed on CSAM/urgent legal takedowns, CarPlay and Android Auto behind store-approval flags, and offline-first sync. Ships behind listenMode and offlineDownloads switches (both off by default)."
     }
   ]
 }
