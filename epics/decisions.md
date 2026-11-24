@@ -14,7 +14,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [D4](decisions.md#d4-monetisation) | Monetisation | **decided** | 2026-11-08 | Epic 24, 27.6 provider management, 27.7, P1 |
 | [D5](decisions.md#d5-kids-content-policy) | Kids content policy | **open** | 2026-11-08 | Epic 20 |
 | [D6](decisions.md#d6-fonts) | Fonts | **open** | 2026-11-08 | 10.2, 30.6 |
-| [D7](decisions.md#d7-prayer-time-data) | Prayer-time data | **open** | 2026-11-08 | 21.1 |
+| [D7](decisions.md#d7-prayer-time-data) | Prayer-time data | **decided** | 2026-11-23 | 21.1 (Epic 21 decision E21-D1) |
 | [D8](decisions.md#d8-brand-naming) | Brand naming | **open** | 2026-11-08 | Epics 10, 12, 15, 20 |
 | [D9](decisions.md#d9-linux-ui-toolkit-for-c) | Linux UI toolkit for C# | **decided** | 2026-11-08 | Epics 16, 19 (Linux) |
 | [D10](decisions.md#d10-transcription-location) | Transcription location | **decided** | 2026-11-14 | 18.9, 19.4, 30.4, 28.7 |
@@ -160,13 +160,15 @@ Tokens carry IBM Plex Sans Arabic + Plex and Noto Kufi Arabic + Inter (both OFL)
 
 ### D7: Prayer-time data
 
-**Status:** open · **Date:** 2026-11-08
+**Status:** decided · **Date:** 2026-11-23
 
-Recommendation: on-device calculation (adhan-js).
+**Owner decision:** prayer times come from an online API through our anonymous, cached city proxy. The device sends only the city, the month window, the method and the Asr method; never a user id, cookies or exact coordinates. The Worker calls AlAdhan first with the city's coordinates, caches per city and fixed month window, and serves the cache or a clear error during an outage, never invented times. The Hijri date comes from the same API and cache. Epic 21 records this as [E21-D1](E21-islamic-experience.md#e21-d1--prayer-times) and [E21-D2](E21-islamic-experience.md#e21-d2--hijri-date); its other decisions are E21-D3 to E21-D9 in the same section.
 
-**Blocks / affects:** 21.1
+This replaces the earlier on-device-calculation recommendation. Research: `research/prayer-times-2026-11-23.md`.
 
-**Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md)
+**Blocks / affects:** 21.1, 21.2
+
+**Sources:** [Epic 21 §3](E21-islamic-experience.md#3-prayer-times-and-hijri-the-city-proxy); [AlAdhan API](https://aladhan.com/prayer-times-api); [AlAdhan terms](https://aladhan.com/credits-and-terms)
 
 ### D8: Brand naming
 

@@ -9,7 +9,7 @@
 | **Status** | **in progress** |
 | **Last updated** | 2026-11-08 |
 
-> 26 ACs: 2 done, 3 partial, 3 not done, 18 owned by Epics 21.3, 22.3, 26, 28.
+> 26 ACs: 2 done, 3 partial, 3 not done, 18 owned by Epics 21.3, 22.3, 26, 28 (Epic 21.3 is admin-granted only).
 
 ## Goal
 
@@ -25,7 +25,7 @@ Safer, more engaged community: scholar verification, moderation tools, engagemen
 
 | Story | What | Status / acceptance notes |
 |---|---|---|
-| 6.1 | Scholar verification | Partial: admin verification endpoint (#367) and verified badge (#382); application flow → Epic 21.3. |
+| 6.1 | Scholar verification | Partial: admin verification endpoint (#367) and verified badge (#382); Epic 21.3 adds a required reason and a scholar/institution kind; there is no application flow (E21-D4). |
 | 6.2 | Community moderation tools | Owned by Epic 28. |
 | 6.3 | Community engagement | Partial: community guidelines page (#346); study groups → 22.3; forums/Q&A → 26; reputation, similar users → queue issues. |
 
