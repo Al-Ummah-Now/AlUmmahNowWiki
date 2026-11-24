@@ -2349,6 +2349,32 @@
       ]
     },
     {
+      "id": "islamic-experience",
+      "name": {
+        "en": "Islamic experience: prayer times, Hijri, recitation references and notes",
+        "ar": "التجربة الإسلامية: أوقات الصلاة والتاريخ الهجري ومراجع التلاوة والملاحظات"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E21-islamic-experience.md",
+      "prs": [
+        "AlUmmahNow#1807",
+        "AlUmmahNow#1815",
+        "AlUmmahNow#1835",
+        "AlUmmahNow#1836",
+        "AlUmmahNow#1837",
+        "AlUmmahNow#1838",
+        "AlUmmahNow#1839",
+        "AlUmmahNow#1840"
+      ],
+      "note": "Owner decisions E21-D1 to E21-D9 final 2026-11-23. Prayer times and the Hijri date come from our anonymous, cached city proxy (AlAdhan first, pluggable); only the city id leaves the device. The scholar label is admin-granted with a reason. Recitation references carry no Quran text. Private notes are time-stamped bookmarks with Markdown export. Learning paths, ayah repeat, A–B loop and content filters are dropped. Every new surface defaults off on the Features page."
+    },
+    {
       "id": "player-links",
       "name": {
         "en": "In-video links: credits, info cards and end screens",
