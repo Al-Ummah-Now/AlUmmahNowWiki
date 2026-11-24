@@ -7,7 +7,7 @@
 | **ID** | `CHAT-UPLOADS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-10 |
+| **Last updated** | 2026-11-24 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
 > Merged 2026-11-10 (#578, #583, #592, #606, #612, #613, #634, #680; rate limits #522, #623).
@@ -20,6 +20,8 @@ Uploads resume after deploys and failures, never from 0; stuck uploads are flagg
 
 - [O26](decisions.md#o26-always-async-with-admin-visible-errors): Always async, with admin-visible errors (decided)
 - **A finished file picked again is never a silent duplicate** (owner, 2026-11-13). The single uploader and the batch uploader both show **Already uploaded** with a link to the video. A second video is created only through the explicit **Upload again as a new video** action, which is in-page with no browser prompt. An unfinished file still resumes at its offset ([AlUmmahNow#1126](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1126)).
+
+- **Accepted video files** (2026-11-24, [AlUmmahNow#1938](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1938)). The web upload forms (single, batch, and a file dropped on either drop zone) accept **MP4, M4V, MOV, WebM, MKV and AVI**. A file is taken by the type the browser reports (MOV is `video/quicktime`, AVI is `video/x-msvideo` or `video/avi`) or, when the type is empty or generic, by its extension in any case; a type that names another kind of file is refused. The type sent to the server is the format's own, whatever name the browser used. One list feeds the file picker, the help text and the error messages in English and Arabic. Bunny Stream and our ffmpeg transcoder read all six. Desktop Studio and Tools accept more (TS/MTS, WMV, FLV, 3GP, MPEG); the web list stays at these six until the transcoder is tested on the rest. Apple Studio's picker takes `.movie` types, which leaves out MKV ([AlUmmahNowApple#101](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/101)).
 
 Platform-wide constraints that apply to every epic:
 
