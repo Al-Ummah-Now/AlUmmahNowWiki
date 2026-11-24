@@ -166,7 +166,7 @@ The admin page shows only fields that change by default, with "Show all fields".
 
 ## 7. Data model (search D1)
 
-New search migration (next free number when it merges; 0082 if #1785 and #1810 take 0080 and 0081). The search D1 holds the support, finance-list and feature-switch tables, so most changes apply in the same `db.batch` as their request. The tables hold account ids only (no emails or names), so they are not Auth-sensitive; names come from the existing batched name lookup (`lib/audit/names.ts`), never a scan of the Auth D1.
+Search migration `0085_approval_workflows.sql`. The search D1 holds the support, finance-list and feature-switch tables, so most changes apply in the same `db.batch` as their request. The tables hold account ids only (no emails or names), so they are not Auth-sensitive; names come from the existing batched name lookup (`lib/audit/names.ts`), never a scan of the Auth D1.
 
 | Table | One row per | Key columns |
 |---|---|---|
