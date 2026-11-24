@@ -45,7 +45,7 @@ Faults found on main that this epic fixes, because it builds on them:
 | Fault | Where | Fixed in |
 |---|---|---|
 | The minute cron passes the unwrapped env to `sweepLiveSessions`, so a stream ended by the idle or tier sweep keeps `status = 'live'` in `content_ownership`. | `index.ts` `scheduled()` | E17-1 |
-| A confirmed report on a live stream looks up the bare id, without `livestream:`, in an unwrapped bucket, so nothing is hidden. | `apps/admin-api/src/lib/moderation/reportDecision.ts` | E17-2 |
+| A confirmed report on a live stream looks up the bare id, without `livestream:`, in an unwrapped bucket, so nothing is hidden. | `apps/admin-api/src/lib/moderation/reportDecision.ts` | E17-2b |
 | `GET /api/videos/:id/chapters` has no visibility check, so a private video's chapter titles are readable. | `endpoints/video/chapters.ts` | E17-3 |
 
 ## 3. Switches and tiers
@@ -127,7 +127,7 @@ Indexes: `(status, scheduled_start_at)`, `(event_type, status, scheduled_start_a
 
 **Never blocks the index.** `owner_id` and `channel_id` are nullable, dates fall back to 0, unknown enum values fall back to their default, so no stored stream can fail the batch that also writes its ownership row. A failed metadata write is recorded with `repairLater`, as ownership is.
 
-**Wrapped everywhere.** E17-1 passes `withSearchSync(rawEnv, ctx)` to `sweepLiveSessions`. admin-api does not write stream records itself: E17-2 sends its hide and restore to api-videos (§5.2).
+**Wrapped everywhere.** E17-1 passes `withSearchSync(rawEnv, ctx)` to `sweepLiveSessions`. admin-api's one write of a stream record is the report fault in §2: E17-2b sends its hide and restore to api-videos (§5.2).
 
 **Existing streams.**
 
@@ -243,7 +243,7 @@ Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/
 
 **`POST /api/live-streams/:id/chat`** `{ "text": "…" }`, checks in this order:
 
-1. switch, sign-in, `videosBanMiddleware`, `requireHuman('videos.live_chat', 'first')`;
+1. switch, sign-in, `videosBanMiddleware`, `LIVE_CHAT_LIMITER`, `requireHuman('videos.live_chat', 'first')`;
 2. the stream can be read by this caller, is `live`, or `scheduled` with the start at most 30 minutes away; the owner's tier has chat;
 3. `subscribersOnly`: the owner, moderators, and people in `channel_subscriptions` (`403 live_chat_subscribers_only`);
 4. rate limits: two new bindings in every environment, `LIVE_CHAT_LIMITER` (30 per 60 s, per user, through `edgeRateLimit`) and `LIVE_CHAT_IP_LIMITER` (120 per 60 s, key `live-chat:<ip>`, called separately because `edgeRateLimit` keys a signed-in caller by user). They are separate from comments, and the second is loose so a mosque on one address can chat;
@@ -265,12 +265,12 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 - The consumer writes a `moderation_signals` row, as for comments. It does **not** hide the message: main has no AI auto-hide, and E17 does not add one. A person hides it from the AI queue, the Reports queue, or the chat.
 - `live_chat` takes at most a share of the daily neuron cap (admin setting, default 25 %, no share limit when there is no cap). The scan reserves `feature = 'live_chat'` first, then `moderation`; when the second fails the first is released with `settleBudget(estimate, 0)`. Past either limit: signal `skipped` / `budget`, message stays.
-- Consequence, stated plainly: at 22–62 neurons a message (§8), a 25,000-neuron share scans about 400 to 1,100 messages a day for the whole site. Beyond that, chat relies on the fast filter, slow mode, blocks, reports and people. A creator with no moderator should use subscribers-only or slow mode.
+- Consequence, stated plainly: at 22–62 neurons a message (§8) and the default cap of 10,000 neurons a day (`DEFAULT_DAILY_NEURON_CAP`), the share scans about 40 to 110 messages a day for the whole site. An admin can raise the cap or the share. Beyond that, chat relies on the fast filter, slow mode, blocks, reports and people. A creator with no moderator should use subscribers-only or slow mode.
 - `SURFACES` in `consumer.ts`, `ModerationSurface`, `ModerationSubjectType` and the admin-api and admin-web lists all gain the value in E17-2, with a test that every `ModerationSurface` is accepted.
 
-**Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.moderate`, `comment.moderate` or a site moderator. An author may `remove` their own message. `block_author` uses `channel_blocks` and removes that person's messages on the stream. Each action is recorded with `recordTeamActivity`. `PATCH /:id/chat/settings` is the same four fields as §5.1 for `live.manage` and `live.moderate`.
+**Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.manage`, `live.moderate` or `comment.moderate`. An author may `remove` their own message, and nobody else can bring that back. `block_author` uses `channel_blocks` and removes that person's messages on the stream; the team cannot be blocked. Site moderators act from the admin queues (below). `PATCH /:id/chat/settings` is `allowChat`, `chatReplay`, `slowModeSeconds` and `subscribersOnly` for the owner, `live.manage` and `live.moderate`.
 
-**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). The admin-api `reports` table has a CHECK on `entity_type`, so E17-2 rebuilds it in a migration (as `0020_reports_queue.sql` did) and adds the type to `ReportableEntityType`, the queue and the decision code. Decisions on `live_chat` and `livestream` are sent to an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2.
+**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). The admin-api `reports` table has a CHECK on `entity_type`, so E17-2b rebuilds it in a migration (as `0020_reports_queue.sql` did) and adds the type to `ReportableEntityType`, the queue and the decision code. Decisions on `live_chat` and `livestream` are sent to an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2 (E17-2b).
 
 ### 5.3 WebSocket `live:<streamId>`
 
@@ -279,11 +279,11 @@ In `apps/websocket-server`:
 - `CHANNEL_FEATURES` gains `{ prefix: 'live:', key: 'liveChat', failClosed: true }`. Today an unreadable switch allows the channel; for `live:` it refuses.
 - `canPublish` returns false for `live:`. Only `/broadcast` (internal key) feeds it. Today any signed-in client can publish into it.
 - Subscribe is allowed only after one indexed read of `live_stream_metadata`, with the read rule of §5.2; a non-public stream also needs a `channel_access` role. A missing row refuses. Signed-out sockets may subscribe to public streams.
-- `live_chat_closed` evicts everyone on the channel after it is delivered. api-videos sends it when a stream turns private, hidden, cancelled or deleted, or chat is turned off. Clients that may still read subscribe again.
+- `live_chat_closed` evicts everyone on the channel after it is delivered. `syncStreamInline` sends it on every write that leaves the stream private, hidden, cancelled or deleted, or its chat off, so a suspension or an erasure closes it too. Clients that may still read subscribe again.
 - `expireAuthIfNeeded` keeps `live:` only for public streams; others are dropped when the token expires.
 - Authentication is whatever the socket uses: the access token today, the single-use ticket once [#1803](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1803) merges. E17 needs nothing from either.
 
-Frames: `live_chat_message` (`message`), `live_chat_removed` (`messageId`), `live_chat_pinned` (`message` or null), `live_chat_settings` (`settings`), `live_chat_closed` (`reason`). Each carries `channel` and `streamId`.
+Frames use the standard envelope `{ type, channel, timestamp, data: { type, streamId, … } }`: `live_chat_message` (`message`), `live_chat_removed` (`messageId`, and `userId` when everything that person wrote is removed), `live_chat_pinned` (`message` or null), `live_chat_settings` (`settings`), `live_chat_closed`.
 
 Clients use the socket. They poll `GET /chat?afterId=` only while it is disconnected: every 10 s ± 2 s while live, 30 s while scheduled, never in the background, backing off to 60 s on errors.
 
@@ -400,7 +400,7 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | Work | Unit | Operations | Cost |
 |---|---|---|---|
 | Chat message posted | per million | 5 rows written (row + 4 full indexes; a published message is in neither partial index), about 10 rows read, 1 Worker request, 3 or more Durable Object requests, 3 queue operations | about $7 |
-| …AI scan of each | per million | 22–62 neurons each (guard 22, +2 Arabic translation, +22 when mixed script, +15 with platform categories) | $240–$680, held down by the daily share: 25,000 neurons is $0.28 a day |
+| …AI scan of each | per million | 22–62 neurons each (guard 22, +2 Arabic translation, +22 when mixed script, +15 with platform categories) | $240–$680, held down by the daily share: 2,500 neurons at the default cap is $0.03 a day |
 | Polling, signed out | 1,000 viewers for an hour | 360,000 requests, no D1 on a cache hit; per location 1,800 refreshes × about 102 rows = 184,000 rows read | $0.11 |
 | Polling, signed in | same | + 1 row read per poll (channel block) and the existing per-request account checks | $0.11 |
 | WebSocket subscribe | per million | 1–2 rows read | under $0.01 |
@@ -415,10 +415,11 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | Story | Repo | Scope | Waits for |
 |---|---|---|---|
 | **E17-1** ([#1787](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1787)) | AlUmmahNow | Switches, tier fields, shared types, filter and normalizer, three tables, projection with order guard, hydration, wrapped live sweep, erasure, Takeout | nothing |
-| **E17-2** | AlUmmahNow | Chat routes, limits, socket rules, moderation, reports, scan surface, purge jobs, replay | E17-1 |
+| **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841)) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
+| **E17-2b** | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
 | **E17-3** | AlUmmahNow | Premieres, reminders, event filter, chapters fix | E17-1 |
 | **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3 and #1819 |
-| **E17-4** | AlUmmahNow | Admin | E17-2, E17-3 |
+| **E17-4** | AlUmmahNow | Admin | E17-2b, E17-3 |
 | **E17-5** | AlUmmahNow | Web viewer and Studio | E17-2, E17-3 |
 | **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
 | **E17-9** | AlUmmahNow | Longer playlist for seek-back on the self-hosted edge | E17-1 |
