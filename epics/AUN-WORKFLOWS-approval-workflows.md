@@ -151,7 +151,7 @@ asks the rule of its scope:
 - **Admin pages:** the Users, user, Tiers and Tier requests pages show "Sent for approval" with the
   request's link instead of "Saved" and Undo, and "Waiting for approval" in place of the control while the
   request is open (`GET /api/workflows/pending?type=&target=`, up to 100 targets in one read of the
-  open-request index). This is its own PR after the back end; until it is live, give no tier scope approvers.
+  open-request index). Until AlUmmahNow#1936 is live, give no tier scope approvers.
 - Declining a tier request stays a direct action: it only takes the request away.
 
 ## 5. Lifecycle
@@ -237,6 +237,7 @@ Permissions (admin-api, not Auth): `workflows:read` (every admin role, sees requ
 | `POST /api/workflows/requests/:id/withdraw` | `{ version }` |
 | `POST /api/workflows/requests/:id/comment` | `{ note }` |
 | `POST /api/workflows/requests/:id/retry` | Retries a `failed` apply (super admin, or finance list for money) |
+| `GET /api/workflows/pending?type=&target=` | `{ items: { "<kind>:<id>": requestId } }`: the open request of each target (repeat `target`, up to 100), so a page shows "Waiting for approval" in place of its control; money types only for people who can see money |
 | `GET /api/workflows/counts` | `{ waitingForMe }` for the sidebar badge (from `workflow_inbox`) |
 
 Errors use the server envelope (FEAT-3) with server-written en/ar messages: `change_pending`, `approval_not_allowed` (with `reason`: `own_request`, `subject`, `excluded_tech_staff`, `excluded_owner`, `not_in_approver_set`, `one_step_per_person`, `already_approved`), `request_closed`, `request_stale`, `version_conflict`, `rule_below_floor`, `rule_invalid`, `propose_not_allowed`, `nobody_can_approve`.
@@ -363,8 +364,8 @@ A few rows per request in the search D1, one email per recipient per event throu
 | WF-9 Features page: read admin-api's real answers, shared readers and contract tests (AUN-FEATURES FEAT-8, taken over) | [AlUmmahNow#1759](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1759) | merged (`6356143`) |
 | WF-9 Features page: a change sent for approval | [AlUmmahNow#1874](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1874) | merged (`f04b81b`) |
 | `creatorSupport` direct (WF-D9 superseded) | [AlUmmahNow#1913](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1913) | merged (`bbf2120`) |
-| WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | in review |
-| WF-10 tiers: the admin pages | branch `feat/wf10-tiers-web` | built; opens when #1914 is merged |
+| WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | merged (`921a555`) |
+| WF-10 tiers: the admin pages | [AlUmmahNow#1936](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1936) | in review |
 | WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
