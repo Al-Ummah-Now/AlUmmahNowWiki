@@ -202,7 +202,7 @@ Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/
 
 `GET /api/live-streams` keeps its present rules (owner and `live.manage` members see private and hidden streams; VR9 recordings are withheld) and gains `kind` and `eventType`. With either filter it reads ids from `live_stream_metadata` and then re-checks every loaded record with the same `isListed` function.
 
-`PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
+Until a premiere starts, `premiereVideoId` is given to its team only. `PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
 
 `GET /api/live-streams/:id/state` keeps every field it returns today (`streamId`, `sessionId`, `status`, `sessionStatus`, `receiving`, `playbackUrl`, `vodUrl`, `startedAt`, `endedAt`, `bitrateKbps`, `provider`, `qoe`, `viewers`, `serverNow` in milliseconds) and adds:
 
@@ -322,7 +322,7 @@ A hold whose stream no longer exists, or is cancelled or ended, is **stale**: th
 
 **Start** (cron: `status = 'scheduled' AND scheduled_start_at <= now`, premieres only; or the owner's `POST /api/live-streams/:id/start`):
 
-1. Load the video. Not the same channel, removed or rejected: cancel (below), and the owner is notified. Not ready yet (processing, `checking`, `in_review`, `appealed`), or the switch is off: leave it scheduled and try again next minute; after 60 minutes cancel.
+1. Load the video. Not the same channel, removed or rejected, or no longer held for this premiere: cancel (below), and the owner is notified (E17-3a). Not ready yet (processing, `checking`, `in_review`, `appealed`), or the switch is off: leave it scheduled and try again next minute; after 60 minutes cancel.
 2. **Claim:** one conditional write on the stream, `scheduled → live` with `actualStartTime`, refused unless the fresh copy is still `scheduled` and due. Only the writer that wins goes on, so it happens once.
 3. **Release:** one conditional write on the video, only if `premiereHold.streamId` is this stream: delete `premiereHold`, `isPublic = true`, `isDraft = false`, and `publishedAt` through `markPublished`. The wrapped bucket then updates search and queues the media move (`onVideoWritten`). Until the move finishes, playback is signed from the private prefix, as for any video just made public.
 4. **Announce:** `announceLiveStarted`, then reminders (§5.5). `announceNewVideo` is not sent: one notification per premiere.
@@ -390,7 +390,7 @@ Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82,
 | **17.1** Live watch, viewer count, DVR | Web watch and viewer count on main. Seek-back is not: the self-hosted playlist lists only 4 to 6 segments (`lib/live/providers.ts`, `hls_list_size`), though every segment is kept in R2 and indexed in `live_segments`. E17-9 serves a longer playlist from that index. |
 | **17.2** Moderated chat | E17-2, then clients. |
 | **17.3** Premieres, scheduled streams, reminders | E17-3. Shares `live_stream_metadata` with E22. |
-| **17.4** Event streams | E17-1 (field), E17-3 (filter), then clients. |
+| **17.4** Event streams | E17-1 (field), E17-3c (tags, filter), then clients. |
 | **17.5** Recordings | Server recording and review on main. Chat replay is E17-2. |
 
 ## 8. Cost
@@ -417,8 +417,10 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-1** ([#1787](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1787)) | AlUmmahNow | Switches, tier fields, shared types, filter and normalizer, three tables, projection with order guard, hydration, wrapped live sweep, erasure, Takeout | nothing |
 | **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841)) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
 | **E17-2b** | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
-| **E17-3** | AlUmmahNow | Premieres, reminders, event filter, chapters fix | E17-1 |
-| **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3 and #1819 |
+| **E17-3** | AlUmmahNow | Premieres, chapters fix | E17-2 |
+| **E17-3a** | AlUmmahNow | Reminders, and the owner's notice when a premiere is cancelled by the system | E17-3 |
+| **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3a and #1819 |
+| **E17-3c** | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
 | **E17-4** | AlUmmahNow | Admin | E17-2b, E17-3 |
 | **E17-5** | AlUmmahNow | Web viewer and Studio | E17-2, E17-3 |
 | **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
