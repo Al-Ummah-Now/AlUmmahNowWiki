@@ -7,7 +7,7 @@
 | **ID** | `CHAT-ADMIN-CONTENT` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-24 |
 | **Origin** | Chat only: no repo doc defines this epic |
 
 > API (#576) and UI (#627) merged 2026-11-10. ADM-1 completeness (2026-11-14): purge completeness merged (#1370 and, for revoked invites, #1413; needs release); audit log page and names instead of ids (#1403), channel transfer with the shared autocomplete (#1405) and the remote config editor (#1410) are held for owner screenshots.
@@ -30,6 +30,7 @@ Platform-wide constraints that apply to every epic:
 ## Status evidence
 
 - ADM-1: [AlUmmahNow#1370](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1370), [AlUmmahNow#1413](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1413), [AlUmmahNow#1403](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1403), [AlUmmahNow#1405](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1405), [AlUmmahNow#1410](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1410)
+- Account emails: [AlUmmahNow#1864](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1864), [AlUmmahNow#1866](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1866), [AlUmmahNow#1868](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1868), [AlUmmahNow#1870](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1870), [AlUmmahNow#1871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1871)
 - PRs [AlUmmahNow#576](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/576), [AlUmmahNow#627](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/627), [AlUmmahNow#636](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/636), [AlUmmahNow#645](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/645), [AlUmmahNow#649](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/649)
 
 ## Admin completeness (ADM-1, 2026-11-14)
@@ -39,6 +40,14 @@ Platform-wide constraints that apply to every epic:
 - **Audit log page** (#711, #745): `/audit` in the videos admin lists every admin action, filtered by admin and item (autocomplete), area, action and dates, and every history card shows names instead of ids. [AlUmmahNow#1403](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1403).
 - **Channel transfer** (#710, #713): the new owner is picked with the shared autocomplete (search by name, @handle or email; team members first; banned accounts can't be picked). [AlUmmahNow#1405](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1405).
 - **Remote config editor** (#413, #415): see [E09](E09-native-platform-foundations.md) 9.5. [AlUmmahNow#1410](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1410).
+
+## Account emails (2026-11-24)
+
+- **Source.** A person's email is their sign-in account's, read from Auth by user id (`AUTH_DB`, read only, by primary key or the email index). The profile holds a copy, set from the signed-in token; an `email` a client sends is ignored. Channels carry no copy. [AlUmmahNow#1864](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1864), [#1866](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1866), [#1870](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1870).
+- **Mail.** Account mail (warnings, rejections, tiers, workflow notices) goes to the account's address. No account means no mail. While accounts cannot be read, the queued email retries and the in-app notice still goes out.
+- **Admin.** The user page says when there is no account, when the email could not be read, and when the profile shows another email. CSAM report facts carry the email's source, and name an account that was deleted but is not purged yet. An invite is decided by the account; a profile that shows the email is a warning.
+- **Channel move.** The picker shows the user id beside the account email. The dialog is confirmed with the channel's @handle or the new owner's user id. [AlUmmahNow#1868](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1868).
+- **Profile emails page** (super admins, **People › Profile emails**): a queued check compares profiles and their channels with the accounts and changes nothing. A repair, offered for 24 hours after a check, writes the account email on profiles that differ and removes it from channels that do. Emails are only in the job's private report, kept 30 days. CSAM cases are compared separately, and each read is logged. [AlUmmahNow#1871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1871).
 
 ## Open questions
 

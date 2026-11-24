@@ -84,6 +84,7 @@ Admins can also **warn** a user: the warning is recorded and audited, and the us
 |---|---|---|
 | 30-day purge of soft-deleted items | Videos admin, Auth, CMS | Hourly |
 | Watch history older than 18 months; event archive older than 13 months | api-videos cron | Daily |
+| Profile email reports older than 30 days | api-videos, when the next check or repair starts | On demand ([#1871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1871)) |
 | Admin history older than 2 years; dead letters, erase tombstones older than 30 days; archive title index past the archive's retention | processor cron | Daily |
 | Abandoned and orphan Bunny uploads (reaper; only removes what an upload made) | api-videos | Scheduled ([#613](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/613), [#634](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/634)) |
 | E2E leftovers on QA, stale run accounts, test-library sweeps, orphan collections | GitHub Actions | See [Testing and E2E](testing.md#cleanup-jobs-for-shared-environments) |

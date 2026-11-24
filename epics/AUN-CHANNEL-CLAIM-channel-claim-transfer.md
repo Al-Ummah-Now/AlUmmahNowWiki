@@ -49,7 +49,7 @@ Paths are in AlUmmahNow at `origin/main` unless noted.
 | Checks | Channel exists and isn't deleted, target isn't the owner (`already_owner`), target has a profile (`new_owner_not_found`), target isn't banned (`new_owner_banned`) — `transferChannel` in `apps/api-videos/src/lib/admin/service.ts` |
 | Job | `channel.transfer` in `SEARCH_DB.admin_jobs`, run from `ADMIN_JOBS_QUEUE` with retries, DLQ and a Retry button on the admin Errors page. `runTransfer` changes the channel (`userId`, `isMain`, drops the new owner's member entry), both profiles' `channels[]`, the old owner's main channel (`pickNewMainChannel`), each video's `userId` and each playlist's `userId`. Sends `ChannelUpdate {action:'transferred'}`, which the processor only logs |
 | Search index | `content_ownership` and `channel_access` follow the R2 writes (`apps/api-videos/src/lib/search/ownership.ts`) |
-| Admin screen | `/channels/[id]` → `ChannelTransfer.tsx`: the shared Autocomplete (team members first, banned people can't be picked; [ADM-1, AlUmmahNow#1405](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1405)), a confirm dialog where the admin types the @handle or the new owner's email, live job progress |
+| Admin screen | `/channels/[id]` → `ChannelTransfer.tsx`: the shared Autocomplete (team members first, banned people can't be picked; [ADM-1, AlUmmahNow#1405](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1405)), a confirm dialog where the admin types the @handle or the new owner's user id ([#1868](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1868)), live job progress |
 | Invites | An admin invite can hand over up to 10 existing channels (`channels.transfer`), and a revoked, never-accepted invite gives them back before the invitee's data is erased (`apps/admin-api/src/lib/invite-erase.ts`) |
 | Handles | Owners change their own handle in channel settings. `canClaimOfficialHandles` lets a super admin use an official handle only on a channel they own or administer (`apps/api-videos/src/lib/channelHandles.ts`). Handle history and 301s exist ([AUN-SEO](AUN-SEO-search-visibility.md)) |
 | Team | Members can leave; the owner can't leave or be removed (`channelMembers.ts`). `transfer_kept_old_owner` is defined in `channel-roles.ts` but never written |
@@ -79,7 +79,7 @@ The move leaves these on the old owner or unchanged:
 
 | Record | Change | How it's found |
 |---|---|---|
-| Channel | `userId`, `email` (new owner's), `isMain` ([§3.2](#32-main-channel)), `contactEmail` cleared unless kept, `transferredAt`, `dateModified` | By id |
+| Channel | `userId`, `email` removed (channels carry no copy of the account email; [#1866](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1866)), `isMain` ([§3.2](#32-main-channel)), `contactEmail` cleared unless kept, `transferredAt`, `dateModified` | By id |
 | Handle index | `userId` | By handle |
 | Profiles | Old loses, new gains the id in `channels[]` | By id |
 | Videos and shorts, **including private, draft, hidden and soft-deleted** | `userId` | `content_ownership` by `channel_id` **with no `is_deleted` filter** (indexed column; new `contentIdsAll`) |
@@ -262,7 +262,7 @@ A move is one R2 write per moved object plus a few D1 rows, on a rare action: fr
 - **Account takeover:** a stolen session could give a channel away, but only to someone the owner already made a channel admin. Fresh sign-in, typed handle, emails to both sides, and admin undo (move back) limit the damage.
 - **Selling channels:** limited by the admins-only receiver rule, the 30-day limit and the official-handle block; abuse reports can lead to an admin move back.
 - **Impersonation claims:** only admins approve, proof is shown, and an approved claim can be reversed by an admin move. Proof files may hold personal data: private storage, scanned, deleted after the retention period.
-- **Personal data:** `email` and `contactEmail` belong to the old owner and are replaced or cleared. Audit rows and offers store user ids, not addresses. Erasure of either account works by `userId` and runs after any open offer is cancelled.
+- **Personal data:** `email` (older records only) and `contactEmail` belong to the old owner and are removed or cleared. Audit rows and offers store user ids, not addresses. Erasure of either account works by `userId` and runs after any open offer is cancelled.
 - **Creator support money:** support never follows a channel unless an admin decides ([CC-D10](#13-owner-decisions)).
 - **Copyright:** a claim by the real creator of imported content is the fix the import process needs; the claim form says that approving it does not decide copyright disputes.
 

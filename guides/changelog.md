@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-24: account emails come from the sign-in account
+
+- **AlUmmahNow:** a profile's email is the signed-in account's, and an `email` sent with a profile is ignored ([#1864](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1864)). Account mail, the admin user page, CSAM report facts, channel moves, admin user search and invites read the email from Auth by user id, and channels no longer carry a copy ([#1866](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1866)). A profile may have no email ([#1870](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1870)). Channel moves name the new owner by user id ([#1868](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1868)), and super admins can check and repair stored profile emails ([#1871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1871)). See [Videos admin](../epics/CHAT-ADMIN-CONTENT-admin-content-management.md#account-emails-2026-11-24).
+
 ## 2026-11-24: Auth's API can't lose something a client uses unannounced (AUTH-R6)
 
 - **AlUmmahNowAuth:** every pull request compares `openapi.json` with the one in the newest release. Removing or narrowing something a client uses fails, unless it was announced in a release and its date has passed ([#511](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/511)). A PR that corrects the spec to match the server records the exact change in `docs/api-exceptions.json`. Test users made by the admin specs are run accounts, deleted with the run ([#505](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/505)).
