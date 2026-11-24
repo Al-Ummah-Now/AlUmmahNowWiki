@@ -366,9 +366,10 @@ A few rows per request in the search D1, one email per recipient per event throu
 | `creatorSupport` direct (WF-D9 superseded) | [AlUmmahNow#1913](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1913) | merged (`bbf2120`) |
 | WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | merged (`921a555`) |
 | WF-10 tiers: the admin pages | [AlUmmahNow#1936](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1936) | merged (`367a249`) |
+| WF-10 follow-up: people lists in emails, the minimum's wording | [AlUmmahNow#1939](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1939) | merged (`ee88a3d`) |
 | WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
 | WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
+"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Release `v2026.11.24.2` has everything up to AlUmmahNow#1914; AlUmmahNow#1936 and #1939 are not in a release yet (2026-11-24). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
