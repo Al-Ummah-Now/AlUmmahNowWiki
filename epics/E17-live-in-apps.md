@@ -273,7 +273,11 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 **Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.manage`, `live.moderate` or `comment.moderate`. An author may `remove` their own message, and nobody else can bring that back. `block_author` uses `channel_blocks` and removes that person's messages on the stream; the team cannot be blocked. Site moderators act from the admin queues (below). `PATCH /:id/chat/settings` is `allowChat`, `chatReplay`, `slowModeSeconds` and `subscribersOnly` for the owner, `live.manage` and `live.moderate`.
 
-**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). The admin-api `reports` table has a CHECK on `entity_type`, so E17-2b rebuilds it in a migration (as `0020_reports_queue.sql` did) and adds the type to `ReportableEntityType`, the queue and the decision code. Decisions on `live_chat` and `livestream` are sent to an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2 (E17-2b).
+**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). It answers `404 feature_off` while `liveChat` is off or unreadable, and `404` unless the message is published and the reporter may read that chat now. The text, stream, channel and author go with the report when it is filed, because deleting a stream deletes its messages; the queue archive drops the text and pseudonymises the author. Account erasure takes the reported person's id and name out of every report, and their words out of reports on comments and chat messages. admin-api migration `0051_reports_live_chat.sql` adds the type to `reports`.
+
+**Decisions.** On `live_chat` and `livestream`, admin-api calls an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2. A removed or restored message drops the shared 2-second page. A stream an admin hides or deletes ends whatever its status, with any session still open, and a premiere is cancelled or ended. While it is hidden or deleted, `/ingest`, `/start`, `PATCH` to `live` and the encoder's first video are refused (`live_stream_removed`).
+
+**AI queue.** A `live_chat` row shows the message and leads to its channel. Message text is not searchable there: the table grows without bound, a `LIKE` over it would be a full scan, and a text index would cost extra writes on every message. Search by message, author or channel id, author name and channel name works.
 
 ### 5.3 WebSocket `live:<streamId>`
 
@@ -364,9 +368,8 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 ### 5.6 Kids
 
-There is no in-app Kids Mode (owner, 2026-11-23; AlUmmahNow#1801 closed), so there is no Kids session for live chat to refuse. E17 adds no Kids mechanism of its own.
+There is no Kids Mode and no kids app ([O45](decisions.md#o45-no-in-app-kids-mode-support-the-systems-parental-controls)), so there is no Kids session or client for live chat to refuse. What remains:
 
-- **No live chat in Ummah Kids.** In `GET /api/me/features`, `liveChat` and `liveReminders` are off for the Ummah Kids client (`isKidsClientApp`), as `eventCalendar` is. That hides them there; it is not an access check.
 - **Content made for kids:** `made_for_kids` is stored on the stream when it is written: the creator's `madeForKids`, or the premiere video's `importedFrom.madeForKids`. Chat, replay and reminders are off for it, for everyone, over HTTP and the socket, from that one stored flag.
 
 ## 6. Platforms
@@ -379,7 +382,7 @@ Labels: **Jumu'ah** / **الجمعة**, **Taraweeh** / **التراويح**, **C
 |---|---|
 | **Web viewer** | Chat panel, pinned message, slow-mode timer, sign-in prompt, report, moderator menu, replay chat; premiere countdown and synced playback; reminder button; event badges and filter; return-to-live. |
 | **Web Studio** | Schedule a premiere from a video (search box opens with eligible videos), reschedule, swap, cancel; event type; chat settings. A held video shows "Premiere, date" and its visibility controls are replaced by a link to the premiere. |
-| **Admin** | Four switches, three tier fields, live-chat share of the AI cap, `live_chat` in AI moderation and Reports. |
+| **Admin** | Four switches, three tier fields, live-chat share of the AI cap, `live_chat` in AI moderation and Reports, live and its choices named in the tier change log. |
 | **Apple, Android, Desktop** | Live list, watch, chat, premiere, reminder, replay, against the merged server. TV: watch, premiere and reading chat only. |
 
 Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82, Android #56, Desktop #75) were written against routes that do not exist and are closed; their replacements are E17-6 to E17-8.
@@ -389,9 +392,9 @@ Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82,
 | Story | Status |
 |---|---|
 | **17.1** Live watch, viewer count, DVR | Web watch and viewer count on main. Seek-back is not: the self-hosted playlist lists only 4 to 6 segments (`lib/live/providers.ts`, `hls_list_size`), though every segment is kept in R2 and indexed in `live_segments`. E17-9 serves a longer playlist from that index. |
-| **17.2** Moderated chat | E17-2, then clients. |
-| **17.3** Premieres, scheduled streams, reminders | E17-3. Shares `live_stream_metadata` with E22. |
-| **17.4** Event streams | E17-1 (field), E17-3c (tags, filter), then clients. |
+| **17.2** Moderated chat | Server done (E17-2, E17-2b), then clients. |
+| **17.3** Premieres, scheduled streams, reminders | Server done (E17-3, E17-3a), then clients. Shares `live_stream_metadata` with E22. |
+| **17.4** Event streams | Server done (E17-1, E17-3c), then clients. |
 | **17.5** Recordings | Server recording and review on main. Chat replay is E17-2. |
 
 ## 8. Cost
@@ -417,12 +420,12 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 |---|---|---|---|
 | **E17-1** ([#1787](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1787)) | AlUmmahNow | Switches, tier fields, shared types, filter and normalizer, three tables, projection with order guard, hydration, wrapped live sweep, erasure, Takeout | nothing |
 | **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841)) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
-| **E17-2b** | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
-| **E17-3** | AlUmmahNow | Premieres, chapters fix | E17-2 |
-| **E17-3a** | AlUmmahNow | Reminders, and the owner's notice when a premiere is cancelled by the system | E17-3 |
+| **E17-2b** ([#1858](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1858)) | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
+| **E17-3** ([#1842](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1842)) | AlUmmahNow | Premieres, chapters fix | E17-2 |
+| **E17-3a** ([#1845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1845)) | AlUmmahNow | Reminders, and the owner's notice when a premiere is cancelled by the system | E17-3 |
 | **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3a and #1819 |
-| **E17-3c** | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
-| **E17-4** | AlUmmahNow | Admin | E17-2b, E17-3 |
+| **E17-3c** ([#1863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1863)) | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
+| **E17-4** ([#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)) | AlUmmahNow | Admin | E17-2b, E17-3 |
 | **E17-5** | AlUmmahNow | Web viewer and Studio | E17-2, E17-3 |
 | **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
 | **E17-9** | AlUmmahNow | Longer playlist for seek-back on the self-hosted edge | E17-1 |
