@@ -1,4 +1,4 @@
-[← Home](../README.md) · [Epic 23](../epics/E23-release-engineering.md) · [Release process](release-process.md)
+[← Home](../README.md) · [Epic 23](../epics/E23-release-engineering.md) · [Release process](release-process.md) · [Store compliance](store-compliance.md)
 
 # Store release: what the owner pastes where
 
