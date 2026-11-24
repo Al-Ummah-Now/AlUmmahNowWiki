@@ -104,12 +104,12 @@ The format is the same everywhere and is defined by `packages/admin-help/schema.
 Rules for the text:
 
 - **Plain, factual, short.** The popover shows only `summary` (at most two short sentences, about 200 characters), `tipCaution` when there is one (one line, about 120 characters), and Learn more; the check enforces the lengths. The guide shows every field, including `summary`, so the popover never says anything the guide does not.
-- **Numbers as `{#n}`** so Arabic shows ٠–٩ through the shared formatter. Arabic uses «مرئي/مرئيات» and «،».
+- **Numbers as `{#n}`** so Arabic shows ٠–٩ through the shared formatter. A literal value the admin types (a version such as `1.4.0`, a key, a JSON value) goes in backticks and is shown as code, left to right, exactly as typed. Arabic uses «مرئي/مرئيات» and «،».
 - **Costs in unit terms only**: "each caption track is one Workers AI call, about $0.01 per hour of audio", never a budget or cap.
 - **Laws and policies** are stated as facts with a `source` link to the official text, never as legal advice. The guide footer says "This guide describes how the setting works. It is not legal advice." in both languages.
 - **No secret values** (keys, tokens) and no internal hostnames beyond what the admin already sees.
 
-**One source, two views.** The popover and the guide render the same entry, so they cannot drift. Native admin apps ([AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md)) read the same files: each admin serves its content as static JSON at `/help/content/<locale>.json` (built from the files above, no database, cached by the CDN), and the native apps bundle the same JSON at build time with the server copy as the update path.
+**One source, two views.** The popover and the guide render the same entry, so they cannot drift. Native admin apps ([AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md)) read the same files: they vendor `packages/admin-help/content` at build time, the way they vendor the Fanous tokens, so the help works offline and ships with the app version it describes.
 
 ## The "?" component
 
@@ -146,7 +146,7 @@ Behavior:
 
 `pnpm check:admin-help` (videos admin; same script vendored into Auth and the CMS), run by the existing lint job:
 
-1. **Schema**: every content file is valid, every entry has `en` and `ar` for every text field, ids and anchors are unique, Arabic text has no 0–9 outside `{#…}` and URLs.
+1. **Schema**: every content file is valid, every entry has `en` and `ar` for every text field, ids and anchors are unique, Arabic text has no 0–9 outside `{#…}`, code spans, Latin names and URLs.
 2. **Every control is covered**: in the covered folders, every JSX form control (`input` other than `hidden`, `select`, `textarea`, `NumberField`, `Select`, switches) carries `data-help="<id>"` naming an existing entry, or `data-help-exempt="<reason>"` (a search box, a filter, a file picker). A control with neither fails the build with its file and line.
 3. **Every entry is used**: each id is rendered by a `<HelpTip id=…>` somewhere, so stale entries fail too.
 4. **The covered folders** start with Platform settings and grow with each area PR; the last PR covers all of `apps/admin-web/src`, and the list is removed.
