@@ -107,7 +107,7 @@ Rules:
 2. **When to ask** ([E20-D4](#11-owner-decisions)). If `requiredRegulatoryFeatures` contains `declaredAgeRangeRequired` (or, on 26.2 and 26.3, `isEligibleForAgeFeatures` is true): at first launch after install, when an account signs in on that device, and when a significant change takes effect. Otherwise: once, the first time someone tries to comment, chat, post or upload. Never on a plain launch, never for watching. A periodic re-check happens at most once in 12 months (the Utah and Alabama limit).
 3. Use `lowerBound`; `nil` means under 13. Use `activeParentalControls` for Communication Limits.
 4. Nothing about the range goes into logs, analytics, crash samples, push or support diagnostics.
-5. Errors (`notAvailable`, `invalidRequest`, `declinedOnboarding`, `invalidAccount`, `network`) and `declinedSharing` are "no signal", never "adult" and never "child".
+5. Errors (`notAvailable` and `invalidRequest` from 26.0; `declinedOnboarding`, `invalidAccount` and `network` from 27.0, so behind an availability check and a default case) and `declinedSharing` are "no signal", never "adult" and never "child".
 
 The outcome is a **level** evaluated in aun-core from the signal and the policy the server sends (§5.2): the same code on every platform.
 
@@ -170,7 +170,7 @@ CarPlay shows the phone app's content, so the phone's level and limits apply. Ag
 3. Map: `ageUpper ≤ 12` under 13; and so on; `ageRangeSource` `TIER_B` means a parent manages the age. `VERIFICATION_REQUIRED`: tell the person to open the Play Store to finish (Google's instruction), with viewing still open ([E20-D5](#11-owner-decisions)).
 4. `significantChangeStatus` `PENDING` or `DECLINED` keeps the changed feature off.
 5. Retry only the codes Google marks retryable, at most twice, never blocking the first screen. Use Play Integrity (already in `integrity-play`) when a level is sent to the server.
-6. Google's terms: **only** for age-appropriate experiences and legal compliance. No ads, analytics, profiling or sharing. Do not store `installId`: it exists only to report revoked approvals, and Play already stops the app.
+6. Google's terms: **only** for age-appropriate experiences and legal compliance. No ads, analytics, profiling or sharing. Do not store `installId`: it exists only to report revoked approvals, and Play already stops the app. Reopened only if counsel answers yes to Q5.
 
 The library goes in `viewer-mobile` and `studio-mobile` behind an interface in `core-bridge`, so the Fire flavor and TV never link it.
 
@@ -211,7 +211,7 @@ Age sits **in front of** creator tiers, not inside them: a tier can never lower 
 
 **Switches** (Features page, all default **off**, server-enforced): `ageSignals` (group people), `ageRestrictedVideos` (group people), `parentsGuide` (group site). `ageSignals` can be turned on only when the policy is saved with English and Arabic text for every listed change (a check in `feature-preconditions.ts`). Off: apps don't ask, the config key is absent, the routes answer `404 feature_off`.
 
-**Policy**: `site_settings` key `age_policy`, edited on videos admin → Mobile apps → **Age policy**, audited, conflict-checked like app config. Served inside the existing `GET /api/v1/app-config` answer, so it costs no extra request:
+**Policy**: one rule, key `age.policy`, in the existing `config` document of the **`APP_CONFIG` KV**, the only store `GET /api/v1/app-config` reads (`apps/api-videos/src/endpoints/app-config/appConfigGet.ts`). It is not a `site_settings` value and not in `ADMIN_DB`. Videos admin → App config gains an **Age policy** form that writes that rule through `apps/admin-api/src/routers/appConfig.router.ts`, with its validation, conflict check and audit row (`site_settings_log`, key `app-config:config`). The rule editor refuses to edit the key by hand. `appConfigGet` leaves the key out while `ageSignals` is off. The server's own checks read the same rule. It travels in an answer the apps already fetch, so it costs no extra request:
 
 ```json
 "config": { "age.policy": {
@@ -232,19 +232,29 @@ Age sits **in front of** creator tiers, not inside them: a tier can never lower 
 CREATE TABLE user_age_levels (
   user_id    TEXT PRIMARY KEY,
   level      TEXT NOT NULL CHECK (level IN ('under13','13_15','16_17')),
-  platform   TEXT NOT NULL CHECK (platform IN ('apple','play','windows')),
-  set_at     TEXT NOT NULL,
   expires_at TEXT NOT NULL            -- 12 months; asking again renews it
 );
 CREATE INDEX idx_user_age_levels_expires ON user_age_levels (expires_at);
 ```
 
-- Adults have **no row**. The range itself, the source tier and the region are never stored.
-- `PUT /api/v1/me/age-level` `{ "band": "under13|13_15|16_17|adult", "platform": "…" }`, signed in, `X-AUN-Native-Proof` required when attestation is on for that client. A lower level is taken at once. A higher one, or `adult` (deletes the row), needs a valid proof; otherwise `403 native_proof_required`. Rate-limited per user. `GET` is part of `GET /api/me/features`, which drops the keys the level may not use.
-- Enforcement: middleware `requireMinimumAge(key)` on comment, reply, post, reaction, live chat, upload, channel-create and support routes: one primary-key read, cached per isolate for 60 seconds, then `403 age_minimum` (new code in the error catalogue, English and Arabic). Reading public content is never checked.
-- A route table test fails when a writing route has neither the middleware nor an exemption with a reason.
+- Adults have **no row**. The range itself, its source, the platform and the region are never stored.
+- `PUT /api/v1/me/age-level` `{ "band": "under13|13_15|16_17|adult" }`, signed in, rate-limited per user. Two rules, the same for every client:
+  1. **Lowering, or a first level, needs no proof** and takes effect at once: it can only restrict the caller.
+  2. **Raising or clearing always needs a valid `X-AUN-Native-Proof`**, checked with `acceptProof` (`lib/attestation/service.ts`) against this account. It does not depend on "Require a proof from these clients" (`enforceClientIds`). No proof, an expired one, another account's, or that platform's attestation switched off: `403 native_proof_required`, and the level stays. The web, Windows, Linux, TV and Mac have no attestation, so there a level can only go down.
+- Ways up: the iPhone, iPad or Android app with a proof; expiry after 12 months; support staff with an audited reason. A proof shows the request came from our genuine app, not that the age is true; a determined person can still get around it. That is accepted: we never claim to verify ages.
+- **`accountLevel` can't be turned on** (`feature-preconditions.ts`, `409 feature_precondition`) until App Attest and Play Integrity are on and the viewers that send proofs are released (E20-A6, E20-G5). Neither viewer attests today. The same PRs update App Privacy and Data safety.
+- `GET /api/me/features` drops the keys the level may not use.
+- Enforcement: middleware `requireMinimumAge(key)`, one primary-key read, cached per isolate for 60 seconds, then `403 age_minimum` (new code in `API_ERROR_CATALOGUE`, English and Arabic). If the row can't be read, the write answers `503 service_unavailable`. Keys:
+
+| Key | Routes |
+|---|---|
+| `signIn` | Every personal write: watch history and progress, likes and reactions, subscriptions, playlists, watch later, downloads, device and push registration, notification settings, profile |
+| `comment`, `post`, `liveChat`, `upload`, `support` | Comments and replies; community posts; chat messages; uploads, channel creation and Studio writes; creator support |
+| Exempt, with the reason in the route table | Sign-out, account deletion, data export, privacy and consent choices, reporting content, `PUT /me/age-level` itself: they protect the person. Public reads |
+
+- A route table test fails when a signed-in writing route has neither the middleware nor an exemption with a reason.
 - GDPR export and erase include the row. A daily job deletes expired rows through the index. The level never enters analytics, recommendations, email or admin lists; support staff see only "age rule applied", and can clear it with an audited reason.
-- `under13` on an existing account: writing stops. What else the law requires (notice, deletion, consent) is question Q2 for counsel; nothing is deleted automatically before that answer.
+- `under13` on an existing account: every personal write above stops, so nothing new is collected; push stops at the next send, which skips accounts below `signIn`. What else the law requires (notice, deletion, consent) is question Q2 for counsel; nothing is deleted automatically before that answer.
 
 **Apple notifications** (optional, E20-B5): `POST /webhooks/apple/app-store`, outside the session and CSRF middleware. Verifies the JWS chain to **Apple Root CA – G3** (the App Attest root in `lib/attestation/apple-root.ts` is a different root), then bundle id and environment; rejects anything else with 401. De-duplicates on `notificationUUID`. Acts on `RESCIND_CONSENT` only, by adding one to a daily counter. Stores no transaction or user id.
 
@@ -321,7 +331,7 @@ Questions for counsel (to add to the letter already in preparation):
 2. **Q2.** A store signal of under 13 on a signed-in account: is that COPPA actual knowledge, and must we notify a parent, delete, or suspend the account?
 3. **Q3.** Does a level learned in an app bind the website for the same account under California's text?
 4. **Q4.** Minimum account age 13 in the Terms: is 13 right in every storefront we open (the EU varies from 13 to 16)?
-5. **Q5.** Which storefronts need more than the store signal, and do internal-testing builds (Admin, QA) fall under any of these laws?
+5. **Q5.** Which storefronts need more than the store signal, and do internal-testing builds (Admin, QA) fall under any of these laws? If account levels are on, must a consent revoked in Play (reported only by `installId`) or at Apple also end access on our other surfaces?
 6. **Q6.** Which of our planned changes are "significant" (live chat, comments, creator support, downloads, a new data type)?
 7. **Q7.** Made-for-kids videos on a general site: must history and recommendations be off for them as well as comments?
 
@@ -335,18 +345,20 @@ Questions for counsel (to add to the letter already in preparation):
 | **E20-W1** | `store/microsoft/age-rating.md`, privacy answers, Samsung answers, test in `StoreListingTests` | Desktop | – | D1 |
 | **E20-B1** | `ageRestricted` and `madeForKids` on the video: record, index columns, upload defaults applied at last, API, `/api/v1` rules, import fallback, `ageRestrictedVideos` switch | AlUmmahNow | – | D8 |
 | **E20-B1u** | Studio, upload and admin fields (with staff lock and Undo) and the web warning page | AlUmmahNow | yes | B1 |
-| **E20-B2** | `ageSignals` switch and precondition, `age_policy` setting, app-config key, Age policy admin page, OpenAPI | AlUmmahNow | yes | D2–D5 |
+| **E20-B2** | `ageSignals` switch and precondition, the `age.policy` rule in the `APP_CONFIG` `config` document, Age policy form, OpenAPI | AlUmmahNow | yes | D2–D5 |
 | **E20-B3** | Core: policy types, `evaluate_age`, `due_to_ask`, scrubber keys, UniFFI; release candidate | Core | – | B2 contract |
-| **E20-B4** | Account level: table, API, middleware, route-table test, `GET /api/me/features`, export and erase, expiry job. Ships with `accountLevel` false | AlUmmahNow | – | B2; **turn-on** waits for D6 and Q1–Q3 |
+| **E20-B4** | Account level: table, API, middleware, route-table test, `GET /api/me/features`, export and erase, expiry job. Ships with `accountLevel` false | AlUmmahNow | – | B2; **turn-on** waits for D6, Q1–Q3, A6 and G5 |
 | **E20-B5** | `RESCIND_CONSENT` receiver (optional) | AlUmmahNow | – | – |
 | **E20-A2** | Declared Age Range in Viewer and Studio (iOS, iPadOS, macOS): entitlement, adapter, ask rules, hidden features, Communication Limits | Apple | yes | B3 |
 | **E20-A3** | Significant-change flow (PermissionKit, acknowledgment sheet, `ageRatingCode`, iCloud storage) | Apple | yes | A2 |
 | **E20-A4** | Read media limits on iOS and tvOS; drop age-restricted items from lists, Top Shelf, Spotlight, Now Playing, CarPlay | Apple | – | B1 |
 | **E20-A5** | Interruption: shield mid-playback, blocked sign-in domain; en/ar message | Apple | yes | – |
+| **E20-A6** | App Attest in the iPhone and iPad viewer, sending proofs with `PUT /me/age-level`; App Privacy answers. Only if D6 turns account levels on | Apple | – | B4, viewer sign-in |
 | **E20-G2** | Play Age Signals in viewer and Studio; Fire and TV flavors don't link it | Android | yes | B3 |
 | **E20-G3** | Suspension and resume in `AunPlaybackService`, Auto and Cast; significant-change state | Android | – | G2 |
 | **E20-G4** | TV and Auto: blocked ratings, rating on home-screen entries, explicit extra | Android | – | B1, Epic 15 screens |
-| **E20-W2** | Windows age range adapter, capability, consent text | Desktop | yes | B3 |
+| **E20-G5** | Play Integrity in `viewer-mobile` (`:integrity-play`), same use; Data safety answers. Only if D6 turns account levels on | Android | – | B4, viewer sign-in |
+| **E20-W2** | Windows age range adapter, capability, consent text. Lowers an account level, never raises one | Desktop | yes | B3 |
 | **E20-S1** | Parents' guide page and Age Suitability URL | AlUmmahNow | yes | D1 |
 | **E20-S2** | `Prefer: safe` | AlUmmahNow | – | B1u |
 | **E20-R** | Store release gate: checklist lines (re-read §7, answers, significant change?, switch on), device runs recorded | Wiki | – | all must-do stories |
@@ -373,7 +385,7 @@ Nothing else here needs the owner: formats, names, limits and order are set abov
 
 Every test seeds and deletes its own data; no paid services; stores and systems are faked in CI.
 
-- **Server (B1–B5):** switch off gives `404 feature_off` and no config key; precondition refuses a missing Arabic text; `/api/v1` list, search, related, playlist and single-video answers never contain an age-restricted video for `X-AUN-Client` and do for the web; staff lock; flags mutually exclusive; import fallback; the query plans use an index. Account level: lower at once, higher only with proof, adult deletes, expiry through the index, every writing route covered, `GET /api/me/features` drops keys, export and erase, no band in logs or error samples. Apple notification: good chain, wrong root, wrong bundle, wrong environment, replay, other types ignored.
+- **Server (B1–B5):** switch off gives `404 feature_off` and no config key; precondition refuses a missing Arabic text; `/api/v1` list, search, related, playlist and single-video answers never contain an age-restricted video for `X-AUN-Client` and do for the web; staff lock; flags mutually exclusive; import fallback; the query plans use an index. Account level: lower at once; higher and `adult` refused from the web, Windows and any client without a proof, with attestation on and off, with `enforceClientIds` empty, with another account's or an expired proof; accepted with a good one, adult deletes; precondition refuses `accountLevel` without attestation; unreadable row refuses the write, expiry through the index, every writing route covered, `GET /api/me/features` drops keys, export and erase, no band in logs or error samples. Apple notification: good chain, wrong root, wrong bundle, wrong environment, replay, other types ignored.
 - **Core (B3):** a table test for every band × account level × policy × missing value, unknown policy version, gates replaced by the system, ask cadence across install, sign-in, change and 12 months; the same table runs through Swift, Kotlin and C# bindings.
 - **Apple (A1–A5):** unit tests with a fake `AgeRangeProviding` for every declaration, `nil` bounds, declined, each error, iOS 17 (framework absent), 26.2 and 26.4 paths, tvOS (never asks); fake `AskCenter` for approve, decline, not available; iCloud merge. UI tests in English and Arabic, iPhone, iPad and Mac: hidden features per level, no prompt while watching, shield mid-video keeps the position, blocked sign-in message. tvOS UI test: no age-restricted item with a limit below R. Real devices before release, with Apple's sandbox scenarios (Settings → Developer → Sandbox Apple Account → Age Assurance: the six cases, plus Revoke App Consent) and a real child account: rating limit, Ask to Buy for a free download, App Limit, Downtime, Time Allowance, Always/Ask/Never.
 - **Android (G1–G4):** `FakeAgeSignalsManager` for each documented example and every error code; one Robolectric and one instrumented run in English and Arabic; suspend and unsuspend the package during playback, background audio and an Auto session on an emulator; the Fire and TV APKs contain no age-signals class. Real device with a Family Link child: rating filter, app approval, app limit, block, sharing on and off.
