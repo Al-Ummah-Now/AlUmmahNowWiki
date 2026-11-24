@@ -76,7 +76,7 @@ Merged since 2026-11-09:
 |---|---|
 | [Epic 9: Platform foundations for native clients (backend)](../epics/E09-native-platform-foundations.md) | in progress |
 | [Legacy roadmap 1.3: SSO authentication service](../epics/LR-1.3-legacy-sso.md) | shipped |
-| [Auth v1.0 roadmap: Documentation & developer experience](../epics/AUTH-R4-auth-docs-dx.md) | in progress |
+| [Auth v1.0 roadmap: Documentation & developer experience](../epics/AUTH-R4-auth-docs-dx.md) | shipped |
 | [Identity platform: SSO provider, Lanes 1–7](../epics/AUTH-IDP-identity-platform.md) | shipped |
 | [OpenAuth fork: enterprise features](../epics/AUTH-ENTERPRISE-openauth-enterprise-features.md) | shipped |
 | [OpenAuth enterprise admin APIs](../epics/OA-ADMIN-APIS-openauth-admin-apis.md) | shipped |
