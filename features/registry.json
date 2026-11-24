@@ -2336,7 +2336,7 @@
         "auth"
       ],
       "wiki": "epics/AUN-D1-SCALING-d1-capacity-and-scaling.md",
-      "note": "Spec only. Every D1 database and table inventoried with a growth model at 10k to 10M monthly users. The notifications database (inbox plus analytics counters) reaches the 10 GB limit first, at about 64k monthly users, then Auth (about 129k) and search (about 167k). First story: admins are alerted at 70% of each D1 limit on the Costs, Operations, Status and Errors pages, fed by the cost-monitor. Then retention, analytics dimensions to Analytics Engine, the Auth audit split and per-user inbox shards."
+      "note": "Spec only. Every D1 database and table inventoried with a growth model at 10k to 10M monthly users. The notifications database (inbox, analytics counters and 91 days of Popular viewer rows) reaches the 10 GB limit first, at about 40k monthly users, then Auth (about 129k) and search (about 167k). First story: admins are alerted at 70% of each D1 limit on the Costs, Operations, Status and Errors pages, fed by the cost-monitor. Then inbox retention, Popular viewer counts, an exact 90-day analytics hot window with an R2 archive, Auth count-scan fixes, audit retention and split, and per-user inbox shards."
     },
     {
       "id": "error-pages",
