@@ -9,8 +9,8 @@
 | [AlUmmahNow](../repos/AlUmmahNow.md) | Push to `main` | `vYYYY.MM.DD[.N]` tag on `main` |
 | [AlUmmahNowUI](../repos/AlUmmahNowUI.md) | Push to `main` | `vYYYY.MM.DD[.N]` tag on `main` |
 | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md) | Push to `main` | `vYYYY.MM.DD[.N]` tag on `main` |
-| [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) | From PRs | Every merge to `main` |
-| [openauth](../repos/openauth.md) | Not applicable | Merge to `master` publishes to GitHub Packages once tests pass; the version comes from git tags, never a pushed commit ([openauth#27](https://github.com/Al-Ummah-Now/openauth/pull/27)) |
+| [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) | Push to `main` | Every merge to `main`; each production release gets a `vYYYY.MM.DD[.N]` GitHub release as its record |
+| [openauth](../repos/openauth.md) | Not applicable | Merge to `master` publishes to GitHub Packages once `test` and `format` pass on that commit and a published file changed; the version comes from git tags and the commits, never a pushed commit ([openauth#27](https://github.com/Al-Ummah-Now/openauth/pull/27), [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59)) |
 | [AlUmmahNowCore](../repos/AlUmmahNowCore.md) | Not applicable | `vX.Y.Z` (or `vX.Y.Z-rc.N` pre-release) tag on `main`, matching `Cargo.toml`, publishes the AAR, NuGet, XCFramework and a SwiftPM tag |
 | [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) | QA build flavour | `vYYYY.MM.DD[.N]` tag on `main`: Studio APKs and AAB on a GitHub release (pre-release key until the upload key exists); Play internal once its inputs are set ([Android#10](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/10)) |
 | [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) | QA build default; `vX.Y.Z-<suffix>` tag publishes a QA pre-release | `vX.Y.Z` tag creates a draft release (MSI, portable zip, `.deb`, Flatpak, Tizen) that a person publishes ([Desktop#27](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/27)) |
@@ -88,13 +88,13 @@ Between releases, the monorepo's PR checks include Local E2E; nothing tests the 
 
 ## AlUmmahNowAuth: release on merge
 
-PRs deploy to QA and run E2E there. **Every merge to `main`** runs `release.yml`: build once, stage, smoke and E2E on stage, then production through the same 0% → smoke → 100% promotion, with automatic rollback.
+A push to `main` deploys QA and runs there the specs stage leaves out; PRs deploy nothing. **Every merge to `main`** runs `release.yml`: build once, stage, smoke and E2E on stage, then production through the same 0% → smoke → 100% promotion, with automatic rollback.
 
 A failed stage job stops the release and leaves production untouched.
 
 The audit consumer has no gradual rollout and is left out of `rollback.yml` on purpose. Details are in [the auth release notes](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/release-pipeline.md).
 
-Switching auth to tag releases is proposed in [#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217).
+**The record.** After a successful production promote, the run creates a `vYYYY.MM.DD[.N]` GitHub release (US Eastern date) on that commit: the pull requests since the last record, the openauth version, new migrations, the worker versions and the rollback link ([Auth#491](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/491)). The newest record is what production runs, unless someone rolled back since. A superseded or rolled-back run records nothing. The tag is a record, not a trigger: never push one by hand. Auth keeps releasing on every merge ([AUTH-R6](../epics/AUTH-R6-auth-release.md), AR6-D2).
 
 Every released Auth commit also publishes a **local-stack bundle** (the prebuilt auth, profile and admin workers, configs and migrations) on a `local-stack-<sha>` prerelease, which the monorepo's local E2E stack runs ([Auth#323](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/323), [Auth#324](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/324)). QA deploys are serialised with a waiting lock rather than a concurrency group ([Auth#306](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/306)).
 
