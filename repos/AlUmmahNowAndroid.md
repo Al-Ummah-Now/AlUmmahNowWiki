@@ -87,7 +87,7 @@ One open PR: analytics chart value axis, date labels and readout ([#12](https://
 | [Epic 15: TV apps](../epics/E15-tv-apps.md) | in progress |
 | [Epic 17: Live in apps (watch, chat, premieres, reminders)](../epics/E17-live-in-apps.md) | planned |
 | [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
-| [Epic 20: Ummah Kids profiles & parental controls](../epics/E20-ummah-kids.md) | planned |
+| [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
 | [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |

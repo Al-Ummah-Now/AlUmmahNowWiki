@@ -619,7 +619,7 @@ Built on `feat/qf-short-credit`, made the first `credit` element:
 
 ### Phase 1: the layer and internal info cards (web)
 
-- Data model, read and write API, `playerCards` switch, tier columns, and the stored `madeForKids` flag.
+- Data model, read and write API, `playerCards` switch and tier columns. The stored `madeForKids` flag comes from [Epic 20](E20-system-parental-controls.md) (E20-B1), or here if this ships first.
 - Card icon, teaser, cards panel and corner queue. Studio section with the timeline, pickers and preview.
 - Analytics events and counters, Studio counts, embed rules, and the `links=0` parameter.
 
@@ -710,7 +710,7 @@ Each question has a recommendation. Phase 0 is built to the recommendations for 
 | PL-D8 | Creator-written credits ("Source: …") as fixed overlays? | **Yes, in phase 5:** text plus an optional link under the same external rules, for a time range, 3 per video, a separate tier column |
 | PL-D9 | When the creator's end screen has a chosen video, should it become the Up next video at the end? | **Yes,** unless the viewer is in a playlist or queue. The Up next countdown and autoplay setting are unchanged |
 | PL-D10 | TV behavior? | **End-screen internal elements only, with the remote.** No cards and no external links; credits as text |
-| PL-D11 | Store `madeForKids` on every video (set at upload and in Studio, imported from YouTube) so links can be withheld? | **Yes.** It is needed anyway for [Epic 20](E20-ummah-kids.md) |
+| PL-D11 | Store `madeForKids` on every video (set at upload and in Studio, imported from YouTube) so links can be withheld? | **Yes.** [Epic 20](E20-system-parental-controls.md) story E20-B1 stores it, so PL-4 only reads it |
 | PL-D12 | Add tracking parameters (`utm_source=alummahnow`) to external links? | **No.** Daily counts are enough, and destinations see only the referrer origin |
 | PL-D13 | URL scanning provider? | **Cloudflare URL Scanner + Google Safe Browsing Lookup** (no paid service). Ask Google whether a nonprofit platform counts as non-commercial; if not, Cloudflare plus the allowlist alone |
 | PL-D14 | Links on age-restricted videos, and on videos held in review or with an open report? | **Age-restricted: internal only. Held or reported: internal only** until resolved. Made for kids: none |

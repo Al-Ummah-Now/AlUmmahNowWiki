@@ -81,5 +81,6 @@ Open issues (6): empty-query search so pickers open with content ([#34](https://
 | [Epic 14: Offline & Listen mode (incl. CarPlay / Android Auto)](../epics/E14-offline-listen.md) | planned |
 | [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
 | [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
