@@ -172,14 +172,14 @@ Behind the switch `channelClaim` (off). Claims are requests on the approval work
 ### 7.1 Storage (`SEARCH_DB`, migrations numbered at build time)
 
 ```sql
--- One unfinished move per channel (built: migration 0083, with idx_live_sessions_channel; offers are migration 0084)
+-- One unfinished move per channel (built: migration 0090, with idx_live_sessions_channel; offers are migration 0091)
 CREATE TABLE IF NOT EXISTS channel_transfer_locks (
   channel_id TEXT PRIMARY KEY,
   job_id TEXT NOT NULL,
   created_at TEXT NOT NULL
 ) WITHOUT ROWID;
 
--- Phase B, as built (migration 0084). Moves of channels that accept payments will add the
+-- Phase B, as built (migration 0091). Moves of channels that accept payments will add the
 -- workflow request link when AUN-WORKFLOWS exists; until then they are refused.
 CREATE TABLE IF NOT EXISTS channel_move_offers (
   id TEXT PRIMARY KEY,
@@ -289,7 +289,7 @@ All answered by the owner on 2026-11-23.
 
 | Story | Phase | Repo | What |
 |---|---|---|---|
-| CC-1 | A | AlUmmahNow | Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check at request and job time, Go live refused during a move, support guard (`channel_has_support`), verify step and 48-hour re-verify — [#1784](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1784); subscriptions, invites, verify [#1789](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1789); 48-hour re-verify [#1808](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1808) |
+| CC-1 | A | AlUmmahNow | **Merged** (19196f3). Move covers every record in §3.1 (soft-deleted videos, handle index, live + key rotation, schedules, posts, subscriptions, emails, invites), lock, live check at request and job time, Go live refused during a move, support guard (`channel_has_support`), verify step and 48-hour re-verify — [#1784](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1784); subscriptions, invites, verify [#1789](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1789); 48-hour re-verify [#1808](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1808) |
 | CC-2 | A | AlUmmahNow | New `account` notification keys for both owners, move emails, live channel-list reload on web — [#1792](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1792) (emails follow) |
 | CC-3 | A | AlUmmahNow | Required reason (sent to the old owner), options (keep old owner as channel admin, keep contact email), channel-limit refusal; admin-web form and result — [#1795](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1795) |
 | CC-4 | A | AlUmmahNow | Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) — API [#1805](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1805), admin card [#1809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1809) |
