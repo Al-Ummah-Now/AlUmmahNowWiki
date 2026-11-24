@@ -2324,6 +2324,21 @@
       "note": "The channel Playlists tab, the Home playlist and live shelves, GET /api/playlists?channelId= and the live list read the search index with keyset cursors: each page is one index seek however deep the scroll. Failed index writes are repaired per object by a queued admin job (backoff, then the Errors page with Retry) and the full reconcile runs weekly. The home feed and trending belong to discovery ranking. The admin lists (keyset cursors, trigram search, channel_totals and processing health lists) are still open in AlUmmahNow#688."
     },
     {
+      "id": "d1-capacity",
+      "name": {
+        "en": "Database capacity alerts and scaling plan",
+        "ar": "تنبيهات سعة قواعد البيانات وخطة التوسّع"
+      },
+      "status": "planned",
+      "apps": [
+        "videos-admin",
+        "api",
+        "auth"
+      ],
+      "wiki": "epics/AUN-D1-SCALING-d1-capacity-and-scaling.md",
+      "note": "Spec only. Every D1 database and table inventoried with a growth model at 10k to 10M monthly users. The notifications database (inbox plus analytics counters) reaches the 10 GB limit first, at about 64k monthly users, then Auth (about 129k) and search (about 167k). First story: admins are alerted at 70% of each D1 limit on the Costs, Operations, Status and Errors pages, fed by the cost-monitor. Then retention, analytics dimensions to Analytics Engine, the Auth audit split and per-user inbox shards."
+    },
+    {
       "id": "error-pages",
       "name": {
         "en": "One error-page family on every app",

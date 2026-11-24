@@ -11,6 +11,8 @@
 
 > Audit doc merged (#506); the audit's AV, PR and WS items are marked fixed with their PRs ([#671](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/671), [#672](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/672), [#678](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/678)). Later: public lists fill their page ([#800](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/800)), search index converges under writes ([#860](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/860), [#873](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/873), [#879](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/879)), admin lists and user search read indexes ([#841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/841), [#869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/869), [#902](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/902)). Revived 2026-11-21 (owner approved): per-object index repair ([#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683)) and index-backed channel playlists, live lists and processing sweep ([#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685)) are live in production since release `v2026.11.21.7`. See [Index-backed lists and per-object repair](#index-backed-lists-and-per-object-repair).
 
+> **Capacity and growth** (2026-11-24): how big each D1 database gets, when it reaches a Cloudflare limit, and the stories that keep it inside are in [AUN-D1-SCALING](AUN-D1-SCALING-d1-capacity-and-scaling.md).
+
 ## Index-backed lists and per-object repair
 
 Revived 2026-11-21 (owner approved). [#683](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/683) and [#685](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/685) merged 2026-11-21 and shipped in videos release `v2026.11.21.7` (stage E2E passed, promoted to production).

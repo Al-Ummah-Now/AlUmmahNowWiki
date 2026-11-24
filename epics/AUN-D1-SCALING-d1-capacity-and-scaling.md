@@ -1,0 +1,823 @@
+[← Epics](README.md) · [Decisions](decisions.md) · [Home](../README.md)
+
+# D1 capacity: growth model, monitoring and scaling plan
+
+| | |
+|---|---|
+| **ID** | `AUN-D1-SCALING` |
+| **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
+| **Status** | **planned**: spec only, no code yet |
+| **Last updated** | 2026-11-24 |
+| **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
+
+> Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
+> - lists every D1 database and table;
+> - gives each database's current size;
+> - projects size and peak load at 10k, 100k, 1M and 10M monthly active users (MAU);
+> - says when each database reaches 70% and 100% of a Cloudflare limit;
+> - lists the stories, in order of urgency, that keep every database inside its limits.
+>
+> [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) made queries index-backed. This epic is about **how big** the databases get and **how fast** they are written.
+
+## Summary
+
+- **The notifications database runs out of room first.** It holds the notification inbox and the analytics counters in one database. It reaches 70% of D1's 10 GB limit at about **45k MAU** and 100% at about **64k MAU**. Across every assumption we varied, 100% stays between 62k and 91k MAU.
+- **Auth is second.** `audit_events` is never purged, and `token_usage` keeps 90 days. Auth reaches 70% at about **90k MAU** and 100% at about **129k MAU**. Auth is the sign-in database, so it must never get close.
+- **Search is third.** It reaches 70% at about **122k MAU** and 100% at about **167k MAU**. This depends on caption search being on for most videos; without transcripts it reaches 100% at about 330k MAU.
+  - Search is also the first database to hit D1's single-threaded **query** limit: 70% busy at about 1.6M MAU.
+- **The other databases are fine.**
+  - Reports reaches 100% at about 690k MAU.
+  - CMS, costs and status never reach the limit, because they do not grow with users.
+- **The plan.** Stories D1-1 to D1-6, about one PR each, move the first limit from about 64k MAU to between about 650k and 1M MAU:
+  - monitoring;
+  - two retention fixes;
+  - analytics counters to Analytics Engine;
+  - the Auth audit split;
+  - notification inbox shards.
+
+  Stories D1-7 to D1-10 cover 1M to 10M MAU.
+
+## Cloudflare limits used
+
+Read on 2026-11-24. The page dates are Cloudflare's "last modified" dates.
+
+| Limit (Workers Paid) | Value | Source |
+|---|---|---|
+| Database size | **10 GB** per database (cannot be raised) | [D1 limits](https://developers.cloudflare.com/d1/platform/limits/) (2026-11-20) |
+| Storage per account | **1 TB** (can be raised on request) | same |
+| Databases per account | 1,000,000; the first 100,000 included | same |
+| Throughput | "Each individual D1 database is inherently single-threaded, and processes queries one at a time." At 1 ms per query that is at most about 1,000 queries per second. When the queue is full, D1 returns "overloaded". | same |
+| Query duration / result size | 30 s / 50 MB | same |
+| Queries per Worker invocation | 1,000; a `batch()` counts as one | same |
+| Rows read / rows written | No hard cap; they are billing metrics. Rows written: 50M a month included, then $1.00 per million. Every index on a written column adds a written row. Rows read: 25 billion a month included, then $0.001 per million. | [D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/) (2026-10-30) |
+| Storage price | 5 GB included, then $0.75 per GB-month | same |
+| Read replication | Read-only replicas in every region at no extra cost. Writes still go to the primary. It needs the Sessions API (bookmarks give read-your-writes). It works through the Worker binding only, not the REST API. | [Read replication](https://developers.cloudflare.com/d1/best-practices/read-replication/) (2026-08-10) |
+| Analytics Engine | 250 data points per invocation; 20 blobs and 20 doubles per point; **data kept 3 months**. 10M points a month included, then $0.25 per million; billing has not started yet. | [AE limits](https://developers.cloudflare.com/analytics/analytics-engine/limits/), [AE pricing](https://developers.cloudflare.com/analytics/analytics-engine/pricing/) (2026-04-23) |
+| Durable Objects (SQLite) | 10 GB per object; unlimited per account; soft limit of 1,000 requests per second per object | [DO limits](https://developers.cloudflare.com/durable-objects/platform/limits/) (2026-11-13) |
+| Queues | 5,000 messages per second per queue; batches of up to 100; messages up to 128 KB | [Queues limits](https://developers.cloudflare.com/queues/platform/limits/) (2026-10-30) |
+
+Because D1 is single-threaded, each database has only one second of query time per second. In this page, **busy share** is peak queries per second × average query time ÷ 1 second. Above 70% busy, tail latency climbs and "overloaded" errors start.
+
+## Databases today
+
+Measured on 2026-11-24, read-only:
+- sizes from `wrangler d1 info` metadata;
+- 12 days of history from the cost-monitor's `ops_daily`.
+
+No query touched a production data table. `sqlite_stat1` is absent, so per-table row counts are **not** measured. They come from the model below. Raw data and scripts are kept outside the wiki (`research/d1-growth-2026-11-24`).
+
+| Database | Bound by | Tables | Prod | Stage | QA | Prod growth, Nov 12–24 |
+|---|---|---|---|---|---|---|
+| `al-ummah-now-search` | api-videos, admin-api, processor | 127 (161 in QA) | 3.1 MB | 14.0 MB | 167.5 MB | +1.7 MB |
+| `al-ummah-now-notifications` | api-videos, processor | 23 | 0.56 MB | 1.1 MB | 18.5 MB | +0.2 MB |
+| `al-ummah-now-d1` (Auth) | Auth auth, admin, profile, audit-consumer; api-videos | 40 | 6.25 MB | 32.4 MB | **343.9 MB** | flat (purges) |
+| `al-ummah-now-reports` | admin-api, processor | 51 | 1.8 MB | 8.8 MB | 79.1 MB | +1.1 MB |
+| `al-ummah-now-costs` | cost-monitor, admin-api | 14 | 4.8 MB | 1.5 MB | 1.5 MB | +4.5 MB (levels off at about 150 MB: 396-day retention) |
+| `al-ummah-now-cms` | CMS | 41 | 0.53 MB | 4.4 MB | 5.6 MB | flat |
+| `al-ummah-now-status` | status, admin-api | 9 | 0.16 MB | 0.16 MB | 0.16 MB | flat |
+
+Notes:
+- Production is still small: about 460 video objects in R2. Every number at scale below comes from the model.
+- **QA Auth is the largest and busiest database in the account.** Over 24 hours it served 357k read queries and read 513M rows, and its 7-day p99 latency was 274 ms. E2E sign-ins drive this. [QA tests only on releases](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1190) and the QA account cleanup ([AlUmmahNowAuth#504](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/504)) already address it. D1-1 makes such growth visible on its own.
+- `al-ummah-now-videos` is empty (0 tables) and bound nowhere, so it is a cleanup candidate. The two `*-preview` databases have no traffic.
+- A few databases of other projects share the account, about 80 MB in total. They count only toward the 1 TB account limit.
+- p50 query time is 0.15 to 0.5 ms on every production database.
+- Where the large data lives:
+  - **R2:** videos, comments (`comments/<id>/…`) and watch history (548 days), so they never reach D1.
+  - **Durable Object (`VIEW_COUNTER`):** live view counts, flushed to the index.
+
+## Table inventory
+
+**Bytes per row** includes every index entry and page overhead. It is estimated from the schema (column names, types, typical lengths), is roughly ±50%, and was checked against production search: about 7 KB per video.
+
+**Writes per event** counts rows written, including one extra row for each index on a written column, which is how D1 bills.
+
+The full per-table list (all 307 tables) is in [Appendix: every table](#appendix-every-table). The tables below drive growth. Config and catalog tables (settings, tiers, rules, themes, templates, staff) stay below a few MB at any scale.
+
+### Notifications database (`al-ummah-now-notifications`)
+
+| Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
+|---|---|---|---|---|---|
+| `notifications` | per-user inbox | ~900 (7 indexes) | per subscriber × upload or live (bell `all`, or `highlights` for highlighted uploads) | ~8 per notification | 90 days |
+| `analytics_daily` | daily counters per video, channel, post and site (views, watch time, traffic, source, surface, device, country, retention buckets) | ~100 (WITHOUT ROWID) | per active video-day: ~25 rows; per active channel-day: ~40 | ~12 upserts per view after batching (CounterBatch sums repeats) | **none** |
+| `discovery_viewers` | salted viewer hash per day and video, for Popular | ~112 | per distinct viewer-video-day | 1 per view | popular window + 1 day |
+| `liked_videos` | user likes | ~370 (3 indexes) | per like | 4 | none (user data) |
+| `channel_subscribers`, `channel_subscriptions`, `channel_subscriber_counts` | subscriptions and counts | ~290 + 240 + 60 | per subscription | ~5 per subscribe | none (user data) |
+| `post_likes`, `poll_votes`, `saved_posts` | community post state | ~200–330 | per action | 2–3 | none (user data) |
+| `push_devices`, `notification_settings`, `notification_email_prefs`, `notification_seen` | devices and preferences | ~60–570 | per device or user | 2–3 | until removed |
+| `live_reminders`, `review_alerts`, `dead_letters` | reminders, alerts, DLQ copies | ~200–1,000 | per reminder or failure | 2–3 | dead letters and review alerts by age |
+
+### Search database (`al-ummah-now-search`, 127 tables in prod)
+
+| Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
+|---|---|---|---|---|---|
+| `search_videos` + `search_videos_fts` (prefix 2,3) + `content_ownership` (18 indexes) + `media_*` rows | the index behind every list, search and Studio | **~7 KB per video**, measured | per video | ~60 rows per video write | while the video exists |
+| `search_transcripts` + `search_transcripts_fts` | caption search, one row per cue | ~130 B + FTS ≈ **80 KB per caption track** (~300 cues) | per captioned video × languages | ~3 per cue | **none** |
+| `live_chat_messages` | live chat | ~1.1 KB (3 indexes) | per chat message | ~4 | removed or held: 30 days; published: **none** |
+| `channel_comments` | the channel owner's comment inbox (mirror of R2 comments) | ~900 (5 indexes) | per comment | ~7 | none (deleted with the video) |
+| `live_sessions`, `live_segments`, `live_events`, `live_qoe` | live operations | ~240–1,400 | per stream, segment or viewer sample | 2–4 | events and QoE by age; segments of ended sessions |
+| `channel_audit`, `translation_audit`, `social_deliveries`, `workflow_*`, `admin_job_log` | logs | ~250–2,100 | per admin or creator action | 2–8 | channel_audit 365 days; job log trimmed; others none |
+| `billing_*`, `support_*` (32 tables) | payments and the creator-support ledger | ~300–1,200 | per payment or event | 3–7 | kept (financial records) |
+| `yt_import_*`, `import_*` | YouTube and Takeout imports | ~1–2.2 KB | per imported item | 5 | per import |
+| `index_repairs`, `search_meta`, `search_tombstones`, `indexnow_pending` | index upkeep | ~90–460 | per failed write or change | 2 | drained |
+
+### Auth database (`al-ummah-now-d1`)
+
+| Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
+|---|---|---|---|---|---|
+| `users` | accounts (9 indexes) | ~1,060 | per account | ~10 per create; a sign-in updates `last_login_at` | until erased |
+| `user_identities`, `webauthn_credentials`, `rbac_user_roles` | sign-in methods and roles | ~520–770 | per account, passkey or staff role | 4–5 | until removed |
+| `audit_events` | security audit (sign-ins, admin actions, invites, revocations) | ~1,100 (6 indexes; insert runs a NOT EXISTS check) | per audited event (assumed 0.3 per DAU per day) | ~7 | **none** |
+| `token_usage` | token analytics from the openauth audit queue | ~640 (5 indexes) | per issued or refreshed token (assumed 3 per DAU per day) | ~6 | 90 days (hourly cleanup, 1,000-row batches) |
+| `browser_sessions`, `account_sessions`, `app_sessions`, `openauth_atomic`, `authorization_codes`, `password_codes` | sessions and short-lived state | ~230–850 | per session or code | 3–9 | by expiry or 7 days idle |
+| `user_invites`, `moderation_requests`, `admin_deletions` | admin workflows | ~900–2,100 | per admin action | 5–7 | 30-day purge after soft delete |
+
+### Reports database (`al-ummah-now-reports`)
+
+| Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
+|---|---|---|---|---|---|
+| `error_events`, `error_groups`, `error_hourly`, `error_refs` | the admin Errors page | ~200–2,400 | per error report | ~7 | events 30 days; hourly and refs purged |
+| `moderation_signals`, `moderation_actions` | AI and staff moderation | ~1,000–1,840 (10 indexes) | per upload or comment checked | ~11 | 365 days (AI rows) |
+| `reports`, `content_reviews`, `content_review_findings` | user reports and pre-publication review | ~600–2,000 | per report or upload | 6–13 | findings by age |
+| `newsletter_deliveries` | one row per subscriber per issue | ~420 | subscribers × issues | 3 | **none** |
+| `admin_audit_log`, `site_settings_log`, `plan_audit_log` | admin audit | ~800–1,100 | per admin change | 4–5 | none (low volume) |
+| `contact_messages`, `csam_*`, `user_warnings`, `creator_invites` | support and safety | ~600–2,100 | per case | 3–10 | soft delete, 30-day purge; CSAM per legal hold |
+
+### CMS, costs and status
+
+| Database | Largest tables | Driver | Retention |
+|---|---|---|---|
+| CMS | `posts`, `pages`, `feed_*`, `timeline_entries`, `translation_flags`, `ai_jobs` | editorial content, not users | ai_jobs and tokens by age; trash 30 days |
+| costs | `ops_hourly` and `ops_daily` (~460 B) | resources × hours; resources grow with workers, not users | 396 days |
+| status | `daily`, `incidents`, `subscribers`, `deliveries` | incidents and status subscribers | 90 days uptime, 14 days history |
+
+## Growth model
+
+### Assumptions
+
+These are the inputs. Each one is a stated guess to be replaced by measured values from D1-1.
+
+| # | Assumption | Value |
+|---|---|---|
+| G1 | Daily active users (DAU) ÷ MAU | 0.25 |
+| G2 | Registered accounts ÷ MAU (counts inactive accounts) | 2.0 |
+| G3 | Video views per DAU per day | 5 (sensitivity: 2.5 to 10) |
+| G4 | Uncached page views per DAU per day (each about 1 search-DB query) | 20 |
+| G5 | Creators (channels) ÷ MAU | 0.5% |
+| G6 | Catalog per creator, including YouTube imports | 120 videos (sensitivity: 60) |
+| G7 | New uploads per creator per month / live streams per creator per month | 8 / 2 |
+| G8 | Videos with at least one view on a given day | the smaller of 15% of the catalog and 30% of the day's views |
+| G9 | Captioned videos / caption tracks per captioned video | 50% / 1.5 |
+| G10 | Accounts that subscribe / subscriptions each | 50% / 6 |
+| G11 | Share of uploads and lives that reach a subscriber's inbox (bell `all`, or `highlights` for highlighted uploads) | 0.37 (sensitivity: 0.15) |
+| G12 | Chat messages per stream (average): 10k / 100k / 1M / 10M MAU | 30 / 100 / 300 / 1,000 |
+| G13 | Peak chat rate of the largest stream: 10k / 100k / 1M / 10M MAU | 2 / 10 / 60 / 400 messages per second |
+| G14 | Comments per view / likes per view | 0.5% / 3% |
+| G15 | Auth audit events per DAU per day / token_usage rows per DAU per day | 0.3 / 3 |
+| G16 | Client error reports per DAU per day / reports per DAU per day | 0.02 / 0.0005 |
+| G17 | Newsletter subscribers ÷ accounts / issues per month | 20% / 4 |
+| G18 | Peak second ÷ average second (evening peak, Jumu'ah, Ramadan nights) | 4× |
+| G19 | Average query time at scale: search / notifications / Auth / reports | 1.5 / 1.0 / 0.8 / 0.5 ms (today: 0.15–0.5 ms p50) |
+| G20 | Horizon for tables that are never purged | 12 months at the milestone's scale. Tables with a retention window are at steady state. |
+
+The derived volumes:
+
+| MAU | DAU | Accounts | Creators | Catalog | Views per day | Inbox rows per day | Chat messages per day |
+|---|---|---|---|---|---|---|---|
+| 10k | 2.5k | 20k | 50 | 6k | 12.5k | 7.4k | 100 |
+| 100k | 25k | 200k | 500 | 60k | 125k | 74k | 3.3k |
+| 1M | 250k | 2M | 5k | 600k | 1.25M | 740k | 100k |
+| 10M | 2.5M | 20M | 50k | 6M | 12.5M | 7.4M | 3.3M |
+
+### Projected size per database
+
+In GB. The share of the 10 GB limit is in brackets.
+
+| Database | 10k MAU | 100k MAU | 1M MAU | 10M MAU | Largest part |
+|---|---|---|---|---|---|
+| notifications | 1.6 (16%) | **15.5 (155%)** | 155 | 1,552 | analytics_daily 55%, inbox 39% |
+| Auth | 0.8 (8%) | 7.7 (77%) | 77 | 774 | token_usage 56%, audit_events 38% |
+| search | 0.5 (5%) | 5.6 (56%) | 82 | 1,746 | transcripts 64%, live chat 23% (at 100k) |
+| reports | 0.2 | 1.5 | 14.5 | 145 | newsletter_deliveries 56%, moderation_signals 35% |
+| cms / costs / status | < 0.2 | < 0.2 | < 0.2 | < 0.2 | does not grow with users |
+| **Account total** (prod only) | 3 | 30 | 330 | 4,200 | Account storage passes 70% of 1 TB at about 2.0M MAU and 1 TB at about 2.8M MAU; the account limit can be raised on request |
+
+### Peak load per database
+
+| Database | 100k MAU: queries/s, busy | 1M MAU: queries/s, busy | 10M MAU: queries/s, busy | Peak rows written/s at 1M |
+|---|---|---|---|---|
+| search | 34, 5% | 300, **45%** | 2,900, **436%** | 264 |
+| notifications | 12, 1% | 121, 12% | 1,210, **121%** | 1,033 |
+| Auth | 7, 1% | 70, 6% | 700, 56% | 233 |
+| reports | 2, 0% | 4, 0% | 12, 1% | 6 |
+
+### Runway: when each database reaches a limit
+
+MAU at which each database reaches the limit, with today's code. Each figure assumes 12 months at that scale for tables that are never purged.
+
+| Database | 70% of 10 GB | 100% of 10 GB | 70% busy | 100% busy | First limit |
+|---|---|---|---|---|---|
+| **notifications** | **~45k** | **~64k** | ~5.8M | ~8.3M | size |
+| **Auth** | ~90k | ~129k | ~12.5M | ~17.9M | size |
+| **search** | ~122k | ~167k (~330k without caption search) | ~1.6M | ~2.3M | size, then query time |
+| reports | ~483k | ~690k | — | — | size |
+| cms, costs, status | never | never | — | — | — |
+
+Sensitivity of the first limit (notifications, 100%):
+- 62k MAU at 10 views per DAU;
+- 66k MAU at 2.5 views per DAU;
+- 84k MAU if only 15% of uploads reach the inbox;
+- 87k MAU with 60 videos per creator;
+- 91k MAU on a 6-month horizon.
+
+None of these changes the order.
+
+### Hot spots
+
+| Hot spot | Where | Why it matters |
+|---|---|---|
+| Analytics counters | notifications `analytics_daily` | Never purged. About 25 rows per active video-day, plus channels. About 12 rows written per view. This is the largest single table by 100k MAU. At 1M MAU it is also about 450M rows written a month (about $400 a month at $1.00 per million). |
+| Notifications inbox | notifications `notifications` | It fans out to every subscriber. 7 indexes make about 8 rows written per notification. It holds 6 GB at 100k MAU. |
+| Account events | Auth `audit_events`, `token_usage` | Never purged or kept 90 days, in the **sign-in** database. Growth here slows every sign-in query and makes purges and admin searches risky (the 2026-11-13 sign-in stall). |
+| Search index | search `search_*`, `content_ownership` | About 7 KB per video. It is fine to about 1.4M videos on its own. Its query time is the first throughput limit (~1.6M MAU). |
+| Caption search | search `search_transcripts*` | About 80 KB per caption track. It is 64% of search by 100k MAU when captions are common. |
+| Live chat | search `live_chat_messages` | Published messages are never purged. One large stream at 60–400 messages per second competes with search reads in a single-threaded database. |
+| Watch history | R2 `watch-history` | Not in D1. No action. |
+| Audit logs (admin) | reports `admin_audit_log`, search `channel_audit` | Low volume. channel_audit has a 365-day purge. No action beyond monitoring. |
+| Newsletter deliveries | reports `newsletter_deliveries` | One row per subscriber per issue, never purged. Reports' largest table by 1M MAU. |
+
+## Scaling options
+
+The simplest change that keeps us safe comes first in each row.
+
+| Option | Use for | Trade-offs | Migration cost |
+|---|---|---|---|
+| **TTL and purge** (batched `DELETE … WHERE id IN (SELECT … LIMIT n)` on an indexed time column) | notifications, audit_events, token_usage, chat, newsletter deliveries | Cheapest. It loses old detail unless archived first. Purges must be small batches on an index; never a scan on Auth. | Small: one cron, one index check |
+| **Index trim** | notifications (two overlapping user/unread indexes) | Fewer rows written and less space. Each query plan must be re-checked. | Small |
+| **Archive to R2** (NDJSON or JSON per day or entity, then delete from D1) | audit_events after the hot window, ended streams' chat, analytics dimensions after 90 days | R2 storage is cheap and objects are read by key. No SQL over the archive. GDPR erase must cover the archive. | Medium: writer, reader and erase hook |
+| **Analytics Engine** for per-view dimensions | analytics counters, token_usage | Much cheaper per write (1 data point per view, against about 12 D1 rows). No index or upsert to contend on. Data is kept only 3 months and queried by SQL API (not a binding), so long-range totals must be rolled into D1 or R2. Billing has not started yet. | Medium: dual-write, a rollup job, readers switch |
+| **Split by feature** (a new database per table group) | analytics out of notifications; audit out of Auth; transcripts out of search | Each database gets its own 10 GB and its own query time. There are no cross-database joins, so the readers must be split too. One more binding per worker. | Medium: dual-write, backfill in batches, read cutover, drop |
+| **Shard by key** (N databases, `hash(user_id) mod N`, routing in code) | notifications inbox, likes, subscriptions per user | Scales linearly. Cross-user queries (purge by age, delete by entity) fan out to N databases. Resharding needs a routing table, not plain modulo. | Large: router, fan-out, backfill |
+| **Read replication + Sessions API** | search lists and search, CMS, read-heavy notifications | No extra cost, and reads scale across regions. Replicas lag, so writers pass a bookmark for read-your-writes. Binding only, not REST. | Small to medium: wrap the `SEARCH_DB` reads |
+| **Queues for write batching** | already used for analytics (CounterBatch), audit (audit-consumer) and fan-out (pages of 1,000) | Turns many small writes into one transaction. It adds delay, so it is wrong for chat. | Small where a queue already exists |
+| **Durable Objects for hot write paths** (SQLite in the object) | live chat per stream; the view counter already uses one | One object per stream absorbs about 1,000 requests a second, and its storage is per object (10 GB). Cross-stream queries need an index elsewhere. | Medium |
+| **Dedicated search engine** | search, once D1 FTS no longer fits | Better relevance, typo tolerance and sharding. But it is a separate service with its own cost, and the index must be synced. | Large. See D1-10 for when. |
+
+## Stories
+
+These are ordered by urgency: the MAU at which the problem bites without the story. Each story is one PR unless it says otherwise. None of them changes what users see, so there are no user-facing feature switches.
+
+- Cutovers (dual-write, then read switch) sit behind **admin ops settings**, so a rollback is a setting, not a deploy.
+- Every story ships with tests on the local stack. Each test seeds its own data and cleans it up.
+- No test or probe touches production.
+- Purges and backfills run in small, indexed batches.
+- Nothing scans the Auth database.
+
+| Story | Repo | Fixes | Bites at (MAU) | After the story |
+|---|---|---|---|---|
+| D1-1 | AlUmmahNow (cost-monitor, admin) | visibility | now | alerts 60 days ahead |
+| D1-2 | AlUmmahNow | notifications inbox size and writes | ~45k (70%) | combined with D1-3: notifications 70% at ~176k |
+| D1-3 | AlUmmahNow | analytics_daily | ~45k | analytics part: about 0.5 GB at 100k MAU |
+| D1-4 | AlUmmahNowAuth | audit_events and token_usage | ~90k | Auth 70% at ~266k |
+| D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~266k | Auth 70% at ~1.6M; audit database 70% at ~940k |
+| D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~176k | 4 shards: 70% at ~460k; 8 shards: past 1M |
+| D1-7 | AlUmmahNow | caption search | ~194k (once caption search is on) | own database, sharded by video when one fills |
+| D1-8 | AlUmmahNow | live chat size and peak rate | 60 messages per second at ~1M | search 70% at ~734k by size; chat off the search database |
+| D1-9 | AlUmmahNow | search query time | ~1.6M (70% busy) | reads spread over replicas |
+| D1-10 | AlUmmahNow | when to leave D1 search | ~1.4M videos | written triggers and a bench |
+
+### D1-1 Capacity monitoring and alerts (first)
+
+The goal is that admins hear about a database well before any limit. The work builds on the existing cost-monitor thresholds (`apps/cost-monitor/src/thresholds.ts`), which already turn a crossed rule into an Errors page needs-action item (`ops:<rule>:<resource>`) and resolve it on recovery.
+
+- **Collector.** `graphql.ts` already reads `d1AnalyticsAdaptiveGroups` (queries, rows read and written, latency) and `d1StorageAdaptiveGroups` (`databaseSizeBytes`) into `ops_hourly` and `ops_daily`. Add:
+  - **query time per hour:** the sum of query batch time if the dataset exposes it, otherwise requests × p50;
+  - the **busy share:** query time ÷ 3,600 s.
+- **Limits as settings.** Add these to `cost_settings`, so a Cloudflare change is a setting, not a deploy:
+  - `d1.max_db_bytes` = 10 GB;
+  - `d1.account_bytes` = 1 TB;
+  - `d1.busy_warn` = 0.7.
+- **New threshold metrics** in `ThresholdRule.metric`:
+  - `storage_pct`: the latest stored bytes ÷ the limit;
+  - `storage_days_to_70`: a linear fit of 14 days of daily maximum size, giving the days until 70%;
+  - `busy_pct`: the hourly busy share;
+  - `account_storage_pct`: the sum over every D1 database in the account, including QA and stage.
+- **Default rules**, seeded by migration and editable on the existing thresholds UI:
+  - storage ≥ 70% (warning) and ≥ 90% (critical);
+  - days to 70% ≤ 60;
+  - busy ≥ 70% for 3 hours in a row;
+  - account storage ≥ 70%.
+
+  They apply to every environment, with the environment shown in the item.
+- **Admin Costs page.** Add a "Databases" section. For each D1 database and environment it shows:
+  - size against 10 GB, as a bar;
+  - growth per day over 14 days;
+  - days to 70%;
+  - rows written per day;
+  - peak busy share.
+
+  It also shows the account total against 1 TB. It is sorted by days to 70%.
+- **Admin Operations and Status pages.** Show the same gauges in a compact row. The admin Status page lists "Database capacity" as an internal component. It never appears on the public status page.
+- **Errors page.** Crossings appear as needs-action items with the database, the environment, the value, the forecast date and a link to this page's options.
+- **Cost-alert email.** Opted-in admins get these crossings through the existing cost-alert mail, using `cost_alert_subscriptions` and one language per email.
+- **Calibration.** A documented admin job compares the model's per-table estimates with a **stage** export analyzed locally with `dbstat`. It never runs against prod or Auth prod.
+- **Localization.** Strings in English and Arabic; Arabic digits through the shared formatter.
+- **Tests:**
+  - metric math and the forecast (flat, growing and shrinking);
+  - rule seeding is idempotent;
+  - a GraphQL fixture with storage and query time;
+  - opening and resolving Errors page items;
+  - a Costs page render test with no token (a clear message, nothing fails).
+
+### D1-2 Notifications inbox: retention and index trim
+
+- **Retention:**
+  - read notifications are purged after 30 days and unread ones after 90 days (today all are kept 90 days);
+  - a per-user cap of 500 rows: on insert past the cap, the oldest read rows go first.
+
+  This follows common practice; YouTube's inbox shows recent weeks.
+- **Index trim:**
+  - drop `idx_notifications_user_unread (user_id, is_read)`, which is covered by `idx_notifications_user_unread_created (user_id, is_read, created_at)`;
+  - check `idx_notifications_created` against the purge, and keep it only if the purge needs it.
+
+  Plans for the inbox list, the unread count, push dedupe and the purge are asserted in tests, with no temp b-tree and no scan.
+- The purge runs in the processor's existing cron in batches of 1,000.
+- **Result:**
+  - about 6 written rows per notification instead of about 8;
+  - about 57% less inbox storage (the model: inbox × 0.7/0.9 × 0.55).
+
+### D1-3 Analytics counters: dimensions to Analytics Engine, D1 keeps totals
+
+- **Analytics Engine writes.** The processor writes one AE data point per view or watch-time report (dataset `al_ummah_now_views`) with these fields:
+  - blobs: entity ids, traffic source, surface, device, country, embed origin, campaign and playback;
+  - doubles: watch seconds and retention buckets.
+
+  No user id goes in. The viewer is already a salted hash in `discovery_viewers`.
+- **D1 totals.** `analytics_daily` keeps only `views`, `watch_time` and `retention_start` per entity-day for 90 days. A nightly job then folds older days into a new `analytics_monthly` table (entity, month, metric, value) and deletes them.
+- **Dimensions over time:**
+  - a nightly job queries AE through the SQL API and writes each entity's daily dimensions for that day to R2 (`analytics/dims/<entity>/<YYYY-MM>.json`, the existing `analytics_rollups` bucket);
+  - Studio and admin analytics read dimensions from AE for the last 90 days and from R2 beyond that;
+  - lifetime totals come from D1.
+
+  The API response does not change.
+- **Rollout:**
+  - dual-write behind an ops setting;
+  - compare AE and D1 totals for 14 days on QA and stage;
+  - switch the reads;
+  - stop the D1 dimension writes;
+  - backfill the existing dimension rows to R2 in batches, then delete them.
+- **Result:**
+  - about 2 D1 rows per view instead of about 12;
+  - analytics is about 0.5 GB at 100k MAU and about 5 GB at 1M;
+  - per-view unit cost falls from about $0.000012 (D1 rows) to about $0.0000023 (1 AE point + 2 D1 rows).
+- **Tests:**
+  - the AE writer with a mocked binding;
+  - the rollup job (idempotent; replay never double-counts);
+  - the reader merging D1, AE and R2;
+  - a comparison report.
+
+### D1-4 Auth audit retention (AlUmmahNowAuth)
+
+- **`audit_events`:**
+  - 90 days in D1 for the admin sessions and audit views;
+  - an hourly job (the existing `token-cleanup` cron) writes each day older than 90 days to R2 as NDJSON, then deletes it in batches of 1,000 by the indexed `timestamp`;
+  - archives are kept 395 days, the same as the existing event-archive retention.
+- **GDPR.** Account erase removes the user's lines from the archive days that hold them. Archive lines carry the user id, so erase can find them. The leftover check covers the bucket ([AlUmmahNow#1177](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1177) shows the trap).
+- **`token_usage`:** 90 → 30 days, then moved to Analytics Engine in D1-5.
+- **Safety.** Every statement is checked for an index plan before merge. No count queries. The batch size is tuned so one statement stays under 50 ms on stage.
+- **Tests:** archive then delete (an archive failure means no delete); erase of an archived user; the purge plan uses the timestamp index.
+
+### D1-5 Auth audit database split (AlUmmahNowAuth)
+
+- **New database** `al-ummah-now-auth-audit` (prod, stage, QA):
+  - `audit-consumer` writes `audit_events` there;
+  - admin audit and session views read from it;
+  - `token_usage` becomes an Analytics Engine dataset.
+- **Rollout:** dual-write for one release, then a batched backfill of the 90-day window, then a read switch, then drop the old tables in the sign-in database.
+- The sign-in database then holds only accounts, identities, roles, sessions and short-lived state. It reaches 70% at about 1.6M MAU.
+- **Tests:** the dual-write order (the sign-in database is never the second write in a request); the admin audit list on the new binding.
+
+### D1-6 Notifications per-user shards
+
+- **Shard map.** `notifications`, `notification_seen`, `liked_videos`, `post_likes`, `poll_votes`, `saved_posts` and `channel_subscriptions` (by subscriber) move to N databases (`al-ummah-now-notify-<n>`). The shard comes from a shard map:
+  - `hash(user_id)` → one of 256 slots → a database;
+  - the map is kept in `site_settings`, so a split later moves slots, not every user.
+- **Fan-out.** Pages are grouped by shard: 1,000 subscribers per page become up to N bounded writes.
+- **Global data.** Counts by video or channel stay global, in the main notifications database (`channel_subscriber_counts`, like totals in `analytics`). Deletes by entity fan out to N.
+- **Rollout:** start with N = 4; dual-write, backfill by slot, then read switch per slot.
+- **Result:** each shard reaches 70% at about 460k MAU with 4 shards. Move to 8 shards before 1M.
+
+### D1-7 Caption search in its own database
+
+- **Split.** `search_transcripts` and its FTS move to `al-ummah-now-search-transcripts`. A transcript search is a separate query whose video ids are then filtered through the main index. The same shard map as D1-6 (by video id) applies once one transcripts database passes 70%.
+- **Prune.** Only the published track per language is indexed, never drafts.
+- **When.** This is needed once caption search is on for most videos. With 50% captioned it reaches 70% at about 194k MAU.
+
+### D1-8 Live chat on the stream's Durable Object
+
+- **While live.** Chat is stored in SQLite inside the stream's Durable Object (the websocket server already runs one per stream). It absorbs the peak: 60 messages per second at 1M MAU and 400 at 10M, under the object's 1,000 per second.
+- **D1's role.** D1 keeps only moderation state (held and removed rows, pins, blocks).
+- **At stream end.** The object writes the chat replay to R2 (`live/chat/<stream>.ndjson`), and replay reads from R2.
+- Published chat rows older than 30 days are archived to R2 and deleted.
+- **Result:** search no longer carries chat. Size: search reaches 70% at about 734k MAU after D1-7 and D1-8.
+
+### D1-9 Read replication and the Sessions API for search
+
+- **Enable replication** on `al-ummah-now-search` (`read_replication.mode: auto`) on QA, then stage, then prod.
+- **Sessions.**
+  - Wrap the `SEARCH_DB` reads in `withSession()`.
+  - Writers return the bookmark, and the web client sends it back for the next request, which gives read-your-writes after an edit.
+  - Admin and Studio use `first-primary`.
+- **Then the other databases.** CMS and notifications reads follow when D1-1 shows them above 40% busy.
+- **Result:** no extra cost. Read capacity grows with regions; the write path does not change. It is needed by about 1.6M MAU (70% busy) and can come earlier at no cost.
+
+### D1-10 Search engine graduation criteria (doc and bench, no build)
+
+- **Write down the triggers.** Leave D1 FTS when **any** of these holds for 7 days:
+  - the main index is above 7 GB after D1-7;
+  - search p95 is above 300 ms;
+  - search busy share is above 50% with replicas on;
+  - Arabic relevance complaints need features FTS5 lacks (typo tolerance, synonyms beyond the glossary).
+- **Bench.** Add a local bench harness of synthetic catalogs (100k, 1M and 5M videos) for FTS query time and size.
+- **Next steps.** List the candidate next steps with their trade-offs:
+  - FTS shards by language;
+  - Vectorize for semantic search;
+  - a dedicated engine.
+
+## Costs
+
+These are plain unit prices for Workers Paid, from the pages above.
+
+| Item | Today's design | After the plan |
+|---|---|---|
+| Analytics per view | ~12 D1 rows written ≈ $0.000012 | 1 AE point + ~2 D1 rows ≈ $0.0000023 |
+| Notification per inbox row | ~8 rows written ≈ $0.000008 | ~6 rows ≈ $0.000006 |
+| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 330 GB → about 110 GB at 1M MAU |
+| At 1M MAU, analytics writes only | ~450M rows a month ≈ $400 a month | ~75M rows + ~37.5M AE points ≈ $25 + $7 a month |
+| Read replicas | — | $0 extra |
+| Extra databases (D1-5, D1-6, D1-7) | — | $0 (included up to 100,000 databases) |
+
+## Platforms
+
+These are server-only changes:
+- **Web:** no change, except D1-9's bookmark round trip, which is handled in the API client.
+- **Admin:** D1-1 (the Costs, Operations, Status and Errors pages).
+- **Apple, Android and Desktop:** no change. API responses keep their shape.
+
+## Legal and safety
+
+- **Archives and erase.** Archives (D1-4, D1-8) hold personal data such as IPs and user ids. Account erase covers them, and the R2 buckets are listed in the erase leftover check, never allow-listed without a PII check. Retention is stated on the privacy page by the existing privacy-retention text.
+- **Analytics Engine.** D1-3 writes no user id and no IP to AE. Country comes from Cloudflare's request data, as today.
+- **Sign-in safety.** No story runs an unindexed query on the Auth database. Purges are batched by an indexed time column (the sign-in stall of 2026-11-13, [AlUmmahNowAuth#341](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/341)).
+
+## Owner decisions
+
+None are needed now. Retention windows follow common practice (YouTube and Google) and the existing 395-day event archive. Every unit cost above is small.
+
+One money choice is noted for later. D1-10 will ask it only when a trigger fires: whether to pay for a dedicated search engine, or keep sharding D1 FTS.
+
+## Appendix: every table
+
+Estimated bytes per row, including index entries and page overhead. The estimate comes from the schema rebuilt from every migration on `main` (2026-11-24), is roughly ±50%, and does not measure row counts. Growth drivers and retention for the tables that grow are in [Table inventory](#table-inventory). The tables not listed there are config, catalog or workflow tables that stay small.
+
+#### al-ummah-now-search (135 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `admin_comment_sigs` | 83 | 1 |
+| `admin_comments` | 666 | 3 |
+| `admin_deletions` | 1156 | 8 |
+| `admin_job_log` | 333 | 1 |
+| `admin_job_users` | 143 | 2 |
+| `admin_jobs` | 1209 | 4 |
+| `billing_checkouts` | 407 | 3 |
+| `billing_customers` | 203 | 2 |
+| `billing_events` | 927 | 5 |
+| `billing_payments` | 607 | 4 |
+| `billing_price_links` | 359 | 2 |
+| `billing_prices` | 337 | 2 |
+| `billing_providers` | 459 | 1 |
+| `billing_settings` | 140 | 1 |
+| `billing_subscriptions` | 1227 | 7 |
+| `caption_jobs` | 845 | 3 |
+| `caption_minute_grants` | 677 | 2 |
+| `caption_minute_holds` | 592 | 2 |
+| `caption_minute_ledger` | 297 | 2 |
+| `caption_minute_overdraft` | 86 | 1 |
+| `caption_minute_usage` | 114 | 1 |
+| `category_suggestions` | 1505 | 6 |
+| `channel_access` | 257 | 2 |
+| `channel_audit` | 564 | 5 |
+| `channel_blocks` | 205 | 2 |
+| `channel_comment_sigs` | 98 | 1 |
+| `channel_comments` | 903 | 6 |
+| `channel_comments_index_state` | 121 | 1 |
+| `channel_invites` | 915 | 8 |
+| `channel_quran_translations` | 275 | 2 |
+| `channel_transfer_locks` | 117 | 1 |
+| `channel_translation_settings` | 114 | 1 |
+| `content_ownership` | 1796 | 18 |
+| `creator_tier_assignments` | 220 | 2 |
+| `creator_tier_changes` | 580 | 2 |
+| `creator_tier_settings` | 399 | 1 |
+| `creator_tiers` | 1111 | 2 |
+| `delivery_cost_daily` | 175 | 1 |
+| `discovery_exclusions` | 271 | 1 |
+| `discovery_home_rails` | 95 | 1 |
+| `discovery_pins` | 618 | 3 |
+| `discovery_rail_items` | 278 | 1 |
+| `discovery_rails` | 243 | 1 |
+| `feature_switch_changes` | 245 | 2 |
+| `feature_switches` | 114 | 1 |
+| `image_owners` | 220 | 2 |
+| `import_source_items` | 1085 | 4 |
+| `import_sources` | 1113 | 5 |
+| `import_takeout_files` | 1061 | 5 |
+| `index_repairs` | 460 | 2 |
+| `indexnow_pending` | 89 | 2 |
+| `inline_translation_usage` | 86 | 1 |
+| `live_channel_overrides` | 284 | 1 |
+| `live_chat_messages` | 1121 | 7 |
+| `live_counters` | 74 | 1 |
+| `live_events` | 530 | 3 |
+| `live_qoe` | 527 | 3 |
+| `live_segments` | 240 | 1 |
+| `live_sessions` | 1385 | 6 |
+| `live_settings` | 399 | 1 |
+| `live_stream_metadata` | 692 | 7 |
+| `media_backfill_items` | 872 | 2 |
+| `media_backfill_runs` | 869 | 2 |
+| `media_bunny_removals` | 396 | 3 |
+| `media_jobs` | 785 | 3 |
+| `media_originals` | 319 | 2 |
+| `media_provider_health` | 184 | 1 |
+| `media_provider_refs` | 243 | 2 |
+| `media_r2_verified` | 292 | 2 |
+| `metadata_translations` | 429 | 1 |
+| `playback_fallback_daily` | 556 | 1 |
+| `playback_qoe_daily` | 294 | 1 |
+| `privacy_footprint_sigs` | 98 | 1 |
+| `privacy_footprints` | 171 | 2 |
+| `quran_translation_defaults` | 145 | 1 |
+| `search_channels` | 734 | 4 |
+| `search_channels_fts` | FTS5 index (see search model) | 0 |
+| `search_meta` | 400 | 1 |
+| `search_playlists` | 814 | 5 |
+| `search_playlists_fts` | FTS5 index (see search model) | 0 |
+| `search_posts` | 720 | 3 |
+| `search_posts_fts` | FTS5 index (see search model) | 0 |
+| `search_tombstones` | 120 | 2 |
+| `search_transcripts` | 319 | 1 |
+| `search_transcripts_fts` | FTS5 index (see search model) | 0 |
+| `search_videos` | 911 | 8 |
+| `search_videos_fts` | FTS5 index (see search model) | 0 |
+| `social_accounts` | 965 | 3 |
+| `social_audit` | 600 | 2 |
+| `social_deliveries` | 932 | 5 |
+| `social_instance_apps` | 305 | 1 |
+| `social_pending` | 442 | 2 |
+| `social_rules` | 226 | 1 |
+| `social_settings` | 429 | 1 |
+| `social_spend` | 164 | 1 |
+| `social_templates` | 534 | 1 |
+| `social_webhook_deliveries` | 773 | 3 |
+| `social_webhooks` | 607 | 2 |
+| `support_adjustments` | 463 | 2 |
+| `support_bank_statements` | 324 | 2 |
+| `support_checkouts` | 893 | 3 |
+| `support_config` | 310 | 1 |
+| `support_country_rules` | 318 | 1 |
+| `support_disputes` | 575 | 3 |
+| `support_events` | 845 | 4 |
+| `support_finance_members` | 276 | 2 |
+| `support_ledger` | 888 | 6 |
+| `support_ledger_entries` | 307 | 2 |
+| `support_payees` | 788 | 5 |
+| `support_payments` | 969 | 5 |
+| `support_payout_batches` | 584 | 3 |
+| `support_payouts` | 743 | 4 |
+| `support_pledges` | 846 | 4 |
+| `support_reconciliations` | 357 | 2 |
+| `support_refunds` | 569 | 3 |
+| `support_reports` | 460 | 3 |
+| `support_settings` | 540 | 1 |
+| `support_tech_staff` | 112 | 1 |
+| `support_test_state` | 371 | 1 |
+| `tier_requests` | 911 | 4 |
+| `translation_audit` | 413 | 3 |
+| `upload_limit_hits` | 252 | 3 |
+| `upload_rate_leases` | 137 | 2 |
+| `upload_rate_windows` | 132 | 2 |
+| `video_categories` | 801 | 1 |
+| `video_notes` | 837 | 3 |
+| `videos_bans` | 275 | 1 |
+| `workflow_inbox` | 252 | 3 |
+| `workflow_requests` | 2127 | 8 |
+| `workflow_rules` | 537 | 2 |
+| `workflow_steps` | 502 | 3 |
+| `yt_import_items` | 2188 | 5 |
+| `yt_import_playlists` | 801 | 1 |
+| `yt_imports` | 1151 | 4 |
+| `yt_oauth_states` | 506 | 3 |
+
+#### al-ummah-now-reports (50 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `admin_audit_log` | 827 | 4 |
+| `admin_staff` | 615 | 3 |
+| `ai_budget_daily` | 156 | 1 |
+| `ai_usage_daily` | 217 | 1 |
+| `auth_moderation_requests` | 1804 | 6 |
+| `channel_verification_log` | 477 | 2 |
+| `contact_messages` | 2100 | 9 |
+| `contact_notes` | 1077 | 2 |
+| `content_review_findings` | 619 | 2 |
+| `content_reviews` | 1769 | 7 |
+| `creator_invites` | 1637 | 6 |
+| `csam_access_log` | 604 | 2 |
+| `csam_cases` | 1161 | 4 |
+| `csam_settings` | 448 | 1 |
+| `email_template_versions` | 491 | 1 |
+| `email_templates` | 456 | 1 |
+| `entitlement_overrides` | 1005 | 3 |
+| `erased_users` | 132 | 2 |
+| `error_actions` | 1953 | 4 |
+| `error_events` | 2385 | 6 |
+| `error_group_activity` | 670 | 2 |
+| `error_group_releases` | 245 | 1 |
+| `error_group_users` | 380 | 2 |
+| `error_groups` | 1449 | 7 |
+| `error_hourly` | 210 | 2 |
+| `error_rate` | 172 | 2 |
+| `error_refs` | 297 | 3 |
+| `error_releases` | 221 | 1 |
+| `import_batches` | 413 | 3 |
+| `import_items` | 664 | 3 |
+| `moderation_actions` | 1040 | 4 |
+| `moderation_appeals` | 684 | 3 |
+| `moderation_config` | 448 | 1 |
+| `moderation_signals` | 1838 | 10 |
+| `newsletter_deliveries` | 418 | 3 |
+| `newsletter_issues` | 776 | 2 |
+| `newsletter_subscribers` | 1105 | 6 |
+| `plan_audit_log` | 1143 | 2 |
+| `plan_entitlements` | 483 | 1 |
+| `plans` | 853 | 3 |
+| `reports` | 2004 | 12 |
+| `review_alert_subscribers` | 168 | 1 |
+| `site_domain_checks` | 233 | 2 |
+| `site_settings` | 448 | 1 |
+| `site_settings_log` | 1073 | 4 |
+| `subscriptions` | 737 | 3 |
+| `theme_package_versions` | 240 | 1 |
+| `theme_packages` | 760 | 2 |
+| `usage_counters` | 338 | 1 |
+| `user_warnings` | 947 | 2 |
+
+#### al-ummah-now-notifications (23 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `analytics_daily` | 155 | 1 |
+| `analytics_rollup_imports` | 126 | 1 |
+| `archive_subjects` | 210 | 1 |
+| `archive_title_refs` | 171 | 2 |
+| `channel_subscriber_counts` | 58 | 1 |
+| `channel_subscribers` | 287 | 2 |
+| `channel_subscription_import_state` | 79 | 0 |
+| `channel_subscription_imports` | 67 | 1 |
+| `channel_subscriptions` | 238 | 2 |
+| `dead_letters` | 984 | 3 |
+| `discovery_viewers` | 112 | 1 |
+| `liked_videos` | 368 | 4 |
+| `live_reminders` | 198 | 2 |
+| `notification_email_prefs` | 157 | 1 |
+| `notification_seen` | 59 | 1 |
+| `notification_settings` | 147 | 1 |
+| `notifications` | 1474 | 8 |
+| `poll_votes` | 238 | 2 |
+| `post_counter_imports` | 176 | 1 |
+| `post_likes` | 205 | 2 |
+| `push_devices` | 573 | 3 |
+| `review_alerts` | 496 | 2 |
+| `saved_posts` | 329 | 2 |
+
+#### al-ummah-now-status (8 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `component_state` | 526 | 1 |
+| `daily` | 256 | 2 |
+| `deliveries` | 384 | 3 |
+| `incident_updates` | 627 | 2 |
+| `incidents` | 718 | 3 |
+| `notifications` | 284 | 2 |
+| `subscribe_limits` | 172 | 2 |
+| `subscribers` | 739 | 4 |
+
+#### al-ummah-now-costs (13 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `collector_runs` | 548 | 2 |
+| `cost_alert_deliveries` | 696 | 1 |
+| `cost_alert_subscriptions` | 211 | 1 |
+| `cost_credentials` | 957 | 1 |
+| `cost_job_runs` | 556 | 2 |
+| `cost_product_daily` | 345 | 2 |
+| `cost_settings` | 448 | 1 |
+| `ops_alerts` | 251 | 1 |
+| `ops_cost_alerts` | 157 | 1 |
+| `ops_daily` | 464 | 2 |
+| `ops_hourly` | 456 | 2 |
+| `ops_resources` | 256 | 1 |
+| `ops_thresholds` | 226 | 1 |
+
+#### al-ummah-now-d1 (Auth) (38 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `_openauth_migrations` | 203 | 2 |
+| `account_sessions` | 772 | 8 |
+| `admin_deletions` | 899 | 3 |
+| `app_sessions` | 731 | 3 |
+| `audit_events` | 1094 | 6 |
+| `auth_settings` | 429 | 1 |
+| `auth_theme_client_defaults` | 180 | 1 |
+| `auth_theme_settings` | 429 | 1 |
+| `auth_themes` | 548 | 1 |
+| `authorization_codes` | 847 | 6 |
+| `browser_sessions` | 500 | 5 |
+| `identity_providers` | 1178 | 6 |
+| `jwt_keys` | 533 | 4 |
+| `moderation_request_events` | 800 | 2 |
+| `moderation_requests` | 2066 | 6 |
+| `oauth_clients` | 1074 | 5 |
+| `openauth_atomic` | 441 | 3 |
+| `passkey_setup_tickets` | 356 | 2 |
+| `password_codes` | 226 | 1 |
+| `password_login_attempts` | 114 | 1 |
+| `rbac_permissions` | 635 | 5 |
+| `rbac_role_permissions` | 332 | 3 |
+| `rbac_roles` | 568 | 4 |
+| `rbac_user_roles` | 534 | 5 |
+| `refresh_tokens` | 912 | 7 |
+| `scoped_revocations` | 382 | 1 |
+| `tenant_admins` | 449 | 4 |
+| `tenant_invitations` | 727 | 7 |
+| `tenants` | 974 | 5 |
+| `token_usage` | 642 | 5 |
+| `user_identities` | 770 | 4 |
+| `user_invite_superseded_tokens` | 599 | 3 |
+| `user_invites` | 1753 | 6 |
+| `user_revocations` | 284 | 1 |
+| `users` | 1057 | 9 |
+| `webauthn_credentials` | 521 | 3 |
+| `webauthn_prompts` | 113 | 1 |
+| `webhook_dlq` | 909 | 4 |
+
+#### al-ummah-now-cms (40 tables)
+
+| Table | Est. bytes/row incl. indexes | Indexes |
+|---|---|---|
+| `ai_jobs` | 927 | 4 |
+| `ai_settings` | 363 | 0 |
+| `ai_settings_audit` | 832 | 2 |
+| `ai_usage` | 429 | 3 |
+| `cms_videos` | 351 | 2 |
+| `community_links` | 332 | 1 |
+| `content_revisions` | 569 | 1 |
+| `curated_videos` | 730 | 2 |
+| `curated_videos_dupes_0002` | 588 | 0 |
+| `feed_dirty` | 81 | 0 |
+| `feed_garbage` | 175 | 2 |
+| `feed_heads` | 184 | 1 |
+| `feed_items` | 206 | 2 |
+| `feed_state` | 340 | 0 |
+| `feed_weeks` | 383 | 1 |
+| `feed_years` | 174 | 1 |
+| `media` | 683 | 3 |
+| `media_variants` | 344 | 2 |
+| `nav_items` | 387 | 1 |
+| `page_entries` | 449 | 3 |
+| `pages` | 1479 | 1 |
+| `pages_backup_0006` | 1074 | 0 |
+| `pages_backup_0022` | 1421 | 0 |
+| `pages_backup_0023` | 1421 | 0 |
+| `posts` | 2018 | 6 |
+| `scholars` | 889 | 3 |
+| `site_settings` | 461 | 1 |
+| `slug_history` | 265 | 2 |
+| `sso_session_revocations` | 102 | 1 |
+| `sso_sign_outs` | 28 | 0 |
+| `system_tokens` | 291 | 1 |
+| `timeline_changes` | 511 | 1 |
+| `timeline_entries` | 456 | 3 |
+| `translation_flag_events` | 569 | 2 |
+| `translation_flags` | 1186 | 2 |
+| `translation_glossary` | 545 | 2 |
+| `trash` | 1012 | 5 |
+| `trash_events` | 526 | 1 |
+| `users` | 897 | 4 |
+| `video_snapshots` | 626 | 2 |
