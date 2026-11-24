@@ -7,7 +7,7 @@
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **building, paused for new stories**: D1-1 and D1-2 merged; D1-3a in review ([AlUmmahNow#1909](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1909)). On 2026-11-24 scaling moved to a per-workload architecture plan, so no new cleanup story starts until that plan is decided. |
-| **Last updated** | 2026-11-24 (revision 6) |
+| **Last updated** | 2026-11-24 (revision 7) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
 > Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
