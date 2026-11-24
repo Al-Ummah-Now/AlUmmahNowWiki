@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 110 epics and 637 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 110 epics and 650 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -84,10 +84,10 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E11](E11-aun-core.md) | [AUN-279](https://linear.app/hamzalabs/issue/AUN-279/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 7 | 1 | 0 | 1 | 0 | 9 |
 | [E12](E12-viewer-mobile.md) | [AUN-289](https://linear.app/hamzalabs/issue/AUN-289/e12-viewer-mobile-apps-ios-ipados-android) | 2 | 4 | 0 | 8 | 0 | 14 |
 | [E13](E13-native-players.md) | [AUN-304](https://linear.app/hamzalabs/issue/AUN-304/e13-native-players) | 3 | 5 | 1 | 2 | 0 | 11 |
-| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 1 | 11 | 4 | 9 | 1 | 26 |
+| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 2 | 11 | 3 | 9 | 1 | 26 |
 | [E15](E15-tv-apps.md) | [AUN-322](https://linear.app/hamzalabs/issue/AUN-322/e15-tv-apps) | 0 | 5 | 0 | 4 | 0 | 9 |
 | [E16](E16-desktop-viewer.md) | [AUN-332](https://linear.app/hamzalabs/issue/AUN-332/e16-desktop-viewer-windows-macos-linux) | 1 | 2 | 0 | 1 | 0 | 4 |
-| [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 3 | 0 | 2 | 0 | 5 |
+| [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 1 | 5 | 12 | 0 | 18 |
 | [E18](E18-studio-mobile.md) | [AUN-343](https://linear.app/hamzalabs/issue/AUN-343/e18-studio-mobile-ios-ipados-android) | 2 | 3 | 1 | 4 | 0 | 10 |
 | [E19](E19-studio-desktop.md) | [AUN-354](https://linear.app/hamzalabs/issue/AUN-354/e19-studio-desktop-windows-macos-linux) | 3 | 5 | 0 | 1 | 1 | 10 |
 | [E20](E20-ummah-kids.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-ummah-kids-profiles-and-parental-controls) | 0 | 0 | 4 | 6 | 1 | 11 |
@@ -118,4 +118,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 3 | 0 | 0 | 0 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **110 epics** | **246** | **113** | **55** | **186** | **37** | **637** |
+| **All** | **110 epics** | **247** | **111** | **59** | **196** | **37** | **650** |
