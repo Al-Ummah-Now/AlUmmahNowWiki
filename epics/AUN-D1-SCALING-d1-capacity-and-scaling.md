@@ -486,6 +486,11 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - a crash after the move batch but before the drain, and a crash after the R2 write but before the outbox delete, each count exactly once;
   - a flush that runs at the same time as a move lands either in the moved part or in D1, never in both and never in neither;
   - one test for each of the acceptance criteria of I1 to I5;
+  - from the final review (Gemini, revision 6):
+    - **Partial index.** A partial index `idx_analytics_active_dirty ON analytics_active (day) WHERE dirty = 1` serves the nightly archive query. A test asserts its plan.
+    - **Outbox payload.** It is built with `json_group_array(json_array(metric, dim, value))`, which takes one argument, and guarded with `HAVING COUNT(*) > 0`, so an empty entity-day writes no `'[]'` move.
+    - **Concurrent drains.** Drain writes are grouped per monthly R2 key and use a conditional PUT (`etagMatches`, retried), so overlapping drain runs can't overwrite each other's parts. A test runs two drains at once.
+    - **Prose.** When a flush runs just before a fold, the totals it added are moved by that same fold batch, and the active row stays `dirty = 1`. That way any dimensions and later totals are not stranded. The reader rules always include I4 (unmoved daily rows). "An R2 failure means no delete" means no delete from `analytics_moves`. I1 to I5 govern if the prose differs.
   - a failed fold leaves `analytics_active` and the daily rows in place;
   - the archive and the fold plans use primary-key ranges, never a scan of `analytics_daily`;
   - the reader returns the same series as today for a seeded 400-day fixture;
