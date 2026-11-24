@@ -2373,14 +2373,20 @@
         "en": "Database capacity alerts and scaling plan",
         "ar": "تنبيهات سعة قواعد البيانات وخطة التوسّع"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "videos-admin",
         "api",
         "auth"
       ],
       "wiki": "epics/AUN-D1-SCALING-d1-capacity-and-scaling.md",
-      "note": "Spec only. Every D1 database and table inventoried with a growth model at 10k to 10M monthly users. The notifications database (inbox, analytics counters and 91 days of Popular viewer rows) reaches the 10 GB limit first, at about 40k monthly users, then Auth (about 129k) and search (about 167k). First story: admins are alerted at 70% of each D1 limit on the Costs, Operations, Status and Errors pages, fed by the cost-monitor. Then inbox retention, Popular viewer counts, an exact 90-day analytics hot window with an R2 archive, Auth count-scan fixes, audit retention and split, and per-user inbox shards."
+      "prs": [
+        "AlUmmahNow#1883",
+        "AlUmmahNow#1886",
+        "AlUmmahNow#1892",
+        "AlUmmahNow#1909"
+      ],
+      "note": "Building; new cleanup stories paused 2026-11-24 while scaling moves to a per-workload architecture plan. Merged: capacity alerts on the Costs, Operations, Status and Errors pages (D1-1) and inbox retention (D1-2); Popular viewer counts (D1-3a) in review. The notifications database (inbox, analytics counters and 91 days of Popular viewer rows) reaches the 10 GB limit first, at about 40k monthly users, then search (about 167k) and Auth (about 293k; token_usage has no producer). Analytics writes about 46 rows and 16 queue messages per view."
     },
     {
       "id": "error-pages",
