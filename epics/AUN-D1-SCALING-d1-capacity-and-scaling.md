@@ -680,7 +680,7 @@ These are server-only changes:
 - **Archives and erase.**
   - **Audit archive (D1-4):** it holds personal data. Account erase redacts the user's rows still in D1 and tombstones the user's key, so the archived lines can't be read. No scan of R2 is needed.
   - **Analytics archive (D1-3b):** it holds per-video counts only, no user data.
-  - **Chat archive (D1-8):** account erase covers it by message id.
+  - **Chat archive (D1-8):** account erase finds the user's streams through their `live_chat_participants` rows on the D1-6 shards, then uses each stream's `authors.json` to rewrite only that author's minute files. There is no scan.
   - **Erase checks:** the R2 buckets are listed in the erase leftover check, never allow-listed without a PII check.
   - **Privacy page:** the existing privacy-retention text states retention.
 - **Sign-in safety.** No story runs an unindexed query on the Auth database. D1-4 removes the existing `COUNT(*)` scans first. Purges are batched by an indexed time column (the sign-in stall of 2026-11-13, [AlUmmahNowAuth#341](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/341)).
