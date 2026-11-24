@@ -905,7 +905,7 @@
       "prs": [
         "AlUmmahNow#1405"
       ],
-      "note": "The new owner is picked by name, @handle or email with the shared autocomplete; team members first, banned accounts cannot be picked."
+      "note": "The new owner is picked by name, @handle or email with the shared autocomplete; team members first, banned accounts cannot be picked. The user id is shown, and the move is confirmed with the channel's @handle or that id."
     },
     {
       "id": "channel-move-complete",
