@@ -903,7 +903,8 @@
       ],
       "wiki": "epics/CHAT-ADMIN-CONTENT-admin-content-management.md",
       "prs": [
-        "AlUmmahNow#1405"
+        "AlUmmahNow#1405",
+        "AlUmmahNow#1868"
       ],
       "note": "The new owner is picked by name, @handle or email with the shared autocomplete; team members first, banned accounts cannot be picked. The user id is shown, and the move is confirmed with the channel's @handle or that id."
     },
