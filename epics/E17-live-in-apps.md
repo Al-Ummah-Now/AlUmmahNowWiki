@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist, everything in §3 is being built behind switches that default off) |
-| **Last updated** | 2026-11-23 |
+| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server for chat, premieres, reminders and event tags is on main behind switches that default off, no client uses it yet) |
+| **Last updated** | 2026-11-24 |
 | **Linear** | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337) (stories AUN-338 to AUN-342) |
 
 How to read this page: **on main** means the code is merged in `AlUmmahNow`. Anything that is only in an open PR is named with its number, and §9 says which story waits for it. Each rule is written once; other sections link to it.
@@ -273,11 +273,11 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 **Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.manage`, `live.moderate` or `comment.moderate`. An author may `remove` their own message, and nobody else can bring that back. `block_author` uses `channel_blocks` and removes that person's messages on the stream; the team cannot be blocked. Site moderators act from the admin queues (below). `PATCH /:id/chat/settings` is `allowChat`, `chatReplay`, `slowModeSeconds` and `subscribersOnly` for the owner, `live.manage` and `live.moderate`.
 
-**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). It answers `404 feature_off` while `liveChat` is off or unreadable, and `404` unless the message is published and the reporter may read that chat now. The text, stream, channel and author go with the report when it is filed, because deleting a stream deletes its messages; the queue archive drops the text and pseudonymises the author. Account erasure takes the reported person's id and name out of every report, and their words out of reports on comments and chat messages. admin-api migration `0051_reports_live_chat.sql` adds the type to `reports`.
+**Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). It answers `404 feature_off` while `liveChat` is off or unreadable, and `404` unless the message is published and the reporter may read that chat now. The text, stream, channel and author go with the report when it is filed, because deleting a stream deletes its messages; the queue archive drops the text and pseudonymizes the author. Account erasure ([#1875](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1875)) takes the reported person out of every report: their id and name, the title or text of what was reported, their own channel's name, and their id on a ban decision. Nothing puts them back: admin-api's lookup drops people listed in `erased_users`, for rows not filled yet, for refreshes and for the queue page, and reads nothing back while that list cannot be read. A comment or chat message never takes another author, even after that list is purged at 30 days. admin-api migration `0051_reports_live_chat.sql` adds the type to `reports`.
 
-**Decisions.** On `live_chat` and `livestream`, admin-api calls an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2. A removed or restored message drops the shared 2-second page. A stream an admin hides or deletes ends whatever its status, with any session still open, and a premiere is cancelled or ended. While it is hidden or deleted, `/ingest`, `/start`, `PATCH` to `live` and the encoder's first video are refused (`live_stream_removed`).
+**Decisions.** On `live_chat` and `livestream`, admin-api calls an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2. A removed or restored message drops the shared 2-second page. A stream an admin hides or deletes ends whatever its status, with any session still open, and a premiere is cancelled or ended. While it is hidden or deleted, `/ingest`, `/start` and `PATCH` to `live` answer `403 live_stream_removed`; the encoder's uploads get `410`, because the session has ended, and the stream never turns live.
 
-**AI queue.** A `live_chat` row shows the message and leads to its channel. Message text is not searchable there: the table grows without bound, a `LIKE` over it would be a full scan, and a text index would cost extra writes on every message. Search by message, author or channel id, author name and channel name works.
+**AI queue** (E17-4, [#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)). A `live_chat` row shows the message and leads to its channel. Message text is not searchable there: the table grows without bound, a `LIKE` over it would be a full scan, and a text index would cost extra writes on every message. Search by message, author or channel id, author name and channel name works.
 
 ### 5.3 WebSocket `live:<streamId>`
 
@@ -393,7 +393,7 @@ Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82,
 |---|---|
 | **17.1** Live watch, viewer count, DVR | Web watch and viewer count on main. Seek-back is not: the self-hosted playlist lists only 4 to 6 segments (`lib/live/providers.ts`, `hls_list_size`), though every segment is kept in R2 and indexed in `live_segments`. E17-9 serves a longer playlist from that index. |
 | **17.2** Moderated chat | Server done (E17-2, E17-2b), then clients. |
-| **17.3** Premieres, scheduled streams, reminders | Server done (E17-3, E17-3a), then clients. Shares `live_stream_metadata` with E22. |
+| **17.3** Premieres, scheduled streams, reminders | Server done (E17-3, E17-3a) except `calendar.ics` (E17-3b, waits for [#1819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1819)), then clients. Shares `live_stream_metadata` with E22. |
 | **17.4** Event streams | Server done (E17-1, E17-3c), then clients. |
 | **17.5** Recordings | Server recording and review on main. Chat replay is E17-2. |
 
@@ -419,7 +419,7 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | Story | Repo | Scope | Waits for |
 |---|---|---|---|
 | **E17-1** ([#1787](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1787)) | AlUmmahNow | Switches, tier fields, shared types, filter and normalizer, three tables, projection with order guard, hydration, wrapped live sweep, erasure, Takeout | nothing |
-| **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841)) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
+| **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841), landed through #1842) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
 | **E17-2b** ([#1858](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1858)) | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
 | **E17-3** ([#1842](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1842)) | AlUmmahNow | Premieres, chapters fix | E17-2 |
 | **E17-3a** ([#1845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1845)) | AlUmmahNow | Reminders, and the owner's notice when a premiere is cancelled by the system | E17-3 |
@@ -465,4 +465,4 @@ Built to the recommendation; the owner can change any of them.
 
 ## 13. Sources
 
-[D2](D2-video-delivery.md), [D3](D3-live-provider.md), [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md), [E13](E13-native-players.md), [E14](E14-offline-listen.md), [E20](E20-ummah-kids.md), [E22](E22-notifications-sharing-circles.md), [E28](E28-ai-moderation.md)
+[D2](D2-video-delivery.md), [D3](D3-live-provider.md), [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md), [E13](E13-native-players.md), [E14](E14-offline-listen.md), [E20](E20-system-parental-controls.md), [E22](E22-notifications-sharing-circles.md), [E28](E28-ai-moderation.md)
