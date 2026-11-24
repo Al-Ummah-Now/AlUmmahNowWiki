@@ -7,7 +7,7 @@
 | **ID** | `AUN-WORKFLOWS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, admin-api, admin-web, api-videos search D1 migrations), later [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) and [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) through [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) |
 | **Status** | **building** (revision 2: owner decisions WF-D1 to WF-D10 recorded 2026-11-23; no effective dates) |
-| **Last updated** | 2026-11-23 |
+| **Last updated** | 2026-11-24 |
 | **Origin** | Owner, 2026-11-23, asked whether a change to a creator-support fee rate should need a second approver: "build a workflow system." Recorded as [O44](decisions.md#o44-one-approval-workflow-system-for-sensitive-admin-changes). |
 
 ## Goal
@@ -71,13 +71,13 @@ Each consuming feature registers its action types in `packages/shared-types/src/
 | `support.emergencyStop.lift` | money | finance list | 1 approver, finance list; step-up; 1 day | one person |
 | `workflows.rule.set` (changing a rule on the rules page) | governance | super admin; for a money rule, finance list | 1 approver: super admin, or the finance list for money rules; step-up; 7 days | new |
 | `features.set` scoped per switch | platform | `features:manage` (super admin for `toggle: 'superAdmin'`) | **direct** for every switch, `creatorSupport` included (owner 2026-11-24, WF-D9 superseded); its readiness checks stay a 409 precondition. An admin can give any switch approvers on the rules page | one admin |
-| `tiers.change` (a creator's tier, the default tier, a tier's limits) | platform | admins | direct | one admin |
+| `tiers.change`, three scopes: `assign` (a creator's tier, one or many, or a tier request approved), `default` (the default tier), `tiers` (add, edit, delete, reorder tiers) | platform | `creators:manage` | direct in every scope ([§4.5](#45-tier-changes-wf-10)) | one admin |
 | `channels.transfer`, `channels.claim.approve` | people | super admin | direct (rule ready for 1 approver) | one super admin |
 | `credentials.create`, `credentials.rotate` | platform | super admin | direct with step-up (rule ready for 1 approver) | one super admin |
 
 The finance list and tech-staff marks are **people** actions, not money actions: they decide who holds money permissions, and super admins decide them (AUN-MEMBERS §9.6), so they can't need the finance list to approve. They have their own floor ([§4.3](#43-floors-rules-the-admin-page-cant-lower)).
 
-**Direct** means the rule asks for no approver: the request is created, approved by the rules and applied in the same call. The person sees no difference from today, but the change still gets a request, a diff and the append-only log, and an admin can raise the count later on the rules page without code.
+**Direct** means the rule asks for no approver: the change takes effect in the same call, and the person sees no difference from today. Feature switches and tier changes keep their own direct write and their own audit rows, and no request is created; an action that always goes through the engine (`proposeChange`) still gets a request, a diff and the append-only log. A direct rule can still ask for a step-up to propose. Either way an admin can raise the count later on the rules page without code.
 
 Removing someone from the finance list, holding payouts, stopping a batch and the emergency stop are **never** governed: they only take access or money movement away, and they must work in an emergency ([§4.3](#43-floors-rules-the-admin-page-cant-lower)).
 
@@ -113,6 +113,46 @@ Hard-coded per domain in shared-types, checked by the server when a rule is save
 ### 4.4 When nobody can approve
 
 If no account matches the approver sets after exclusions, the request page and the proposer see "Nobody can approve this yet" with the reason (for example "The finance list has no one with Payouts"). The request still expires on time. Super admins see a warning on the rules page for every rule in that state. `creatorSupport`'s existing precondition (a finance approver exists) keeps it from being switched on in that state.
+
+### 4.5 Tier changes (WF-10)
+
+Every tier route in `routers/content.router.ts` builds one operation (`lib/workflows/tier-actions.ts`) and
+asks the rule of its scope:
+
+| Scope | Routes (`/api/content`) |
+|---|---|
+| `assign` | `PUT /users/:id/creator-tier`, `POST /creators/tier` (bulk), `POST /tier-requests/:id/approve` |
+| `default` | `PUT /creator-tiers/default` |
+| `tiers` | `POST /creator-tiers`, `PUT /creator-tiers/:id`, `PUT /creator-tiers/order`, `DELETE /creator-tiers/:id` |
+
+- **Direct** (the default, WF-D1): the route runs the change at once, exactly as before (same checks,
+  audit rows, emails and answers). No request is created.
+- **With approvers** (set on the rules page; the three scopes are always listed there, named in both
+  languages): the route answers **202** with the request and nothing changes. On approval the same
+  operation runs under the proposer's name; its audit rows carry `workflowRequest`. The route's own
+  refusals (a super admin's automatic Unlimited without the explicit confirmation, a tier request already
+  decided, a tier still carried by pending invites) are checked before anyone is asked, and again when it
+  runs. The request's reason is kept on the request and never sent to api-videos (a deleted tier's reason
+  also shows in Recently deleted).
+- **Who may not approve:** the person the change is about. A bulk change is about everyone selected: none
+  of them can approve it, and none of them gets it in their inbox. A bulk change that would move nobody is
+  answered at once and asks nobody.
+- **The diff** names the people and the tiers (in both languages). A bulk change lists everyone who would
+  move, under the tier they hold now. The email names the first five people of a list and counts the rest.
+- **Retry.** A change is made once. If an attempt failed after api-videos made the change, Retry finds it
+  (made by the proposer, since the request: the assignment, the decided tier request, the tier's edit stamp,
+  the deleted tier; for the default and the order, the same value), finishes what was left (the audit row,
+  the tier request's notice and email) and marks the request applied instead of out of date. Each audit row
+  of a request has one id, so a retry never writes a second one. A lost answer is checked at once the same
+  way. A target someone else changed meanwhile is out of date.
+- **Step-up:** whenever the scope's rule asks for one to propose, direct or with approvers.
+- **Staleness:** a creator's current tier, the tier request's status, or the tiers list and default (for
+  `default` and `tiers`); bulk changes are planned again when they run, so they never go stale.
+- **Admin pages:** the Users, user, Tiers and Tier requests pages show "Sent for approval" with the
+  request's link instead of "Saved" and Undo, and "Waiting for approval" in place of the control while the
+  request is open (`GET /api/workflows/pending?type=&target=`, up to 100 targets in one read of the
+  open-request index). This is its own PR after the back end; until it is live, give no tier scope approvers.
+- Declining a tier request stays a direct action: it only takes the request away.
 
 ## 5. Lifecycle
 
@@ -317,8 +357,17 @@ A few rows per request in the search D1, one email per recipient per event throu
 | WF-3 `/api/workflows`, step-up, expiry cron, audit mirror | [AlUmmahNow#1827](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1827) | merged (`a111485`) |
 | WF-5 finance list and tech-staff unmark on the workflow | [AlUmmahNow#1829](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1829) | merged (`ea5ea0f`) |
 | WF-4 emails (one language, Review request link) | [AlUmmahNow#1832](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1832) | merged (`4c08136`) |
-| WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next; fees wait on AlUmmahNow#1810 |
-| WF-7, WF-8 admin Approvals and Approval rules pages | — | next (visual, screenshot audit) |
-| WF-9 to WF-11 | — | later |
+| Spec update: back end merged | [AlUmmahNowWiki#233](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/233) | merged (`23f9421`) |
+| WF-7, WF-8 admin Approvals and Approval rules pages | [AlUmmahNow#1862](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1862) | merged (`70662a1`) |
+| WF-9 feature switches on the workflow (admin-api) | [AlUmmahNow#1865](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1865) | merged (`423e5df`) |
+| WF-9 Features page: read admin-api's real answers, shared readers and contract tests (AUN-FEATURES FEAT-8, taken over) | [AlUmmahNow#1759](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1759) | merged (`6356143`) |
+| WF-9 Features page: a change sent for approval | [AlUmmahNow#1874](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1874) | merged (`f04b81b`) |
+| `creatorSupport` direct (WF-D9 superseded) | [AlUmmahNow#1913](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1913) | merged (`bbf2120`) |
+| WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | in review |
+| WF-10 tiers: the admin pages | branch `feat/wf10-tiers-web` | built; opens when #1914 is merged |
+| WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
+| WF-10 credentials | — | after AlUmmahNow#1547 |
+| WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
+| WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-All reviewed cross-provider (Gemini 4 Hydrogen, PASS). The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
+Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen), as a comment on the PR. The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
