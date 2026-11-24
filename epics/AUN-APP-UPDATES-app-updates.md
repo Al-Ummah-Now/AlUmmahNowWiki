@@ -23,7 +23,7 @@ Every native and desktop app knows, without a store release of its own, when a n
 
 ## Decisions and constraints
 
-- **Feature switch** `appUpdates` on the Features page ([O39](decisions.md#o39-one-features-page-server-enforced), [AUN-FEATURES](AUN-FEATURES-feature-switches.md)), **default off**. The server enforces it: while it is off, `GET /api/v1/app-config` answers `update.status: "ok"` with no notice data, so no app shows anything. Because the minimum-version gate is the escape hatch for a bad build, the owner is asked to turn it on as soon as the first app ships the check ([APPUPD-D1](#owner-decisions)).
+- **Feature switch** `appUpdates` on the Features page ([O39](decisions.md#o39-one-features-page-server-enforced), [AUN-FEATURES](AUN-FEATURES-feature-switches.md)), **default off**. The server enforces it: while it is off, `GET /api/v1/app-config` answers `update.status: "ok"` with no notice data, so no app shows anything. Because the minimum-version gate is the escape hatch for a bad build, it goes on in QA and production as soon as the first app release with the check is out (owner, 2026-11-24, [APPUPD-D1](#owner-decisions)).
 - **Not tier-gated.** Updates are not a creator capability; every user of every app gets them. The admin settings (minimum version, forced-screen message, check interval, release-note overrides) are site-wide operational values with an audit row ([#1434](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1434) "operational values are admin-managed"). **Only super admins edit them**, as #1434 lists; admins with `settings:manage` see them read-only ([§4.2](#42-admin)).
 - **Store rules come first** ([§8](#8-store-rules-and-safety)). App Store, Mac App Store, TestFlight, Play and Microsoft Store builds never download or install code themselves; they only open their store. Self-updating is only for builds we distribute ourselves.
 - **No browser-style prompts** ([No browser prompts](../guides/product-rules.md)): the notice is an in-app bar; the forced screen and "Restart now?" are in-app views, never `confirm`/`alert` or a system dialog we raise ourselves (store sheets the OS shows are fine).
@@ -428,13 +428,13 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 
 Open, for the owner:
 
-- **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** Options: (a) on in QA and production as soon as APPUPD-3 and one client are released; (b) keep off until every platform has shipped. **Recommend (a)**: the minimum-version gate is the only way to stop a broken build already installed, and with no minimum set it only shows "new version" bars.
 - **APPUPD-D5: "Install updates automatically" default.** (a) on (download in the background, install when the app closes, never restart on its own); (b) off. **Recommend (a)**; the admin can change the default with `updates.autoInstallDefault`, and the user's own choice always wins.
 - **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build; notices for downloaded builds and self-install switch on per repo when its keys arrive.
 
 Decided:
 
-- **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` / `.pkg` is the main download and the MSI and `.dmg` stay for managed installs. Both are "Windows installer" downloads on GitHub Releases, as the owner set on 2026-11-10; only (a) can update itself without admin rights.
+- **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** **Decided (a) by the owner (2026-11-24): yes.** The switch goes on in QA and production as soon as the first app release with the update check is out; until then it stays off.
+- **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` (Windows) and `.pkg` (Tools on macOS) are the main downloads, and the MSI and `.dmg` stay for managed installs. All four are direct downloads on GitHub Releases, as the owner set on 2026-11-10; only the Velopack installers let the app update itself without admin rights.
 - **APPUPD-D3: where update files live.** **Decided (a)** by the owner's earlier answer (2026-11-10, native apps distribution): direct downloads live on GitHub Releases. Moving later takes one release that adds the new host to the apps' host list first.
 - **APPUPD-D4: signing keys.** **Decided (a)**, routine security design (2026-11-23): per repo, an offline root key (K-R) and a CI release key (K1–K4). Generating and holding the root keys is an owner item (K-R).
 - **APPUPD-D6: check interval.** **Decided: 6 hours**, routine (2026-11-23); admins change it with `updates.checkHours` (1–48).
