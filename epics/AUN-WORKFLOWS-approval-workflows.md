@@ -151,7 +151,7 @@ asks the rule of its scope:
 - **Admin pages:** the Users, user, Tiers and Tier requests pages show "Sent for approval" with the
   request's link instead of "Saved" and Undo, and "Waiting for approval" in place of the control while the
   request is open (`GET /api/workflows/pending?type=&target=`, up to 100 targets in one read of the
-  open-request index). Until AlUmmahNow#1936 is live, give no tier scope approvers.
+  open-request index). Give no tier scope approvers on an environment until a release with AlUmmahNow#1936 is on it.
 - Declining a tier request stays a direct action: it only takes the request away.
 
 ## 5. Lifecycle
@@ -365,10 +365,10 @@ A few rows per request in the search D1, one email per recipient per event throu
 | WF-9 Features page: a change sent for approval | [AlUmmahNow#1874](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1874) | merged (`f04b81b`) |
 | `creatorSupport` direct (WF-D9 superseded) | [AlUmmahNow#1913](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1913) | merged (`bbf2120`) |
 | WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | merged (`921a555`) |
-| WF-10 tiers: the admin pages | [AlUmmahNow#1936](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1936) | in review |
+| WF-10 tiers: the admin pages | [AlUmmahNow#1936](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1936) | merged (`367a249`) |
 | WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
 | WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen), as a comment on the PR. The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
+"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
