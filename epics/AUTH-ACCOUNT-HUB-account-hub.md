@@ -7,7 +7,7 @@
 | **ID** | `AUTH-ACCOUNT-HUB` |
 | **Owning repos** | [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-21 |
+| **Last updated** | 2026-11-24 |
 
 > Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Step A2's sign-in hardening landed through the SSO audit (state and PKCE, sessions in D1 with one refresh at a time, logout CSRF guard). Step C1 (account events, off) is built ([Auth#507](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/507)). The other steps are in the table below.
 

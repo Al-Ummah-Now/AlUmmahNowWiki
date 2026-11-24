@@ -1758,6 +1758,26 @@
       ]
     },
     {
+      "id": "account-events",
+      "name": {
+        "en": "Account events: apps are told when an account is disabled, restored or erased",
+        "ar": "أحداث الحسابات: إبلاغ التطبيقات بتعطيل حساب أو استعادته أو محوه"
+      },
+      "status": "rolling",
+      "apps": [
+        "auth",
+        "auth-admin"
+      ],
+      "wiki": "epics/AUTH-ACCOUNT-HUB-account-hub.md",
+      "prs": [
+        "AlUmmahNowAuth#513",
+        "AlUmmahNowAuth#516",
+        "AlUmmahNowAuth#522",
+        "AlUmmahNowAuth#524"
+      ],
+      "note": "Auth's side is in production and off (ACCOUNT_EVENTS); the Videos receiver (step C3) comes next, and no app subscribes yet."
+    },
+    {
       "id": "account-deletion-export",
       "name": {
         "en": "Account deletion and data export in the apps",
