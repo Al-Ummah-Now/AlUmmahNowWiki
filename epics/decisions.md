@@ -28,11 +28,14 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md#16-owner-decisions) | In-video links (decisions PL-D1–PL-D20: caps, who may add external links, allowlist only, interstitial, the QF credit tied to Quran text, no payment links, affiliate, creator credits, Up next hand-off, TV, kids and flagged videos, scanning, tier defaults) | **pending** (phase 0 built to PL-D4 and PL-D5) | 2026-11-23 | AUN-PLAYER-LINKS phases 1–5 |
 | [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md#13-owner-decisions) | Channel claim, transfer and self-service move (CC-D1–CC-D12: self-moves only to the channel's own admins, every tier, no wait, old owner loses access, claims and paid-channel moves approved by admins on AUN-WORKFLOWS, free-form proof, everything moves, badge stays with the channel, official handles taken back, always told with the reason, channel limit refuses) | **decided** | 2026-11-23 | AUN-CHANNEL-CLAIM phases B and C, AUN-WORKFLOWS |
 | [E14](E14-offline-listen.md#11-owner-decisions) | Offline & Listen mode (decisions E14-D1–E14-D8: plain unencrypted R2 `video.mp4` downloads with no DRM/licenses/expiry, same rights for everyone under an admin-configurable per-user rate limit, sign-in required for both Listen mode and downloads, reuse existing HLS audio streams with no `audio.m4a` or `audio_extract`, web Listen mode + plain Download button via `/dl/` with `Content-Disposition: attachment` and no in-browser offline library, store portal approvals for CarPlay/Android Auto, next-sync cleanup plus cacheable `videoId`-only revocations feed for CSAM/urgent legal takedowns) | **decided** (E14-D7 store portal action open) | 2026-11-24 | Epic 14 |
+| [E22-D6](decisions.md#e22-d6-notification-quiet-hours-and-prayer-time-quiet-windows) | Notification quiet hours and prayer-time quiet windows: one daily quiet window + optional prayer-times toggle (using Epic 21's prayer-time windows); optional notifications stay in inbox without push; account/security notices always push; no summary push | **decided** | 2026-11-23 | [Epic 22](E22-notifications-sharing-events.md) story 22.1, [Epic 21](E21-islamic-experience.md) story 21.1 |
+| [E22-D7](decisions.md#e22-d7-event-calendar-online-events-only-one-upcoming-model-with-epic-17) | Event calendar: online events only (scheduled live streams, premieres, halqas, with reminders; no in-person venues), sharing one upcoming model with [Epic 17](E17-live-in-apps.md) (separate group-watch system dropped: "it's a live video with chat") | **decided** | 2026-11-23 | [Epic 22](E22-notifications-sharing-events.md) stories 22.3–22.4, [Epic 17](E17-live-in-apps.md) |
+| [E22-D8](decisions.md#e22-d8-app-clips-and-google-play-instant-apps) | App Clips & Google Play Instant Apps: build once store accounts are set up (open a shared video or short link and play it, ≤ 15 MB); build non-store code and AASA/assetlinks plumbing now | **decided** | 2026-11-23 | [Epic 22](E22-notifications-sharing-events.md) story 22.2, [Epic 23](E23-release-engineering.md) |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | Native admin app (decisions AD1–AD14) | **decided** | 2026-11-13 | AUN-ADMIN-NATIVE build (held until the owner says go) |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | Multiple audio tracks (decisions MA1–MA10: demuxed HLS alternate audio from R2, tier limit per video, review of each track) | **decided** | 2026-11-14 | AUN-MULTI-AUDIO build |
 | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) | Passkeys everywhere, required for staff (from AD6; PK1–PK8 built to recommendation, owner may change) | **built to recommendation** | 2026-11-13 | AUTH-PASSKEYS, AUN-ADMIN-NATIVE step 0b |
 | [AUTH-R4](AUTH-R4-auth-docs-dx.md#owner-decisions) | Auth docs (AR4-D1–AR4-D3: no outside developers on our sign-in; tested Python and Go examples; GitHub Packages only) | **decided** | 2026-11-23 | AUTH-R4; the developer portal is not built |
-| [E17](E17-live-in-apps.md#12-owner-decisions) | Live in apps (decisions E17-D1–E17-D8: chat kept with the recording, held and removed purged after 30 days; 2 s cooldown, slow mode, 120 a minute per address; signed-in posting with a subscribers-only option; fast filter and AI signals, people hide; links from owner and moderators only; reminders 15 minutes before and at the start; four event tags; 2-hour seek-back). No circles product (owner): a circle is a live video with chat. One upcoming model with Epic 22 | **built to recommendation** | 2026-11-23 | [Epic 17](E17-live-in-apps.md), [Epic 22](E22-notifications-sharing-circles.md) |
+| [E17](E17-live-in-apps.md#12-owner-decisions) | Live in apps (decisions E17-D1–E17-D8: chat kept with the recording, held and removed purged after 30 days; 2 s cooldown, slow mode, 120 a minute per address; signed-in posting with a subscribers-only option; fast filter and AI signals, people hide; links from owner and moderators only; reminders 15 minutes before and at the start; four event tags; 2-hour seek-back). No circles product (owner): a circle is a live video with chat. One upcoming model with Epic 22 | **built to recommendation** | 2026-11-23 | [Epic 17](E17-live-in-apps.md), [Epic 22](E22-notifications-sharing-events.md) |
 | [E20](E20-system-parental-controls.md#11-owner-decisions) | System parental controls (decisions E20-D1–E20-D11: 13+ everywhere; under-13s watch as guests with nothing stored; 13–17 without live chat under 16, age-restricted videos or money; "date of birth in profile" as the single source of truth, no device signals; no Texas-specific handling; D6 moot, the owner asked to follow YouTube and Google and invent no cases; secondary category Entertainment; age-restricted videos need a signed-in 18+ account on every surface and made-for-kids videos have comments, chat and personalization off; a release checklist per store; an under-13 date disables the account at once and deletes it after 30 days; nobody makes themselves older, staff correct on request) | **decided** | 2026-11-24 | Epic 20 build, first public store release |
 | [E1](decisions.md#e1-embed-host-domain) | Embed host domain | **deferred** | 2026-11-07 | 25.4 |
 | [E2](decisions.md#e2-default-thread-scope) | Default thread scope | **open** | 2026-11-07 | 26.4 |
@@ -1031,9 +1034,40 @@ There is no Kids Mode in our apps: no PIN, no time limits of our own, no curated
 
 [Epic 20](E20-system-parental-controls.md) is rewritten for this. The old spec ([wiki #209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209)) and its PRs (AlUmmahNow [#1778](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1778), [#1780](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1780), [#1794](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1794), [#1801](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1801)) are closed and never merged. With them go the `ummahKids` switch, the `kidsMode` feature key, the `kids:viewer` scope, the `kids_*` tables, and every decision they proposed: **KIDS-D1 to KIDS-D17 are superseded** (KIDS-D9 had already been dropped). [D5](#d5-kids-content-policy) is rejected. [E14](E14-offline-listen.md) and [E17](E17-live-in-apps.md) drop their `kids:viewer` rules in their own PRs.
 
-**Blocks / affects:** [Epic 20](E20-system-parental-controls.md), [Epic 14](E14-offline-listen.md), [Epic 17](E17-live-in-apps.md), [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md)
+**Blocks / affects:** [Epic 20](E20-system-parental-controls.md), [Epic 14](E14-offline-listen.md), [Epic 17](E17-live-in-apps.md), [Epic 22](E22-notifications-sharing-events.md), [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md)
 
 **Sources:** owner messages relayed by the orchestrator thread, 2026-11-24
+
+### E22-D6: Notification quiet hours and prayer-time quiet windows
+
+**Status:** decided · **Date:** 2026-11-23 · **Page:** [E22-notifications-sharing-events.md](E22-notifications-sharing-events.md#10-owner-decisions)
+
+Keep quiet hours simple behind the `quietHours` feature switch (default off): one user setting for a daily quiet window (`start_minute`–`end_minute`, default `22:00`–`06:00` / `1320`–`360` in the user's IANA timezone), plus one optional "quiet during prayer times" toggle that syncs daily `[startMinute, endMinute)` windows on-device from [Epic 21](E21-islamic-experience.md)'s prayer-time service once `21.1` ships (never sending GPS coordinates or city names to `NOTIFICATIONS_DB`, re-syncing daily or on timezone change, ignored server-side if older than 7 days, and hidden in UI until `21.1` supplies windows). During quiet hours, optional notifications are not pushed and wait in the in-app inbox; `account` and security notices always come through; no summary push is sent afterwards.
+
+**Blocks / affects:** [Epic 22](E22-notifications-sharing-events.md) story 22.1, [Epic 21](E21-islamic-experience.md) story 21.1
+
+**Sources:** owner message relayed by the orchestrator thread, 2026-11-23
+
+### E22-D7: Event calendar: online events only, one upcoming model with Epic 17
+
+**Status:** decided · **Date:** 2026-11-23 · **Page:** [E22-notifications-sharing-events.md](E22-notifications-sharing-events.md#10-owner-decisions)
+
+1. **Separate group-watch system retired:** Asked who hosts group watch sessions (`E22-D1`), the owner ruled: *"it's a live video with chat, why make it special."* Watching and chatting together runs on [Epic 17](E17-live-in-apps.md)'s live-streaming and moderated live-chat stack (`E22-D1`–`E22-D5` and `E22-D9` retired).
+2. **Online events only, unified upcoming model:** Channels post upcoming online events — scheduled live streams, premieres, and halqas (`halqa`) — with reminders. There are **no in-person venues**. Epic 22 shares [Epic 17](E17-live-in-apps.md)'s single upcoming model (`live_stream_metadata` + `live_reminders`) rather than creating a second `channel_events` or `event_reminders` model.
+
+**Blocks / affects:** [Epic 22](E22-notifications-sharing-events.md) stories 22.3–22.4, [Epic 17](E17-live-in-apps.md)
+
+**Sources:** owner messages relayed by the orchestrator thread, 2026-11-23
+
+### E22-D8: App Clips and Google Play Instant Apps
+
+**Status:** decided · **Date:** 2026-11-23 · **Page:** [E22-notifications-sharing-events.md](E22-notifications-sharing-events.md#43-app-clips-ios-and-google-play-instant-apps-android)
+
+Build Apple App Clips and Google Play Instant Apps once the App Store Connect and Google Play Console accounts are set up. Scope: open a shared video or `alummahnow.link` short link and play the HLS stream immediately (`≤ 15 MB` payload/module limit, unauthenticated playback + full-app install prompt). Specify signing, associated domains, and store setup in [Epic 22 §4.3–§4.4](E22-notifications-sharing-events.md#43-app-clips-ios-and-google-play-instant-apps-android), and build all code and `/.well-known/*` plumbing that does not require store accounts now.
+
+**Blocks / affects:** [Epic 22](E22-notifications-sharing-events.md) story 22.2, [Epic 23](E23-release-engineering.md)
+
+**Sources:** owner message relayed by the orchestrator thread, 2026-11-23
 
 ### LIC: Repo licence for Core and the app repos
 

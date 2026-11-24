@@ -84,7 +84,7 @@ Every query below uses an index. Each story has a query-plan test that fails on 
 
 ### 4.1 `SEARCH_DB.live_stream_metadata`: the one upcoming model, shared with Epic 22
 
-[E22](E22-notifications-sharing-circles.md) ([wiki #217](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/217), decision E22-D7; [AlUmmahNow#1819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1819)) reads this table for the online events calendar. There is no second table, and no second list of event types: `LIVE_EVENT_TYPES` in `packages/shared-types/src/live-apps.ts` is the only one, and #1819 imports it.
+[E22](E22-notifications-sharing-events.md) ([wiki #217](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/217), decision E22-D7; [AlUmmahNow#1819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1819)) reads this table for the online events calendar. There is no second table, and no second list of event types: `LIVE_EVENT_TYPES` in `packages/shared-types/src/live-apps.ts` is the only one, and #1819 imports it.
 
 ```sql
 CREATE TABLE IF NOT EXISTS live_stream_metadata (
@@ -462,4 +462,4 @@ Built to the recommendation; the owner can change any of them.
 
 ## 13. Sources
 
-[D2](D2-video-delivery.md), [D3](D3-live-provider.md), [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md), [E13](E13-native-players.md), [E14](E14-offline-listen.md), [E20](E20-ummah-kids.md), [E22](E22-notifications-sharing-circles.md), [E28](E28-ai-moderation.md)
+[D2](D2-video-delivery.md), [D3](D3-live-provider.md), [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md), [E13](E13-native-players.md), [E14](E14-offline-listen.md), [E20](E20-ummah-kids.md), [E22](E22-notifications-sharing-events.md), [E28](E28-ai-moderation.md)

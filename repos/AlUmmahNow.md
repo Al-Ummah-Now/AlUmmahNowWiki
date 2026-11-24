@@ -215,7 +215,7 @@ Open: the admin R2 backfill page and engine (in review, #1395 and #1399), and th
 | [Epic 17: Live in apps (watch, chat, premieres, reminders)](../epics/E17-live-in-apps.md) | planned |
 | [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
-| [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
+| [Epic 22: Notifications, sharing, App Clips & event calendar](../epics/E22-notifications-sharing-events.md) | in progress |
 | [Epic 24: Creator support & premium](../epics/E24-creator-support-premium.md) | deferred |
 | [Epic 25: Sharing & embeddable player](../epics/E25-sharing-embeds.md) | in progress |
 | [Epic 26: Embedded discussions ("Ummah Comments")](../epics/E26-ummah-comments.md) | in progress |

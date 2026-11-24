@@ -2545,6 +2545,55 @@
       ],
       "wiki": "epics/E20-system-parental-controls.md",
       "note": "Owner decision O45, 2026-11-24: no in-app Kids Mode; parents use the device's own controls. Store age ratings, a date of birth in the profile (Auth) with only an age band shared with our apps, age-restricted videos for signed-in 18+ accounts, made-for-kids videos without comments, chat or personalization, and a parents' guide. Behind the ageRules, ageRestrictedVideos and parentsGuide switches (all off by default). All owner decisions (E20-D1 to E20-D11) are made."
+    },
+    {
+      "id": "notification-quiet-hours",
+      "name": {
+        "en": "Notification quiet hours and prayer-time quiet windows",
+        "ar": "ساعات الهدوء للإشعارات وإيقاف التنبيهات في أوقات الصلاة"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E22-notifications-sharing-events.md",
+      "note": "Specified and building 2026-11-23 (Epic 22; E22-D6) behind the quietHours switch (off by default). Daily quiet window plus optional on-device prayer-time quiet windows (hidden until Epic 21.1 prayer calculation is active on the device, refreshed daily and ignored server-side if older than 7 days); optional pushes wait in the inbox while account/security notices come through, with no summary push.",
+      "prs": [
+        "AlUmmahNow#1816",
+        "AlUmmahNow#1828",
+        "AlUmmahNowCore#55",
+        "AlUmmahNowApple#84",
+        "AlUmmahNowAndroid#57",
+        "AlUmmahNowDesktop#76"
+      ]
+    },
+    {
+      "id": "event-calendar",
+      "name": {
+        "en": "Event calendar, reminders and .ics feeds",
+        "ar": "تقويم الفعاليات والتذكيرات وخلاصات التقويم"
+      },
+      "status": "building",
+      "apps": [
+        "videos",
+        "videos-admin",
+        "api",
+        "native"
+      ],
+      "wiki": "epics/E22-notifications-sharing-events.md",
+      "note": "Specified and building 2026-11-23 (Epic 22; E22-D7 decided online events only, sharing Epic 17's single upcoming live/premiere model). Upcoming scheduled live streams, premieres and halqas with Gregorian and Hijri dates and bilingual .ics calendar feeds behind the eventCalendar switch (off by default); reminder toggles wait on Epic 17's liveReminders.",
+      "prs": [
+        "AlUmmahNow#1813",
+        "AlUmmahNow#1819",
+        "AlUmmahNow#1831",
+        "AlUmmahNowCore#55",
+        "AlUmmahNowApple#84",
+        "AlUmmahNowAndroid#57",
+        "AlUmmahNowDesktop#76"
+      ]
     }
   ]
 }

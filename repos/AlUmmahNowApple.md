@@ -95,7 +95,7 @@ Open issues (9), no open PRs. They include the Arabic plural for videos ([#26](h
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
 | [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 21: Islamic experience layer](../epics/E21-islamic-experience.md) | planned |
-| [Epic 22: Notifications, sharing, study circles](../epics/E22-notifications-sharing-circles.md) | planned |
+| [Epic 22: Notifications, sharing, App Clips & event calendar](../epics/E22-notifications-sharing-events.md) | in progress |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
 | [Epic 24: Creator support & premium](../epics/E24-creator-support-premium.md) | deferred |
 | [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
