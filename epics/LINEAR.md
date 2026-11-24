@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 110 epics and 650 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 110 epics and 655 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -51,7 +51,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUTH-R3](AUTH-R3-auth-rbac.md) | [AUN-122](https://linear.app/hamzalabs/issue/AUN-122/auth-r3-auth-v10-roadmap-rbac-and-user-management) | 4 | 1 | 0 | 0 | 0 | 5 |
 | [AUTH-R4](AUTH-R4-auth-docs-dx.md) | [AUN-128](https://linear.app/hamzalabs/issue/AUN-128/auth-r4-auth-v10-roadmap-documentation-and-developer-experience) | 2 | 3 | 0 | 0 | 0 | 5 |
 | [AUTH-R5](AUTH-R5-auth-cicd.md) | [AUN-134](https://linear.app/hamzalabs/issue/AUN-134/auth-r5-auth-v10-roadmap-cicd-and-infrastructure) | 2 | 2 | 0 | 0 | 1 | 5 |
-| [AUTH-R6](AUTH-R6-auth-release.md) | [AUN-140](https://linear.app/hamzalabs/issue/AUN-140/auth-r6-auth-v10-roadmap-release-and-distribution) | 1 | 3 | 0 | 0 | 1 | 5 |
+| [AUTH-R6](AUTH-R6-auth-release.md) | [AUN-140](https://linear.app/hamzalabs/issue/AUN-140/auth-r6-auth-v10-roadmap-release-and-distribution) | 7 | 3 | 0 | 0 | 0 | 10 |
 | [CHAT-ADMIN-CONTENT](CHAT-ADMIN-CONTENT-admin-content-management.md) | [AUN-146](https://linear.app/hamzalabs/issue/AUN-146/chat-admin-content-videos-admin-platform-content-management) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [CHAT-AI-CATEGORIES](CHAT-AI-CATEGORIES-ai-categories.md) | [AUN-148](https://linear.app/hamzalabs/issue/AUN-148/chat-ai-categories-ai-category-suggestions-explore-hides-empty) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [CHAT-CONTACT](CHAT-CONTACT-contact-us.md) | [AUN-149](https://linear.app/hamzalabs/issue/AUN-149/chat-contact-contact-us-page-and-admin-inbox) | 1 | 0 | 0 | 0 | 0 | 1 |
@@ -118,4 +118,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 3 | 0 | 0 | 0 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **110 epics** | **247** | **111** | **59** | **196** | **37** | **650** |
+| **All** | **110 epics** | **253** | **111** | **59** | **196** | **36** | **655** |
