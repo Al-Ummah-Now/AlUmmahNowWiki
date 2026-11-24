@@ -82,6 +82,7 @@ Shipped since 2026-11-09:
 | [Epic 15: TV apps](../epics/E15-tv-apps.md) | in progress |
 | [Epic 16: Desktop viewer (Windows, macOS, Linux)](../epics/E16-desktop-viewer.md) | in progress |
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
+| [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
 | [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |

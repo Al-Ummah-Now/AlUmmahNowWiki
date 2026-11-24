@@ -12,10 +12,10 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [D2](decisions.md#d2-video-delivery) | Video delivery | **decided** | 2026-11-10 | Was blocking 9.6 (R2 adapter), Epic 14 (downloads), D3 and through it Epics 17, 18.7 and 19.7, D11, and E4 (embed delivery cost). All unblocked now; the migration itself is AlUmmahNow#687. |
 | [D3](decisions.md#d3-live-provider) | Live provider | **pending** | 2026-11-10 | Epic 17, 18.7, 19.7, 29.17 chat, 28.12, live-streaming Phase 2 |
 | [D4](decisions.md#d4-monetisation) | Monetisation | **decided** | 2026-11-08 | Epic 24, 27.6 provider management, 27.7, P1 |
-| [D5](decisions.md#d5-kids-content-policy) | Kids content policy | **open** | 2026-11-08 | Epic 20 |
+| [D5](decisions.md#d5-kids-content-policy) | Kids content policy (superseded by [O45](decisions.md#o45-no-in-app-kids-mode-support-the-systems-parental-controls): no kids catalog) | **rejected** | 2026-11-24 | Nothing |
 | [D6](decisions.md#d6-fonts) | Fonts | **open** | 2026-11-08 | 10.2, 30.6 |
 | [D7](decisions.md#d7-prayer-time-data) | Prayer-time data | **decided** | 2026-11-23 | 21.1 (Epic 21 decision E21-D1) |
-| [D8](decisions.md#d8-brand-naming) | Brand naming | **open** | 2026-11-08 | Epics 10, 12, 15, 20 |
+| [D8](decisions.md#d8-brand-naming) | Brand naming | **open** | 2026-11-08 | Epics 10, 12, 15 |
 | [D9](decisions.md#d9-linux-ui-toolkit-for-c) | Linux UI toolkit for C# | **decided** | 2026-11-08 | Epics 16, 19 (Linux) |
 | [D10](decisions.md#d10-transcription-location) | Transcription location | **decided** | 2026-11-14 | 18.9, 19.4, 30.4, 28.7 |
 | [D11](decisions.md#d11-who-encodes-renditions) | Who encodes renditions | **decided** | 2026-11-14 | 19.3 |
@@ -33,6 +33,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [AUTH-PASSKEYS](AUTH-PASSKEYS-passkeys-everywhere.md) | Passkeys everywhere, required for staff (from AD6; PK1–PK8 built to recommendation, owner may change) | **built to recommendation** | 2026-11-13 | AUTH-PASSKEYS, AUN-ADMIN-NATIVE step 0b |
 | [AUTH-R4](AUTH-R4-auth-docs-dx.md#owner-decisions) | Auth docs (AR4-D1–AR4-D3: no outside developers on our sign-in; tested Python and Go examples; GitHub Packages only) | **decided** | 2026-11-23 | AUTH-R4; the developer portal is not built |
 | [E17](E17-live-in-apps.md#12-owner-decisions) | Live in apps (decisions E17-D1–E17-D8: chat kept with the recording, held and removed purged after 30 days; 2 s cooldown, slow mode, 120 a minute per address; signed-in posting with a subscribers-only option; fast filter and AI signals, people hide; links from owner and moderators only; reminders 15 minutes before and at the start; four event tags; 2-hour seek-back). No circles product (owner): a circle is a live video with chat. One upcoming model with Epic 22 | **built to recommendation** | 2026-11-23 | [Epic 17](E17-live-in-apps.md), [Epic 22](E22-notifications-sharing-circles.md) |
+| [E20](E20-system-parental-controls.md#11-owner-decisions) | System parental controls (decisions E20-D1–E20-D9: minimum age and store rating, under-13s, ages 13–17, when apps ask for the age range, unresolved signals, device or account, store category, age-restricted and made-for-kids videos, release gate) | **pending** | 2026-11-24 | Epic 20 build, first public store release |
 | [E1](decisions.md#e1-embed-host-domain) | Embed host domain | **deferred** | 2026-11-07 | 25.4 |
 | [E2](decisions.md#e2-default-thread-scope) | Default thread scope | **open** | 2026-11-07 | 26.4 |
 | [E3](decisions.md#e3-guest-commenting) | Guest commenting | **open** | 2026-11-07 | 26 |
@@ -95,6 +96,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float); paid perks only as a separate optional section, default off. "Never hold funds" replaced by [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O44](decisions.md#o44-one-approval-workflow-system-for-sensitive-admin-changes) | One generic, admin-configurable approval workflow system for sensitive admin changes (propose, approve or reject, effective; rules per action type; diff; append-only log; notices), used instead of one-off approval code; first for creator-support fee changes and payouts | **decided** | 2026-11-23 | [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) |
+| [O45](decisions.md#o45-no-in-app-kids-mode-support-the-systems-parental-controls) | No in-app Kids Mode (no PIN, time limits, curated catalog or child profiles); support the parental controls of Apple, Android, Windows and browsers instead. Supersedes D5 and KIDS-D1 to KIDS-D17 | **decided** | 2026-11-24 | Epic 20, E14, E17 |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -142,11 +144,11 @@ None at launch. Payments parts of Epic 27 deferred.
 
 ### D5: Kids content policy
 
-**Status:** open · **Date:** 2026-11-08
+**Status:** rejected, superseded by [O45](#o45-no-in-app-kids-mode-support-the-systems-parental-controls) · **Date:** 2026-11-24 (asked 2026-11-08)
 
-Recommendation: moderator-curated allow-list, age bands 3–6 and 7–12.
+The recommendation was a moderator-curated allow-list with age bands 3–6 and 7–12. The owner decided on 2026-11-24 that there is no curated kids catalog.
 
-**Blocks / affects:** Epic 20
+**Blocks / affects:** nothing
 
 **Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md)
 
@@ -176,9 +178,9 @@ This replaces the earlier on-device-calculation recommendation. Research: `resea
 
 **Status:** open · **Date:** 2026-11-08
 
-Confirm "Lamahat", "Sakinah", "Ummah Kids", "Fanous" and Arabic forms. "Fanous" used for the token package meanwhile.
+Confirm "Lamahat", "Sakinah", "Fanous" and Arabic forms. ("Ummah Kids" is no longer needed: [O45](#o45-no-in-app-kids-mode-support-the-systems-parental-controls).) "Fanous" used for the token package meanwhile.
 
-**Blocks / affects:** Epics 10, 12, 15, 20
+**Blocks / affects:** Epics 10, 12, 15
 
 **Sources:** [docs/native-apps/EPICS.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/native-apps/EPICS.md); [AlUmmahNow#365](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/365)
 
@@ -1020,6 +1022,18 @@ The details are in [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md). **Decid
 **Blocks / affects:** [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) (fees, payout batches, ledger adjustments, finance list), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md), [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md)
 
 **Sources:** owner message relayed by the orchestrator thread, 2026-11-23
+
+### O45: No in-app Kids Mode, support the system's parental controls
+
+**Status:** decided · **Date:** 2026-11-24
+
+There is no Kids Mode in our apps: no PIN, no time limits of our own, no curated kids catalog and no child profiles. The owner, 2026-11-24: "parental controls are for the apps to allow parents use SYSTEM settings to limit their children access" and "THE EPIC IS TO build anything needed for apple parental control features if there is anything the app should do"; confirmed the same day to be the same for Android, then Windows and the web.
+
+[Epic 20](E20-system-parental-controls.md) is rewritten for this. The old spec ([wiki #209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209)) and its PRs (AlUmmahNow [#1778](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1778), [#1780](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1780), [#1794](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1794), [#1801](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1801)) are closed and never merged. With them go the `ummahKids` switch, the `kidsMode` feature key, the `kids:viewer` scope, the `kids_*` tables, and every decision they proposed: **KIDS-D1 to KIDS-D17 are superseded** (KIDS-D9 had already been dropped). [D5](#d5-kids-content-policy) is rejected. [E14](E14-offline-listen.md) and [E17](E17-live-in-apps.md) drop their `kids:viewer` rules in their own PRs.
+
+**Blocks / affects:** [Epic 20](E20-system-parental-controls.md), [Epic 14](E14-offline-listen.md), [Epic 17](E17-live-in-apps.md), [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md)
+
+**Sources:** owner messages relayed by the orchestrator thread, 2026-11-24
 
 ### LIC: Repo licence for Core and the app repos
 
