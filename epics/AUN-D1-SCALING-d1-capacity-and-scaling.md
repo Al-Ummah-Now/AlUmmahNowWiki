@@ -7,7 +7,7 @@
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **building, paused for new stories**: D1-1 and D1-2 merged; D1-3a in review ([AlUmmahNow#1909](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1909)). On 2026-11-24 scaling moved to a per-workload architecture plan, so no new cleanup story starts until that plan is decided. |
-| **Last updated** | 2026-11-24 (revision 7) |
+| **Last updated** | 2026-11-24 (revision 8) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
 > Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
@@ -29,16 +29,19 @@
   It reaches 70% of D1's 10 GB limit at about **28k MAU** and 100% at about **40k MAU**. Across every assumption we varied, 100% stays between 37k and 55k MAU.
 - **Search is second.** It reaches 70% at about **122k MAU** and 100% at about **167k MAU**. This depends on caption search being on for most videos; without transcripts it reaches 100% at about 330k MAU.
   - Search is also the first database to hit D1's single-threaded **query** limit: 70% busy at about 1.6M MAU.
-- **Auth is third.** `audit_events` is never purged. `token_usage` has had no producer on main since 2026-01-13 (`42b68c3`), so it does not grow today. Auth reaches 70% at about **205k MAU** and 100% at about **293k MAU**. If token events came back at 3 per DAU, that would be about 90k and 129k. Auth is the sign-in database, so it must never get close.
+- **Reports is third, once live chat is moderated.** Every live chat message is scanned (or skipped) and writes one `moderation_signals` row, kept 365 days. Reports reaches 70% at about **163k MAU** and 100% at about **214k MAU**. Without chat signals it was about 690k.
+- **Auth is fourth.** `audit_events` is never purged. `token_usage` has had no producer on main since 2026-01-13 (`42b68c3`), so it does not grow today. Auth reaches 70% at about **205k MAU** and 100% at about **293k MAU**. If token events came back at 3 per DAU, that would be about 90k and 129k. Auth is the sign-in database, so it must never get close.
 - **The other databases are fine.**
-  - Reports reaches 100% at about 690k MAU.
   - CMS, costs and status never reach the limit, because they do not grow with users.
 - **The plan.** Stories D1-1 to D1-6 cover monitoring, the inbox retention, the Popular viewer counts, the analytics hot window, the Auth audit retention and split, and the inbox shards. They are about one PR each.
-  - Together they move the first limit from about 40k MAU to about 480k MAU, where the 4 notifications shards reach 70%. The Auth audit database reaches 70% at about 924k MAU with no token events.
+  - Together they move the first limit from about 40k MAU to about 163k MAU, where reports reaches 70% from live chat signals. D1-8 writes signals only for flagged messages; with it, the first limit is about 480k MAU, where the 4 notifications shards reach 70%. The Auth audit database reaches 70% at about 924k MAU with no token events.
   - The notifications shards reach 70% at about 480k MAU with 4 shards.
   - Caption search reaches 70% at about 194k MAU, but only once caption search is on for most videos. D1-7 fixes that.
 
   Stories D1-7 to D1-10 cover 1M to 10M MAU.
+- **Revision 8** (2026-11-24) applies the chat research (`research/scale-chat-2026-11-24.md`, [#257](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/257)):
+  - D1-8 no longer assumes a chat object per stream. Only the viewer counter exists per stream, and the websocket class is key-value backed, so chat rooms need a new SQLite class in their own Worker;
+  - the model counts live chat `moderation_signals`. Reports fills at about 214k MAU, not 690k, while AI moderation of chat is on.
 - **Revision 7** (2026-11-24) corrects the model from the scaling research (`research/scale-analytics-2026-11-24.md`, `research/scale-audit-2026-11-24.md`):
   - analytics is about **16 queue messages and 46 D1 rows written per view**, not 12 rows. Watch time is reported every 30 s, and retention 3 times a view. Storage figures stand; the write cost and load are about 4× ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254));
   - `token_usage` has no producer on main, so Auth reaches 70% at about 205k MAU, not 90k. The D1-4 30-day window ([Auth#529](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/529)) saves nothing today and is held ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)).
@@ -162,7 +165,7 @@ The full per-table list (all 307 tables) is in [Appendix: every table](#appendix
 | Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
 |---|---|---|---|---|---|
 | `error_events`, `error_groups`, `error_hourly`, `error_refs` | the admin Errors page | ~200–2,400 | per error report | ~7 | events 30 days; hourly and refs purged |
-| `moderation_signals`, `moderation_actions` | AI and staff moderation | ~1,000–1,840 (10 indexes) | per upload or comment checked | ~11 | 365 days (AI rows) |
+| `moderation_signals`, `moderation_actions` | AI and staff moderation | ~1,000–1,840 (10 indexes) | per upload, comment or live chat message checked (or skipped) | ~11 | 365 days (AI rows) |
 | `reports`, `content_reviews`, `content_review_findings` | user reports and pre-publication review | ~600–2,000 | per report or upload | 6–13 | findings by age |
 | `newsletter_deliveries` | one row per subscriber per issue | ~420 | subscribers × issues | 3 | **none** |
 | `admin_audit_log`, `site_settings_log`, `plan_audit_log` | admin audit | ~800–1,100 | per admin change | 4–5 | none (low volume) |
@@ -224,9 +227,9 @@ In GB. The share of the 10 GB limit is in brackets.
 | notifications | 2.5 (25%) | **25.2 (252%)** | 252 | 2,520 | analytics_daily 52%, inbox 39%, discovery_viewers 5% |
 | Auth | 0.34 (3%) | 3.4 (34%) | 34 | 342 | audit_events 87% (token_usage has no producer; with 3 rows per DAU it would add 4.3 GB at 100k) |
 | search | 0.5 (5%) | 5.6 (56%) | 82 | 1,746 | transcripts 64%, live chat 23% |
-| reports | 0.2 | 1.5 | 14.5 | 145 | newsletter_deliveries 56%, moderation_signals 35% (at 1M) |
+| reports | 0.23 | 3.7 | 82 | 2,383 | live chat moderation_signals 61%, newsletter_deliveries 22% |
 | cms / costs / status | < 0.2 | < 0.2 | < 0.2 | < 0.2 | does not grow with users |
-| **Account total** (prod only) | 3.75 | 36 | 383 | 4,752 | Account storage passes 70% of 1 TB at about 1.76M MAU and 1 TB at about 2.46M MAU; the account limit can be raised on request |
+| **Account total** (prod only) | 3.82 | 38 | 450 | 6,991 | Account storage passes 70% of 1 TB at about 1.48M MAU and 1 TB at about 2.01M MAU; the account limit can be raised on request |
 
 ### Peak load per database
 
@@ -235,7 +238,7 @@ In GB. The share of the 10 GB limit is in brackets.
 | search | 34, 5% | 300, **45%** | 2,900, **436%** | 264 |
 | notifications | 26, 4% | 258, **41%** | 2,582, **407%** | 2,977 |
 | Auth | 7, 1% | 70, 6% | 695, 56% | 24 |
-| reports | 2, 0% | 4, 0% | 12, 1% | 6 |
+| reports | 2, 0% | 8, 0% | 167, 8% | 43 |
 
 ### Runway: when each database reaches a limit
 
@@ -246,10 +249,10 @@ MAU at which each database reaches the limit, with today's code. Each figure ass
 | **notifications** | **~28k** | **~40k** | ~1.72M | ~2.46M | size |
 | **search** | ~122k | ~167k (~330k without caption search) | ~1.6M | ~2.3M | size, then query time |
 | **Auth** | ~205k | ~293k | ~12.5M | ~17.9M | size |
-| reports | ~483k | ~690k | — | — | size |
+| reports | ~163k | ~214k | — | — | size (live chat signals) |
 | cms, costs, status | never | never | — | — | — |
 
-The notifications busy figures count analytics at 16 queue messages and 46 rows per view ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254)); the Auth figures count no `token_usage` rows ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)). Every figure in these three tables comes from one run of the model (`research/d1-growth-2026-11-24/model.py`, revision 7: `token_usage_per_dau = 0`, 16 messages and 46 rows per view). They are for the whole database, not analytics alone.
+The notifications busy figures count analytics at 16 queue messages and 46 rows per view ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254)); the Auth figures count no `token_usage` rows ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)). Every figure in these three tables comes from one run of the model (`research/d1-growth-2026-11-24/model.py`, revision 8: `token_usage_per_dau = 0`, 16 messages and 46 rows per view, and one `moderation_signals` row per live chat message). They are for the whole database, not analytics alone.
 
 Sensitivity of the first limit (notifications, 100%):
 - 37k MAU at 10 views per DAU;
@@ -313,7 +316,7 @@ These are ordered by urgency: the MAU at which the problem bites without the sto
 | D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~582k | Auth ~1.6M / ~2.2M; audit database ~924k / ~1.3M with no token events |
 | D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~101k | 4 shards: each ~480k / ~686k; main notifications ~657k / ~939k |
 | D1-7 | AlUmmahNow | caption search | ~194k (once caption search is on) | own database, sharded by video when one fills |
-| D1-8 | AlUmmahNow | live chat size and peak rate | 60 messages per second at ~1M | search ~734k / ~1.0M by size; chat off the search database |
+| D1-8 | AlUmmahNow | live chat size and peak rate, and its moderation signals in reports | reports ~163k (chat signals); 60 messages per second at ~1M | search ~734k / ~1.0M by size; chat in its own room Worker; signals only for flagged messages |
 | D1-9 | AlUmmahNow | search query time | ~1.6M (70% busy) | reads spread over replicas |
 | D1-10 | AlUmmahNow | when to leave D1 search | ~1.4M videos | written triggers and a bench |
 
@@ -597,13 +600,17 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
 - **Prune.** Only the published track per language is indexed, never drafts.
 - **When.** This is needed once caption search is on for most videos. With 50% captioned, one transcripts database reaches 70% at about 194k MAU.
 
-### D1-8 Live chat on the stream's Durable Object
+### D1-8 Live chat in its own room Worker
 
-- **While live.** Chat is stored in SQLite inside the stream's Durable Object (the websocket server already runs one per stream). It absorbs the peak: 60 messages per second at 1M MAU and 400 at 10M, under the object's 1,000 per second.
-- **D1's role.** D1 keeps only moderation state (held and removed rows, pins, blocks).
-- **At stream end.** The object writes the chat replay to R2 (`live/chat/<stream>.ndjson`), and replay reads from R2.
-  - **Erase.** Account erase covers this archive by the user's message ids, which the moderation state keeps per stream.
+- **What exists today.** There is no chat object per stream. What runs per stream is only the viewer counter. Chat posts go to `SEARCH_DB.live_chat_messages`, and the websocket server fans them out through 8 shared `sockets:<n>` objects. Those objects are key-value backed.
+- **Why a new Worker.** A Durable Object namespace keeps its storage type once it exists, so the websocket class cannot become SQLite. A new SQLite class needs a migration, and versions with migrations cannot be uploaded, which is how production releases. So chat gets its **own Worker** (`al-ummah-now-chat`): one `wrangler deploy` for the class, then normal releases. A chat release then never drops the site's notification sockets.
+- **While live.** One room object per stream stores chat in its SQLite. It absorbs the peak: 60 messages per second at 1M MAU and 400 at 10M, under the object's 1,000 per second. Relay objects take the fan-out above about 2,000 viewers, with one batched frame each half second.
+- **D1's role.** D1 keeps only moderation state (held and removed rows, pins, blocks) and one participant row per author per stream. Erase needs those rows, because published messages have no D1 state.
+- **At stream end.** The room writes the chat replay to R2 (`live/chat/<stream>.ndjson`), and replay reads from R2.
+  - **Erase.** Account erase finds the archives through the participant rows and removes the user's messages by id.
+- **Moderation signals.** Each live chat message scanned (or skipped) writes one `moderation_signals` row in reports today, which fills reports at about 214k MAU. Rows are written only for flagged messages, and messages are scanned 25 to an AI call.
 - Published chat rows older than 30 days are archived to R2 and deleted.
+- **Design.** The chat research has the full shape, the order and the load numbers (CH-3 to CH-5).
 - **Result:** search no longer carries chat. Size: search reaches 70% at about 734k MAU after D1-7 and D1-8.
 
 ### D1-9 Read replication and the Sessions API for search
@@ -639,7 +646,7 @@ These are plain unit prices for Workers Paid, from the pages above, plus R2 Stan
 | Analytics archive at 1M MAU | — | ~2.1M dimension-row deletes a day ≈ $63 a month, plus ~93k R2 GET and PUT pairs a day ≈ $13 a month |
 | Popular viewer rows at 1M MAU | 1.25M rows written a day, kept 91 days | the same writes, plus about 1 delete per row once its day closes ≈ $38 a month; reads per ranking run fall about 10× |
 | Notification per inbox row | ~9 rows written ≈ $0.000009 | ~8 rows ≈ $0.000008 |
-| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 383 GB → about 142 GB at 1M MAU |
+| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 450 GB → about 209 GB at 1M MAU |
 | Read replicas | — | $0 extra |
 | Extra databases (D1-5, D1-6, D1-7) | — | $0 (included up to 100,000 databases) |
 
