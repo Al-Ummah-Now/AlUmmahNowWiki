@@ -83,7 +83,7 @@ The rules for every client that offers **Delete account**. They're the target; n
 | Web page `/delete-account`, [Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533) | In review. Built to all of them at head `d2fca964`. |
 | Apple Studio, [Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97) | In review (`e6040716`). Still missing: the erase again after a mid-flow sign-in, a saved record and cleanup after the app is killed, `errors`, the pause for `503`, the new confirmation after 50 passes, the owned-channels warning, wording about stored files, either word in either language. |
 | Android Studio, [Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68) | In review (`df2ac40e`). Still missing: a saved record and saved marker, `errors`, the pause for `503`, the new confirmation after 50 passes, the owned-channels warning, wording about stored files. |
-| Server: [#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937) (passes, `errors`, `503`), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933) (the web page's tokens) | Merged, in release `v2026.11.24.2`. Whether a token for another client is refused on the erase or only logged depends on `AUD_MODE`. |
+| Server: [#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937) (passes, `errors`, `503`), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933) (the web page's tokens) | Live on production since 2026-11-24 (`v2026.11.24.2`). Whether a token for another client is refused on the erase or only logged depends on `AUD_MODE`. |
 
 ### Order of the calls
 
