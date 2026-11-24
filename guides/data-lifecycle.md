@@ -76,14 +76,16 @@ The local E2E stack's leftover check is what finds gaps like these: an admin spe
 
 The rules for every client that offers **Delete account**. They're the target; no client is released yet, and each is reviewed against them. The web page's address isn't in Google Play's Data safety form yet.
 
-### Status (2026-11-24)
+### Status
 
-| Client | State against these rules |
+| Client | State |
 |---|---|
-| Web page `/delete-account`, [Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533) | In review. Built to all of them at head `d2fca964`. |
-| Apple Studio, [Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97) | In review (`e6040716`). Still missing: the erase again after a mid-flow sign-in, a saved record and cleanup after the app is killed, `errors`, the pause for `503`, the new confirmation after 50 passes, the owned-channels warning, wording about stored files, either word in either language. |
-| Android Studio, [Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68) | In review (`df2ac40e`). Still missing: a saved record and saved marker, `errors`, the pause for `503`, the new confirmation after 50 passes, the owned-channels warning, wording about stored files. |
-| Server: [#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937) (passes, `errors`, `503`), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933) (the web page's tokens) | Live on production since 2026-11-24 (`v2026.11.24.2`). Whether a token for another client is refused on the erase or only logged depends on `AUD_MODE`. |
+| Web page `/delete-account` | In review ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)) |
+| Apple Studio | In review ([Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97)) |
+| Android Studio | In review ([Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68)) |
+| Server ([#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933)) | Live on production since 2026-11-24 (`v2026.11.24.2`) |
+
+"In review" doesn't mean a client already meets every rule below; its PR lists what is open.
 
 ### Order of the calls
 
@@ -94,7 +96,7 @@ The rules for every client that offers **Delete account**. They're the target; n
 
 ### A recent sign-in and one account
 
-- Before anything is erased, the sign-in must be recent. Auth accepts 600 seconds (`auth_time`). A client should start with a margin, so the erase fits; the web page asks for at most 300 seconds.
+- Before anything is erased, the sign-in must be recent. Auth accepts 600 seconds (`auth_time`). A client must start with a margin, so the erase fits; the web page asks for at most 300 seconds.
 - A client must read `properties.id` from the access token before **every** call, also after a token refresh, and stop if it is missing or isn't the account the person confirmed. It must never fall back to `sub`. Both calls must use that account's own token.
 - A sign-in started for a deletion must be bound to its OAuth `state` and a short expiry, and dropped when the person cancels. If they come back as someone else, the client must stop, erase nothing of either account and say that this is a different account. An app with several accounts must make the first one active again; the web page can't, because the new sign-in replaces the old one.
 - Step 2 can answer `401 insufficient_user_authentication` after a long erase. The client must say that the content is gone and the account isn't, ask to sign in again once, and start at step 1.
@@ -102,6 +104,7 @@ The rules for every client that offers **Delete account**. They're the target; n
 ### The dialog
 
 - It must be in the app or page, never an OS or browser alert, with focus on **Cancel** first.
+- It must always have a way out: an enabled button and Escape or back, also after an answer that never comes and after the deletion is done. Only a request that is out may hold it, for a limited time.
 - It must name the account and say, **before** the word is typed, that channels the person owns are deleted whole, with what their other admins and members added. A client that knows how many channels that is must say the number. The web page doesn't know it.
 - **The typed word:** either `DELETE` or «حذف» must be accepted in either language, because a keyboard may have only one of them. The dialog shows the one in the person's language. Letter case, spaces around the word, and Arabic vowel marks, tatweel and direction marks anywhere in it must not count.
 - A client that says what is deleted must not promise that stored video and image files are gone (see [Media files](#media-files)).
@@ -124,7 +127,7 @@ After **50 passes** in one go the client must stop and ask the person to confirm
 ### Progress and cleanup
 
 - **Before step 1 the client must save that a deletion started**, per account: the pinned id and the latest token. If it can't, it must call nothing. It updates the record after each pass and before step 2. The record has no expiry while the account exists: one from last week still means that content may be gone. The web page keeps it in the Auth database, and the token never reaches the browser; the apps keep it on the device. A lost record is safe, because an attempt without one starts step 1 from the beginning.
-- **An open record must show.** Coming back to the page or opening the app must say that a deletion started, that some content may be gone, and that anything added before it's finished is deleted too. Nothing is erased until the person confirms again.
+- **An open record must show.** Coming back to the page or opening the app must say that a deletion started and that some content may be gone and, where the person can finish it, that anything added before then is deleted too. Nothing is erased until the person confirms again.
 - **Nothing local may be removed before both steps succeeded.** Then queued and staged uploads, the local session and the record must go, in that order, with a saved marker so an upload that was still running can't write back for the deleted account. If the app is killed in between, its next start must finish the cleanup, although the session no longer works.
 - **A deletion that worked must never be shown as failed.** After a lost answer from step 2, ask again: Auth answers `deleted: true` for an account that's already deleted. `404` with `error: "not_found"` also means deleted, but only right after step 1 succeeded for the same account; any other `404` is an error. The web page reads Auth's own record instead, and keeps its own for a day to settle a lost answer. Cleanup that fails after step 2 must not turn success into an error.
 - The "deleted" message must be shown on proof only (the answer itself, or Auth's record), never from an address or a saved flag that could be faked.
@@ -136,7 +139,7 @@ What is true on `main` today.
 - **At once, for good:** the Videos profile, owned channels with everything on them, the person's playlists, posts, watch history, subscriptions, likes and votes. There is no 30-day restore for these.
 - **Kept without the person:** their comments elsewhere (the text is emptied), reports they filed, and what they added to someone else's channel.
 - **The sign-in account** is deleted at once and its record is purged after **30 days**. Until then an Auth admin can restore it, without the Videos data. Refresh tokens stop at once; access tokens already issued are refused within the [revocation time](authentication.md).
-- The follow-up messages of an erase (search rows, moderation copies) are queued after it. If queueing fails it's only logged today.
+- The follow-up messages of an erase (search rows, moderation copies) are queued after it. If queueing fails they aren't sent again today.
 
 #### Media files
 
