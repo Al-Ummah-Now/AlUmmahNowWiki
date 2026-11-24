@@ -237,7 +237,7 @@ Permissions (admin-api, not Auth): `workflows:read` (every admin role, sees requ
 | `POST /api/workflows/requests/:id/withdraw` | `{ version }` |
 | `POST /api/workflows/requests/:id/comment` | `{ note }` |
 | `POST /api/workflows/requests/:id/retry` | Retries a `failed` apply (super admin, or finance list for money) |
-| `GET /api/workflows/pending?type=&target=` | `{ items: { "<kind>:<id>": requestId } }`: the open request of each target (repeat `target`, up to 100), so a page shows "Waiting for approval" in place of its control; money types only for people who can see money |
+| `GET /api/workflows/pending?type=&target=` | `{ items: { "<kind>:<id>": requestId } }`: the open request of each target (repeat `target`, up to 100), so a page shows "Waiting for approval" in place of its control; each row is shown by its stored domain, as in the lists |
 | `GET /api/workflows/counts` | `{ waitingForMe }` for the sidebar badge (from `workflow_inbox`) |
 
 Errors use the server envelope (FEAT-3) with server-written en/ar messages: `change_pending`, `approval_not_allowed` (with `reason`: `own_request`, `subject`, `excluded_tech_staff`, `excluded_owner`, `not_in_approver_set`, `one_step_per_person`, `already_approved`), `request_closed`, `request_stale`, `version_conflict`, `rule_below_floor`, `rule_invalid`, `propose_not_allowed`, `nobody_can_approve`.
