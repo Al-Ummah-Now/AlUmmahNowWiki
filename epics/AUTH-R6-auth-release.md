@@ -17,7 +17,7 @@ The epic covers the five roadmap items under release and distribution: package d
 
 ## What exists today
 
-Checked against the code on 2026-11-23.
+As of 2026-11-23, with the stories below that have merged.
 
 | Area | Where | State |
 |---|---|---|
@@ -25,23 +25,27 @@ Checked against the code on 2026-11-23.
 | Auth rollback | [`rollback.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/rollback.yml) | Complete |
 | Auth bundle for other repos | [`local-stack-bundle.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/local-stack-bundle.yml) | Complete: a `local-stack-<sha>` prerelease per released commit |
 | **Auth release record** | [`record.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/scripts/release/record.ts) | Built (R6-4): a `vYYYY.MM.DD[.N]` GitHub release per promoted commit. Before, what was live could only be read from the Actions run list, and a run can succeed without promoting |
-| openauth package | [`publish-github.yml`](https://github.com/Al-Ummah-Now/openauth/blob/master/.github/workflows/publish-github.yml), [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md) | Merge to `master` publishes the next patch to GitHub Packages with a tag and a GitHub Release; pull requests get prereleases. The version lives in git tags, so the branch rule is not a problem ([openauth#27](https://github.com/Al-Ummah-Now/openauth/pull/27)). The gaps are listed below |
-| Versioning policy | none | Auth's HTTP API and the package have no written rule for breaking changes |
+| openauth package | [`publish-github.yml`](https://github.com/Al-Ummah-Now/openauth/blob/master/.github/workflows/publish-github.yml), [`plan.mjs`](https://github.com/Al-Ummah-Now/openauth/blob/master/scripts/release/plan.mjs), [RELEASING.md](https://github.com/Al-Ummah-Now/openauth/blob/master/docs/RELEASING.md) | A merge to `master` publishes to GitHub Packages with a tag and a GitHub Release, once both checks pass on that commit and only if a published file changed. The commits set the size of the version. The version lives in git tags, so the branch rule is not a problem ([openauth#27](https://github.com/Al-Ummah-Now/openauth/pull/27), [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59)) |
+| Versioning policy | [`API_VERSIONING.md`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/API_VERSIONING.md) | Written ([Auth#495](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/495)). The CI check waits for the complete API spec (AUTH-R4 R4-4) |
 | Performance gate | [`signin-latency.spec.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/e2e/tests/release/signin-latency.spec.ts) | Stage E2E fails if the password sign-in p95 passes its budget |
 | Security | [SECURITY.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/SECURITY.md), CodeQL, Dependabot, committed-secrets check | In place ([Auth#225](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/225), [Auth#230](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/230)). No outside penetration test or legal review ([AlUmmahNow#349](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/349)) |
 | Privacy | [`account-routes.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/apps/auth/src/routes/account-routes.ts) | Account deletion and JSON export are built ([Auth#233](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/233)); see [Deletion, erasure and cleanup](../guides/data-lifecycle.md) |
-| Community files | [CONTRIBUTING.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/CONTRIBUTING.md), issue and PR templates | Partly. There is no code of conduct in Auth (the 2026-11-21 reconciliation said there was). Issue templates link to the old `meywd` repo and a `workers.dev` demo |
+| Community files | [CONTRIBUTING.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/CONTRIBUTING.md), [CODE_OF_CONDUCT.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/CODE_OF_CONDUCT.md), [SUPPORT.md](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/SUPPORT.md), issue and PR templates | Current, and a test checks their links ([Auth#494](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/494)). Security problems go to private reporting; the public template is gone |
 
-### Gaps in the openauth publish workflow
+### Gaps the epic found in the openauth publish workflow
 
-1. **It can publish code whose tests failed.** It runs when `test` *or* `format` finishes successfully, so a green `format` publishes while `test` is red.
-2. **It can publish a commit nobody tested.** It checks out the branch, not the commit that triggered it.
-3. **A failed publish is lost.** The tag is pushed before `npm publish`, and a tagged commit counts as released, so a re-run does nothing until someone deletes the tag.
-4. **It publishes when nothing changed.** 1.0.60 to 1.0.62 hold no source change at all.
-5. **The version says nothing.** Every release is a patch. A manual minor or major only works on an untagged commit, which exists for a minute or two after a merge.
-6. **No artifact outside GitHub Packages.** Installing the package needs a token even though the repo is public, so consumers rebuild the package to learn its hash.
-7. **Two upstream workflows still run on every push:** `release.yml` keeps a "Version Packages" pull request open that must never be merged, and `docs.yml` deploys the same docs site as `docs-fork.yml`.
-8. **The fork's code of conduct sends security reports to upstream's author**, not to us.
+All eight are closed. R6-2's attestation still has to prove itself on the first release that changes the package.
+
+| Gap before | Closed by |
+|---|---|
+| A green `format` could publish while `test` was red | [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59) |
+| It checked out the branch, so it could publish a commit nobody tested | [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59) |
+| A failed publish was lost: its tag made the commit count as released | [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59) |
+| It published when nothing changed (1.0.60 to 1.0.62 hold no source change) | [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59) |
+| Every release was a patch | [openauth#59](https://github.com/Al-Ummah-Now/openauth/pull/59) |
+| No artifact outside GitHub Packages, which asks for a token even for a public package | [openauth#62](https://github.com/Al-Ummah-Now/openauth/pull/62) |
+| Two upstream workflows still ran: a "Version Packages" pull request that must never be merged, and a second docs deploy | [openauth#61](https://github.com/Al-Ummah-Now/openauth/pull/61) |
+| The code of conduct sent security reports to upstream's author | [openauth#61](https://github.com/Al-Ummah-Now/openauth/pull/61) |
 
 ## Stories
 
@@ -113,7 +117,7 @@ Outside the code: an independent penetration test and a legal privacy review are
 
 ## History
 
-The roadmap (December 2024) listed five items and was never updated. The 2026-11-21 reconciliation marked community and support Done, and package distribution, compliance and performance In Progress. The inventory above replaces it: community is reopened because the code of conduct is missing and the links are stale.
+The roadmap (December 2024) listed five items and was never updated. The 2026-11-21 reconciliation marked community and support Done, and package distribution, compliance and performance In Progress. The inventory above replaces it. Community was reopened, because the code of conduct was missing and the links were stale, and closed again by R6-7.
 
 ## Sources
 

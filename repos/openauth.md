@@ -10,7 +10,7 @@ The organisation's fork of OpenAuth, a standards-based OAuth 2.0 provider librar
 
 ## Tech stack
 
-TypeScript, Bun workspaces, Changesets. Published to GitHub Packages.
+TypeScript, Bun workspaces. Published to GitHub Packages.
 
 ## Layout
 
