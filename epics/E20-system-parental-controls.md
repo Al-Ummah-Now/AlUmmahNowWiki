@@ -29,7 +29,7 @@ No in-app Kids Mode: no PIN, no time limits of our own, no curated kids catalog,
 | **Windows** | Microsoft Store IARC rating kept current; Windows age signals from 2027-01-01 (California covers computers) | none | Any Family Safety integration: it works on the app with no code |
 | **Web** | The date of birth page and the same rules as the apps | Honor the `Prefer: safe` header; one public parents' guide that lists our domains and the steps per device | RTA label, `rating` meta tags |
 
-**What makes this urgent:** Texas is in force now, California and Alabama start on 2027-01-01. Our apps are not in any public store yet, so the duties start with the **first public store release** ([E20-D9](#11-owner-decisions)).
+**What sets the dates:** California and Alabama start on 2027-01-01. Our apps are not in any public store yet, so the duties start with the **first public store release** or that date, whichever is later ([E20-D9](#11-owner-decisions)).
 
 ## 2. What exists today (2026-11-23, default branches)
 
@@ -71,7 +71,7 @@ Recommended answers (recorded in the repo by story [E20-A1](#10-stories-one-pr-e
 | Age assurance | Yes once E20-A2 ships, else No | No | Yes once E20-A2 ships | Apple counts the Declared Age Range API |
 | Unrestricted web access | No | No | No | No web view; sign-in is the system session |
 | User-generated content | Yes | Yes | Yes | Videos come from creators (guideline 1.2.1 calls this creator content) |
-| Social media | **Yes** | No while it only plays | No | [E20-D1](#11-owner-decisions). Answer Yes from the first release, so that adding likes and comments later doesn't change the rating, which would be a significant change in Texas (§7) |
+| Social media | **Yes** | No while it only plays | No | [E20-D1](#11-owner-decisions). Answer Yes from the first release, so that adding likes and comments later doesn't change the rating, which would be a significant change under the laws in §7 |
 | Social media disabled under 13 | **No** | – | – | Saying Yes also promises that "only age-appropriate UGC is delivered" to under-13s. That needs a curated catalog, which the owner ruled out |
 | Messaging and chat | No until comments or chat ship in the app, then Yes (Apple counts public posting) | No | No | Does not raise the rating |
 | Advertising, gambling, contests, loot boxes, location, dating | No | No | No | |
@@ -92,7 +92,7 @@ Also fill the optional **Age Suitability URL** with the parents' guide (§6.3). 
 | **Web content: limit adult websites, allowed only** | Can block `auth.alummahnow.net` inside the system sign-in sheet | Sign-in failure shows a plain message in the person's language and the app keeps working as a guest (E20-A5) |
 | **Media ratings, explicit content** | `ManagedSettingsStore().effectiveMaximumMovieRating` (0 to 1000; iOS 15, tvOS 26), which Apple says an app may read without FamilyControls authorization, and `effectiveDenyExplicitContent` (iOS 26, tvOS 26), whose page says "an authorized app" | Optional. Read it at launch and on return to the foreground; hide age-restricted videos when explicit content is denied or the movie limit is below R (400). Apple says *subscribing* to changes needs the Family Controls entitlement, so we only read. E20-A4 starts with a device check of what reads without that entitlement; whatever doesn't is dropped, not requested |
 | **Siri, Spotlight, Top Shelf, widgets, Now Playing** | Our titles can appear outside the app, even when it is limited | Age-restricted videos never go to any of them |
-| **Ask to Buy** | Covers downloads (free ones too) and In-App Purchases | Nothing: there are no In-App Purchases and creator support in apps is off. If purchases ever ship: handle StoreKit's pending state, and give each product a Texas age rating |
+| **Ask to Buy** | Covers downloads (free ones too) and In-App Purchases | Nothing: there are no In-App Purchases and creator support in apps is off. If purchases ever ship: handle StoreKit's pending state |
 | **App deletion, privacy, location limits** | Generic | Nothing: we ask for none of them |
 
 FamilyControls, DeviceActivity, ManagedSettings *writes* and the Screen Time framework exist for parental-control apps and browsers. We are neither. Asking for the Family Controls entitlement would add an Apple approval and buy nothing. SensitiveContentAnalysis is for person-to-person images; our images are scanned on the server ([Epic 28](E28-ai-moderation.md)).
@@ -111,7 +111,7 @@ Rules:
 
 aun-core turns the signal, the account's band and the policy into one decision (§5.3, §5.4), the same code on every platform. The stricter of the two wins.
 
-### 3.4 Significant changes and revoked consent (must do, Texas now)
+### 3.4 Significant changes and revoked consent (must do by 2027-01-01)
 
 - **Minors**: PermissionKit `SignificantAppUpdateTopic` sends the parent a question through `PermissionButton`; until approved, the changed feature stays off. **Verified adults** where required: `showSignificantUpdateAcknowledgment`. Handled changes are kept in iCloud key-value storage (Apple's sample does this), and a person who installs after the change is not asked.
 - The list of changes (id, date, English and Arabic text) comes from app config, written on the admin page (E20-B2). Counsel decides what is significant; the release checklist asks at each release.
@@ -163,11 +163,11 @@ CarPlay shows the phone app's content, so the phone's level and limits apply. Ag
 
 ### 4.3 Play Age Signals (must do where required)
 
-`com.google.android.play:age-signals:0.0.6` (November 2026, beta), phones, foldables and tablets on Android 6 and up. **Not TV** (`DEVICE_NOT_SUPPORTED`) and not sideloaded builds (`APP_NOT_OWNED`). Responses for everyone by 2026-12-11; mandatory in California and Brazil from January 2027; live in Texas; Alabama "details coming soon".
+`com.google.android.play:age-signals:0.0.6` (November 2026, beta), phones, foldables and tablets on Android 6 and up. **Not TV** (`DEVICE_NOT_SUPPORTED`) and not sideloaded builds (`APP_NOT_OWNED`). Responses for everyone by 2026-12-11; mandatory in California and Brazil from January 2027; Alabama "details coming soon".
 
 1. `getApplicableAgeFeatures()`. If it contains `MANDATORY_SHARING`, ask at the same moments as §3.3; otherwise never.
 2. `requestAgeSignalsAccess(activity)`, then `checkAgeSignals()` when `SHARED`. Default ranges (0–12, 13–15, 16–17, 18+) fit our gates, so no custom ranges.
-3. Map: `ageUpper ≤ 12` under 13; and so on; `ageRangeSource` `TIER_B` means a parent manages the age. `VERIFICATION_REQUIRED`: tell the person to open the Play Store to finish (Google's instruction), with viewing still open ([E20-D5](#11-owner-decisions)).
+3. Map: `ageUpper ≤ 12` under 13; and so on; `ageRangeSource` `TIER_B` means a parent manages the age. `VERIFICATION_REQUIRED` is no signal: nothing changes and the app shows nothing about it ([E20-D5](#11-owner-decisions)).
 4. `significantChangeStatus` `PENDING` or `DECLINED` keeps the changed feature off.
 5. Retry only the codes Google marks retryable, at most twice, never blocking the first screen. No Play Integrity is needed for it (§5.4).
 6. Google's terms: **only** for age-appropriate experiences and legal compliance. No ads, analytics, profiling or sharing. Do not store `installId`: it exists only to report revoked approvals, and Play already stops the app. Reopened only if counsel answers yes to Q5.
@@ -208,7 +208,7 @@ Ages 13–17 have exactly three limits ([E20-D3](#11-owner-decisions)), each a f
 
 Age sits **in front of** creator tiers, not inside them: a tier can never lower a legal minimum, so this is one platform-wide policy. Features a level can't use are hidden, with no "not available for your age" text ([Hidden when off](../guides/product-rules.md#hidden-when-off)). The one exception is an action already on screen (a deep link to comments, a stale page): the server's localized refusal shows.
 
-An account without a date of birth is not an adult account: it can do everything a viewer does, and each of the five things above asks for the date first. A person who only watches is never asked. Where the system says sharing is required and it is unresolved, viewing works and writing waits ([E20-D5](#11-owner-decisions)).
+An account without a date of birth is not an adult account: it can do everything a viewer does, and each of the five things above asks for the date first. A person who only watches is never asked. A system signal that is required but missing or unresolved changes nothing: the date of birth rules apply as everywhere else ([E20-D5](#11-owner-decisions)). No state gets its own handling; the apps only do what the system's own "required" answer says.
 
 **Nothing is stored about an under-13** ([E20-D2](#11-owner-decisions)). While the device's signal, or the date of birth just entered, says under 13:
 
@@ -277,7 +277,6 @@ A table of its own, so no `SELECT * FROM users`, KV user record, admin list or w
 "config": { "age.policy": {
   "v": 1,
   "minimumAge": { "account": 13, "comment": 13, "post": 13, "liveChat": 16, "upload": 13, "support": 18, "ageRestricted": 18 },
-  "unresolvedWhereRequired": "viewOnly",
   "significantChanges": [ { "id": "2027-02-live-chat", "effectiveFrom": "2027-02-01", "platforms": ["ios", "ipados", "macos", "android"], "text": { "en": "…", "ar": "…" } } ]
 } }
 ```
@@ -363,7 +362,7 @@ Read from the statute or the legislature's own digest unless marked †. Counsel
 
 | Law | Status on 2026-11-23 | What a developer must do | Applies to us |
 |---|---|---|---|
-| **Texas** SB 2420 (Bus. & Com. Code ch. 121) | **In force.** The Fifth Circuit stayed the injunction (2026-05-28; Apple acted from 2026-06-04); appeal pending | Give each app (and purchase) an age rating and its reasons (121.052); notify the store **before** a significant change: data types, rating, monetization, or material function (121.053); verify age category and consent with the store's data (121.054); use it only for age protection, law and safety, and **delete it once verified** (121.055). No enforcing terms against a minor without consent. Good-faith reliance is protected | Phones and tablets, from the first store release. New store accounts only |
+| **Texas** SB 2420 | In force, appeal pending | **Counsel item only** (Q1). Nothing here is designed around it, by owner decision ([E20-D5](#11-owner-decisions)) | Counsel |
 | **California** AB 1043 + AB 1856† (Civ. Code 1798.500 ff.) | **2027-01-01**; apps already downloaded and updated since 2026-01-01: first request **before 2027-07-01** | Ask for the signal when the app is downloaded and launched; treat it as the main sign of age; use it to follow other laws; don't prompt people to change it, share it, or ask when no law requires. Receiving it is actual knowledge | All apps from a store on phones, tablets **and computers** |
 | **Alabama** HB 161 | **2027-01-01** (stores have until 2027-10-01 for old accounts) | As Utah, plus use the **lowest** category for our own restrictions | Phones and tablets. Google: "details coming soon" |
 | **Utah** SB 142 as amended by HB 498 | Developer duties **2027-05-06**; minors or parents may sue ($1,000 or actual damages) | Verify category and consent; notify significant changes; use only for restrictions, law, safety; **lowest** category for first defaults; never share; routine re-check at most once in 12 months | Phones and tablets |
@@ -388,12 +387,12 @@ The Apple page that gave 2026 dates for Utah and Louisiana predates both amendme
 ## 9. Legal and safety
 
 - Minimum data: one date of birth, encrypted, in Auth, seen by its owner only; everyone else gets a band. No document, photo or face check, ever. A system signal stays on the device, except a 13–17 cap kept with that sign-in (§5.4).
-- Terms of Service, a privacy policy and the child-safety standard page must be public before the first store release: the stores ask for them, Play requires accepting Terms before user content, and Texas is about enforcing terms against minors. They are with counsel and the CMS, not in this epic.
+- Terms of Service, a privacy policy and the child-safety standard page must be public before the first store release: the stores ask for them and Play requires accepting Terms before user content. They are with counsel and the CMS, not in this epic.
 - Native comments, chat and posts each need in-app report and block in the same release ([Epic 12](E12-viewer-mobile.md), [Epic 17](E17-live-in-apps.md)).
 
 Questions for counsel (to add to the letter already in preparation):
 
-1. **Q1.** Texas says delete the store's data once verified. May we keep a derived 13–17 cap with that one sign-in, and a bare "minor signal seen" date for 12 months, so a changed date of birth can't undo it?
+1. **Q1.** What does Texas SB 2420 ask of us at the first store release, given that we build nothing specific to it? Under every state law here, may we keep a derived 13–17 cap with one sign-in, and a bare "minor signal seen" date for 12 months, so a changed date of birth can't undo it?
 2. **Q2.** Under 13: is the 7-day hold before deletion acceptable after a self-entered date (with nothing new collected), or must deletion be immediate? May we send the one email to an address that may be the child's? For a *signal* of under 13 we sign out and tell the server nothing: is that enough?
 3. **Q3.** Under California's text, does a signal learned on one device bind the account on our website and other devices, against an older self-entered date of birth ([E20-D6](#11-owner-decisions))?
 4. **Q4.** Minimum account age 13 in the Terms: is 13 right in every storefront we open (the EU varies from 13 to 16)?
@@ -412,8 +411,9 @@ Questions for counsel (to add to the letter already in preparation):
 | **E20-B1** | `ageRestricted` and `madeForKids` on the video: record, index columns, upload defaults applied at last, API, `/api/v1` rules, import fallback, `ageRestrictedVideos` switch | AlUmmahNow | – | D8 |
 | **E20-B1u** | Studio, upload and admin fields (with staff lock and Undo) and the web warning page | AlUmmahNow | yes | B1 |
 | **E20-P1** | Auth: `user_birth_dates`, encryption key, `GET`/`PUT /account/birth-date`, `birth_date` setting (off), export, erase, audit, scrubber | AlUmmahNowAuth | – | – |
-| **E20-P2** | Auth: `age_band` claim at sign-in and refresh for first-party clients; `session_age_caps`, `PUT /account/age-signal`; the openauth fork change if a top-level claim needs one | AlUmmahNowAuth, openauth | – | P1 |
+| **E20-P2** | Auth: `age_band` claim at sign-in and refresh for first-party clients; the openauth fork change if a top-level claim needs one | AlUmmahNowAuth, openauth | – | P1 |
 | **E20-P3** | Profile: the date of birth page and settings row, return links, TV code | AlUmmahNowAuth | yes | P1 |
+| **E20-P6** | Auth: `session_age_caps`, `PUT /account/age-signal`, `minor_signal_until` | AlUmmahNowAuth | – | P2, D6 |
 | **E20-P4** | Change rules: 30-day wait, cancel, emails, review queue in the Auth admin | AlUmmahNowAuth | yes | P3, D11 |
 | **E20-P5** | Under 13: `age_hold`, hidden content, 7-day deletion, lift, device flag | AlUmmahNowAuth | yes | P3, D10, account hub C1 and C3 |
 | **E20-B2** | `ageRules` switch and preconditions, the `age.policy` rule in the `APP_CONFIG` `config` document, Age policy form, OpenAPI | AlUmmahNow | yes | D2–D5 |
@@ -436,7 +436,7 @@ Questions for counsel (to add to the letter already in preparation):
 | **E20-S2** | `Prefer: safe` | AlUmmahNow | – | B1u |
 | **E20-R** | Store release gate: checklist lines (re-read §7, answers, significant change?, switch on), device runs recorded | Wiki | – | all must-do stories |
 
-Order: A1, G1, W1 and B1 first, then P1 to P3 with B2, then B3, B4, P4, P5 and B7, then the web and the apps, Apple before Android before Windows. Nothing starts before the owner confirms.
+Order: A1, G1, W1 and B1 first, then P1 to P3 with B2, then B3, B4, P4, P5 and B7, then the web and the apps' date of birth sheet (B6, A6, G5), then the signals and significant changes (P6, A2, A3, G2, G3, W2) in time for 2027-01-01, Apple before Android before Windows. Nothing starts before the owner confirms.
 
 ## 11. Owner decisions
 
@@ -446,11 +446,11 @@ Order: A1, G1, W1 and B1 first, then P1 to P3 with B2, then B3, B4, P4, P5 and B
 | **E20-D2** | A child the system says is under 13 | **A.** Watch as a guest; sign-in and everything that writes is hidden. **B.** Block the app. **C.** No difference | **A.** It keeps the benefit, collects nothing (COPPA), and leaves the parent's own limits in charge | B2 | **Decided 2026-11-24: A.** Under-13s watch as guests; sign-in, comments, chat, posts and uploads are hidden, and nothing is stored about them |
 | **E20-D3** | Ages 13 to 17 | **A.** As adults, except no live chat under 16, no age-restricted videos and no money. **B.** Also no comments or posts under 16. **C.** No difference but money | **A.** Live chat is the hardest to moderate in time. All values stay editable in admin | B2 | **Decided 2026-11-24: A.** As adults, with three limits for 13–17: no live chat under 16, no age-restricted videos, no money. All three stay editable in admin |
 | **E20-D4** | When do apps ask for the age range? | **A.** Automatically only where the law requires; elsewhere once, at the first comment, chat, post or upload. **B.** Everyone at first launch. **C.** Only where required | **A.** No prompt for people who only watch, and a parent's choice still works worldwide | A2, G2, W2 | **Decided 2026-11-24:** none of the options. "Date of birth in profile": the profile is the main source (§5.2); the system is asked only where a law requires it (§5.4) |
-| **E20-D5** | Where the law requires the store's signal but it is unresolved (Texas "verification required") | **A.** Watching works; writing waits, whatever the date of birth says. **B.** The date of birth is enough. **C.** Block the app | **A.** Texas makes the store's answer, not ours, the test for a minor's consent | B2 | Open |
-| **E20-D6** | A 13–17 system signal on one device against an older date of birth: what does it limit? (Where the age lives is settled by D4: the account.) | **A.** That device's sign-in only. **B.** The whole account, everywhere, for 12 months | **A.** The signal describes the device's store account: with B a parent who signs in on a child's tablet loses chat and money everywhere. Either way it blocks raising the date without staff. Counsel Q3 may force B in some states | P2 | Open |
+| **E20-D5** | Where a law requires the store's signal but it is unresolved | **A.** Watching works; writing waits. **B.** The date of birth is enough. **C.** Block the app | **A.** (asked with Texas in mind) | B2 | **Decided 2026-11-24:** "i dont care about texas". No Texas-specific handling; an unresolved signal changes nothing, and the date of birth rules apply as everywhere else |
+| **E20-D6** | A 13–17 system signal on one device against an older date of birth: what does it limit? (Where the age lives is settled by D4: the account.) | **A.** That device's sign-in only. **B.** The whole account, everywhere, for 12 months | **A.** The signal describes the device's store account: with B a parent who signs in on a child's tablet loses chat and money everywhere. Either way it blocks raising the date without staff. Counsel Q3 may force B in some states | P6 | Open |
 | **E20-D7** | App Store secondary category | **A.** Add Entertainment (primary stays Photo & Video). **B.** Leave it. **C.** Education | **A.** Then a parent's Entertainment time allowance covers watching here | A1 | Open |
 | **E20-D8** | Videos above 13+ (such as war footage) and made-for-kids videos | **A.** Not allowed at all. **B.** Allowed with an age-restricted flag: never in the apps; on the web only for signed-in 18+ accounts; made-for-kids videos start with comments and chat off. **C.** As B, also in apps for 18+ | **B.** Changed by D4: the web can now check, so signing out no longer gets around D3. Apps stay without them: Apple accepts absence, and it works on TV | B1, B6, A4, G4, S2 | Open |
-| **E20-D9** | Public store release | **A.** No public release in any store until the must-do stories for that store are done and `ageRules` is on. **B.** Release outside the affected US states first. **C.** Release and follow up | **A.** Texas is in force, stores can't exclude one state for us, and nothing is public yet, so waiting costs little | E20-R | Open |
+| **E20-D9** | Public store release | **A.** No public release in a store until that store's answers (A1, G1 or W1), the age-restricted rule (B1) and, for an app that signs in, the date of birth rules are done and `ageRules` is on; the signal and significant-change stories (A2, A3, G2, G3, W2) by 2027-01-01. **B.** All must-do stories first. **C.** Release and follow up | **A.** The stores check the first group at review; the second group follows the California and Alabama date | E20-R | Open |
 | **E20-D10** | An account whose owner enters a date under 13 | **A.** Lock and hide at once, delete after 7 days unless staff accept it was a mistake. **B.** Delete at once. **C.** Ask a parent for consent | **A.** Nothing new is collected, and an adult's typing mistake doesn't destroy a channel. C needs verified parental consent, which is a product of its own. Counsel Q2 may shorten the 7 days | P5 | Open |
 | **E20-D11** | Raising your own age | **A.** 30-day wait, then automatic; staff review if a minor signal was seen or it is the second time. **B.** Always staff review. **C.** At once | **A.** Stops the quick change without a queue for staff. A new account with another date is always possible, so B buys little | P4 | Open |
 
@@ -460,7 +460,7 @@ Nothing else here needs the owner: formats, names, limits and order are set abov
 
 Every test seeds and deletes its own data; no paid services; stores and systems are faked in CI.
 
-- **Auth and Profile (P1–P5):** the date is ciphertext in D1 and appears in no list, KV record, webhook, `/userinfo`, ID token, audit row, log or third-party token; export has it, all three deletions remove it; only its owner reads it, with another account, staff and M2M refused; recent sign-in and CSRF. Claim at every boundary (13th, 16th, 18th birthday, 29 February, UTC−12), at sign-in and refresh, with and without a cap; a cap ends with its sign-in and touches no other; an older signal lifts it; raising the date does not. Change table row by row, second raise, `minor_signal_until`, cancel, email in one language. Under 13: no date saved, tokens refused everywhere, content hidden, day 7 purge in Auth and Videos, lift, staff and shared-channel exceptions, no retry for 24 hours, typing mistakes refused first. Playwright on the local stack in English and Arabic, light and dark, phone and desktop, axe clean, Eastern Arabic digits.
+- **Auth and Profile (P1–P6):** the date is ciphertext in D1 and appears in no list, KV record, webhook, `/userinfo`, ID token, audit row, log or third-party token; export has it, all three deletions remove it; only its owner reads it, with another account, staff and M2M refused; recent sign-in and CSRF. Claim at every boundary (13th, 16th, 18th birthday, 29 February, UTC−12), at sign-in and refresh, with and without a cap; a cap ends with its sign-in and touches no other; an older signal lifts it; raising the date does not. Change table row by row, second raise, `minor_signal_until`, cancel, email in one language. Under 13: no date saved, tokens refused everywhere, content hidden, day 7 purge in Auth and Videos, lift, staff and shared-channel exceptions, no retry for 24 hours, typing mistakes refused first. Playwright on the local stack in English and Arabic, light and dark, phone and desktop, axe clean, Eastern Arabic digits.
 - **Server (B1–B7):** switch off gives `404 feature_off` and no config key; precondition refuses a missing Arabic text; `/api/v1` list, search, related, playlist and single-video answers never contain an age-restricted video for `X-AUN-Client` and do for the web; staff lock; flags mutually exclusive; import fallback; the query plans use an index. Enforcement: each of the five keys with every band, no claim, a forged and an expired token, `ageRules` unreadable (503), switch off; nothing else is checked; `needsBirthDate`; no band in any answer, log or error sample. Apple notification: good chain, wrong root, wrong bundle, wrong environment, replay, other types ignored.
 - **Core (B3):** a table test for every signal × band × policy × missing value, unknown policy version, gates replaced by the system, ask cadence across install, sign-in, change and 12 months; the same table runs through Swift, Kotlin and C# bindings.
 - **Apple (A1–A5):** unit tests with a fake `AgeRangeProviding` for every declaration, `nil` bounds, declined, each error, iOS 17 (framework absent), 26.2 and 26.4 paths, tvOS (never asks); fake `AskCenter` for approve, decline, not available; iCloud merge. UI tests in English and Arabic, iPhone, iPad and Mac: hidden features per level, an under-13 signal signs out and leaves no token, history or id on disk and sends none (the same test on Android and Windows), no prompt while watching, shield mid-video keeps the position, blocked sign-in message. tvOS UI test: no age-restricted item with a limit below R. Real devices before release, with Apple's sandbox scenarios (Settings → Developer → Sandbox Apple Account → Age Assurance: the six cases, plus Revoke App Consent) and a real child account: rating limit, Ask to Buy for a free download, App Limit, Downtime, Time Allowance, Always/Ask/Never.
