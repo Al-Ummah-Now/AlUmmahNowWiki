@@ -426,14 +426,14 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 
 ## Owner decisions
 
-Open, for the owner:
+Owner items (not decisions):
 
-- **APPUPD-D5: "Install updates automatically" default.** (a) on (download in the background, install when the app closes, never restart on its own); (b) off. **Recommend (a)**; the admin can change the default with `updates.autoInstallDefault`, and the user's own choice always wins.
 - **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build; notices for downloaded builds and self-install switch on per repo when its keys arrive.
 
-Decided:
+Decided (all settled 2026-11-24):
 
 - **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** **Decided (a) by the owner (2026-11-24): yes.** The switch goes on in QA and production as soon as the first app release with the update check is out; until then it stays off.
+- **APPUPD-D5: "Install updates automatically" default.** **Decided (a) by the owner (2026-11-24): on.** Desktop apps download updates in the background and install them when the app closes, never restarting on their own; the user's own choice in Settings → Updates always wins; admins change the default with `updates.autoInstallDefault`.
 - **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` (Windows) and `.pkg` (Tools on macOS) are the main downloads, and the MSI and `.dmg` stay for managed installs. All four are direct downloads on GitHub Releases, as the owner set on 2026-11-10; only the Velopack installers let the app update itself without admin rights.
 - **APPUPD-D3: where update files live.** **Decided (a)** by the owner's earlier answer (2026-11-10, native apps distribution): direct downloads live on GitHub Releases. Moving later takes one release that adds the new host to the apps' host list first.
 - **APPUPD-D4: signing keys.** **Decided (a)**, routine security design (2026-11-23): per repo, an offline root key (K-R) and a CI release key (K1–K4). Generating and holding the root keys is an owner item (K-R).
