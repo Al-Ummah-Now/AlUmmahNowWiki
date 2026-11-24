@@ -70,7 +70,7 @@ Each consuming feature registers its action types in `packages/shared-types/src/
 | `support.policy.set` (owner decisions, holds, payout day, limits) | money | finance list with `support:providers` | 1 approver, finance list; step-up; 7 days | one person |
 | `support.emergencyStop.lift` | money | finance list | 1 approver, finance list; step-up; 1 day | one person |
 | `workflows.rule.set` (changing a rule on the rules page) | governance | super admin; for a money rule, finance list | 1 approver: super admin, or the finance list for money rules; step-up; 7 days | new |
-| `features.set` scoped per switch | platform (the `creatorSupport` scope: money) | `features:manage` (super admin for `toggle: 'superAdmin'`) | `creatorSupport`: 1 approver from the finance list, under the money floor; every other switch: **direct** (no approver) | one admin |
+| `features.set` scoped per switch | platform | `features:manage` (super admin for `toggle: 'superAdmin'`) | **direct** for every switch, `creatorSupport` included (owner 2026-11-24, WF-D9 superseded); its readiness checks stay a 409 precondition. An admin can give any switch approvers on the rules page | one admin |
 | `tiers.change` (a creator's tier, the default tier, a tier's limits) | platform | admins | direct | one admin |
 | `channels.transfer`, `channels.claim.approve` | people | super admin | direct (rule ready for 1 approver) | one super admin |
 | `credentials.create`, `credentials.rotate` | platform | super admin | direct with step-up (rule ready for 1 approver) | one super admin |
@@ -106,7 +106,7 @@ The owner is already marked as tech staff (`support_tech_staff`, AUN-MEMBERS §9
 Hard-coded per domain in shared-types, checked by the server when a rule is saved and again when a request is approved:
 
 - **Every domain:** the proposer never approves their own request; the person a change is about never approves it; a rule change is itself a request (`workflows.rule.set`) and needs at least one approver.
-- **Money** (every money action, plus two scopes of other actions: the `creatorSupport` switch, WF-D9, and changes to money rules, rule-change scope `money`): tech staff and the owner are always excluded, as proposers and as approvers; approvers come only from the finance list; step-up to approve is always on. `support.fees.set`, the `creatorSupport` switch and money rule changes need at least one approver; payout batches and ledger adjustments follow MEM-D24 (0 or 1 approver) and can be raised, never lowered below it. Whether a rule is a money rule follows its floor, not only its action's domain, and a request's stored domain follows the floor too, so a super admin can't see, lower or approve any of them without being on the finance list.
+- **Money** (every money action, plus one scope of another action: changes to money rules, rule-change scope `money`; the `creatorSupport` switch left the money floor on 2026-11-24, WF-D9 superseded): tech staff and the owner are always excluded, as proposers and as approvers; approvers come only from the finance list; step-up to approve is always on. `support.fees.set` and money rule changes need at least one approver; payout batches and ledger adjustments follow MEM-D24 (0 or 1 approver) and can be raised, never lowered below it. Whether a rule is a money rule follows its floor, not only its action's domain, and a request's stored domain follows the floor too, so a super admin can't see, lower or approve any of them without being on the finance list.
 - **People:** `support.financeList.add` and `support.techStaff.unmark` need at least one approver and a step-up to approve; super admins approve; the person the change is about never approves it, and whoever marked someone as tech staff never approves removing the mark.
 - **Never governed:** actions that only take access or money movement away (§3) stay one-person and immediate.
 
@@ -243,7 +243,7 @@ Sidebar group **Site**: **Approvals** / «الموافقات», with the waiting
 
 All decided on 2026-11-23 (owner, relayed by the orchestrator; WF-D7, WF-D8 and WF-D10 delegated to the orchestrator as routine details).
 
-1. **WF-D1. Scope of version 1: decided.** "Anything related to money" needs approval: fee rates, payout batches, ledger adjustments, the finance list, the tech-staff mark, support policy, lifting the emergency stop, and turning `creatorSupport` on. Everything else (feature switches, tiers, channel moves, credentials) is registered **direct**: it takes effect at once until an admin adds approvers on the rules page. Actions that only take money access away are immediate: marking someone as tech staff and removing someone from the finance list. Removing a tech-staff mark needs approval. (This reading was confirmed by the orchestrator on 2026-11-23 as a routine safety rule.)
+1. **WF-D1. Scope of version 1: decided.** "Anything related to money" needs approval: fee rates, payout batches, ledger adjustments, the finance list, the tech-staff mark, support policy, lifting the emergency stop, and turning `creatorSupport` on (that part superseded on 2026-11-24, see WF-D9; the rest of WF-D1 is being confirmed with the owner). Everything else (feature switches, tiers, channel moves, credentials) is registered **direct**: it takes effect at once until an admin adds approvers on the rules page. Actions that only take money access away are immediate: marking someone as tech staff and removing someone from the finance list. Removing a tech-staff mark needs approval. (This reading was confirmed by the orchestrator on 2026-11-23 as a routine safety rule.)
 2. **WF-D2. Fee changes need a second person: decided, yes.** One approver from the finance list with `support:providers`.
 3. **WF-D3. MEM-D24 counts move into the workflow rules: decided, yes.** MEM-D24's answer becomes the seeded rule and the floor for payout batches and ledger adjustments.
 4. **WF-D4. How the owner is excluded: decided.** Through the existing tech-staff mark (the owner is marked); `PLATFORM_OWNER_USER_IDS` can name more accounts.
@@ -251,7 +251,7 @@ All decided on 2026-11-23 (owner, relayed by the orchestrator; WF-D7, WF-D8 and 
 6. **WF-D6. Effective dates: decided, none.** An approved change takes effect at approval. Fees are charged live from the collector's or rail's quote and the fee setting is only a display label or fallback, so nothing is re-priced. No effective-date field, no scheduler path, no backdating; the cron only expires requests.
 7. **WF-D7. Retention: decided.** 7 years for money requests and steps, 2 years for others.
 8. **WF-D8. Feature switch: decided, none.** The workflow system is admin-only safety infrastructure with no Features-page switch; consumers adopt it one at a time and every rule starts as today's behavior.
-9. **WF-D9. `creatorSupport` switch-on needs a finance approver: decided, yes.** Its rule carries the money floor ([§4.3](#43-floors-rules-the-admin-page-cant-lower)).
+9. ~~**WF-D9. `creatorSupport` switch-on needs a finance approver: decided, yes.** Its rule carries the money floor.~~ **Superseded by the owner on 2026-11-24:** "money means handling the money itself"; switching a feature on is not. The `creatorSupport` switch is **direct** like every switch, with no money floor and no seeded rule. Its readiness checks (the organization formed, a finance approver exists) stay a 409 precondition on the Features page, not an approval. Admins can still give it approvers on the rules page, like any switch (AlUmmahNow#1897 for picking one switch). Rule versions approved through a money rule change for this scope no longer apply, and open requests opened under the money floor were closed by the system with the reason (`WORKFLOW_FLOOR_SUPERSEDED`, the expiry cron).
 10. **WF-D10. Expiry: decided.** 7 days by default, 5 for payout batches, 1 day to lift the emergency stop; admin-configurable within the floors.
 
 ## 12. Stories
@@ -268,7 +268,7 @@ Each story is one PR. Back end first.
 | **WF-6** | Creator support consumers: `support.fees.set` (after #1810), `support.payoutBatch.approve`, `support.ledger.adjust`, `support.policy.set`, `support.emergencyStop.lift`; MEM-D24 read from the rules. Done with the MEMBERS agent ([§14](#14-what-aun-members-needs-to-change)) | WF-3, WF-D2, WF-D3 |
 | **WF-7** | admin-web Approvals list and request page (visual, screenshots) | WF-3 |
 | **WF-8** | admin-web Approval rules page (visual, screenshots) | WF-3 |
-| **WF-9** | Feature switches as `features.set` per switch; `creatorSupport` seeded with an approver | WF-3, WF-D9 |
+| **WF-9** | Feature switches as `features.set` per switch, all direct (`creatorSupport` too since 2026-11-24) | WF-3 |
 | **WF-10** | Direct rules for tiers, channel transfer and claims, credentials | WF-3; channel moves after AUN-CHANNEL-CLAIM Phase A |
 | **WF-11** | Native admin (AUN-ADMIN-NATIVE): approvals list, request, approve with passkey, push | AUN-ADMIN-NATIVE |
 
