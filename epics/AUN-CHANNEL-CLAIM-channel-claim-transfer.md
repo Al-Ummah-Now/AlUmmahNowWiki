@@ -165,7 +165,7 @@ Four records change at their own pace: the offer row, the move job, the move loc
 **Invariants**
 
 1. A move that hasn't changed hands when either person is erased never does. One that has is the receiver's channel.
-2. An offer row keeps both ids while it can still begin or finish a move. Only a closed row, or one whose move is settled, loses an erased account's id.
+2. An offer row keeps both ids while it can still begin or finish a move. Only a closed row, or one whose move is settled, loses an erased account's id; the receiver's leaves only once the channel is no longer theirs.
 3. A lock is held only by work that can still write. A move that can't change hands holds nothing.
 4. No erased account owns a channel when its erasure is complete.
 
@@ -206,10 +206,10 @@ Nobody releases another holder's lock. A dead one blocks nothing and the next mo
 
 **The erasure's steps**
 
-1. **First look**, before anything else. In rounds, until no row names the account: close `offered` and read the running offers (one transaction); for each, write the stop mark on the channel record if it is still the sender's, set the row, release the move's own lock; then take the id out of closed and settled rows (one transaction). The run's beginning counts from here, so a channel a move already brought is part of it.
-2. Channels, videos and the rest, each judged by the channel's owner at that moment.
+1. **First look**, before anything else. In rounds, until no row names the account: close `offered` and read the running offers (one transaction); for each, write the stop mark on the channel record if it is still the sender's, set the row, release the move's own lock; then take the id out of closed and settled rows (one transaction). A `moved` row to the account stays while its channel is still the account's, so a run that stops half-way knows it again. The run's beginning counts from here, or from the latest `transferredAt` on those channels if that is later (another worker's clock), so a channel a move already brought is part of it.
+2. Channels (those of the received rows included, if the ownership index is behind), videos and the rest, each judged by the channel's owner at that moment.
 3. The profile goes. An accept reads the receiver's profile after its claim, so one that starts now is refused, and one that got past it has a row the last look finds.
-4. **Last look**, the same rounds, except that a received `moved` row stays: it means a channel came meanwhile, and the run starts over from 1. Subscriptions are cleared once more.
+4. **Last look**, the same rounds. A received row that stays means a channel came meanwhile, and the run starts over from 1; otherwise no row names the account. Subscriptions are cleared once more.
 
 **Every point of a move, crossed with an erasure**
 
