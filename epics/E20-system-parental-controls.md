@@ -229,7 +229,7 @@ If counsel says a signal is required somewhere, it is one story per platform (De
 |---|---|
 | Auth and Profile | Date of birth page, claim, correction by staff, disabled accounts |
 | Web | Birth-date and sign-in steps, hidden features per band, flags in Studio and upload, age screen, parents' guide |
-| Videos admin | Three switches, Age rules page, staff flag and lock on a video with a reason and Undo |
+| Videos admin | Two switches (`ageRules`, `parentsGuide`), Age rules page, staff flag and lock on a video with a reason and Undo |
 | Apple, Android, Windows | Store answers; stop cleanly when the system ends the app; open the birth-date page in the system browser; the age screen; hidden features per band. Privacy answers gain the date of birth with the first app that signs in |
 | TV | Age-restricted videos show as not playable here |
 | Core | Band from the token, error codes, scrubber keys |
