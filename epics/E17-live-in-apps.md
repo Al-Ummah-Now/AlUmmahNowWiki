@@ -266,12 +266,13 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 **AI scan.** `surface: 'live_chat'`, `subjectId` the message, `parentId` the stream, `event: 'create'`, through the existing `MODERATION_QUEUE`.
 
-- The consumer writes a `moderation_signals` row, as for comments. It does **not** hide the message: main has no AI auto-hide, and E17 does not add one. A person hides it from the AI queue, the Reports queue, or the chat.
+- The consumer writes a `moderation_signals` row, as for comments, and **holds** the message as far as the stream's creator chose (`aiHold`, E17-D4, E17-2c [#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)): `none`; `basic` (default), when a score reaches its category's threshold; `strict`, also when it comes within 0.15 of it. This stays inside Epic 28's rules: only categories an admin enforces (nothing is held while all are in shadow mode), never `religious_authenticity`, never a message of the owner or a moderator, never one a person has decided on. A held message is `held` / `moderation`, leaves every screen (`live_chat_removed`) and is purged after 30 days. The setting is the team's business: it is not in public answers or events.
+- **`GET /:id/chat/held`**: at most 100, newest first, for those who moderate the chat. `restore` shows one, `remove` removes it. Studio and the chat on the watch page show them.
 - `live_chat` takes at most a share of the daily neuron cap (admin setting, default 25 %, no share limit when there is no cap). The scan reserves `feature = 'live_chat'` first, then `moderation`; when the second fails the first is released with `settleBudget(estimate, 0)`. Past either limit: signal `skipped` / `budget`, message stays.
 - Consequence, stated plainly: at 22–62 neurons a message (§8) and the default cap of 10,000 neurons a day (`DEFAULT_DAILY_NEURON_CAP`), the share scans about 40 to 110 messages a day for the whole site. An admin can raise the cap or the share. Beyond that, chat relies on the fast filter, slow mode, blocks, reports and people. A creator with no moderator should use subscribers-only or slow mode.
 - `SURFACES` in `consumer.ts`, `ModerationSurface`, `ModerationSubjectType` and the admin-api and admin-web lists all gain the value in E17-2, with a test that every `ModerationSurface` is accepted.
 
-**Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.manage`, `live.moderate` or `comment.moderate`. An author may `remove` their own message, and nobody else can bring that back. `block_author` uses `channel_blocks` and removes that person's messages on the stream; the team cannot be blocked. Site moderators act from the admin queues (below). `PATCH /:id/chat/settings` is `allowChat`, `chatReplay`, `slowModeSeconds` and `subscribersOnly` for the owner, `live.manage` and `live.moderate`.
+**Moderation.** `POST /:id/chat/:messageId/moderate` `{ "action": "remove" | "restore" | "pin" | "unpin" | "block_author" }` for the owner, `live.manage`, `live.moderate` or `comment.moderate`. An author may `remove` their own message, and nobody else can bring that back. `block_author` uses `channel_blocks` and removes that person's messages on the stream; the team cannot be blocked. Site moderators act from the admin queues (below). `PATCH /:id/chat/settings` is `allowChat`, `chatReplay`, `slowModeSeconds`, `subscribersOnly` and `aiHold` for the owner, `live.manage` and `live.moderate`.
 
 **Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). It answers `404 feature_off` while `liveChat` is off or unreadable, and `404` unless the message is published and the reporter may read that chat now. The text, stream, channel and author go with the report when it is filed, because deleting a stream deletes its messages; the queue archive drops the text and pseudonymizes the author. Account erasure ([#1875](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1875)) takes the reported person out of every report: their id and name, the title or text of what was reported, their own channel's name, and their id on a ban decision. Nothing puts them back: admin-api's lookup drops people listed in `erased_users`, for rows not filled yet, for refreshes and for the queue page, and reads nothing back while that list cannot be read. A comment or chat message never takes another author, even after that list is purged at 30 days. admin-api migration `0051_reports_live_chat.sql` adds the type to `reports`.
 
@@ -359,7 +360,7 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 ### 5.5 Reminders
 
 - `POST` and `DELETE /api/live-streams/:id/reminders` (signed in; public, scheduled streams of a channel, not `madeForKids`; a premiere only while premieres are on). `INSERT OR IGNORE` / `DELETE`; `reminder_count` changes only when a row did. Answer `{ "set": true, "count": 35 }`. The count is corrected from `live_reminders` when the heads-up is sent.
-- **Heads-up, 15 minutes before.** The api-videos minute cron finds public scheduled streams starting in the next 15 minutes and claims each with `UPDATE … SET heads_up_for = scheduled_start_at WHERE stream_id = ? AND scheduled_start_at = ? AND heads_up_for IS NOT scheduled_start_at`. Everything is read before the claim, the winner queues the fan-out, and if queueing fails it puts the old value back. A new time makes the two differ again, so a reschedule needs no extra code. Streams set up less than 15 minutes ahead get it at once. For a premiere the start checks run first, so a dead premiere never reminds.
+- **Heads-up, 30 minutes before** (E17-D6). The api-videos minute cron finds public scheduled streams starting in the next 30 minutes and claims each with `UPDATE … SET heads_up_for = scheduled_start_at WHERE stream_id = ? AND scheduled_start_at = ? AND heads_up_for IS NOT scheduled_start_at`. Everything is read before the claim, the winner queues the fan-out, and if queueing fails it puts the old value back. A new time makes the two differ again, so a reschedule needs no extra code. Streams set up less than 30 minutes ahead get it at once. For a premiere the start checks run first, so a dead premiere never reminds.
 - **Live now.** `markStreamLive` and the premiere start already call `announceLiveStarted`. When its last page is done, the processor queues the same event for reminders. They run one after the other, never together, because they share the dedupe key `live:<streamId>` and two fan-outs in flight could push the same row twice. Reminders exist only for streams of a channel.
 - The processor's `NotificationFanoutPayload` gains `audience: 'subscribers' | 'reminders'` and kind `live_soon` (key `liveSoon`, dedupe `live-soon:<streamId>:<scheduledAtMs>`). Reminder pages read `live_reminders` by primary key, 1,000 a page. Social announcements are sent for subscribers only.
 - **Settings and quiet hours.** Category `live`: a person who turned it off gets nothing. Push goes through `enqueuePush` and `dispatchPush` only, so E22 quiet hours and prayer windows ([#1816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1816)) apply the moment that PR merges, with no E17 code: inside a quiet window the notification is in the inbox and makes no sound.
@@ -380,10 +381,14 @@ Labels: **Jumu'ah** / **الجمعة**, **Taraweeh** / **التراويح**, **C
 
 | Platform | What it needs |
 |---|---|
-| **Web viewer** | Chat panel, pinned message, slow-mode timer, sign-in prompt, report, moderator menu, replay chat; premiere countdown and synced playback; reminder button; event badges and filter; return-to-live. |
-| **Web Studio** | Schedule a premiere from a video (search box opens with eligible videos), reschedule, swap, cancel; event type; chat settings. A held video shows "Premiere, date" and its visibility controls are replaced by a link to the premiere. |
+| **Web viewer** | Chat panel, pinned message, slow-mode timer, sign-in prompt, report, moderator menu, replay chat (5a, [#1884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1884)); premiere countdown and synced playback, reminder button, event badges and filter, Upcoming list, return-to-live (5b, [#1889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1889)); held messages above the chat for moderators (5c). |
+| **Web Studio** | Schedule a premiere from a video (search box opens with eligible videos), reschedule, swap, cancel; event type; chat settings, held messages; an optional start for ordinary streams (5c, [#1893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1893)). A held video shows "Premiere, date" and its visibility controls are replaced by a link to the premiere. |
 | **Admin** | Four switches, three tier fields, live-chat share of the AI cap, `live_chat` in AI moderation and Reports, live and its choices named in the tier change log. |
 | **Apple, Android, Desktop** | Live list, watch, chat, premiere, reminder, replay, against the merged server. TV: watch, premiere and reading chat only. |
+
+**Playing a premiere** (every client): position is `serverNow - startedAt` by the state's clock; re-sync above 3 seconds, never while buffering; seeking ahead goes back to the moment; only normal speed at the moment. A viewer may pause or go back, then has "Return to live", and may play faster until they catch up. The video is asked for again every 5 s until it is released; at the countdown's end the state is read every 5 s. After it ends the same player goes on.
+
+Streams and premieres have no thumbnail of their own yet: [#1891](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1891).
 
 Native starts after E17-2 and E17-3 are merged. The first native PRs (Apple #82, Android #56, Desktop #75) were written against routes that do not exist and are closed; their replacements are E17-6 to E17-8.
 
@@ -426,9 +431,12 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3a and #1819 |
 | **E17-3c** ([#1863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1863)) | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
 | **E17-4** ([#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)) | AlUmmahNow | Admin | E17-2b, E17-3 |
-| **E17-5** | AlUmmahNow | Web viewer and Studio | E17-2, E17-3 |
+| **E17-2c** ([#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)) | AlUmmahNow | AI hold (E17-D4), held messages | E17-2 |
+| **E17-5a** ([#1884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1884)) | AlUmmahNow | Web: chat and replay | E17-2 |
+| **E17-5b** ([#1889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1889)) | AlUmmahNow | Web: premieres, reminders (30 minutes), event tags and filter | E17-5a |
+| **E17-5c** ([#1893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1893)) | AlUmmahNow | Web Studio | E17-5b, E17-2c |
 | **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
-| **E17-9** | AlUmmahNow | Longer playlist for seek-back on the self-hosted edge | E17-1 |
+| **E17-9** | AlUmmahNow | Seek-back on the self-hosted edge: an admin setting, 2 hours unless changed, at most 12 (E17-D8) | E17-8 |
 
 Open PRs that touch the same ground, none of which E17 needs first: #1803 (tickets), #1819 (E22 calendar), #1816 (quiet hours). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
 
@@ -450,19 +458,21 @@ Signed-in posting only. Bans, blocks, reports with reasons, removal by moderator
 
 ## 12. Owner decisions
 
-Built to the recommendation; the owner can change any of them.
+Decided 2026-11-24. Where YouTube has a way of doing it, we do it that way ([S1](#13-sources) to S4).
 
-| ID | Question | Options | Recommendation and why |
+| ID | Question | Options | Decision and why |
 |---|---|---|---|
-| **E17-D1** | How long is chat kept? | A: with the recording, held and removed purged after 30 days. B: all purged 30 days after the stream. C: moved to a file after 7 days. | **A.** Replay and later moderation work; same 30-day rule as elsewhere. |
-| **E17-D2** | Pace limits | A: 2 s per person, optional slow mode, 30 a minute per person, 120 a minute per address. B: 10 s slow mode always. C: none. | **A.** Stops floods; a mosque on one address can still chat. |
-| **E17-D3** | Who may post | A: any signed-in person in good standing, with a subscribers-only option. B: accounts over 24 hours old. C: guests too. | **A.** Guests cannot be moderated; B blocks someone who joins for tonight's class. |
-| **E17-D4** | AI in chat | A: fast filter before, AI signal after, up to 25 % of the daily AI cap, people hide. B: hold every message for the AI (1–4 s). C: no AI. | **A.** Immediate, and cannot use up the site's AI allowance. It does not replace a moderator: see §5.2. If Epic 28 gains auto-hide, chat follows its policies. |
-| **E17-D5** | Links | A: owner and moderators only. B: everyone. C: no one. | **A.** Links are the usual way chat is abused. |
-| **E17-D6** | Reminder times | A: 15 minutes before and at the start. B: start only. C: each person picks. | **A.** One tap, honors settings and quiet hours. |
-| **E17-D7** | Event tags | A: four fixed tags. B: free text. C: admins only. | **A.** Translated and filterable; shared with E22. |
-| **E17-D8** | Seek-back window while live | A: 2 hours. B: 30 minutes. C: whole stream. | **A.** Covers a lecture; the playlist stays small. |
+| **E17-D1** | How long is chat kept? | A: with the recording, held and removed purged after 30 days. B: all purged 30 days after the stream. C: moved to a file after 7 days. | **A, decided.** Replay and later moderation work; same 30-day rule as elsewhere. |
+| **E17-D2** | Pace limits | A: 2 s per person, optional slow mode, 30 a minute per person, 120 a minute per address. B: 10 s slow mode always. C: none. | **A, decided.** Stops floods; a mosque on one address can still chat. |
+| **E17-D3** | Who may post | A: any signed-in person in good standing, with a subscribers-only option. B: accounts over 24 hours old. C: guests too. | **A, decided.** Guests cannot be moderated; B blocks someone who joins for tonight's class. |
+| **E17-D4** | AI in chat | A: fast filter before, AI signal after, people hide. B: hold every message for the AI. C: no AI. D: as YouTube: what the AI flags is held, the creator picks None, Basic or Strict. | **D, decided**, inside Epic 28's rules (§5.2). Basic is the default; the owner's and moderators' messages are exempt; the AI's share stays an admin setting. YouTube holds potentially inappropriate messages for the channel's moderators and lets the channel choose how much (S1, S2). |
+| **E17-D5** | Links | A: owner and moderators only. B: everyone. C: no one. | **A, decided.** Links are the usual way chat is abused. |
+| **E17-D6** | Reminder times | A: 15 minutes before and at the start. B: start only. C: each person picks. D: 30 minutes before and at the start. | **D, decided**, as YouTube does (S3). One tap, honors settings and quiet hours. |
+| **E17-D7** | Event tags | A: four fixed tags. B: free text. C: admins only. | **A, decided.** Translated and filterable; shared with E22. |
+| **E17-D8** | Seek-back window while live | A: 2 hours, fixed. B: 30 minutes. C: whole stream. D: an admin setting, 2 hours unless changed, at most 12. | **D, decided.** Covers a lecture; 12 hours is where YouTube's DVR may be limited (S4). Built in E17-9. |
 
 ## 13. Sources
+
+YouTube Help, read 2026-11-24. S1: [Moderate live chat](https://support.google.com/youtube/answer/9826490) (None, Basic, Strict). S2: [How to use moderation tools for live chat](https://support.google.com/youtube/answer/10888907). S3: [YouTube premiere tips](https://support.google.com/youtube/answer/12356784) (a reminder about 30 minutes before and at the start). S4: [Turn on DVR on live streams](https://support.google.com/youtube/answer/9296823) (limited or unavailable for streams longer than 12 hours).
 
 [D2](D2-video-delivery.md), [D3](D3-live-provider.md), [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [CHAT-CREATOR-TIERS](CHAT-CREATOR-TIERS-creator-tiers.md), [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md), [E13](E13-native-players.md), [E14](E14-offline-listen.md), [E20](E20-system-parental-controls.md), [E22](E22-notifications-sharing-circles.md), [E28](E28-ai-moderation.md)
