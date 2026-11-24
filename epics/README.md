@@ -27,8 +27,8 @@ The [Linear roadmap](LINEAR.md) links every epic to its Linear issue and summari
 | Status | Epics |
 |---|---|
 | shipped | 31 |
-| in progress | 65 |
-| planned | 5 |
+| in progress | 67 |
+| planned | 3 |
 | deferred | 7 |
 | rejected | 2 |
 | **All** | **110** |
