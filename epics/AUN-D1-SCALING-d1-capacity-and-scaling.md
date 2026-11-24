@@ -7,7 +7,7 @@
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **planned**: spec only, no code yet |
-| **Last updated** | 2026-11-24 (revision 5) |
+| **Last updated** | 2026-11-24 (revision 6) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
 > Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
@@ -43,6 +43,10 @@
   - D1-3b deletes `analytics_active` rows only when they are folded, and re-archives days dirtied by late reports. Moves go through a transactional outbox (`analytics_moves`, AUTOINCREMENT ids, drained first on every run; revision 5);
   - D1-4 tombstones by upsert before redacting, gives erased D1 rows a random pseudonym, strips late events, and keys tombstones by `SHA-256(user_id)`;
   - audit retention is 395 days in total (90 in D1 + 305 in R2).
+- **Revision 6** (2026-11-24) applies the fifth review. D1-3b now writes down invariants I1 to I5 as acceptance criteria:
+  - the fold deletes an active row only if it is still clean (`dirty = 0`), and sums the monthly totals in SQL;
+  - readers deduplicate parts by `move_id` and include rows not yet moved;
+  - the outbox is fully drained before any new move, and backfills are capped.
 - **Revision 3** (2026-11-24) applies the second review:
   - D1-3b finds each day's entities in a new `analytics_active` table instead of sweeping `analytics_daily` by day;
   - D1-4 redacts the D1 rows at erase, tombstones keys, adds wrap-key ids and HKDF-separated keys, and encrypts all personal metadata;
@@ -433,6 +437,29 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
 - **Totals in D1.** Totals stay in `analytics_daily` for 90 days. Then a nightly fold handles every `analytics_active` row with `day <= today − 91` and `dirty = 0`. It finds them by primary key and never sweeps by `day`.
   - Each fold is one move of kind `totals` (so R2 holds the daily totals for older ranges). In the same batch it upserts the same sums into `analytics_monthly (entity_type, entity_id, month, metric, dim, value)` and deletes the `analytics_active` row.
   - A total that arrives after the fold recreates the daily row and the active row (`dirty = 1`). The next archive and fold move it as one more part.
+- **Invariants.** The implementation PR must test each one as an acceptance criterion.
+  - **I1. Fold batch order.** One batch, in this order:
+    1. `INSERT INTO analytics_moves … SELECT` from `analytics_daily`;
+    2. `INSERT INTO analytics_monthly … SELECT … FROM analytics_daily … ON CONFLICT DO UPDATE SET value = value + excluded.value`, summing in SQL. The values are never passed in from the Worker;
+    3. `DELETE FROM analytics_daily` with the same predicate;
+    4. `DELETE FROM analytics_active WHERE <key> AND dirty = 0`.
+
+    **Acceptance:** if a flush dirties the row before the batch, the row survives (`dirty = 1`), and the totals the flush added are moved by the next fold, not lost.
+  - **I2. Archive batch order.** One batch: `INSERT INTO analytics_moves … SELECT`, then `DELETE FROM analytics_daily`, then `UPDATE analytics_active SET dirty = 0 WHERE <key>`.
+
+    **Acceptance:** every statement uses the same entity-day predicate; a flush either lands before the batch (and is in the part) or after it (and the row is dirty again).
+  - **I3. Readers deduplicate by `move_id`.** A part can exist in R2 and in `analytics_moves` at the same time: after the drain's R2 write, before its outbox delete. Readers take the union by `move_id`, so each id counts once.
+
+    **Acceptance:** a read during that window returns the same totals as before and after it.
+  - **I4. Readers include rows not yet moved.** For **any** day in the range, readers also add `analytics_daily` rows that have not been moved yet, such as a late report on a day older than 3 days, or totals not yet folded.
+
+    **Acceptance:** a late report shows up in reads before the next archive runs.
+  - **I5. Outbox bound.** A run starts new moves only after the outbox is fully drained.
+    - If the drain fails or leaves any row, the run stops without moving anything and raises an Errors page item.
+    - The `analytics_moves` row count and the database size are covered by D1-1, through the 70% storage alert on the notifications database.
+    - A backfill run is capped at 5,000 moves, with the cap as a setting.
+
+    **Acceptance:** with R2 failing, repeated runs never grow the outbox past one run's moves.
   - **Lifetime totals** are `SUM(analytics_daily) + SUM(analytics_monthly)`, exact.
 - **Readers** (Studio and admin analytics in `apps/api-videos/src/lib/analytics.ts`, up to 366 days). Every day older than 3 days reads R2 parts **plus** any undrained `analytics_moves` rows for that entity and day (an index seek). A move that is not drained yet is never missing from a read.
   - the last 3 days come from D1 (totals and dimensions);
@@ -458,6 +485,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - a report 10 days late, and another after the fold, both reach R2 and the lifetime totals exactly once;
   - a crash after the move batch but before the drain, and a crash after the R2 write but before the outbox delete, each count exactly once;
   - a flush that runs at the same time as a move lands either in the moved part or in D1, never in both and never in neither;
+  - one test for each of the acceptance criteria of I1 to I5;
   - a failed fold leaves `analytics_active` and the daily rows in place;
   - the archive and the fold plans use primary-key ranges, never a scan of `analytics_daily`;
   - the reader returns the same series as today for a seeded 400-day fixture;
