@@ -72,7 +72,7 @@ Shipped since 2026-11-09:
 
 ## Epics for this repo
 
-9 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+11 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
 
 | Epic | Status |
 |---|---|
@@ -83,6 +83,7 @@ Shipped since 2026-11-09:
 | [Epic 16: Desktop viewer (Windows, macOS, Linux)](../epics/E16-desktop-viewer.md) | in progress |
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
 | [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
+| [Epic 22: Notifications, sharing, App Clips & event calendar](../epics/E22-notifications-sharing-events.md) | in progress |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
 | [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |
 | [Themes: Lantern, Zujaj, Nahas, Fawanees, and the theme builder](../epics/AUN-THEMES-themes.md) | in progress |

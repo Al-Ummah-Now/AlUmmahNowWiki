@@ -71,7 +71,7 @@ Open issues (6): empty-query search so pickers open with content ([#34](https://
 
 ## Epics for this repo
 
-8 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+10 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
 
 | Epic | Status |
 |---|---|
@@ -82,5 +82,6 @@ Open issues (6): empty-query search so pickers open with content ([#34](https://
 | [Epic 18: Studio mobile (iOS / iPadOS / Android)](../epics/E18-studio-mobile.md) | in progress |
 | [Epic 19: Studio desktop (Windows, macOS, Linux)](../epics/E19-studio-desktop.md) | in progress |
 | [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
+| [Epic 22: Notifications, sharing, App Clips & event calendar](../epics/E22-notifications-sharing-events.md) | in progress |
 | [Epic 23: Release engineering & store compliance](../epics/E23-release-engineering.md) | in progress |
 | [Epic 30: Studio media engine (`aun-media`, Rust)](../epics/E30-aun-media.md) | in progress |

@@ -9,7 +9,7 @@
 | **Status** | **deferred** |
 | **Last updated** | 2025-11-05 |
 
-> No epic owns a full LMS. Playlists (Epic 21 dropped learning paths, E21-D5) and study circles (22.3) cover part of it.
+> No epic owns a full LMS. Playlists (Epic 21 dropped learning paths, E21-D5), live streams and premieres with moderated live chat ([Epic 17](E17-live-in-apps.md)), and scheduled online events ([Epic 22](E22-notifications-sharing-events.md)) cover community watch-and-discuss sessions without an academy subsystem.
 
 ## Goal
 
