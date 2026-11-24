@@ -33,7 +33,7 @@ Turn the profile app into a Google-account-style hub: home, devices, data, conne
 | B4b | Launcher and privacy links from the client registry (chat: "profile app should link to all available apps", 2026-11-08) | In Progress — both cross-checks agree: docs/account-hub/PLAN.md:102-106 requires migration 0017, privacy_url and /account/launcher; none exists on main and apps/profile/src/apps.ts remains.; apps/profile/src/launcher.ts+apps.ts ship the launcher, but no privacy link exists anywhere in apps/profile/src (verified) — the story names both. |
 | B5 | Hub pages, step-up | In Progress — both cross-checks agree: account-routes.ts has recent-sign-in step-up and the hub has passkeys, but PLAN.md:108-112 editable/activity/connected-apps pages are absent.; Hub pages exist (sign-in, passkeys, apps); staff step-up is tracked open in Auth#361. |
 | B6 | AlUmmahNow privacy link |  |
-| C1 | Account events (signed SETs) | Also needed by [Epic 20](E20-system-parental-controls.md) (E20-P5, E20-B7): hold, restore and delete for under-13 accounts |
+| C1 | Account events (signed SETs) | Also needed by [Epic 20](E20-system-parental-controls.md) (E20-P4, E20-B6): hold, restore and delete for under-13 accounts |
 | C2 | Deletion in the hub | In Progress — both cross-checks agree: DELETE /account exists, but PLAN.md:120-124 requires a confirmation UI and account.deleted event; neither is on main.; DELETE /account + cleanup merged (#233 etc.), but no deletion UI exists in apps/profile (verified) — API-only. |
 | C3 | Videos receiver erases on `account.deleted` |  |
 | T1 | Drop theme-demo redirect URIs |  |

@@ -63,7 +63,7 @@ When everything is done: a summary (imported, left out, failed), links to the ch
 
 **Visibility:** public → public, unlisted → unlisted, private → private. A private video with a future `publishAt` (scheduled on YouTube) becomes a scheduled video here at the same time. "Import everything as private" overrides all of these.
 
-**Made for kids:** recorded on the video (`importedFrom.madeForKids`). As on YouTube, comments start **off** on those videos; the creator can turn them on in Studio.
+**Made for kids:** recorded on the video (`importedFrom.madeForKids`). As on YouTube, comments start **off** on those videos; the creator can turn them on in Studio. (Once [E20-B1](E20-system-parental-controls.md) ships they stay off, as on YouTube: E20-D8.)
 
 ### What is not imported, and why
 
