@@ -72,6 +72,27 @@ The archive itself still expires after 13 months. The local E2E leftover check s
 
 The local E2E stack's leftover check is what finds gaps like these: an admin spec erases an account and the check lists anything still keyed by it.
 
+## Self-service account deletion (shared client rules)
+
+Every client that offers **Delete account** — the public web page (`Auth#533`, `/delete-account`, which is also Google Play's Data safety deletion URL), Apple Studio (`Apple#97`) and Android Studio (`Android#68`) — follows the same contract so no client leaves orphan data, deletes the wrong account, or traps a user in a half-deleted state:
+
+1. **Two-step server order (never reversed):**
+   - **Step 1 — Erase Videos data first:** call `DELETE /api/privacy/data` (accepting Auth-issued tokens per [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933)) in bounded resumable passes, sending each returned `resumeToken` until `complete: true` (hard cap of 50 passes). Fail closed if `complete: false` arrives without a `resumeToken`, if the cap is hit, on non-2xx responses, or if `errors` contains `channel_unreadable:*`. Non-blocking async cleanup entries in `errors` are logged without blocking completion.
+   - **Step 2 — Delete the Auth account second:** only after Step 1 completes, call `DELETE /account`. Treat `200` and `404` with `error: "not_found"` (already deleted) as deleted; treat any other `404` as an error. Videos data must be erased first because deleting the Auth account ends sessions immediately.
+2. **Recent sign-in (step-up) and account pinning:**
+   - Require a recent interactive sign-in (`auth_time` within `max_age`, default 10 minutes / 600 s; `DELETE /account` enforces `401 insufficient_user_authentication` with `max_age`).
+   - Pin every step — pre-check, step-up callback, Videos erase, Auth delete and local purge — to the account's canonical Auth user id (`properties.id` in the JWT payload, never trusting `sub` alone or an unverified active-account switch).
+   - Bind pending step-up intent to the OAuth `state` and a short expiry, clear it on cancel/dismissal, and never loop step-up automatically more than once. If the user completes step-up as a different account, cancel deletion, keep the other account untouched (restoring the original active account in multi-account apps), and show an explicit wrong-account notice.
+3. **Explicit in-app confirmation:**
+   - Confirm in an accessible in-app dialog (never an OS/browser alert), focus **Cancel** first, name the account being deleted, and require typing the localized confirmation word (`DELETE` in English, «حذف» in Arabic, ignoring case, surrounding whitespace, Arabic harakat, tatweel and bidi marks).
+4. **Partial failure and local cleanup:**
+   - If Step 1 fails, abort before `DELETE /account` and keep local drafts/uploads intact.
+   - If Step 1 succeeds and Step 2 fails, report the partial state clearly so the user can retry `DELETE /account` (which is safe to re-run because Step 1 is idempotent and `not_found` finishes cleanup).
+   - After deletion succeeds, purge that account's queued and staged local uploads, persist a purge tombstone so no in-flight background worker or resumed staging can write back under the deleted user id, forget the client session, and complete single sign-out.
+5. **Scope and retention:**
+   - Channels owned by the deleted account are deleted whole (including videos uploaded to those channels by other admins or editors). Videos the user uploaded to someone else's channel remain with that channel.
+   - Auth soft-deletes the account immediately and ends all active sessions across apps; soft-deleted account and video records are purged permanently after **30 days**, and underlying R2/Bunny media cleanup runs via retried server jobs.
+
 ## Account actions across services
 
 The videos admin doesn't change sign-in accounts directly. It **requests** an account action (suspend, delete) from Auth. Auth admins approve or refuse it, and approved actions run from a queue with retries; a failure flags the request ([#574](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/574), [Auth#275](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/275), [Auth#278](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/278)). Suspended and deleted accounts get no tokens by any route. See [Authentication and SSO](authentication.md).
