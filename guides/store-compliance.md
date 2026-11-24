@@ -84,6 +84,8 @@ Applies to any app that **shows** content from users, not only apps where people
 
 ### Review visibility (Apple 2.5.19)
 
+> **Owner decision, 2026-11-24: list and enable for review.** Every switch-gated feature in a build is listed in the App Review Notes and turned on for the reviewer account. A money or posting feature goes live in an app only after a reviewed build has shown it. Other switches stay direct: the admin turns them on without an App Review step.
+
 - [ ] App Review Notes list every switch-gated feature in the build, and those switches are on for the reviewer account.
 - [ ] A money or writing feature turns on in an app for the first time only after a reviewed build showed it.
 
