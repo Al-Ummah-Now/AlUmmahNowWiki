@@ -34,14 +34,15 @@
 - **The other databases are fine.**
   - CMS, costs and status never reach the limit, because they do not grow with users.
 - **The plan.** Stories D1-1 to D1-6 cover monitoring, the inbox retention, the Popular viewer counts, the analytics hot window, the Auth audit retention and split, and the inbox shards. They are about one PR each.
-  - Together they move the first limit from about 40k MAU to about 163k MAU, where reports reaches 70% from live chat signals. D1-8 writes signals only for flagged messages; with it, the first limit is about 480k MAU, where the 4 notifications shards reach 70%. The Auth audit database reaches 70% at about 924k MAU with no token events.
-  - The notifications shards reach 70% at about 480k MAU with 4 shards.
+  - Together they move the first limit from about 40k MAU to about 163k MAU, where reports reaches 70% from live chat signals. D1-8 writes signals only for flagged messages (about 2%); with it, the first limit is about 454k MAU, where reports reaches 70%, just before the 4 notifications shards (about 475k). The Auth audit database reaches 70% at about 924k MAU with no token events.
+  - The notifications shards reach 70% at about 475k MAU with 4 shards, including D1-8's chat participant rows.
   - Caption search reaches 70% at about 194k MAU, but only once caption search is on for most videos. D1-7 fixes that.
 
   Stories D1-7 to D1-10 cover 1M to 10M MAU.
 - **Revision 8** (2026-11-24) applies the chat research (`research/scale-chat-2026-11-24.md`, [#257](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/257)):
   - D1-8 no longer assumes a chat object per stream. Only the viewer counter exists per stream, and the websocket class is key-value backed, so chat rooms need a new SQLite class in their own Worker;
-  - the model counts live chat `moderation_signals`. Reports fills at about 214k MAU, not 690k, while AI moderation of chat is on.
+  - the model counts live chat `moderation_signals`. Reports fills at about 214k MAU, not 690k, while AI moderation of chat is on;
+  - after D1-8 (`post.py` revision 8), chat leaves D1 and only flagged messages (2%) write signals: reports reaches 70% at about 454k MAU.
 - **Revision 7** (2026-11-24) corrects the model from the scaling research (`research/scale-analytics-2026-11-24.md`, `research/scale-audit-2026-11-24.md`):
   - analytics is about **16 queue messages and 46 D1 rows written per view**, not 12 rows. Watch time is reported every 30 s, and retention 3 times a view. Storage figures stand; the write cost and load are about 4× ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254));
   - `token_usage` has no producer on main, so Auth reaches 70% at about 205k MAU, not 90k. The D1-4 30-day window ([Auth#529](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/529)) saves nothing today and is held ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)).
@@ -314,9 +315,9 @@ These are ordered by urgency: the MAU at which the problem bites without the sto
 | D1-3b | AlUmmahNow | `analytics_daily` | ~28k | 13.2 GB → 0.7 GB at 100k MAU |
 | D1-4 | AlUmmahNowAuth | Auth count scans, audit_events and token_usage retention | scans: now; size: ~205k | Auth ~582k / ~831k |
 | D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~582k | Auth ~1.6M / ~2.2M; audit database ~924k / ~1.3M with no token events |
-| D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~101k | 4 shards: each ~480k / ~686k; main notifications ~657k / ~939k |
+| D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~101k | 4 shards: each ~475k / ~677k (with D1-8's chat participant rows); main notifications ~657k / ~939k |
 | D1-7 | AlUmmahNow | caption search | ~194k (once caption search is on) | own database, sharded by video when one fills |
-| D1-8 | AlUmmahNow | live chat size and peak rate, and its moderation signals in reports | reports ~163k (chat signals); 60 messages per second at ~1M | search ~734k / ~1.0M by size; chat in its own room Worker; signals only for flagged messages |
+| D1-8 | AlUmmahNow | live chat size and peak rate, and its moderation signals in reports | reports ~163k (chat signals); 60 messages per second at ~1M | chat in its own room Worker, archived to R2; search ~1.05M / ~1.5M; reports ~454k / ~642k (signals only for flagged messages) |
 | D1-9 | AlUmmahNow | search query time | ~1.6M (70% busy) | reads spread over replicas |
 | D1-10 | AlUmmahNow | when to leave D1 search | ~1.4M videos | written triggers and a bench |
 
@@ -591,7 +592,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   Deletes by entity fan out to N.
 - **Rollout:** start with N = 4; dual-write, backfill by slot, then read switch per slot.
 - **Result:**
-  - each of 4 shards reaches 70% at about 480k MAU, and the main notifications database at about 657k MAU;
+  - each of 4 shards reaches 70% at about 475k MAU (with D1-8's chat participant rows), and the main notifications database at about 657k MAU;
   - move to 8 shards before 1M MAU.
 
 ### D1-7 Caption search in its own database
@@ -602,16 +603,31 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
 
 ### D1-8 Live chat in its own room Worker
 
-- **What exists today.** There is no chat object per stream. What runs per stream is only the viewer counter. Chat posts go to `SEARCH_DB.live_chat_messages`, and the websocket server fans them out through 8 shared `sockets:<n>` objects. Those objects are key-value backed.
-- **Why a new Worker.** A Durable Object namespace keeps its storage type once it exists, so the websocket class cannot become SQLite. A new SQLite class needs a migration, and versions with migrations cannot be uploaded, which is how production releases. So chat gets its **own Worker** (`al-ummah-now-chat`): one `wrangler deploy` for the class, then normal releases. A chat release then never drops the site's notification sockets.
-- **While live.** One room object per stream stores chat in its SQLite. It absorbs the peak: 60 messages per second at 1M MAU and 400 at 10M, under the object's 1,000 per second. Relay objects take the fan-out above about 2,000 viewers, with one batched frame each half second.
-- **D1's role.** D1 keeps only moderation state (held and removed rows, pins, blocks) and one participant row per author per stream. Erase needs those rows, because published messages have no D1 state.
-- **At stream end.** The room writes the chat replay to R2 (`live/chat/<stream>.ndjson`), and replay reads from R2.
-  - **Erase.** Account erase finds the archives through the participant rows and removes the user's messages by id.
-- **Moderation signals.** Each live chat message scanned (or skipped) writes one `moderation_signals` row in reports today, which fills reports at about 214k MAU. Rows are written only for flagged messages, and messages are scanned 25 to an AI call.
-- Published chat rows older than 30 days are archived to R2 and deleted.
-- **Design.** The chat research has the full shape, the order and the load numbers (CH-3 to CH-5).
-- **Result:** search no longer carries chat. Size: search reaches 70% at about 734k MAU after D1-7 and D1-8.
+This story follows the chat research (`research/scale-chat-2026-11-24.md` §4.2, §4.6 and §4.7, stories CH-3 to CH-5). The full chat design will be `research/design-chat-2026-11-24.md`; this section follows it once it lands.
+
+- **What exists today.** There is no chat object per stream; only the viewer counter runs per stream. Chat posts go to `SEARCH_DB.live_chat_messages`, and the websocket server fans them out through 8 shared `sockets:<n>` objects, which are key-value backed.
+- **Why a new Worker.** A Durable Object namespace keeps its storage type once it exists, so the websocket class cannot become SQLite. A new SQLite class needs a migration, and versions with migrations cannot be uploaded, which is how production releases. So chat gets its **own Worker** (`al-ummah-now-chat`): one `wrangler deploy` for the class (the older `migrations` list), then normal releases. A chat release then never drops the site's notification sockets.
+- **While live.**
+  - One room object per stream keeps the last 500 messages in memory.
+  - Every 0.5 to 1 s it writes **one chunk row** to its SQLite, holding that tick's messages, and answers the posters after the commit. A 3-hour stream writes about 22,000 rows at any rate.
+  - Join reads the last 100 from memory, with no D1 query.
+  - Visibility, settings and bans are pushed to the room by `syncStreamInline`. A room that has not heard reads D1 once and fails closed.
+  - Relay objects take the fan-out above about 2,000 viewers, with one batched frame each half second.
+- **Archive in R2.**
+  - The room writes one gzip file per minute, `live/chat/<stream>/<minute>.json.gz`, plus `authors.json` (each author's index and minutes) and `removed.json`.
+  - At the end it checks the files, then empties its storage after 24 hours. Held and removed messages stay 30 days in the room (E17-D1).
+  - Replay reads one cached file per minute watched, with no D1 and no 1,000-message cap.
+  - Existing D1 chat rows move with a one-time, per-stream job, gated like the other backfills. Then `live_chat_messages` leaves the search database.
+- **What D1 keeps.**
+  - One `live_chat_participants(user_id, stream_id)` row per author per stream (about 1 per 6 messages), for Takeout and account erase. It is about 0.9 GB a year at 1M MAU and 27 GB at 10M, so it lives on the **D1-6 user shards**.
+  - Holds and reports.
+- **Erase and Takeout.** The participant rows name the streams. `authors.json` gives the author's index and minutes, and only those minute files are rewritten: at most 180 reads and writes for a 3-hour stream, with no scan.
+- **Moderation signals.**
+  - Today every chat message scanned or skipped writes one `moderation_signals` row in reports, which fills reports at about 214k MAU.
+  - After D1-8, clean and skipped messages are counted, not written. Only flagged messages (about 2%) write a row, and messages are scanned 25 to an AI call.
+- **Result.**
+  - Search no longer carries chat. After D1-7 and D1-8, search reaches 70% / 100% at about 1.05M / 1.5M MAU.
+  - Reports reaches 70% / 100% at about 454k / 642k MAU.
 
 ### D1-9 Read replication and the Sessions API for search
 
@@ -646,11 +662,11 @@ These are plain unit prices for Workers Paid, from the pages above, plus R2 Stan
 | Analytics archive at 1M MAU | — | ~2.1M dimension-row deletes a day ≈ $63 a month, plus ~93k R2 GET and PUT pairs a day ≈ $13 a month |
 | Popular viewer rows at 1M MAU | 1.25M rows written a day, kept 91 days | the same writes, plus about 1 delete per row once its day closes ≈ $38 a month; reads per ranking run fall about 10× |
 | Notification per inbox row | ~9 rows written ≈ $0.000009 | ~8 rows ≈ $0.000008 |
-| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 450 GB → about 209 GB at 1M MAU |
+| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 450 GB → about 141 GB at 1M MAU |
 | Read replicas | — | $0 extra |
 | Extra databases (D1-5, D1-6, D1-7) | — | $0 (included up to 100,000 databases) |
 
-At 1M MAU, storage falls by about 241 GB, about $181 a month. That is more than the new delete and R2 costs above.
+At 1M MAU, storage falls by about 310 GB, about $232 a month. That is more than the new delete and R2 costs above.
 
 ## Platforms
 
