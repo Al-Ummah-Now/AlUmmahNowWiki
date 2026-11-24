@@ -9,7 +9,7 @@
 | **Status** | **in progress** |
 | **Last updated** | 2026-11-21 |
 
-> Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Step A2's sign-in hardening landed through the SSO audit (state and PKCE, sessions in D1 with one refresh at a time, logout CSRF guard). Other steps (A3–C3, T1) not started.
+> Spec merged (Auth #250); `account.*` → `profile.auth.*` redirect merged (Auth #253, step A1). Step A2's sign-in hardening landed through the SSO audit (state and PKCE, sessions in D1 with one refresh at a time, logout CSRF guard). Step C1 (account events, off) is built ([Auth#507](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/507)). The other steps are in the table below.
 
 ## Goal
 
@@ -33,9 +33,9 @@ Turn the profile app into a Google-account-style hub: home, devices, data, conne
 | B4b | Launcher and privacy links from the client registry (chat: "profile app should link to all available apps", 2026-11-08) | In Progress — both cross-checks agree: docs/account-hub/PLAN.md:102-106 requires migration 0017, privacy_url and /account/launcher; none exists on main and apps/profile/src/apps.ts remains.; apps/profile/src/launcher.ts+apps.ts ship the launcher, but no privacy link exists anywhere in apps/profile/src (verified) — the story names both. |
 | B5 | Hub pages, step-up | In Progress — both cross-checks agree: account-routes.ts has recent-sign-in step-up and the hub has passkeys, but PLAN.md:108-112 editable/activity/connected-apps pages are absent.; Hub pages exist (sign-in, passkeys, apps); staff step-up is tracked open in Auth#361. |
 | B6 | AlUmmahNow privacy link |  |
-| C1 | Account events (signed SETs) | Also needed by [Epic 20](E20-system-parental-controls.md) (E20-P4, E20-P5, E20-B6; [Auth#507](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/507)): hold, restore and delete for under-13 accounts |
+| C1 | Account events (signed SETs) | **Built, off** (`ACCOUNT_EVENTS`): [#513](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/513) recording, signing, delivery; [#516](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/516) delete, restore and purge; [#522](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/522) and [#524](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/524) the admin page. Also needed by [Epic 20](E20-system-parental-controls.md) (E20-P4, E20-P5, E20-B6; [Auth#507](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/507)): hold, restore and delete for under-13 accounts |
 | C2 | Deletion in the hub | In Progress — both cross-checks agree: DELETE /account exists, but PLAN.md:120-124 requires a confirmation UI and account.deleted event; neither is on main.; DELETE /account + cleanup merged (#233 etc.), but no deletion UI exists in apps/profile (verified) — API-only. |
-| C3 | Videos receiver erases on `account.deleted` |  |
+| C3 | Videos receiver: hides and restores on `account-disabled` and `account-enabled`, erases on `account-purged` | Next: C3a (receiver), C3b (erase), C3c (hide and restore); then C4 subscribes **API Videos** per environment |
 | T1 | Drop theme-demo redirect URIs |  |
 
 ## Decisions and constraints
