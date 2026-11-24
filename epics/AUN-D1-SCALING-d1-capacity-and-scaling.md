@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
-| **Status** | **planned**: spec only, no code yet |
+| **Status** | **building, paused for new stories**: D1-1 and D1-2 merged; D1-3a in review ([AlUmmahNow#1909](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1909)). On 2026-11-24 scaling moved to a per-workload architecture plan, so no new cleanup story starts until that plan is decided. |
 | **Last updated** | 2026-11-24 (revision 6) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
@@ -27,18 +27,21 @@
   - the Popular viewer rows, kept 91 days.
 
   It reaches 70% of D1's 10 GB limit at about **28k MAU** and 100% at about **40k MAU**. Across every assumption we varied, 100% stays between 37k and 55k MAU.
-- **Auth is second.** `audit_events` is never purged, and `token_usage` keeps 90 days. Auth reaches 70% at about **90k MAU** and 100% at about **129k MAU**. Auth is the sign-in database, so it must never get close.
-- **Search is third.** It reaches 70% at about **122k MAU** and 100% at about **167k MAU**. This depends on caption search being on for most videos; without transcripts it reaches 100% at about 330k MAU.
+- **Search is second.** It reaches 70% at about **122k MAU** and 100% at about **167k MAU**. This depends on caption search being on for most videos; without transcripts it reaches 100% at about 330k MAU.
   - Search is also the first database to hit D1's single-threaded **query** limit: 70% busy at about 1.6M MAU.
+- **Auth is third.** `audit_events` is never purged. `token_usage` has had no producer on main since 2026-01-13 (`42b68c3`), so it does not grow today. Auth reaches 70% at about **205k MAU** and 100% at about **293k MAU**. If token events came back at 3 per DAU, that would be about 90k and 129k. Auth is the sign-in database, so it must never get close.
 - **The other databases are fine.**
   - Reports reaches 100% at about 690k MAU.
   - CMS, costs and status never reach the limit, because they do not grow with users.
 - **The plan.** Stories D1-1 to D1-6 cover monitoring, the inbox retention, the Popular viewer counts, the analytics hot window, the Auth audit retention and split, and the inbox shards. They are about one PR each.
-  - Together they move the first limit from about 40k MAU to about 320k MAU, where the Auth audit database reaches 70%.
+  - Together they move the first limit from about 40k MAU to about 480k MAU, where the 4 notifications shards reach 70%. The Auth audit database reaches 70% at about 924k MAU with no token events.
   - The notifications shards reach 70% at about 480k MAU with 4 shards.
   - Caption search reaches 70% at about 194k MAU, but only once caption search is on for most videos. D1-7 fixes that.
 
   Stories D1-7 to D1-10 cover 1M to 10M MAU.
+- **Revision 7** (2026-11-24) corrects the model from the scaling research (`research/scale-analytics-2026-11-24.md`, `research/scale-audit-2026-11-24.md`):
+  - analytics is about **16 queue messages and 46 D1 rows written per view**, not 12 rows. Watch time is reported every 30 s, and retention 3 times a view. Storage figures stand; the write cost and load are about 4× ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254));
+  - `token_usage` has no producer on main, so Auth reaches 70% at about 205k MAU, not 90k. The D1-4 30-day window ([Auth#529](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/529)) saves nothing today and is held ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)).
 - **Revision 4** (2026-11-24) applies the third review:
   - D1-3b deletes `analytics_active` rows only when they are folded, and re-archives days dirtied by late reports. Moves go through a transactional outbox (`analytics_moves`, AUTOINCREMENT ids, drained first on every run; revision 5);
   - D1-4 tombstones by upsert before redacting, gives erased D1 rows a random pseudonym, strips late events, and keys tombstones by `SHA-256(user_id)`;
@@ -121,7 +124,7 @@ The full per-table list (all 307 tables) is in [Appendix: every table](#appendix
 | Table | Purpose | Bytes/row | Growth driver | Writes per event | Retention today |
 |---|---|---|---|---|---|
 | `notifications` | per-user inbox | ~1,470 (primary key + 7 secondary indexes, 3 of them partial) | per subscriber × upload or live (bell `all`, or `highlights` for highlighted uploads) | ~9 per notification | 90 days |
-| `analytics_daily` | daily counters per video, channel, post and site (views, watch time, traffic, source, surface, device, country, retention buckets; post likes, poll votes and options, post views; site visits and clicks) | ~155 (WITHOUT ROWID) | per active video-day: ~25 rows; per active channel-day: ~40 | ~12 upserts per view after batching (CounterBatch sums repeats) | **none** |
+| `analytics_daily` | daily counters per video, channel, post and site (views, watch time, traffic, source, surface, device, country, retention buckets; post likes, poll votes and options, post views; site visits and clicks) | ~155 (WITHOUT ROWID) | per active video-day: ~25 rows; per active channel-day: ~40 | ~46 rows per view after batching (CounterBatch sums repeats): 16 queue messages, the view plus 12 watch-time and 3 retention reports | **none** |
 | `discovery_viewers` | salted viewer hash per day and video; the Popular rail counts distinct viewers per video and day | ~112 | per distinct viewer-video-day | 1 per view | **91 days** (`POPULAR_PARAMS.days` + 1) |
 | `liked_videos` | user likes | ~370 (3 indexes) | per like | 4 | none (user data) |
 | `channel_subscribers`, `channel_subscriptions`, `channel_subscriber_counts` | subscriptions and counts | ~290 + 240 + 60 | per subscription | ~5 per subscribe | none (user data) |
@@ -150,7 +153,7 @@ The full per-table list (all 307 tables) is in [Appendix: every table](#appendix
 | `users` | accounts (9 indexes) | ~1,060 | per account | ~10 per create; a sign-in updates `last_login_at` | until erased |
 | `user_identities`, `webauthn_credentials`, `rbac_user_roles` | sign-in methods and roles | ~520–770 | per account, passkey or staff role | 4–5 | until removed |
 | `audit_events` | security audit (sign-ins, admin actions, invites, revocations) | ~1,100 (5 single-column indexes: tenant, user, type, timestamp, severity; the insert runs a NOT EXISTS check) | per audited event (assumed 0.3 per DAU per day) | ~7 | **none** |
-| `token_usage` | token analytics from the openauth audit queue | ~640 (5 indexes) | per issued or refreshed token (assumed 3 per DAU per day) | ~6 | 90 days (hourly cleanup, 1,000-row batches) |
+| `token_usage` | token analytics from the openauth audit queue | ~640 (5 indexes) | none today: no producer on main since 2026-01-13 (`42b68c3`); 3 per DAU per day if a producer is added | ~6 | 90 days (hourly cleanup, 1,000-row batches) |
 | `browser_sessions`, `account_sessions`, `app_sessions`, `openauth_atomic`, `authorization_codes`, `password_codes` | sessions and short-lived state | ~230–850 | per session or code | 3–9 | by expiry or 7 days idle |
 | `user_invites`, `moderation_requests`, `admin_deletions` | admin workflows | ~900–2,100 | per admin action | 5–7 | 30-day purge after soft delete |
 
@@ -195,7 +198,7 @@ These are the inputs. Each one is a stated guess to be replaced by measured valu
 | G12 | Chat messages per stream (average): 10k / 100k / 1M / 10M MAU | 30 / 100 / 300 / 1,000 |
 | G13 | Peak chat rate of the largest stream: 10k / 100k / 1M / 10M MAU | 2 / 10 / 60 / 400 messages per second |
 | G14 | Comments per view / likes per view | 0.5% / 3% |
-| G15 | Auth audit events per DAU per day / token_usage rows per DAU per day | 0.3 / 3 |
+| G15 | Auth audit events per DAU per day / token_usage rows per DAU per day | 0.3 / 0 today (no producer; 3 if one is added) |
 | G16 | Client error reports per DAU per day / reports per DAU per day | 0.02 / 0.0005 |
 | G17 | Newsletter subscribers ÷ accounts / issues per month | 20% / 4 |
 | G18 | Peak second ÷ average second (evening peak, Jumu'ah, Ramadan nights) | 4× |
@@ -219,18 +222,18 @@ In GB. The share of the 10 GB limit is in brackets.
 | Database | 10k MAU | 100k MAU | 1M MAU | 10M MAU | Largest part (at 100k) |
 |---|---|---|---|---|---|
 | notifications | 2.5 (25%) | **25.2 (252%)** | 252 | 2,520 | analytics_daily 52%, inbox 39%, discovery_viewers 5% |
-| Auth | 0.8 (8%) | 7.7 (77%) | 77 | 774 | token_usage 56%, audit_events 38% |
+| Auth | 0.35 (4%) | 3.4 (34%) | 34 | 341 | audit_events 86% (token_usage has no producer; with 3 rows per DAU it would add 4.3 GB at 100k) |
 | search | 0.5 (5%) | 5.6 (56%) | 82 | 1,746 | transcripts 64%, live chat 23% |
 | reports | 0.2 | 1.5 | 14.5 | 145 | newsletter_deliveries 56%, moderation_signals 35% (at 1M) |
 | cms / costs / status | < 0.2 | < 0.2 | < 0.2 | < 0.2 | does not grow with users |
-| **Account total** (prod only) | 4 | 40 | 426 | 5,200 | Account storage passes 70% of 1 TB at about 1.6M MAU and 1 TB at about 2.2M MAU; the account limit can be raised on request |
+| **Account total** (prod only) | 3.5 | 36 | 383 | 4,770 | Account storage passes 70% of 1 TB at about 1.8M MAU and 1 TB at about 2.4M MAU; the account limit can be raised on request |
 
 ### Peak load per database
 
 | Database | 100k MAU: queries/s, busy | 1M MAU: queries/s, busy | 10M MAU: queries/s, busy | Peak rows written/s at 1M |
 |---|---|---|---|---|
 | search | 34, 5% | 300, **45%** | 2,900, **436%** | 264 |
-| notifications | 12, 1% | 121, 12% | 1,210, **121%** | 1,068 |
+| notifications | 12, ~3% | 121, ~30% | 1,210, **~290%** | ~3,000 (analytics alone ~2,750) |
 | Auth | 7, 1% | 70, 6% | 700, 56% | 233 |
 | reports | 2, 0% | 4, 0% | 12, 1% | 6 |
 
@@ -240,11 +243,13 @@ MAU at which each database reaches the limit, with today's code. Each figure ass
 
 | Database | 70% of 10 GB | 100% of 10 GB | 70% busy | 100% busy | First limit |
 |---|---|---|---|---|---|
-| **notifications** | **~28k** | **~40k** | ~5.8M | ~8.3M | size |
-| **Auth** | ~90k | ~129k | ~12.5M | ~17.9M | size |
+| **notifications** | **~28k** | **~40k** | ~2.5M | ~3.5M | size |
 | **search** | ~122k | ~167k (~330k without caption search) | ~1.6M | ~2.3M | size, then query time |
+| **Auth** | ~205k | ~293k | ~12.5M | ~17.9M | size |
 | reports | ~483k | ~690k | — | — | size |
 | cms, costs, status | never | never | — | — | — |
+
+The notifications busy figures count analytics at 16 queue messages and 46 rows per view ([#254](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/254)); the Auth figures count no `token_usage` rows ([#255](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/issues/255)). The Auth busy figures still include token writes, so they are on the safe side.
 
 Sensitivity of the first limit (notifications, 100%):
 - 37k MAU at 10 views per DAU;
@@ -259,7 +264,7 @@ None of these changes the order.
 
 | Hot spot | Where | Why it matters |
 |---|---|---|
-| Analytics counters | notifications `analytics_daily` | Never purged. About 25 rows per active video-day, plus channels, posts and the site. About 12 rows written per view. This is the largest single table by 100k MAU. At 1M MAU it is also about 450M rows written a month (about $400 a month at $1.00 per million). |
+| Analytics counters | notifications `analytics_daily` | Never purged. About 25 rows per active video-day, plus channels, posts and the site. About 46 rows written per view (16 queue messages). This is the largest single table by 100k MAU. At 1M MAU it is also about 1.8 billion rows written a month (about $1,700 a month at $1.00 per million). |
 | Notifications inbox | notifications `notifications` | It fans out to every subscriber. The primary key plus 7 indexes make about 9 rows written per notification. It holds 9.8 GB at 100k MAU. |
 | Popular viewer rows | notifications `discovery_viewers` | One row per view for 91 days: 1.3 GB at 100k MAU and 12.7 GB at 1M. The ranking job reads every row of the 91-day window on each run to count viewers per video and day. |
 | Account events | Auth `audit_events`, `token_usage` | Never purged or kept 90 days, in the **sign-in** database. Two admin queries already scan it: `COUNT(*) FROM audit_events` in `getAuditStats` reads the whole table, and `getUserAuditTrail` counts and sorts every row of one user. Growth slows every sign-in query and makes purges risky (the 2026-11-13 sign-in stall). |
@@ -280,7 +285,7 @@ The simplest change that keeps us safe comes first in each row.
 | **Index trim** | notifications (two overlapping user/unread indexes) | Fewer rows written and less space. Each query plan must be re-checked. | Small |
 | **Roll up raw rows into counts** | `discovery_viewers` (only per-video daily counts are read) | Exact for what is read. The raw rows only need to live until their day is closed. | Small: one job, one table |
 | **Archive to R2** (JSON per entity and month, or NDJSON per hour, then delete from D1) | analytics days older than the hot window, audit_events after 90 days, ended streams' chat | R2 storage is cheap and objects are read by key. There is no SQL over the archive. Personal data in an archive needs an erase path that does not scan R2 (crypto-shredding, D1-4). | Medium: writer, reader and erase hook |
-| **Analytics Engine** | not used for counters in this plan | Cheaper per write (1 data point per view, against about 12 D1 rows). But high-volume writes may be sampled (`_sample_interval`), data is kept only 3 months, and it is queried by the SQL API, not a binding. Our analytics promise exact counts ("Nothing is estimated", `apps/api-videos/src/lib/analytics.ts`), so AE would only suit rough dashboards. | Medium |
+| **Analytics Engine** | not used for counters in this plan | Cheaper per write (one data point per event, against about 46 D1 rows per view). But high-volume writes may be sampled (`_sample_interval`), data is kept only 3 months, and it is queried by the SQL API, not a binding. Our analytics promise exact counts ("Nothing is estimated", `apps/api-videos/src/lib/analytics.ts`), so AE would only suit rough dashboards. | Medium |
 | **Split by feature** (a new database per table group) | audit out of Auth; transcripts out of search | Each database gets its own 10 GB and its own query time. There are no cross-database joins, so the readers must be split too. One more binding per worker. | Medium: dual-write, backfill in batches, read cutover, drop |
 | **Shard by key** (N databases, `hash(user_id)` → slot → database) | notifications inbox, likes, subscriptions per user | Scales linearly. Cross-user queries (purge by age, delete by entity) fan out to N databases. A slot map, not plain modulo, makes resharding a slot move. | Large: router, fan-out, backfill |
 | **Read replication + Sessions API** | search lists and search, CMS, read-heavy notifications | No extra cost, and reads scale across regions. Replicas lag, so writers pass a bookmark for read-your-writes. Binding only, not REST. | Small to medium: wrap the `SEARCH_DB` reads |
@@ -304,8 +309,8 @@ These are ordered by urgency: the MAU at which the problem bites without the sto
 | D1-2 | AlUmmahNow | notifications inbox size | ~28k | with D1-3a and D1-3b: notifications ~101k / ~145k |
 | D1-3a | AlUmmahNow | `discovery_viewers` | ~28k | 1.3 GB → 0.1 GB at 100k MAU |
 | D1-3b | AlUmmahNow | `analytics_daily` | ~28k | 13.2 GB → 0.7 GB at 100k MAU |
-| D1-4 | AlUmmahNowAuth | Auth count scans, audit_events and token_usage retention | scans: now; size: ~90k | Auth ~265k / ~378k |
-| D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~265k | Auth ~1.6M / ~2.2M; audit database ~319k / ~455k |
+| D1-4 | AlUmmahNowAuth | Auth count scans, audit_events and token_usage retention | scans: now; size: ~205k | Auth ~582k / ~831k |
+| D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~582k | Auth ~1.6M / ~2.2M; audit database ~924k / ~1.3M with no token events |
 | D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~101k | 4 shards: each ~480k / ~686k; main notifications ~657k / ~939k |
 | D1-7 | AlUmmahNow | caption search | ~194k (once caption search is on) | own database, sharded by video when one fills |
 | D1-8 | AlUmmahNow | live chat size and peak rate | 60 messages per second at ~1M | search ~734k / ~1.0M by size; chat off the search database |
@@ -475,7 +480,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
 - **Result:**
   - analytics at 100k MAU: 13.2 GB → about 0.7 GB, including about 0.07 GB of `analytics_active`;
   - at 1M MAU: 132 GB → about 7.2 GB.
-  - Rows written per view stay about 12, plus about one delete per dimension row per day, plus one R2 GET and PUT per active entity-day.
+  - Rows written per view stay about 46 (16 queue messages), plus about one delete per dimension row per day, plus one R2 GET and PUT per active entity-day.
 - **Tests:**
   - archive then delete (an R2 failure means no delete);
   - re-running a day changes nothing;
@@ -544,7 +549,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
        - **Removing tombstones.** A tombstone holds no personal data. It is removed 395 days after `shredded_at`, when the last redacted row (in D1 up to 90 days, then 305 days in R2) has expired.
   - **Admin lookups.** While the account exists, an admin can look up a user's archived events by recomputing the HMAC with the subject key.
   - **Erase checks.** The bucket stays in the erase leftover check as "shredded", not allow-listed ([AlUmmahNow#1177](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1177) shows the trap).
-- **`token_usage`:** 90 → 30 days in the existing cleanup.
+- **`token_usage`:** 90 → 30 days in the existing cleanup. **Held:** `token_usage` has had no producer on main since 2026-01-13, so this saves nothing today, and a retention change is the owner's call ([Auth#529](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/529) is a draft).
 - **Safety.** Every statement is checked for an index plan before merge. No unbounded count queries. The batch size is tuned so one statement stays under 50 ms on stage.
 - **Tests:**
   - the stats and trail plans use indexes, never a scan;
@@ -566,7 +571,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
 - **Rollout:** dual-write for one release, then a batched backfill of the 90-day window, then a read switch, then drop the old tables in the sign-in database.
 - **Result:**
   - The sign-in database then holds only accounts, identities, roles, sessions and short-lived state. It reaches 70% at about 1.6M MAU.
-  - The audit database reaches 70% at about 319k MAU; most of it is `token_usage`. When D1-1 shows it at 70%, `token_usage` gets the same hot-window-and-R2 treatment as D1-3b.
+  - The audit database reaches 70% at about 924k MAU with no token events (`token_usage` has no producer today); 319k at 3 token rows per DAU, 152k at 8. If a producer is added and D1-1 shows the database at 70%, `token_usage` gets the same hot-window-and-R2 treatment as D1-3b.
 - **Tests:** the dual-write order (the sign-in database is never the second write in a request); the admin audit list on the new binding.
 
 ### D1-6 Notifications per-user shards
@@ -630,11 +635,11 @@ These are plain unit prices for Workers Paid, from the pages above, plus R2 Stan
 
 | Item | Today's design | After the plan |
 |---|---|---|
-| Analytics per view | ~12 D1 rows written ≈ $0.000012 | the same; counters stay exact in D1 |
+| Analytics per view | ~46 D1 rows written (16 queue messages) ≈ $0.000046 | the same; counters stay exact in D1 |
 | Analytics archive at 1M MAU | — | ~2.1M dimension-row deletes a day ≈ $63 a month, plus ~93k R2 GET and PUT pairs a day ≈ $13 a month |
 | Popular viewer rows at 1M MAU | 1.25M rows written a day, kept 91 days | the same writes, plus about 1 delete per row once its day closes ≈ $38 a month; reads per ranking run fall about 10× |
 | Notification per inbox row | ~9 rows written ≈ $0.000009 | ~8 rows ≈ $0.000008 |
-| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 426 GB → about 156 GB at 1M MAU |
+| Storage | $0.75 per GB-month above 5 GB in total | the same, with less data: about 383 GB → about 156 GB at 1M MAU |
 | Read replicas | — | $0 extra |
 | Extra databases (D1-5, D1-6, D1-7) | — | $0 (included up to 100,000 databases) |
 
