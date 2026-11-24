@@ -86,11 +86,12 @@ Open examples: auth admin following the site theme ([#330](https://github.com/Al
 
 ## Epics for this repo
 
-22 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
+23 epics name this repo. The full list, including epics owned by other repos, is in [Epics](../epics/README.md).
 
 | Epic | Status |
 |---|---|
 | [Epic 9: Platform foundations for native clients (backend)](../epics/E09-native-platform-foundations.md) | in progress |
+| [Epic 20: System parental controls](../epics/E20-system-parental-controls.md) | planned |
 | [Epic 26: Embedded discussions ("Ummah Comments")](../epics/E26-ummah-comments.md) | in progress |
 | [Epic 27: Plans & entitlements framework](../epics/E27-plans-entitlements.md) | in progress |
 | [Epic 29: Core web experience completion (P0)](../epics/E29-core-web-experience.md) | in progress |

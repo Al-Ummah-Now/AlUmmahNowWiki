@@ -2534,10 +2534,13 @@
         "videos",
         "videos-admin",
         "api",
+        "auth",
+        "profile",
+        "auth-admin",
         "native"
       ],
       "wiki": "epics/E20-system-parental-controls.md",
-      "note": "Owner decision O45, 2026-11-24: no in-app Kids Mode. Store age ratings, Declared Age Range and Play Age Signals where the law requires them, significant-change consent, age-restricted videos kept out of the apps, and a parents' guide. Behind the ageSignals, ageRestrictedVideos and parentsGuide switches (all off by default). Waits for the owner decisions E20-D1 to E20-D9."
+      "note": "Owner decision O45, 2026-11-24: no in-app Kids Mode. A date of birth in the profile (Auth) with only an age band shared with the apps, store age ratings, Declared Age Range and Play Age Signals where the law requires them, significant-change consent, age-restricted videos kept out of the apps, and a parents' guide. Behind the ageRules, ageRestrictedVideos and parentsGuide switches (all off by default). Waits for the owner decisions E20-D5 to E20-D11."
     }
   ]
 }
