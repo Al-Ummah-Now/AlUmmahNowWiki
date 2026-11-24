@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-APP-UPDATES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowWiki](https://github.com/Al-Ummah-Now/AlUmmahNowWiki) |
-| **Status** | **planned** (spec revision 2); build starts with the server stories, behind the `appUpdates` switch (default **off**) |
-| **Last updated** | 2026-11-23 (revision 2: cross-provider review of #212) |
+| **Status** | **building**: server and Core merged behind the `appUpdates` switch (default **off**); admin page and app clients next |
+| **Last updated** | 2026-11-24 (routine decisions recorded; server and Core merged) |
 | **Origin** | Owner requirement 2026-11-23, relayed by the orchestrator: "every desktop and native app checks for updates and tells the user when a new version is out. Desktop apps also let the user update from inside the app, either automatically or manually." |
 | **Related** | [Epic 9](E09-native-platform-foundations.md) story 9.3/9.5 (`GET /api/v1/app-config`, built), issue [AlUmmahNow#413](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/413) (App config admin page, built), issue [AlUmmahNow#1434](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1434) (App config native client: this epic takes its forced-update part), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md), [Epic 23](E23-release-engineering.md) |
 
@@ -426,21 +426,35 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 
 ## Owner decisions
 
-1. **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** Options: (a) on in QA and production as soon as APPUPD-3 and one client are released; (b) keep off until every platform has shipped. **Recommend (a)**: the minimum-version gate is the only way to stop a broken build already installed, and with no minimum set it only shows "new version" bars.
-2. **APPUPD-D2: primary Windows (and Tools macOS) download.** Options: (a) Velopack `Setup.exe` / `.pkg` as the main download (per-user, updates itself), MSI and `.dmg` kept for managed installs; (b) keep MSI as the main download and only show a link. **Recommend (a)**: only (a) gives in-app updating without admin rights.
-3. **APPUPD-D3: where update files live.** (a) GitHub Releases (free, already used); (b) R2 behind `updates.alummahnow.net` (under $1/month, our own domain, independent of GitHub). **Recommend (a)** now. Moving later takes one release that adds the new host to the apps' compiled-in host list before files move.
-4. **APPUPD-D4: signing keys.** (a) per repo, an offline root key held by the owner (K-R) plus a CI release key (K1–K4); (b) one root and one release key for the organization. **Recommend (a)**: a leaked key affects one repo's apps only, and the offline root key is what makes rotation skip-safe and revocation possible ([§3.5](#35-keys-rotation-and-revocation)).
-5. **APPUPD-D5: "Install updates automatically" default.** (a) on (download in the background, install when the app closes, never restart on its own); (b) off. **Recommend (a)**; the admin can change the default with `updates.autoInstallDefault`, and the user's own choice always wins.
-6. **APPUPD-D6: check interval.** Default 6 hours, admin-adjustable 1–48. **Recommend 6.**
-7. **APPUPD-D7: beta channel.** (a) TestFlight, Play testing and preview-tag builds are told about the newest beta or stable version; (b) beta builds only about beta. **Recommend (a)**.
-8. **APPUPD-D8: sideloaded Android APK.** (a) bar with a download link to the release page; (b) download and open the installer in the app (needs `REQUEST_INSTALL_PACKAGES`). **Recommend (a)**: smaller attack surface and no policy risk; it is a tester build.
-9. **APPUPD-D9: Linux.** (a) notice and download link for `.deb`, Flatpak and `.tar.gz`; (b) also ship a Velopack AppImage for Tools and Desktop that updates itself. **Recommend (a)** now, (b) later if Linux users ask.
-10. **APPUPD-D10: release notes.** (a) CI requires English and Arabic notes from the store notes files for every release, and admins can override per version; (b) admins write them on the App config page after each release. **Recommend (a)**.
-11. **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build; notices for downloaded builds and self-install switch on per repo when its keys arrive.
-12. **APPUPD-D12: super-admin-only editing of the minimum version** (from #1434). (a) super admins edit `versions`, admins see it read-only; (b) any `settings:manage` admin edits it, as today. **Recommend (a)**, as #1434 asks; the build follows (a) unless the owner says otherwise.
+Open, for the owner:
+
+- **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** Options: (a) on in QA and production as soon as APPUPD-3 and one client are released; (b) keep off until every platform has shipped. **Recommend (a)**: the minimum-version gate is the only way to stop a broken build already installed, and with no minimum set it only shows "new version" bars.
+- **APPUPD-D5: "Install updates automatically" default.** (a) on (download in the background, install when the app closes, never restart on its own); (b) off. **Recommend (a)**; the admin can change the default with `updates.autoInstallDefault`, and the user's own choice always wins.
+- **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build; notices for downloaded builds and self-install switch on per repo when its keys arrive.
+
+Decided:
+
+- **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` / `.pkg` is the main download and the MSI and `.dmg` stay for managed installs. Both are "Windows installer" downloads on GitHub Releases, as the owner set on 2026-11-10; only (a) can update itself without admin rights.
+- **APPUPD-D3: where update files live.** **Decided (a)** by the owner's earlier answer (2026-11-10, native apps distribution): direct downloads live on GitHub Releases. Moving later takes one release that adds the new host to the apps' host list first.
+- **APPUPD-D4: signing keys.** **Decided (a)**, routine security design (2026-11-23): per repo, an offline root key (K-R) and a CI release key (K1–K4). Generating and holding the root keys is an owner item (K-R).
+- **APPUPD-D6: check interval.** **Decided: 6 hours**, routine (2026-11-23); admins change it with `updates.checkHours` (1–48).
+- **APPUPD-D7: beta channel.** **Decided (a)**, routine (2026-11-23): beta builds are told about the newest of beta and stable.
+- **APPUPD-D8: sideloaded Android APK.** **Decided (a)**, routine (2026-11-23): the sideloaded APK gets a bar with a link to a signed release page; no in-app installer and no `REQUEST_INSTALL_PACKAGES`.
+- **APPUPD-D9: Linux.** **Decided (a)**, routine (2026-11-23): Linux builds get the notice and a download link; a self-updating AppImage only if Linux users ask.
+- **APPUPD-D10: release notes.** **Decided (a)**, routine (2026-11-23): CI takes English and Arabic notes from each repo's store notes files and fails the release without them; admins can override per version.
+- **APPUPD-D12: super-admin-only editing of the minimum version** **Decided (a)** by issue AlUmmahNow#1434, which lists super admins as the editors (2026-11-23).
 
 ## Build status
 
 | Story | PR | State |
 |---|---|---|
-| Spec | this PR | open |
+| Spec | AlUmmahNowWiki#212 | merged `331892d` |
+| APPUPD-1 versions, tags, signed manifests | AlUmmahNow#1783 | merged `59e88af` |
+| APPUPD-2 `appUpdates` switch, release index | AlUmmahNow#1797 | merged `e7396a1` |
+| APPUPD-3 update answer in `GET /api/v1/app-config` | AlUmmahNow#1806 | merged `78c0f80` |
+| APPUPD-4 release tool `scripts/app-release/app-release.mjs` | AlUmmahNow#1811 | merged `192d89f` |
+| APPUPD-5 Core `aun-updates` + `UpdateChecker` | AlUmmahNowCore#54 | merged `d37b920`, released in Core `v0.4.0-rc.5` |
+| APPUPD-6 admin Releases tab, super-admin editing | — | next |
+| APPUPD-7 Tools (Velopack, bar, forced screen, Settings → Updates) | — | in progress (on Core `v0.4.0-rc.5`) |
+| APPUPD-8 to -10 Desktop, Android, Apple | — | planned |
+| APPUPD-11 per-app docs | — | planned |
