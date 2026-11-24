@@ -57,11 +57,13 @@ Four new entries in `packages/shared-types/src/feature-registry.ts`, each **defa
 | Key | Group | Server gate |
 |---|---|---|
 | `liveChat` | `people` | every `/api/live-streams/:id/chat*` route; WebSocket `live:<id>` subscribe |
-| `livePremieres` | `create` | `POST /api/videos/:id/premiere`; starting a premiere |
+| `livePremieres` | `create` | `POST /api/videos/:id/premiere`, `PATCH /api/live-streams/:id/premiere`; starting a premiere |
 | `liveReminders` | `people` | `/api/live-streams/:id/reminders`; sending reminders |
 | `liveEvents` | `create` | setting `eventType`; the `eventType` filter |
 
-None of the four `requires` the existing `live` switch. `live` stops **new streams**; streams on air and recordings continue (`feature-routes.ts`), and a premiere needs no live provider.
+None of the four `requires` the existing `live` switch. `live` stops **new streams**; streams on air and recordings continue (`feature-routes.ts`), and a premiere needs no live provider. `POST /api/live-streams/:id/start` serves both kinds, so E17-3 moves it from the middleware to its handler (`enforced: 'handler'`): `livePremieres` for a premiere, `live` for a stream.
+
+The chat routes fail closed: while the switches cannot be read they answer `feature_off`, and so does the socket. Other routes keep today's rule.
 
 `livePremieres` off while a premiere is scheduled: it does not start and is shown to its owner only. Turning the switch on again within 60 minutes of the start time starts it; after that the cron cancels it (§5.4).
 
@@ -95,6 +97,7 @@ CREATE TABLE IF NOT EXISTS live_stream_metadata (
   status TEXT NOT NULL DEFAULT 'scheduled' CHECK (status IN ('scheduled', 'live', 'ended', 'cancelled')),
   visibility TEXT NOT NULL DEFAULT 'private' CHECK (visibility IN ('public', 'private', 'hidden', 'deleted')),
   made_for_kids INTEGER NOT NULL DEFAULT 0,
+  recording_withheld INTEGER NOT NULL DEFAULT 0,
   allow_chat INTEGER NOT NULL DEFAULT 1,
   chat_replay INTEGER NOT NULL DEFAULT 1,
   slow_mode_seconds INTEGER NOT NULL DEFAULT 0,
@@ -202,7 +205,7 @@ Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/
 
 `GET /api/live-streams` keeps its present rules (owner and `live.manage` members see private and hidden streams; VR9 recordings are withheld) and gains `kind` and `eventType`. With either filter it reads ids from `live_stream_metadata` and then re-checks every loaded record with the same `isListed` function.
 
-Until a premiere starts, `premiereVideoId` is given to its team only. `PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
+`premiereVideoId` is given to others only while the premiere is `live` or `ended` (a cancelled one's video is private again). `PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
 
 `GET /api/live-streams/:id/state` keeps every field it returns today (`streamId`, `sessionId`, `status`, `sessionStatus`, `receiving`, `playbackUrl`, `vodUrl`, `startedAt`, `endedAt`, `bitrateKbps`, `provider`, `qoe`, `viewers`, `serverNow` in milliseconds) and adds:
 
@@ -223,11 +226,11 @@ Until a premiere starts, `premiereVideoId` is given to its team only. `PublicLiv
 
 ### 5.2 Live chat
 
-**Who may read.** Anyone who may see the stream (`visibility = 'public'`, or its owner, or a member with `live.manage`, `live.moderate` or `comment.moderate`), when `allow_chat = 1` (scheduled, live) or `chat_replay = 1` (ended) and `made_for_kids = 0`. Signed-out viewers may read public streams. Reading fails closed when the stream row is missing.
+**Who may read.** Anyone who may see the stream (`visibility = 'public'` and its recording not withheld by VR9, or its owner, or a member with `live.manage`, `live.moderate` or `comment.moderate`), when `allow_chat = 1` (scheduled, live) or `chat_replay = 1` (ended) and `made_for_kids = 0`. Signed-out viewers may read public streams. A banned member reads like a visitor. Reading fails closed when the stream row is missing.
 
 **`GET /api/live-streams/:id/chat`**
 
-- **Latest** (no cursor, or `afterId`). One snapshot per stream is cached with `lib/edge-cache.ts` for 2 seconds: the last 100 published messages in `(created_at, id)` order, the pinned message, and the stream's `visibility`, `status`, `madeForKids`, `allowChat`, `chatReplay`. It is used only when that stored state says anyone may read. The key has no `afterId`, so everyone shares it. `afterId` is sliced from the snapshot; when it is older than the snapshot the server looks up that row's `created_at` and reads forward by `(created_at, id)`; when the row is gone it answers the latest page with `resync: true`.
+- **Latest** (no cursor, or `afterId`). One snapshot per stream is cached with `lib/edge-cache.ts` for 2 seconds: the last 100 published messages in `(created_at, id)` order, the pinned message, and the stream's `visibility`, `status`, `madeForKids`, `allowChat`, `chatReplay`. It is used only when that stored state says anyone may read, and any write that closes the stream drops it (here; elsewhere it lives 2 seconds at most). The key has no `afterId`, so everyone shares it. `afterId` is sliced from the snapshot; when it is older than the snapshot the server looks up that row's `created_at` and reads forward by `(created_at, id)`; when the row is gone it answers the latest page with `resync: true`.
 - **Older** (`before=<id>`, limit 50): the row's `(created_at, id)` is the anchor, so two messages in the same millisecond are never skipped.
 - **Replay** (`fromMs`, `toMs`, at most 60 s apart, limit 200), only when `ended`. The answer has `truncated: true` when the limit cut it.
 - A signed-in caller who is blocked on the channel also gets their own `held` messages: a second query on `(stream_id, user_id, created_at)` from the oldest message in the page, merged in code.
@@ -243,7 +246,7 @@ Until a premiere starts, `premiereVideoId` is given to its team only. `PublicLiv
 
 **`POST /api/live-streams/:id/chat`** `{ "text": "…" }`, checks in this order:
 
-1. switch, sign-in, `videosBanMiddleware`, `LIVE_CHAT_LIMITER`, `requireHuman('videos.live_chat', 'first')`;
+1. switch, sign-in, `videosBanMiddleware`, the per-person limit (4), `requireHuman('videos.live_chat', 'first')`;
 2. the stream can be read by this caller, is `live`, or `scheduled` with the start at most 30 minutes away; the owner's tier has chat;
 3. `subscribersOnly`: the owner, moderators, and people in `channel_subscriptions` (`403 live_chat_subscribers_only`);
 4. rate limits: two new bindings in every environment, `LIVE_CHAT_LIMITER` (30 per 60 s, per user, through `edgeRateLimit`) and `LIVE_CHAT_IP_LIMITER` (120 per 60 s, key `live-chat:<ip>`, called separately because `edgeRateLimit` keys a signed-in caller by user). They are separate from comments, and the second is loose so a mosque on one address can chat;
@@ -280,6 +283,8 @@ In `apps/websocket-server`:
 - `canPublish` returns false for `live:`. Only `/broadcast` (internal key) feeds it. Today any signed-in client can publish into it.
 - Subscribe is allowed only after one indexed read of `live_stream_metadata`, with the read rule of §5.2; a non-public stream also needs a `channel_access` role. A missing row refuses. Signed-out sockets may subscribe to public streams.
 - `live_chat_closed` evicts everyone on the channel after it is delivered. `syncStreamInline` sends it on every write that leaves the stream private, hidden, cancelled or deleted, or its chat off, so a suspension or an erasure closes it too. Clients that may still read subscribe again.
+- The row is read again after the socket has joined, so a close that came in between is not missed.
+- A ban, or a channel role taken away or lowered, sends `access_changed` on `user:<id>`: that person's sockets leave every live chat, and join again those they may read. A banned member cannot join a chat that is not public.
 - `expireAuthIfNeeded` keeps `live:` only for public streams; others are dropped when the token expires.
 - Authentication is whatever the socket uses: the access token today, the single-use ticket once [#1803](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1803) merges. E17 needs nothing from either.
 
@@ -314,7 +319,7 @@ Surfaces that do not go through those functions get an explicit test. Known toda
 
 Order: the hold is written first (conditional write, all checks repeated inside it), then the stream record (`kind: 'premiere'`, `premiereVideoId`, `durationSeconds`, `status: 'scheduled'`). If the second write fails the hold is cleared. A draft is allowed; so is a private video.
 
-**While held**, these answer `409 premiere_scheduled`: schedule create and update, publish-now, and any visibility or draft change by `PATCH /api/videos/:id`, bulk edit (reported per video), the upload and import schedulers (`scheduleRefusal` gains the case) and the admin video edit. The check runs inside each conditional write. Even if one were missed, the hold still keeps the video closed, and `publishVideo` in the `scheduler` Worker returns `'cancelled'` for a held video. Title, description, thumbnail and captions stay editable.
+**While held**, these answer `409 premiere_scheduled`: schedule create and update, publish-now, and any visibility change by `PUT /api/videos/:id`, bulk edit (reported per video), the upload and import schedulers (`scheduleRefusal` gains the case) and the admin video edit. The check runs inside each conditional write. Even if one were missed, the hold still keeps the video closed, and `publishVideo` in the `scheduler` Worker returns `'cancelled'` for a held video. Title, description, thumbnail and captions stay editable.
 
 A hold whose stream no longer exists, or is cancelled or ended, is **stale**: the same checks clear it and go on, so a lost stream record can never lock a video.
 
@@ -335,14 +340,15 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 **Cancel, reschedule, swap.**
 
-- *Cancel* (`PATCH` with `status: 'cancelled'`, or `DELETE`): the stream is cancelled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. If the start claimed first, cancel answers `409 premiere_started`.
+- *Cancel* (`PATCH` with `status: 'cancelled'`): the stream is cancelled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. If the start claimed first, cancel answers `409 premiere_started`.
+- *Delete* (`DELETE`): a scheduled premiere is cancelled first, in the same way; a running one answers `409 premiere_started` (end it first); an ended or cancelled one is deleted, and its video is not touched.
 - *Reschedule* (`PATCH` with `scheduledStartTime`): only the stream changes; same date rules; only while `scheduled`. The heads-up re-arms by itself (§5.5).
 - *Swap* (`PATCH /api/live-streams/:id/premiere` `{ videoId }`): only while `scheduled`. All scheduling checks run on the new video, then: hold the new video, conditional write on the stream (`premiereVideoId`, `durationSeconds`), clear the old hold. A failed stream write clears the new hold.
 - `PATCH` with `status: 'live'` or `'ended'` on a premiere is refused; `kind` never changes.
 
 **No live session.** `attachSession` is not called for a premiere. `GET /:id/ingest` answers `409 premiere_no_ingest`. `POST /:id/start` and `/:id/end` branch before any session code. Premieres use no live hours and no concurrency.
 
-**Deleting the video** while held cancels the premiere (owner delete, bulk delete, admin delete call one helper). Any path that misses it is caught at the heads-up and start checks.
+**Deleting the video** while held cancels the premiere, whoever does it: every write in api-videos that removes a held video passes the search-sync wrapper, which cancels. Any other path is caught at the start check. Video deletion is a 30-day soft delete, and restoring the video does not bring its premiere back. A video deleted while its premiere runs ends the premiere at the next minute.
 
 **The premiere page is `/live/<streamId>`**, before, during and after. #1819 currently links to `/video/<premiereVideoId>`, which is a 404 before the start; it must use `/live/<streamId>`.
 
@@ -358,10 +364,10 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 ### 5.6 Kids
 
-Owner rule: no live chat in Ummah Kids. Enforcement is [Epic 20](E20-ummah-kids.md)'s token scope and session model ([wiki #209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209) §4.2, [#1801](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1801)). E17 adds no second mechanism and trusts no client header.
+Owner rule: no live chat in Ummah Kids. Enforcement is [Epic 20](E20-ummah-kids.md)'s token scope and session model ([wiki #209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209) §4.2). E17 adds no second mechanism and trusts no client header. Nothing of it is on main today, and the open [#1801](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1801) has the route table and an `X-Kids-Session` session, not yet the `kids:viewer` scope or any socket change.
 
-- **HTTP:** every E17 route is `block_403` in E20's route table, like all `/api/live-streams` routes there except the heartbeat and QoE, which E20 suppresses. #1801's test fails on any unclassified route, so whichever of the two merges second adds the rows.
-- **WebSocket:** E20 refuses a `kids:viewer` token on connect, so a Kids session has no signed-in socket. E17-2 adds a test for `live:`.
+- **HTTP:** every E17 route is `block_403` in E20's route table, like the `/api/live-streams` routes there (except the heartbeat and QoE, which E20 suppresses). #1801's test fails on any unclassified route, so whichever of the two merges second adds the rows.
+- **WebSocket:** refusing a `kids:viewer` token on connect, and its test for `live:`, belong to E20's `kids:viewer` work. E17-2 leaves a TODO at the place, tied to #1801.
 - **Native Kids Mode** in the normal apps runs on that same `kids:viewer` session in E20's spec, so both rules apply; the apps also do not open the socket or the live pages while Kids Mode is on.
 - Public chat can be read by anyone who is signed out, as any public page can. E20's threat model says the same about a signed-out window.
 - **Content made for kids:** `made_for_kids` is stored on the stream when it is written: the creator's `madeForKids`, or the premiere video's `importedFrom.madeForKids`. Chat, replay and reminders are off for it, for everyone, over HTTP and the socket, from that one stored flag. The Kids catalog is not consulted: a Kids session can reach no live page.
