@@ -49,6 +49,29 @@
       "note": "In production releases since v2026.11.12.9 but not usable there yet. Bunny Stream Live needs preview access (owner step, AlUmmahNow#874). The production live host is attached by the release from AlUmmahNow#1367, which awaits a tag. Self-hosted ingest is HTTPS HLS push (ffmpeg, or OBS Custom Output); plain RTMP/SRT needs Cloudflare Spectrum (vendor step, AlUmmahNow#875). Works end to end on QA with real video (release E2E AlUmmahNow#1372). Creator tiers decide who may go live and for how long (AlUmmahNow#1373). Viewers see how many people are watching (AlUmmahNow#1387)."
     },
     {
+      "id": "live-in-apps",
+      "name": {
+        "en": "Live chat, premieres, reminders and event tags",
+        "ar": "محادثة البث المباشر والعروض الأولى والتذكيرات ووسوم المناسبات"
+      },
+      "status": "building",
+      "apps": [
+        "api",
+        "videos-admin"
+      ],
+      "wiki": "epics/E17-live-in-apps.md",
+      "prs": [
+        "AlUmmahNow#1787",
+        "AlUmmahNow#1842",
+        "AlUmmahNow#1845",
+        "AlUmmahNow#1858",
+        "AlUmmahNow#1863",
+        "AlUmmahNow#1869",
+        "AlUmmahNow#1875"
+      ],
+      "note": "Server only, behind the liveChat, livePremieres, liveReminders and liveEvents switches, all off. #1842 carries #1841 (chat). Still to build: the calendar file (waits for AlUmmahNow#1819), the web viewer and Studio, and the native apps."
+    },
+    {
       "id": "posts-playlists-sections",
       "name": {
         "en": "Posts, playlists and channel sections",
