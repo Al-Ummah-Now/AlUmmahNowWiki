@@ -7,7 +7,7 @@
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **planned**: spec only, no code yet |
-| **Last updated** | 2026-11-24 (revision 2) |
+| **Last updated** | 2026-11-24 (revision 3) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
 > Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
@@ -39,6 +39,10 @@
   - Caption search reaches 70% at about 194k MAU, but only once caption search is on for most videos. D1-7 fixes that.
 
   Stories D1-7 to D1-10 cover 1M to 10M MAU.
+- **Revision 3** (2026-11-24) applies the second review:
+  - D1-3b finds each day's entities in a new `analytics_active` table instead of sweeping `analytics_daily` by day;
+  - D1-4 redacts the D1 rows at erase, tombstones keys, adds wrap-key ids and HKDF-separated keys, and encrypts all personal metadata;
+  - D1-1 stores the account total in its own table, leaving the `ops_*` CHECKs alone.
 - **Revision 2** (2026-11-24) applies the cross-provider review of [wiki #243](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/243):
   - `discovery_viewers` is kept 91 days, not 8;
   - notifications and analytics row sizes now use the schema estimator (1.47 KB and 155 B);
@@ -289,12 +293,12 @@ These are ordered by urgency: the MAU at which the problem bites without the sto
 | Story | Repo | Fixes | Bites at (MAU) | After the story (70% / 100%) |
 |---|---|---|---|---|
 | D1-1 | AlUmmahNow (cost-monitor, admin) | visibility | now | alerts 60 days ahead |
-| D1-2 | AlUmmahNow | notifications inbox size | ~28k | with D1-3a and D1-3b: notifications ~102k / ~146k |
+| D1-2 | AlUmmahNow | notifications inbox size | ~28k | with D1-3a and D1-3b: notifications ~101k / ~145k |
 | D1-3a | AlUmmahNow | `discovery_viewers` | ~28k | 1.3 GB → 0.1 GB at 100k MAU |
 | D1-3b | AlUmmahNow | `analytics_daily` | ~28k | 13.2 GB → 0.7 GB at 100k MAU |
 | D1-4 | AlUmmahNowAuth | Auth count scans, audit_events and token_usage retention | scans: now; size: ~90k | Auth ~265k / ~378k |
 | D1-5 | AlUmmahNowAuth | the sign-in database holds only sign-in data | ~265k | Auth ~1.6M / ~2.2M; audit database ~319k / ~455k |
-| D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~102k | 4 shards: each ~480k / ~686k; main notifications ~704k / ~1.0M |
+| D1-6 | AlUmmahNow | inbox, likes and subscriptions per user | ~101k | 4 shards: each ~480k / ~686k; main notifications ~662k / ~946k |
 | D1-7 | AlUmmahNow | caption search | ~194k (once caption search is on) | own database, sharded by video when one fills |
 | D1-8 | AlUmmahNow | live chat size and peak rate | 60 messages per second at ~1M | search ~734k / ~1.0M by size; chat off the search database |
 | D1-9 | AlUmmahNow | search query time | ~1.6M (70% busy) | reads spread over replicas |
@@ -309,8 +313,9 @@ The goal is that admins hear about a database well before any limit. The work bu
   - the **busy share:** query time ÷ 3,600 s.
 - **Account-wide size.** Discovery (`discover.ts`) keeps only `isAlUmmahName` resources of the collected environments, which is right for per-resource metrics. The account total also counts other projects' databases, so it comes from a separate step:
   - one `GET /accounts/:id/d1/database` listing per hourly run (paged; `file_size` per database);
-  - summed into one `account` row (`kind = 'd1_account'`);
-  - the listing never adds other projects' databases as resources and never stores their names.
+  - summed into a new table `d1_account_storage (hour TEXT PRIMARY KEY, bytes REAL, databases INTEGER)`, with no `env`, `kind` or resource columns, so the `ops_*` tables and their CHECKs stay as they are;
+  - the listing never adds other projects' databases as resources and never stores their names;
+  - kept 396 days, like `ops_hourly`.
 - **Limits as settings.** Add these to `cost_settings`, so a Cloudflare change is a setting, not a deploy:
   - `d1.max_db_bytes` = 10 GB;
   - `d1.account_bytes` = 1 TB;
@@ -323,9 +328,10 @@ The goal is that admins hear about a database well before any limit. The work bu
 - **Migration.** The CHECK constraints must allow the new values:
   - `ops_thresholds.metric` (cost-monitor migration 0001) gains the four metrics above;
   - `cost_alert_subscriptions.kind` (migration 0003) gains `capacity`;
-  - `ops_resources.kind`, `ops_hourly.kind` and `ops_daily.kind` (migrations 0001 and 0002) gain `d1_account`.
+  - `ops_resources`, `ops_hourly` and `ops_daily` are **not** changed. Their `kind` and `env` CHECKs (`env` allows only production, stage and qa) never see the account total, which lives in `d1_account_storage`.
 
-  SQLite cannot alter a CHECK, so the migration rebuilds each table: it creates the new table, copies the rows, drops the old one and renames, in one migration file. This is the same pattern migration 0002 used for `kind`. The previous collector and admin-api keep working during the release, because the new values are only written by the new code.
+  SQLite cannot alter a CHECK, so the migration rebuilds the two tables (`ops_thresholds` and `cost_alert_subscriptions`): it creates the new table, copies the rows, drops the old one and renames, in one migration file. This is the same pattern migration 0002 used for `ops_hourly`. The previous collector and admin-api keep working during the release, because the new values are only written by the new code.
+  - **`account_storage_pct`** is evaluated against `d1_account_storage`. Its Errors page key is `ops:<rule>:account`.
 - **Default rules**, seeded by the same migration and editable on the existing thresholds UI:
   - storage ≥ 70% (warning) and ≥ 90% (critical);
   - days to 70% ≤ 60;
@@ -403,12 +409,16 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - `post` rows stay in `analytics_daily` untouched: `likes`, `poll_votes`, `poll_option` with the option id as `dim`, and `views` with `counter:<shard>` dims. They are permanent counters, read as a lifetime `SUM(value)` (`apps/api-videos/src/lib/post-counters.ts`, `post-views.ts`), and their volume is small: per post per day.
   - `site` rows also stay untouched: visits, landing, source and referrer host, about 200 rows a day for the whole site, read for the last N days.
 - **Totals vs dimensions.** For video and channel rows, the **totals** are `views`, `watch_time` and `retention_start`, each with `dim = ''`. Every other metric is a **dimension row**: `traffic`, `playback`, `source`, `embed_origin`, `external_host`, `retention` buckets, `surface`, `device`, `country` and `campaign`.
+- **Active-entity list.** `analytics_daily`'s primary key starts with `entity_type, entity_id`, so a sweep by `day` would scan the table, and no index on `day` is added (it would cost about 95 B on every row).
+  - **New table.** `analytics_active (day, entity_type, entity_id)` is WITHOUT ROWID, about 75 B a row.
+  - **Who writes it.** `CounterBatch.flush` adds an `INSERT OR IGNORE` for every distinct entity and day in the batch, from **every** metric: views, watch time, retention buckets and late reports that straddle midnight. It is in the same transaction as the counters. A repeat is ignored, so it costs one written row per entity per day.
+  - **Retention.** It is kept 91 days and purged by its own primary key, `day` first.
 - **Nightly archive job**, per closed day. The day is three days back, because watch-time reports arrive late.
-  1. Read the day's rows entity by entity. The primary key (`entity_type, entity_id, day, …`) gives one seek per entity; the active entities of the day come from the day's `views` rows.
+  1. Walk `analytics_active` for the day (a primary-key range), and read each video or channel entity's rows with one primary-key seek (`entity_type, entity_id, day`). No step scans `analytics_daily`.
   2. Merge them into the R2 document `analytics/daily/<entity_type>/<entity_id>/<YYYY-MM>.json` (the existing `analytics_rollups` bucket). It is keyed `day → metric → dim → value`, holds totals and dimensions, and keeps `entity_type` and every `dim` exactly.
      - **Idempotent.** The document records which days it holds, so a re-run never adds a day twice.
   3. Delete that day's **dimension rows** from D1 in batches, and only after the R2 write succeeded.
-- **Totals in D1.** Totals stay in `analytics_daily` for 90 days. Then a monthly fold adds them into `analytics_monthly (entity_type, entity_id, month, metric, dim, value)`, keyed by every column the daily key has except the day, and deletes the daily rows. The fold is one transaction per batch: an upsert of the sum, then a delete of the same rows.
+- **Totals in D1.** Totals stay in `analytics_daily` for 90 days. Then a monthly fold adds them into `analytics_monthly (entity_type, entity_id, month, metric, dim, value)`, keyed by every column the daily key has except the day, and deletes the daily rows. The fold finds day 91's entities in `analytics_active`, then seeks each entity's rows by primary key; it never sweeps by `day`. It is one transaction per batch: an upsert of the sum, then a delete of the same rows.
   - **Lifetime totals** are `SUM(analytics_daily) + SUM(analytics_monthly)`, exact.
 - **Readers** (Studio and admin analytics in `apps/api-videos/src/lib/analytics.ts`, up to 366 days):
   - the last 3 days come from D1 (totals and dimensions);
@@ -422,14 +432,16 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - enable deletes;
   - backfill the existing rows older than 3 days in batches.
 - **Result:**
-  - analytics at 100k MAU: 13.2 GB → about 0.7 GB;
-  - at 1M MAU: 132 GB → about 6.5 GB.
+  - analytics at 100k MAU: 13.2 GB → about 0.7 GB, including about 0.06 GB of `analytics_active`;
+  - at 1M MAU: 132 GB → about 7.1 GB.
   - Rows written per view stay about 12, plus about one delete per dimension row per day, plus one R2 GET and PUT per active entity-day.
 - **Tests:**
   - archive then delete (an R2 failure means no delete);
   - re-running a day changes nothing;
   - post likes, poll options and post views are unchanged after a full run;
   - site rows are untouched;
+  - an entity with only `watch_time` or `retention` rows on a day (no views, for example after midnight) is archived;
+  - the archive and the fold plans use primary-key ranges, never a scan of `analytics_daily`;
   - the reader returns the same series as today for a seeded 400-day fixture;
   - the monthly fold keeps lifetime totals exact.
 
@@ -446,13 +458,33 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - **Progress and safety.** A cursor in `auth_settings` makes the job resumable. It has its own 25-second time box. An R2 failure means no delete.
   - **Archive retention.** Archives are kept 395 days, the same as the existing event-archive retention, and an R2 lifecycle rule removes them.
 - **Erase without scanning R2 (crypto-shredding).**
-  - **Per-user key.** Each user with archived events has a data key in `audit_subject_keys (user_id, key_wrapped, created_at)`. The key is wrapped with a Secrets Store key. This table moves to the audit database in D1-5.
+  - **Per-user key.**
+    - Each user with archived events gets a 256-bit root key in `audit_subject_keys (user_id, key_wrapped, wrap_key_id, created_at, shredded_at)`.
+    - The key is wrapped (AES-KW) with the key named by `wrap_key_id`. That is a version of `KEY_ENCRYPTION_MASTER_KEY` kept in the Secrets Store.
+    - This table moves to the audit database in D1-5.
+  - **Rotation.** A new wrap key gets a new `wrap_key_id`. A batched job re-wraps rows by primary key. Both versions stay readable until the job finishes, then the old version is removed from the Secrets Store.
+  - **Separate derived keys.** HKDF-SHA256 derives two keys from the root key:
+    - the **subject key** (`info = "aun-audit-subject-v1"`) computes the HMAC subject;
+    - the **data key** (`info = "aun-audit-data-v1"`) encrypts with AES-GCM.
+
+    The same key is never used for both.
   - **Archive lines.**
-    - The user id is replaced by `HMAC(key, user_id)`.
-    - The IP address, user agent and any email in `metadata` are AES-GCM encrypted with the same key.
-    - Events with no user (failed sign-ins for unknown emails) use a monthly key in the same table, deleted after 395 days.
-  - **Erase.** Account erase deletes the user's key row: one indexed delete. Their archive lines become unreadable and unlinkable without touching R2.
-  - **Admin lookups.** While the account exists, an admin can look up a user's archived events by recomputing the HMAC.
+    - `user_id` is replaced by `HMAC(subject key, user_id)`.
+    - The personal part of the event is encrypted as **one** AES-GCM blob with the data key. That part is the IP address, the user agent and all of `metadata`, except an allow-list of non-personal fields (`event_type`, `severity`, `success`, `client_id`, `method`, `reason_code`).
+    - Unknown fields are encrypted by default, so a new metadata field can never leak in plaintext.
+    - Events with no user (failed sign-ins for unknown emails) use a monthly key in the same table, shredded after 395 days.
+  - **Erase**, inside the existing account purge, in this order:
+    1. **Redact the D1 rows.** The user's rows still in D1 (the 0–90-day window) are redacted in batches of 500 by the `(user_id, timestamp)` index:
+       - `user_id` is set to the HMAC subject;
+       - `ip_address` and `user_agent` become NULL;
+       - `metadata` keeps only the allow-listed fields.
+
+       Today account erase leaves these rows in plaintext indefinitely ([AlUmmahNowAuth#515](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/515)).
+    2. **Tombstone the key** (`key_wrapped = NULL, shredded_at = now`) instead of deleting the row.
+       - The archive job refuses to create a key for a user whose row is tombstoned.
+       - Rows that age into the archive after the erase stay redacted. They are written with the subject only and nothing to encrypt.
+       - A tombstone holds no personal data and is removed after 395 days, when the last archive that could name the user has expired.
+  - **Admin lookups.** While the account exists, an admin can look up a user's archived events by recomputing the HMAC with the subject key.
   - **Erase checks.** The bucket stays in the erase leftover check as "shredded", not allow-listed ([AlUmmahNow#1177](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1177) shows the trap).
 - **`token_usage`:** 90 → 30 days in the existing cleanup.
 - **Safety.** Every statement is checked for an index plan before merge. No unbounded count queries. The batch size is tuned so one statement stays under 50 ms on stage.
@@ -460,7 +492,10 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - the stats and trail plans use indexes, never a scan;
   - archive then delete (an archive failure means no delete);
   - the archive job resumes from its cursor;
-  - erase deletes the key, and an archived line no longer decrypts;
+  - erase tombstones the key, and an archived line no longer decrypts;
+  - erase redacts the user's D1 rows, and a later archive run writes them without personal data and without a new key;
+  - key rotation re-wraps every key, and old and new lines both decrypt mid-rotation;
+  - the subject and data keys differ (HKDF info strings), and an unknown metadata field is encrypted;
   - the purge plan uses the timestamp index.
 
 ### D1-5 Auth audit database split (AlUmmahNowAuth)
@@ -488,7 +523,7 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   Deletes by entity fan out to N.
 - **Rollout:** start with N = 4; dual-write, backfill by slot, then read switch per slot.
 - **Result:**
-  - each of 4 shards reaches 70% at about 480k MAU, and the main notifications database at about 704k MAU;
+  - each of 4 shards reaches 70% at about 480k MAU, and the main notifications database at about 662k MAU;
   - move to 8 shards before 1M MAU.
 
 ### D1-7 Caption search in its own database
@@ -555,7 +590,7 @@ These are server-only changes:
 ## Legal and safety
 
 - **Archives and erase.**
-  - **Audit archive (D1-4):** it holds personal data, and account erase removes it by crypto-shredding the user's key. No scan of R2 is needed.
+  - **Audit archive (D1-4):** it holds personal data. Account erase redacts the user's rows still in D1 and tombstones the user's key, so the archived lines can't be read. No scan of R2 is needed.
   - **Analytics archive (D1-3b):** it holds per-video counts only, no user data.
   - **Chat archive (D1-8):** account erase covers it by message id.
   - **Erase checks:** the R2 buckets are listed in the erase leftover check, never allow-listed without a PII check.
