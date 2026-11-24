@@ -1402,6 +1402,25 @@
       "note": "12 pages with 33 diagrams (architecture, numbered flows, sketches, the cost of both video pipelines) on alummahnow.dev."
     },
     {
+      "id": "dev-sign-in-api",
+      "name": {
+        "en": "Sign-in API section",
+        "ar": "قسم واجهة تسجيل الدخول"
+      },
+      "status": "rolling",
+      "apps": [
+        "dev"
+      ],
+      "wiki": "epics/AUTH-R4-auth-docs-dx.md",
+      "prs": [
+        "AlUmmahNowUI#147",
+        "AlUmmahNowUI#150",
+        "AlUmmahNowUI#151",
+        "AlUmmahNowUI#152"
+      ],
+      "note": "Which flow for which app, websites, native and TV apps, servers, tokens, an API reference and browser-only tools. For our own apps and scholar sites (AR4-D1). No production release contains it yet."
+    },
+    {
       "id": "fanous-themes",
       "name": {
         "en": "Fanous design system and themes",
