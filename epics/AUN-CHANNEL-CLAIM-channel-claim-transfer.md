@@ -172,14 +172,14 @@ Behind the switch `channelClaim` (off). Claims are requests on the approval work
 ### 7.1 Storage (`SEARCH_DB`, migrations numbered at build time)
 
 ```sql
--- One unfinished move per channel (built: migration 0090, with idx_live_sessions_channel; offers are migration 0091)
+-- One unfinished move per channel (built: migration 0090, with idx_live_sessions_channel; offers are search migration 0121)
 CREATE TABLE IF NOT EXISTS channel_transfer_locks (
   channel_id TEXT PRIMARY KEY,
   job_id TEXT NOT NULL,
   created_at TEXT NOT NULL
 ) WITHOUT ROWID;
 
--- Phase B, as built (migration 0091). Moves of channels that accept payments will add the
+-- Phase B, as built (search migration 0121). Moves of channels that accept payments will add the
 -- workflow request link when AUN-WORKFLOWS exists; until then they are refused.
 CREATE TABLE IF NOT EXISTS channel_move_offers (
   id TEXT PRIMARY KEY,
