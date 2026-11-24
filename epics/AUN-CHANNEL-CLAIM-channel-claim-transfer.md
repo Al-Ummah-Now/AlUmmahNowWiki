@@ -102,7 +102,7 @@ New owner: the channel arrives as main only if they have no channel. Old owner: 
 
 - The existing `channel.transfer` admin job stays the engine. It gains the steps in §3.1, each idempotent, run in order: `channel → links → videos → live → schedules → playlists → posts → subscriptions → team → notify → verify`.
 - **Lock:** one unfinished move per channel, taken atomically: a row in `channel_transfer_locks` (primary key `channel_id`) is inserted before the job is created and deleted when the job succeeds. A second request gets `409 transfer_in_progress`; Go live and handle edits on that channel do too.
-- **Recovery after a failed move:** a move job can't be cancelled (`ADMIN_JOB_UNCANCELLABLE_KINDS`). When it fails for good it keeps its lock, so the channel can't go to a third account (`409 transfer_unfinished`) while some records still sit on the first owner; the admin finishes it with **Retry** on the Errors page, which runs every idempotent step again and releases the lock on success.
+- **Recovery after a failed move:** a move job can't be cancelled (`ADMIN_JOB_UNCANCELLABLE_KINDS`). When it fails for good it keeps its lock, so the channel can't go to a third account (`409 transfer_unfinished`) while some records still sit on the first owner; the admin finishes it with **Retry** on the Errors page, which runs every idempotent step again and releases the lock on success. A failed move whose offer an erasure stopped holds no lock ([5.1](#51-state-machine-offers-the-move-job-the-lock-and-an-account-erasure)).
 - **Live check:** refused with `409 channel_is_live` while a broadcast is on air. The request check is not enough on its own, because a broadcast can start between the request and the job: the job checks again just before it flips the owner and, if the channel is live, waits for a later retry; and Go live is refused (`409 transfer_in_progress`) while a move of the channel is open. A test covers the race.
 - **Creator support:** support never moves with a channel unless an admin decides ([CC-D10](#13-owner-decisions)). A move of a channel that accepts payments (an active or pending payee, an active pledge, or a balance above zero) is refused with `409 channel_has_support` until the admin approval step exists on the approval workflow system; then it waits for that approval ([AlUmmahNow#1812](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1812)). The check fails closed.
 - **Receiver's channel limit:** a move to an account whose creator tier has no room for another channel is refused, admin moves included (`409 new_owner_channel_limit`, [CC-D12](#13-owner-decisions)).
@@ -156,7 +156,81 @@ Behind the switch `channelMove` (off). Owner only. Every tier may use it, Free i
 3. **Move.** On acceptance the shared job (§3) runs at once, with actor `user:{ownerId}` ([CC-D3](#13-owner-decisions)); both sides are told. The old owner keeps no access unless the new owner adds them back through channel roles ([CC-D4](#13-owner-decisions)). An admin can stop an open offer.
 4. **Channels that accept payments.** If the channel has creator support set up (an active or pending payee, an active pledge, or a balance above zero), acceptance does not run the move: it opens an approval request for admins on the approval workflow system (AUN-WORKFLOWS), and the move runs only when an admin approves; support never moves unless the admin decides how. Until that system can take the request, such offers are refused with a clear message (`409 move_channel_has_support`).
 
-Limits: one open offer per channel; a channel can be moved by its owner at most once every 30 days; refused while the channel is live, under a moderation hold, has an open report under review, or holds an official handle. "Under review" means a moderator has marked a report about the channel as reviewing; a report nobody has picked up yet does not block a move. api-videos asks admin-api (`GET /internal/channel-reports/:id`) and refuses the move when it can't get an answer, a missing `ADMIN_API_URL` included (`503 move_check_unavailable`). The sign-in check reads the token's `auth_time` only, which a refresh and a silent sign-in keep, so the page's **Sign in again** sends `prompt=login` (CC-7). Accepting claims the offer first, so a cancel, decline or stop at the same moment either wins before the claim or is refused; the job is created only while the channel is still the offering owner's, checked again under the move lock. Offers are part of account exports, and erasing an account closes its open offers and removes its id from the rest. Erasing the sender or the receiver stops a move that hasn't changed hands yet: the channel stays the sender's, and is erased with the sender. A move that has changed hands is done: the channel is the receiver's, and is erased with the receiver but not with the sender.
+Limits: one open offer per channel; a channel can be moved by its owner at most once every 30 days; refused while the channel is live, under a moderation hold, has an open report under review, or holds an official handle. "Under review" means a moderator has marked a report about the channel as reviewing; a report nobody has picked up yet does not block a move. api-videos asks admin-api (`GET /internal/channel-reports/:id`) and refuses the move when it can't get an answer, a missing `ADMIN_API_URL` included (`503 move_check_unavailable`). The sign-in check reads the token's `auth_time` only, which a refresh and a silent sign-in keep, so the page's **Sign in again** sends `prompt=login` (CC-7). Accepting claims the offer first, so a cancel, decline or stop at the same moment either wins before the claim or is refused; the job is created only while the channel is still the offering owner's, checked again under the move lock. Offers are part of account exports, and erasing an account closes its open offers and removes its id from the rest. Erasing the sender or the receiver stops a move that hasn't changed hands yet: the channel stays the sender's, and is erased with the sender. A move that has changed hands is done: the channel is the receiver's, and is erased with the receiver but not with the sender. The state machine is in [5.1](#51-state-machine-offers-the-move-job-the-lock-and-an-account-erasure).
+
+### 5.1 State machine: offers, the move job, the lock and an account erasure
+
+Four records change at their own pace: the offer row, the move job, the move lock and the channel record. **The channel record decides**: the owner changes in one conditional write on it, and everything else follows.
+
+**Invariants**
+
+1. A move that hasn't changed hands when either person is erased never does. One that has is the receiver's channel.
+2. An offer row keeps both ids while it can still begin or finish a move. Only a closed row, or one whose move is settled, loses an erased account's id.
+3. A lock is held only by work that can still write. A move that can't change hands holds nothing.
+4. No erased account owns a channel when its erasure is complete.
+
+**Offer statuses**
+
+| From | To | By | Condition |
+|---|---|---|---|
+| (none) | `offered` | owner's offer | one `offered` or `accepting` row per channel (unique index) |
+| `offered` | `accepting` | the receiver's accept (claim) | unexpired, `to_user_id` is the caller |
+| `offered` | `declined`, `cancelled`, `stopped`, `expired` | receiver, owner, admin, time | still `offered` |
+| `offered` | `cancelled` | erasure of either person | in one transaction with its read of the running offers |
+| `accepting` | `moved` | the accept, after its job is made | still `accepting` |
+| `accepting` | `offered` or `refused` | the accept, when the move is refused | still `accepting`; no job was queued |
+| `accepting` | `moved` or `refused` | the next offer, when the accept's worker died over 10 minutes ago | a matching move job exists, or not |
+| `accepting`, `moved` | `cancelled` | erasure of either person | the channel was still the sender's when it was marked |
+| `accepting` | `moved` | erasure of either person | the channel was already the receiver's |
+
+`declined`, `cancelled`, `expired`, `stopped` and `refused` are final. An offer **stands** while it is `accepting` or `moved`.
+
+**Move job** (`channel.transfer`, with the offer's id in its params; an admin can't cancel it)
+
+| Status | What it does for an owner's move |
+|---|---|
+| `queued`, `retrying`, `running` | Reads the offer, then the channel. Stops when the offer doesn't stand, the channel carries its stop mark, or the channel isn't the offering owner's. Checked before anything that can fail, and again in the write that changes the owner. A stop ends as `succeeded` with `skipped: stopped` and releases the lock |
+| `failed` before the owner changed | Keeps the lock for Retry, unless the offer stopped standing: then it holds nothing. Retry stops |
+| `failed` after the owner changed | Keeps the lock: its records are half moved. Retry finishes them |
+| `succeeded` | Lock released. A skipped one doesn't hide an earlier move from the daily re-verify |
+
+**Lock holders** (`channel_transfer_locks.job_id`)
+
+| Holder | Released by | Dead when |
+|---|---|---|
+| empty (starting) | the request that took it, matched by when it was taken; or the job it made | its worker died: #1935 part 2 |
+| a move job | that job, when done or stopped; the erasure that stopped its move (this job's lock only) | the job succeeded or is gone; its offer no longer stands |
+| `reverify:…` | that repair only | older than 20 minutes |
+
+Nobody releases another holder's lock. A dead one blocks nothing and the next move takes it over.
+
+**The erasure's steps**
+
+1. **First look**, before anything else. In rounds, until no row names the account: close `offered` and read the running offers (one transaction); for each, write the stop mark on the channel record if it is still the sender's, set the row, release the move's own lock; then take the id out of closed and settled rows (one transaction). The run's beginning counts from here, so a channel a move already brought is part of it.
+2. Channels, videos and the rest, each judged by the channel's owner at that moment.
+3. The profile goes. An accept reads the receiver's profile after its claim, so one that starts now is refused, and one that got past it has a row the last look finds.
+4. **Last look**, the same rounds, except that a received `moved` row stays: it means a channel came meanwhile, and the run starts over from 1. Subscriptions are cleared once more.
+
+**Every point of a move, crossed with an erasure**
+
+| The move is at | Receiver erased | Sender erased |
+|---|---|---|
+| `offered` | closes | closes |
+| claimed, not confirmed | row cancelled; the accept's check under the lock (status and both ids) answers 404 | same; the channel is erased with the sender |
+| confirmed, job not made | mark and row first; the job stops, the accept answers 404 | same, or the job finds no channel |
+| job made, accept not finished | the job stops; the accept finds its row closed and answers 404 without a notice | same |
+| job made but not queued | it is `failed` with a closed offer: its lock is dead | same |
+| accepted, job waiting or retrying | stops at its next delivery, even when Auth is down | same |
+| running, owner not changed | one conditional write wins: the mark (it stops) or the new owner (it moved) | same |
+| `failed`, owner not changed | stopped; lock released; a later move works; Retry stops | channel erased; lock released |
+| owner changed, records moving | the channel is erased with the receiver, and no subscription the job moved stays; the job ends at its next delivery | the channel stays with the receiver; records left on the sender follow it |
+| `failed`, owner changed | erased with the receiver | stays; the lock stays for Retry (records are half moved) |
+| done | erased with the receiver | left alone |
+| offered, claimed or accepted between two of the erasure's own writes | the next round, or the last look, finds it | same |
+| moved between the first and last look | the run starts over and erases it | stays with the receiver |
+| after the last look | no profile: the accept is refused | no channel: the accept is refused |
+
+Not covered here: an **admin's** move to an account that is being erased is not an offer and isn't stopped. A channel that arrives that way after the run began is left alone, as before this epic, and can be left without an owner.
 
 ## 6. Claim an imported channel (Phase C)
 
@@ -187,7 +261,7 @@ CREATE TABLE IF NOT EXISTS channel_move_offers (
   from_user_id TEXT NOT NULL,
   to_user_id TEXT NOT NULL,
   options_json TEXT NOT NULL DEFAULT '{}',
-  -- offered | moved | declined | cancelled | expired | stopped | refused
+  -- offered | accepting (claimed by its receiver while the move starts) | moved | declined | cancelled | expired | stopped | refused
   status TEXT NOT NULL,
   job_id TEXT,
   created_at TEXT NOT NULL,
@@ -195,8 +269,8 @@ CREATE TABLE IF NOT EXISTS channel_move_offers (
   responded_at TEXT,
   updated_at TEXT NOT NULL
 );
--- One open offer per channel
-CREATE UNIQUE INDEX IF NOT EXISTS idx_channel_move_offers_open ON channel_move_offers (channel_id) WHERE status = 'offered';
+-- One open offer per channel (one being accepted counts as open)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_channel_move_offers_open ON channel_move_offers (channel_id) WHERE status IN ('offered', 'accepting');
 -- Offers to me, offers I made
 CREATE INDEX IF NOT EXISTS idx_channel_move_offers_to ON channel_move_offers (to_user_id, status);
 CREATE INDEX IF NOT EXISTS idx_channel_move_offers_from ON channel_move_offers (from_user_id, status);
@@ -208,7 +282,7 @@ CREATE INDEX IF NOT EXISTS idx_channel_move_offers_channel ON channel_move_offer
 -- if the workflow system doesn't carry a subject reference.
 ```
 
-Channel R2 record gains optional `transferredAt` and `claimable`. No backfill.
+Channel R2 record gains optional `transferredAt`, `claimable` and `moveStopped` (the offer an account erasure stopped, [5.1](#51-state-machine-offers-the-move-job-the-lock-and-an-account-erasure); in no view or export). No backfill.
 
 ### 7.2 API
 
