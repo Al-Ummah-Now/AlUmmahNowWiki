@@ -29,8 +29,9 @@ Desktop ships through the Microsoft Store, Flatpak and Samsung, never the Mac Ap
 | Report and block in every app that shows other people's content (videos, channels, chat, comments) | Missing in the viewers | Missing in the viewer | [Apple#91](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/91), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61), [#1912](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1912) |
 | Delete the account from inside every app that can create one | Missing in Studio | Missing in Studio | [Apple#92](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/92), [Android#62](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/62) |
 | A web page to delete the account (Play Data safety URL) | — | Missing | [Auth#532](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/532) |
-| A privacy policy page and terms page, linked in the listing and in the app | Missing | Missing | [#1929](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1929), [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93) |
-| Help and contact link in the app | Missing | Missing | [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61) |
+| A privacy policy page and terms page, linked in the listing and in the app | Missing | Missing | [#1929](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1929), [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61) (viewer), [Android#65](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/65) (Studio) |
+| Help and contact link in the app | Missing | Missing | [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93), [Android#61](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/61), [Android#65](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/65) |
+| Terms accepted before the first upload or channel (Studio) | Missing | Missing | [Android#65](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/65), [Apple#93](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/93), [#1929](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1929) |
 | Privacy manifests with required-reason APIs | In review | — | [Apple#90](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/90) |
 | Studio held comments can be acted on in the app | Read-only | Read-only | [Apple#94](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/94), [Android#63](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/63) |
 | Export compliance answer true for apps that link aun-core | To decide | — | [Apple#95](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/95) |
@@ -53,7 +54,8 @@ Applies to any app that **shows** content from users, not only apps where people
 - [ ] Block a user or channel, everywhere people can see each other's content.
 - [ ] Filtering: comment holds, word lists and AI moderation run on the server for content shown in the apps.
 - [ ] Contact: Help and contact in the app's menu.
-- [ ] Before the first post from an app: Terms accepted (Play), date of birth asked (E20 §5.2), and the app's age rating answers changed in the same PR (Apple "Messaging and chat", Play "Users interact").
+- [ ] Terms accepted before a person first creates content from an app (Play): Studio's first upload or channel today, and the first comment, chat message or post when an app adds writing.
+- [ ] Before the first post from an app: date of birth asked (E20 §5.2), and the app's age rating answers changed in the same PR (Apple "Messaging and chat", Play "Users interact").
 - [ ] Content above the app's 13+ rating (age-restricted videos) plays only for a signed-in 18+ account (Apple 1.2.1(a), E20 §5.4). Made-for-kids videos have comments and chat off.
 
 ### Accounts
@@ -86,7 +88,7 @@ Applies to any app that **shows** content from users, not only apps where people
 ### Platform
 
 - [ ] Background modes only for what the app does: audio for playback in the viewer, remote notifications in Admin.
-- [ ] Play foreground service declaration per type, with a short recording: viewer `mediaPlayback`, Studio `dataSync`.
+- [ ] Play foreground service declaration per type, with a short recording: viewer `mediaPlayback`, Studio `dataSync` (moving to user-initiated data transfer jobs on Android 14+: [Android#66](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/issues/66)).
 - [ ] Photo picker only, no broad media permission. Notifications are asked for in context and are optional.
 - [ ] Apple: built with the SDK Apple currently requires (iOS 26 SDK since 2026-04-28; iOS 27 SDK from April 2027).
 - [ ] Play: targetSdk at or above the required level (36 for phones since 2026-08-31). Native libraries are aligned for 16 KB pages.
