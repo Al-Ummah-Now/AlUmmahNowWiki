@@ -34,9 +34,12 @@ bun test
 
 This is a library, so it has no environments. [`publish-github.yml`](https://github.com/Al-Ummah-Now/openauth/blob/master/.github/workflows/publish-github.yml) publishes after the test and format workflows:
 
-- A PR that changes the package gets a pre-release `X.Y.Z-pr.{PR}.{run}`.
-- A push to `master` gets the next patch version, a `vX.Y.Z` tag and a GitHub release.
-- A manual run can bump patch, minor or major.
+- A PR that changes a published file gets a pre-release `X.Y.Z-pr.{PR}.{run}`.
+- A push to `master` publishes the next version with a `vX.Y.Z` tag and a GitHub release, once `test` and `format` have both passed on that commit and only if a published file changed. Breaking commits (`feat!:`, `BREAKING CHANGE:`) make a major, `feat:` a minor, anything else a patch ([#59](https://github.com/Al-Ummah-Now/openauth/pull/59)).
+- The release carries the published file, its hashes and a build-provenance attestation, so it can be installed and verified without a registry token ([#62](https://github.com/Al-Ummah-Now/openauth/pull/62)).
+- A failed publish is finished by re-running it. A manual run can force patch, minor or major.
+
+Upstream's Changesets flow was removed ([#61](https://github.com/Al-Ummah-Now/openauth/pull/61)).
 
 **The released version lives in git tags, not in `master`.** The workflow never pushes to `master` ([#27](https://github.com/Al-Ummah-Now/openauth/pull/27)), so `package.json` on `master` doesn't show the current version. Check the [tags](https://github.com/Al-Ummah-Now/openauth/tags) instead.
 

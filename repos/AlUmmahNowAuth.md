@@ -50,7 +50,7 @@ Local database setup and seeding are in [QUICKSTART.md](https://github.com/Al-Um
 | [`rollback.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/rollback.yml) | Manual | Rolls back workers |
 | [`local-stack-bundle.yml`](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/.github/workflows/local-stack-bundle.yml) | After each successful release, or manual | Publishes the released auth, profile and admin workers and migrations as a `local-stack-<sha>` prerelease, which AlUmmahNow's local E2E stack downloads |
 
-Unlike the monorepo, **every merge to `main` releases to production** after passing stage. Moving to tags is proposed in [#217](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/217) but hasn't happened. See [Release process](../guides/release-process.md).
+Unlike the monorepo, **every merge to `main` releases to production** after passing stage. Each production release gets a `vYYYY.MM.DD[.N]` GitHub release as its record. See [Release process](../guides/release-process.md).
 
 ## Key docs
 

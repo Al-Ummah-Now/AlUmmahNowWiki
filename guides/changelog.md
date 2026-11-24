@@ -4,6 +4,11 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-23: Auth releases leave a record, the openauth package is safe to publish and verify (AUTH-R6)
+
+- **AlUmmahNowAuth:** every production release creates a `vYYYY.MM.DD[.N]` GitHub release with its changes, migrations, worker versions and rollback link ([#491](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/491)). A sign-in writes its browser session in two database round trips instead of up to five ([#493](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/493)). The admin's Security page reads staff in one batch; before, it could hang for minutes ([#490](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/490)), and theme color pickers have their own names for screen readers again ([#496](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/496)). A written [versioning and deprecation policy](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/blob/main/docs/API_VERSIONING.md) ([#495](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/495)). Contributor docs, a code of conduct and private security reporting in place of a public form ([#494](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/494)). The hourly QA sweep no longer scans every user ([#497](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/497)).
+- **openauth:** a release needs both checks green on the exact commit, happens only when the package changed, and its size follows the commits: breaking → major, `feat` → minor ([#59](https://github.com/Al-Ummah-Now/openauth/pull/59)). Releases carry the published file, its hashes and build provenance ([#62](https://github.com/Al-Ummah-Now/openauth/pull/62)). Upstream's release flow is gone ([#61](https://github.com/Al-Ummah-Now/openauth/pull/61)).
+
 ## 2026-11-22: supporting creators: building starts behind a switch that stays off (AUN-MEMBERS)
 
 - **AlUmmahNow:** server foundation for [AUN-MEMBERS](../epics/AUN-MEMBERS-creator-support.md). Everything sits behind the `creatorSupport` switch, which stays off in every environment until the organization exists and the lawyer, PayGood, Wise and PayPal sign off. [#1757](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1757) adds:
