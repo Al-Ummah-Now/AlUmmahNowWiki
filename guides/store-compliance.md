@@ -60,7 +60,7 @@ Applies to any app that **shows** content from users, not only apps where people
 
 ### Accounts
 
-- [ ] Every app that can create an account (the Auth page's "Create account" counts) has **Delete account** inside the app (Apple 5.1.1(v), Play). It deletes the account and its data, not just deactivates it.
+- [ ] Every app that can create an account (the Auth page's "Create account" counts) has **Delete account** inside the app (Apple 5.1.1(v), Play). It deletes the account and its data, not just deactivates it. Every deletion flow (web `/delete-account` in [Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533), Apple Studio, Android Studio) follows the shared contract in [Self-service account deletion](data-lifecycle.md#self-service-account-deletion-shared-client-rules).
 - [ ] A public web page where a person can delete the account without the app; its URL is in Play's Data safety form.
 - [ ] Sign in with Apple is needed only if we add a third-party or social login (Apple 4.8). Email, sign-in link and passkeys are first-party.
 
