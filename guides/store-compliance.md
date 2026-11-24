@@ -73,6 +73,8 @@ Applies to any app that **shows** content from users, not only apps where people
 
 ### Money
 
+**Owner decision, 2026-11-24: creator support is web only.** Creator support (AUN-MEMBERS, `creatorSupport`) stays hidden in every native app: iPhone, iPad, Mac, Apple TV, Android and Android TV. It stays hidden until Apple and Google confirm in writing that our gifts count as person-to-person gifts: Apple 3.2.1(vii), "100% of the funds go to the receiver", and Play's tips rule. Nothing about it shows in the apps: no button, link, price or "support on the web" text. The server reports the feature off to native clients. Changing this needs both written answers and a new owner decision.
+
 - [ ] No purchase, price, upgrade text or link in any native app while creator support and paid tiers are web only. Refusals for a tier or plan hide the feature ([Hidden when off](product-rules.md#hidden-when-off)).
 - [ ] Before any money flow appears in a native app:
   - read the current Apple 3.1.1, 3.1.3, 3.2.1(vi)/(vii) and Play Payments pages;
