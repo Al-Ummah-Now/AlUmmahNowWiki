@@ -63,7 +63,7 @@ Four new entries in `packages/shared-types/src/feature-registry.ts`, each **defa
 
 None of the four `requires` the existing `live` switch. `live` stops **new streams**; streams on air and recordings continue (`feature-routes.ts`), and a premiere needs no live provider. `POST /api/live-streams/:id/start` serves both kinds, so E17-3 moves it from the middleware to its handler (`enforced: 'handler'`): `livePremieres` for a premiere, `live` for a stream.
 
-The chat routes fail closed: while the switches cannot be read they answer `feature_off`, and so does the socket. Other routes keep today's rule.
+The chat routes fail closed: while the switches cannot be read they answer `feature_off`, and so does the socket. `/start` refuses too, and a scheduled premiere is not shown to others while `livePremieres` is off or unreadable. Other routes keep today's rule.
 
 `livePremieres` off while a premiere is scheduled: it does not start and is shown to its owner only. Turning the switch on again within 60 minutes of the start time starts it; after that the cron cancels it (§5.4).
 
@@ -197,7 +197,7 @@ Erasure and Takeout ship in E17-1, before anything can write a row.
 
 ## 5. Behavior and API
 
-Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/src/lib/api-error.ts`, [O40](decisions.md#o40-server-written-error-messages)); each new code below is added to its catalogue in English and Arabic. New routes are added to the OpenAPI file, `feature-routes.ts`, and the Kids route table (§5.6).
+Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/src/lib/api-error.ts`, [O40](decisions.md#o40-server-written-error-messages)); each new code below is added to its catalogue in English and Arabic. New routes are added to the OpenAPI file and `feature-routes.ts`.
 
 ### 5.1 Streams
 
@@ -332,7 +332,7 @@ A hold whose stream no longer exists, or is cancelled or ended, is **stale**: th
 3. **Release:** one conditional write on the video, only if `premiereHold.streamId` is this stream: delete `premiereHold`, `isPublic = true`, `isDraft = false`, and `publishedAt` through `markPublished`. The wrapped bucket then updates search and queues the media move (`onVideoWritten`). Until the move finishes, playback is signed from the private prefix, as for any video just made public.
 4. **Announce:** `announceLiveStarted`, then reminders (§5.5). `announceNewVideo` is not sent: one notification per premiere.
 
-A crash after step 2 is repaired on the next minute: a live premiere whose video still has this hold repeats steps 3 and 4. Both are idempotent.
+A crash after step 2 is repaired on the next minute: a live premiere whose video still has this hold, or whose `announcedAt` is not on the stream yet, repeats steps 3 and 4. Both are idempotent (notifications and social posts de-duplicate per stream), and `announcedAt` is written last.
 
 **During.** `state.playbackUrl` is null for a premiere. Clients play `premiereVideoId` with the normal `GET /api/videos/:id/playback`, so signing, provider failover and QoE are the same as for any video. Position is `(serverNow - startedAt)`; the player seeks there, offers no seeking ahead, and re-syncs when it drifts more than 3 seconds.
 
@@ -340,7 +340,7 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 **Cancel, reschedule, swap.**
 
-- *Cancel* (`PATCH` with `status: 'cancelled'`): the stream is cancelled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. If the start claimed first, cancel answers `409 premiere_started`.
+- *Cancel* (`PATCH` with `status: 'cancelled'`): the stream is cancelled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. Taking the hold off writes that state (not public, a draft if it was one), so a write that slipped past a guard cannot open it. Undoing an older bulk edit leaves a held video's visibility alone. If the start claimed first, cancel answers `409 premiere_started`.
 - *Delete* (`DELETE`): a scheduled premiere is cancelled first, in the same way; a running one answers `409 premiere_started` (end it first); an ended or cancelled one is deleted, and its video is not touched.
 - *Reschedule* (`PATCH` with `scheduledStartTime`): only the stream changes; same date rules; only while `scheduled`. The heads-up re-arms by itself (§5.5).
 - *Swap* (`PATCH /api/live-streams/:id/premiere` `{ videoId }`): only while `scheduled`. All scheduling checks run on the new video, then: hold the new video, conditional write on the stream (`premiereVideoId`, `durationSeconds`), clear the old hold. A failed stream write clears the new hold.
@@ -354,9 +354,9 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 ### 5.5 Reminders
 
-- `POST` and `DELETE /api/live-streams/:id/reminders` (signed in; public, scheduled streams; not `madeForKids`). `INSERT OR IGNORE` / `DELETE`; `reminder_count` changes only when a row did. Answer `{ "set": true, "count": 35 }`. The count is corrected from `live_reminders` when the heads-up is sent.
-- **Heads-up, 15 minutes before.** The api-videos minute cron finds public scheduled streams starting in the next 15 minutes and claims each with `UPDATE … SET heads_up_for = scheduled_start_at WHERE stream_id = ? AND scheduled_start_at = ? AND heads_up_for IS NOT scheduled_start_at`. The winner queues the fan-out; if queueing fails it puts the old value back. A new time makes the two differ again, so a reschedule needs no extra code. Streams set up less than 15 minutes ahead get it at once. For a premiere the start checks run first, so a dead premiere never reminds.
-- **Live now.** `markStreamLive` and the premiere start already call `announceLiveStarted`. When its last page is done, the processor queues the same event for reminders. They run one after the other, never together, because they share the dedupe key `live:<streamId>` and two fan-outs in flight could push the same row twice. A stream with no channel starts at the reminders step.
+- `POST` and `DELETE /api/live-streams/:id/reminders` (signed in; public, scheduled streams of a channel, not `madeForKids`; a premiere only while premieres are on). `INSERT OR IGNORE` / `DELETE`; `reminder_count` changes only when a row did. Answer `{ "set": true, "count": 35 }`. The count is corrected from `live_reminders` when the heads-up is sent.
+- **Heads-up, 15 minutes before.** The api-videos minute cron finds public scheduled streams starting in the next 15 minutes and claims each with `UPDATE … SET heads_up_for = scheduled_start_at WHERE stream_id = ? AND scheduled_start_at = ? AND heads_up_for IS NOT scheduled_start_at`. Everything is read before the claim, the winner queues the fan-out, and if queueing fails it puts the old value back. A new time makes the two differ again, so a reschedule needs no extra code. Streams set up less than 15 minutes ahead get it at once. For a premiere the start checks run first, so a dead premiere never reminds.
+- **Live now.** `markStreamLive` and the premiere start already call `announceLiveStarted`. When its last page is done, the processor queues the same event for reminders. They run one after the other, never together, because they share the dedupe key `live:<streamId>` and two fan-outs in flight could push the same row twice. Reminders exist only for streams of a channel.
 - The processor's `NotificationFanoutPayload` gains `audience: 'subscribers' | 'reminders'` and kind `live_soon` (key `liveSoon`, dedupe `live-soon:<streamId>:<scheduledAtMs>`). Reminder pages read `live_reminders` by primary key, 1,000 a page. Social announcements are sent for subscribers only.
 - **Settings and quiet hours.** Category `live`: a person who turned it off gets nothing. Push goes through `enqueuePush` and `dispatchPush` only, so E22 quiet hours and prayer windows ([#1816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1816)) apply the moment that PR merges, with no E17 code: inside a quiet window the notification is in the inbox and makes no sound.
 - Cancelled, private, hidden and deleted streams send nothing. `liveReminders` off sends nothing.
@@ -364,15 +364,10 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 ### 5.6 Kids
 
-Owner rule: no live chat in Ummah Kids. Enforcement is [Epic 20](E20-ummah-kids.md)'s token scope and session model ([wiki #209](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/209) §4.2). E17 adds no second mechanism and trusts no client header. Nothing of it is on main today, and the open [#1801](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1801) has the route table and an `X-Kids-Session` session, not yet the `kids:viewer` scope or any socket change.
+There is no in-app Kids Mode (owner, 2026-11-23; AlUmmahNow#1801 closed), so there is no Kids session for live chat to refuse. E17 adds no Kids mechanism of its own.
 
-- **HTTP:** every E17 route is `block_403` in E20's route table, like the `/api/live-streams` routes there (except the heartbeat and QoE, which E20 suppresses). #1801's test fails on any unclassified route, so whichever of the two merges second adds the rows.
-- **WebSocket:** refusing a `kids:viewer` token on connect, and its test for `live:`, belong to E20's `kids:viewer` work. E17-2 leaves a TODO at the place, tied to #1801.
-- **Native Kids Mode** in the normal apps runs on that same `kids:viewer` session in E20's spec, so both rules apply; the apps also do not open the socket or the live pages while Kids Mode is on.
-- Public chat can be read by anyone who is signed out, as any public page can. E20's threat model says the same about a signed-out window.
-- **Content made for kids:** `made_for_kids` is stored on the stream when it is written: the creator's `madeForKids`, or the premiere video's `importedFrom.madeForKids`. Chat, replay and reminders are off for it, for everyone, over HTTP and the socket, from that one stored flag. The Kids catalog is not consulted: a Kids session can reach no live page.
-
-There is no Kids code on main today. `liveChat` may be built and merged before E20; it must not be **switched on** while `ummahKids` is on unless E20's connect refusal is on main. E17-4 makes that a precondition on the Features page.
+- **No live chat in Ummah Kids.** In `GET /api/me/features`, `liveChat` and `liveReminders` are off for the Ummah Kids client (`isKidsClientApp`), as `eventCalendar` is. That hides them there; it is not an access check.
+- **Content made for kids:** `made_for_kids` is stored on the stream when it is written: the creator's `madeForKids`, or the premiere video's `importedFrom.madeForKids`. Chat, replay and reminders are off for it, for everyone, over HTTP and the socket, from that one stored flag.
 
 ## 6. Platforms
 
@@ -432,7 +427,7 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-6/7/8** | Apple / Android / Desktop | Native | E17-2, E17-3 |
 | **E17-9** | AlUmmahNow | Longer playlist for seek-back on the self-hosted edge | E17-1 |
 
-Open PRs that touch the same ground, none of which E17 needs first: #1801 (Kids), #1803 (tickets), #1813 and #1819 (E22 calendar), #1816 (quiet hours). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
+Open PRs that touch the same ground, none of which E17 needs first: #1803 (tickets), #1819 (E22 calendar), #1816 (quiet hours). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
 
 ## 10. Tests
 
@@ -440,7 +435,7 @@ Open PRs that touch the same ground, none of which E17 needs first: #1801 (Kids)
 - **Projection:** an older version never overwrites; a deleted stream is never restored; a record with no owner, channel or dates still indexes; the seed keeps private private; an idle-ended stream turns `ended` in both tables.
 - **Filter:** the must-pass strings; zero-width and tatweel tricks; bare domains.
 - **Chat:** parallel posts against one cooldown give one message; same-millisecond paging; deleted anchor; blocked author sees only their own; `subscribersOnly`; 120 posts from one address by many users pass and the next does not; switch off is 404 and private is 404.
-- **Socket:** client publish refused; private, cancelled, kids and missing streams refused; eviction; unreadable switch refuses; `kids:viewer` refused (with E20).
+- **Socket:** client publish refused; private, cancelled, kids and missing streams refused; eviction; unreadable switch refuses; a ban or a lost role removes open sockets; a close during a subscribe is not missed.
 - **Premiere:** each refusal; draft and private sources; every write listed under "While held" refused; a held video is 404 for others on video, playback, public play, embed, captions and chapters, absent from search and sitemap, and under `priv/`; two crons start it once; crash after the claim is repaired; cancel against start; reschedule; swap; stale hold; deleted or rejected video; old schedule entry; no session rows created.
 - **Reminders:** one heads-up per time; reschedule sends again; bell and reminder together give one notification and one push; category off; quiet hours (once #1816 is on main).
 - Every test seeds and deletes its own rows. AI is mocked.
