@@ -92,6 +92,7 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O40](decisions.md#o40-server-written-error-messages) | Server-written error messages: one envelope (`code`, localized `message`, `action`, `retryAfter`, `helpUrl`, `reference`) and one en/ar catalogue; unknown codes show the server's message; `feature_off` carries a message, shown once when an action still reaches an off feature (amends Hidden when off) | **decided** | 2026-11-22 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [Product rules](../guides/product-rules.md), every client |
 | [O41](decisions.md#o41-creator-support-is-a-gift-0-to-the-platform-never-hold-funds) | Creator support is a gift with nothing unlocked; the platform takes 0% (no fee, margin or float); paid perks only as a separate optional section, default off. "Never hold funds" replaced by [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
+| [O44](decisions.md#o44-one-approval-workflow-system-for-sensitive-admin-changes) | One generic, admin-configurable approval workflow system for sensitive admin changes (propose, approve or reject, effective; rules per action type; diff; append-only log; notices), used instead of one-off approval code; first for creator-support fee changes and payouts | **decided** | 2026-11-23 | [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -1003,6 +1004,18 @@ Consequences in [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) revision 2: a doub
 **Blocks / affects:** [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [Epic 24](E24-creator-support-premium.md)
 
 **Sources:** owner message relayed by the orchestrator thread, 2026-11-22
+
+### O44: One approval workflow system for sensitive admin changes
+
+**Status:** decided · **Date:** 2026-11-23
+
+Asked whether a change to a creator-support fee rate should need a second approver, the owner said on 2026-11-23: "build a workflow system." Sensitive admin changes go through one generic system instead of one-off approval code: a change request is proposed, reviewed, approved or rejected, and takes effect only once approved (at once or on a chosen date); it can be withdrawn and it expires. Admins configure the rules per action type on an admin page (approvers needed, who may approve, exclusions, step-up, expiry, notices), within floors the page can't lower: the proposer never approves their own request, and tech staff and the owner never approve money ([O42](#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail)). Every request shows a before/after diff, every step is in an append-only log, and approvers are told in the admin and by email.
+
+The details are in [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md). **Decided the same day (WF-D1 to WF-D10, §11 there):** anything related to money needs approval (fee rates, payout batches, ledger adjustments, the finance list, removing a tech-staff mark, support policy, lifting the emergency stop, turning `creatorSupport` on), with a second finance-list approver for fees and MEM-D24's counts as the rule; everything else is registered but takes effect at once until an admin adds approvers; the owner is excluded through the tech-staff mark; nothing is approved from an email; **no effective dates**: an approved change takes effect at approval (fees are charged live from the vendor's quote, so nothing is re-priced); money records kept 7 years, others 2; no Features-page switch; requests expire after 7 days (5 for payout batches, 1 to lift the emergency stop).
+
+**Blocks / affects:** [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) (fees, payout batches, ledger adjustments, finance list), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md), [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md)
+
+**Sources:** owner message relayed by the orchestrator thread, 2026-11-23
 
 ### LIC: Repo licence for Core and the app repos
 

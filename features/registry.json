@@ -2328,6 +2328,27 @@
       ]
     },
     {
+      "id": "approval-workflows",
+      "name": {
+        "en": "Approval workflows for admin changes",
+        "ar": "مسارات الموافقة على تغييرات الإدارة"
+      },
+      "status": "building",
+      "apps": [
+        "videos-admin",
+        "api"
+      ],
+      "wiki": "epics/AUN-WORKFLOWS-approval-workflows.md",
+      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; no effective dates). Sensitive admin changes are proposed, approved by the people an admin-set rule names, and take effect at approval, with a diff, an append-only log and email notices. Back end in review; admin pages next. First used for creator-support fee changes and payout batches.",
+      "prs": [
+        "AlUmmahNow#1821",
+        "AlUmmahNow#1825",
+        "AlUmmahNow#1827",
+        "AlUmmahNow#1829",
+        "AlUmmahNow#1832"
+      ]
+    },
+    {
       "id": "player-links",
       "name": {
         "en": "In-video links: credits, info cards and end screens",
