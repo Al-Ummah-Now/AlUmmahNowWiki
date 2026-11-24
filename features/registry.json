@@ -2432,7 +2432,7 @@
         "api"
       ],
       "wiki": "epics/AUN-WORKFLOWS-approval-workflows.md",
-      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; no effective dates). Sensitive admin changes are proposed, approved by the people an admin-set rule names, and take effect at approval, with a diff, an append-only log and email notices. Back end in review; admin pages next. First used for creator-support fee changes and payout batches.",
+      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; changes take effect at approval). Back end merged on main 2026-11-23 (engine, API, emails; the finance list and tech-staff unmark already use it); creator-support fee and payout approvals and the admin pages are next.",
       "prs": [
         "AlUmmahNow#1821",
         "AlUmmahNow#1825",

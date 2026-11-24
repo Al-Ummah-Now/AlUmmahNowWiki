@@ -311,10 +311,14 @@ A few rows per request in the search D1, one email per recipient per event throu
 
 | Story | PR | State |
 |---|---|---|
-| Spec | [AlUmmahNowWiki#222](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/222) | in review |
-| WF-1 shared-types | [AlUmmahNow#1821](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1821) | in review |
-| WF-2 engine, search migration | [AlUmmahNow#1825](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1825) | in review; migration renumbered to the next free number just before merge |
-| WF-3 routes, step-up, cron, audit | [AlUmmahNow#1827](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1827) | in review |
-| WF-5 finance list, tech-staff unmark | [AlUmmahNow#1829](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1829) | review passed; merges after the stack below it |
-| WF-4 emails | [AlUmmahNow#1832](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1832) | in review |
-| WF-6 to WF-11 | — | WF-6 waits on AlUmmahNow#1810 and WF-D2/WF-D3; WF-7/WF-8 are the admin pages |
+| Spec | [AlUmmahNowWiki#222](https://github.com/Al-Ummah-Now/AlUmmahNowWiki/pull/222) | merged 2026-11-23 (`4be6e6c`) |
+| WF-1 shared-types: registry, rules, floors | [AlUmmahNow#1821](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1821) | merged (`b6d40e7`) |
+| WF-2 engine, search migration 0085 | [AlUmmahNow#1825](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1825) | merged (`dbeb64c`) |
+| WF-3 `/api/workflows`, step-up, expiry cron, audit mirror | [AlUmmahNow#1827](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1827) | merged (`a111485`) |
+| WF-5 finance list and tech-staff unmark on the workflow | [AlUmmahNow#1829](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1829) | merged (`ea5ea0f`) |
+| WF-4 emails (one language, Review request link) | [AlUmmahNow#1832](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1832) | merged (`4c08136`) |
+| WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next; fees wait on AlUmmahNow#1810 |
+| WF-7, WF-8 admin Approvals and Approval rules pages | — | next (visual, screenshot audit) |
+| WF-9 to WF-11 | — | later |
+
+All reviewed cross-provider (Gemini 4 Hydrogen, PASS). The search migration is `0085_approval_workflows.sql`; it reaches QA with the next deploy of `main` and production with the next release.
