@@ -7,7 +7,7 @@
 | **ID** | `AUN-D1-SCALING` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowAuth](../repos/AlUmmahNowAuth.md) |
 | **Status** | **planned**: spec only, no code yet |
-| **Last updated** | 2026-11-24 (revision 4) |
+| **Last updated** | 2026-11-24 (revision 5) |
 | **Parent** | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) (in-memory state, lost updates, unbounded scans) |
 
 > Owner (chat, 2026-11-24): "need to estimate the growth of all dbs and spec epics for scaling". This page:
@@ -40,7 +40,7 @@
 
   Stories D1-7 to D1-10 cover 1M to 10M MAU.
 - **Revision 4** (2026-11-24) applies the third review:
-  - D1-3b deletes `analytics_active` rows only when they are folded, and re-archives days dirtied by late reports;
+  - D1-3b deletes `analytics_active` rows only when they are folded, and re-archives days dirtied by late reports. Moves go through a transactional outbox (`analytics_moves`, AUTOINCREMENT ids, drained first on every run; revision 5);
   - D1-4 tombstones by upsert before redacting, gives erased D1 rows a random pseudonym, strips late events, and keys tombstones by `SHA-256(user_id)`;
   - audit retention is 395 days in total (90 in D1 + 305 in R2).
 - **Revision 3** (2026-11-24) applies the second review:
@@ -414,28 +414,27 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - `site` rows also stay untouched: visits, landing, source and referrer host, about 200 rows a day for the whole site, read for the last N days.
 - **Totals vs dimensions.** For video and channel rows, the **totals** are `views`, `watch_time` and `retention_start`, each with `dim = ''`. Every other metric is a **dimension row**: `traffic`, `playback`, `source`, `embed_origin`, `external_host`, `retention` buckets, `surface`, `device`, `country` and `campaign`.
 - **Active-entity list.** `analytics_daily`'s primary key starts with `entity_type, entity_id`, so a sweep by `day` would scan the table, and no index on `day` is added (it would cost about 95 B on every row).
-  - **New table.** `analytics_active (day, entity_type, entity_id, gen, archived_gen, folded_gen)` is WITHOUT ROWID, about 85 B a row.
-  - **Who writes it.** `CounterBatch.flush` adds an upsert for every distinct `video` or `channel` entity and day in the batch (`site` and `post` are left out). It covers **every** metric: views, watch time, retention buckets and reports that arrive late. It is in the same transaction as the counters.
-    - **New row:** costs one written row per entity per day.
-    - **Every flush:** the upsert does `gen = gen + 1`. A day is dirty while `gen > archived_gen`, so any increment after an archive marks it dirty again.
-  - **Retention.** A row is deleted only by the fold that consumed it, never by age: the fold deletes it in the same transaction as the daily rows it folded. A delayed or failed fold leaves the row in place, so nothing is ever stranded in `analytics_daily`.
-- **One "move" rule.** Both the archive (dimension rows) and the fold (total rows) move rows from D1 to R2 the same way, so a crash, a retry or a late report can never count twice or be lost.
-  1. **Read.** Read the entity-day's rows by one primary-key seek (`entity_type, entity_id, day`), together with its `gen`. No step scans `analytics_daily`.
-  2. **Write a pending part.** Write the values read as a **pending part** keyed by `gen` into the R2 document `analytics/daily/<entity_type>/<entity_id>/<YYYY-MM>.json` (the existing `analytics_rollups` bucket).
-     - The document holds `day → parts[gen] → metric → dim → value`, so it keeps `entity_type` and every `dim` exactly.
-     - Rewriting the same part is idempotent.
-  3. **Delete in one D1 batch.** One batch deletes exactly those rows and sets `archived_gen` (or `folded_gen`) to `gen`, all guarded by `gen` being unchanged.
-     - If a flush incremented the day in between, `gen` moved, and nothing is deleted.
-  4. **Commit or discard.** The next run commits a pending part only if D1 recorded its `gen`; otherwise it discards it and moves the current rows again.
-     - Readers sum committed parts only.
-     - A late report after a move simply makes new rows and a new `gen`, which the next run moves as one more part.
-- **Nightly archive job.** It moves the **dimension rows** of every `analytics_active` row with `day <= today − 3` and `gen > archived_gen`. That is the newly closed day plus any older day dirtied by a late report or a DLQ replay. It walks them by primary key, `day` first.
-- **Totals in D1.** Totals stay in `analytics_daily` for 90 days. Then a monthly fold adds them into `analytics_monthly (entity_type, entity_id, month, metric, dim, value)`, keyed by every column the daily key has except the day, and deletes the daily rows. The fold runs nightly for every `analytics_active` row with `day <= today − 91` and `gen > folded_gen` after its archive. It finds them by primary key and seeks each entity's rows; it never sweeps by `day`.
-  - **The fold is a move.** Its D1 batch also upserts the sum into `analytics_monthly`.
-  - **Removing the active row.** When `folded_gen = archived_gen = gen`, the same batch deletes the `analytics_active` row.
-  - **Totals that arrive after the fold.** A total that arrives after the fold recreates the daily row and the active row. The next archive and fold move it as one more part, so lifetime totals stay exact.
+  - **New table.** `analytics_active (day, entity_type, entity_id, dirty)` is WITHOUT ROWID, about 80 B a row.
+  - **Who writes it.** `CounterBatch.flush` upserts `dirty = 1` for every distinct `video` or `channel` entity and day in the batch (`site` and `post` are left out). It covers **every** metric: views, watch time, retention buckets and reports that arrive late. It is in the same transaction as the counters.
+  - **Retention.** A row is deleted only by the fold that consumed it, never by age. A delayed or failed fold leaves it in place, so nothing is stranded.
+- **Moves go through an outbox.** Rows leave D1 through `analytics_moves (move_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_type, entity_id, day, kind, payload)`, with an index on `(entity_type, entity_id, day)`. A move is **one D1 batch**, which is one transaction, so nothing can happen between its statements:
+  1. `INSERT INTO analytics_moves … SELECT json_group_array(metric, dim, value) FROM analytics_daily WHERE <entity-day key> AND <kind's metrics>`: one primary-key range;
+  2. `DELETE FROM analytics_daily WHERE` the same predicate;
+  3. the state change in `analytics_active` (below).
+
+  Steps 1 and 2 read and delete exactly the same rows in the same transaction, so a flush either lands before the batch (and is moved) or after it (and stays in D1, with `dirty = 1`). No generation guard is needed.
+- **Drain.** Every run of the job **starts** by draining the outbox, oldest first, whatever the entity or kind:
+  - it writes each payload into the R2 document `analytics/daily/<entity_type>/<entity_id>/<YYYY-MM>.json` (the existing `analytics_rollups` bucket) as `day → parts[move_id] → metric → dim → value`;
+  - it then deletes the outbox row.
+
+  `move_id` is AUTOINCREMENT, so it is never reused, even after an `analytics_active` row is deleted and recreated. Rewriting `parts[move_id]` after a crash is a plain overwrite, so a retry never counts twice, and an undrained move is never lost.
+- **Nightly archive job.** For every `analytics_active` row with `day <= today − 3` and `dirty = 1` (walked by primary key, `day` first), one move of kind `dims` takes the **dimension rows** and sets `dirty = 0` in the same batch.
+  - That covers the newly closed day, plus any older day dirtied again by a late report or a DLQ replay.
+- **Totals in D1.** Totals stay in `analytics_daily` for 90 days. Then a nightly fold handles every `analytics_active` row with `day <= today − 91` and `dirty = 0`. It finds them by primary key and never sweeps by `day`.
+  - Each fold is one move of kind `totals` (so R2 holds the daily totals for older ranges). In the same batch it upserts the same sums into `analytics_monthly (entity_type, entity_id, month, metric, dim, value)` and deletes the `analytics_active` row.
+  - A total that arrives after the fold recreates the daily row and the active row (`dirty = 1`). The next archive and fold move it as one more part.
   - **Lifetime totals** are `SUM(analytics_daily) + SUM(analytics_monthly)`, exact.
-- **Readers** (Studio and admin analytics in `apps/api-videos/src/lib/analytics.ts`, up to 366 days):
+- **Readers** (Studio and admin analytics in `apps/api-videos/src/lib/analytics.ts`, up to 366 days). Every day older than 3 days reads R2 parts **plus** any undrained `analytics_moves` rows for that entity and day (an index seek). A move that is not drained yet is never missing from a read.
   - the last 3 days come from D1 (totals and dimensions);
   - days 4 to 90 come from D1 totals plus R2 dimensions;
   - older days come from the R2 documents, at most 13 GETs for a 366-day range per entity;
@@ -457,7 +456,8 @@ Every counter stays exact. Nothing moves to Analytics Engine (see [Scaling optio
   - site rows are untouched;
   - an entity with only `watch_time` or `retention` rows on a day (no views, for example after midnight) is archived;
   - a report 10 days late, and another after the fold, both reach R2 and the lifetime totals exactly once;
-  - a crash between the R2 write and the D1 batch, and an increment between read and delete, each count exactly once;
+  - a crash after the move batch but before the drain, and a crash after the R2 write but before the outbox delete, each count exactly once;
+  - a flush that runs at the same time as a move lands either in the moved part or in D1, never in both and never in neither;
   - a failed fold leaves `analytics_active` and the daily rows in place;
   - the archive and the fold plans use primary-key ranges, never a scan of `analytics_daily`;
   - the reader returns the same series as today for a seeded 400-day fixture;
