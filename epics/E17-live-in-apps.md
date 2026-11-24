@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server for chat, premieres, reminders and event tags is on main behind switches that default off, no client uses it yet) |
+| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server, the web viewer and Studio for chat, premieres, reminders and event tags are on main behind switches that default off; the native apps come next, E17-6 to E17-8) |
 | **Last updated** | 2026-11-24 |
 | **Linear** | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337) (stories AUN-338 to AUN-342) |
 
@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS live_stream_metadata (
   chat_replay INTEGER NOT NULL DEFAULT 1,
   slow_mode_seconds INTEGER NOT NULL DEFAULT 0,
   subscribers_only INTEGER NOT NULL DEFAULT 0,
+  ai_hold TEXT NOT NULL DEFAULT 'basic' CHECK (ai_hold IN ('none', 'basic', 'strict')), -- 0122 (E17-2c)
   duration_seconds INTEGER,
   scheduled_start_at INTEGER,
   started_at INTEGER,
@@ -201,11 +202,11 @@ Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/
 
 ### 5.1 Streams
 
-`POST` and `PATCH /api/live-streams/:id` accept these new optional fields: `eventType`, `madeForKids`, `allowChat`, `chatReplay`, `slowModeSeconds` (0, 5, 10, 30, 60), `subscribersOnly`. `kind` and `premiereVideoId` are never accepted here; a premiere is created with its own route (§5.4).
+`POST` and `PATCH /api/live-streams/:id` accept these new optional fields: `eventType`, `madeForKids`, `allowChat`, `chatReplay`, `slowModeSeconds` (0, 5, 10, 30, 60), `subscribersOnly`, `aiHold` (`none`, `basic`, `strict`; in the team's answers only). `kind` and `premiereVideoId` are never accepted here; a premiere is created with its own route (§5.4).
 
 `GET /api/live-streams` keeps its present rules (owner and `live.manage` members see private and hidden streams; VR9 recordings are withheld) and gains `kind` and `eventType`. With either filter it reads ids from `live_stream_metadata` and then re-checks every loaded record with the same `isListed` function.
 
-`premiereVideoId` is given to others only while the premiere is `live` or `ended` (a cancelled one's video is private again). `PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
+`premiereVideoId` is given to others only while the premiere is `live` or `ended` (a canceled one's video is private again). `PublicLiveStream` gains: `kind`, `premiereVideoId`, `eventType`, `madeForKids`, `chatReplay`, `slowModeSeconds`, `subscribersOnly`, `durationSeconds`, `reminderCount`. `premiereHold` and all review fields stay private.
 
 `GET /api/live-streams/:id/state` keeps every field it returns today (`streamId`, `sessionId`, `status`, `sessionStatus`, `receiving`, `playbackUrl`, `vodUrl`, `startedAt`, `endedAt`, `bitrateKbps`, `provider`, `qoe`, `viewers`, `serverNow` in milliseconds) and adds:
 
@@ -267,7 +268,7 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 **AI scan.** `surface: 'live_chat'`, `subjectId` the message, `parentId` the stream, `event: 'create'`, through the existing `MODERATION_QUEUE`.
 
 - The consumer writes a `moderation_signals` row, as for comments, and **holds** the message as far as the stream's creator chose (`aiHold`, E17-D4, E17-2c [#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)): `none`; `basic` (default), when a score reaches its category's threshold; `strict`, also when it comes within 0.15 of it. This stays inside Epic 28's rules: only categories an admin enforces (nothing is held while all are in shadow mode), never `religious_authenticity`, never a message of the owner or a moderator, never one a person has decided on. A held message is `held` / `moderation`, leaves every screen (`live_chat_removed`) and is purged after 30 days. The setting is the team's business: it is not in public answers or events.
-- **`GET /:id/chat/held`**: at most 100, newest first, for those who moderate the chat. `restore` shows one, `remove` removes it. Studio and the chat on the watch page show them.
+- **`GET /:id/chat/held`**: at most 100, newest first, for those who moderate the chat; never while they are banned (or that cannot be read), and nothing of a deleted stream. `restore` shows one, `remove` removes it. Studio and the chat on the watch page show them.
 - `live_chat` takes at most a share of the daily neuron cap (admin setting, default 25 %, no share limit when there is no cap). The scan reserves `feature = 'live_chat'` first, then `moderation`; when the second fails the first is released with `settleBudget(estimate, 0)`. Past either limit: signal `skipped` / `budget`, message stays.
 - Consequence, stated plainly: at 22–62 neurons a message (§8) and the default cap of 10,000 neurons a day (`DEFAULT_DAILY_NEURON_CAP`), the share scans about 40 to 110 messages a day for the whole site. An admin can raise the cap or the share. Beyond that, chat relies on the fast filter, slow mode, blocks, reports and people. A creator with no moderator should use subscribers-only or slow mode.
 - `SURFACES` in `consumer.ts`, `ModerationSurface`, `ModerationSubjectType` and the admin-api and admin-web lists all gain the value in E17-2, with a test that every `ModerationSurface` is accepted.
@@ -276,7 +277,7 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 **Reports.** `POST /api/moderation/reports` with `entityType: 'live_chat'` and the existing reasons (`inappropriate`, `spam`, `harassment`, `copyright`, `misinformation`, `other`). It answers `404 feature_off` while `liveChat` is off or unreadable, and `404` unless the message is published and the reporter may read that chat now. The text, stream, channel and author go with the report when it is filed, because deleting a stream deletes its messages; the queue archive drops the text and pseudonymizes the author. Account erasure ([#1875](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1875)) takes the reported person out of every report: their id and name, the title or text of what was reported, their own channel's name, and their id on a ban decision. Nothing puts them back: admin-api's lookup drops people listed in `erased_users`, for rows not filled yet, for refreshes and for the queue page, and reads nothing back while that list cannot be read. A comment or chat message never takes another author, even after that list is purged at 30 days. admin-api migration `0051_reports_live_chat.sql` adds the type to `reports`.
 
-**Decisions.** On `live_chat` and `livestream`, admin-api calls an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2. A removed or restored message drops the shared 2-second page. A stream an admin hides or deletes ends whatever its status, with any session still open, and a premiere is cancelled or ended. While it is hidden or deleted, `/ingest`, `/start` and `PATCH` to `live` answer `403 live_stream_removed`; the encoder's uploads get `410`, because the session has ended, and the stream never turns live.
+**Decisions.** On `live_chat` and `livestream`, admin-api calls an internal api-videos route over the existing `VIDEOS` service binding, which fixes the report fault in §2. A removed or restored message drops the shared 2-second page. A stream an admin hides or deletes ends whatever its status, with any session still open, and a premiere is canceled or ended. While it is hidden or deleted, `/ingest`, `/start` and `PATCH` to `live` answer `403 live_stream_removed`; the encoder's uploads get `410`, because the session has ended, and the stream never turns live.
 
 **AI queue** (E17-4, [#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)). A `live_chat` row shows the message and leads to its channel. Message text is not searchable there: the table grows without bound, a `LIKE` over it would be a full scan, and a text index would cost extra writes on every message. Search by message, author or channel id, author name and channel name works.
 
@@ -287,7 +288,7 @@ In `apps/websocket-server`:
 - `CHANNEL_FEATURES` gains `{ prefix: 'live:', key: 'liveChat', failClosed: true }`. Today an unreadable switch allows the channel; for `live:` it refuses.
 - `canPublish` returns false for `live:`. Only `/broadcast` (internal key) feeds it. Today any signed-in client can publish into it.
 - Subscribe is allowed only after one indexed read of `live_stream_metadata`, with the read rule of §5.2; a non-public stream also needs a `channel_access` role. A missing row refuses. Signed-out sockets may subscribe to public streams.
-- `live_chat_closed` evicts everyone on the channel after it is delivered. `syncStreamInline` sends it on every write that leaves the stream private, hidden, cancelled or deleted, or its chat off, so a suspension or an erasure closes it too. Clients that may still read subscribe again.
+- `live_chat_closed` evicts everyone on the channel after it is delivered. `syncStreamInline` sends it on every write that leaves the stream private, hidden, canceled or deleted, or its chat off, so a suspension or an erasure closes it too. Clients that may still read subscribe again.
 - The row is read again after the socket has joined, so a close that came in between is not missed.
 - A ban, or a channel role taken away or lowered, sends `access_changed` on `user:<id>`: that person's sockets leave every live chat, and join again those they may read. A banned member cannot join a chat that is not public.
 - `expireAuthIfNeeded` keeps `live:` only for public streams; others are dropped when the token expires.
@@ -311,7 +312,7 @@ and `isVideoReleased()` (shared-types `video-visibility.ts`) returns false while
 
 Surfaces that do not go through those functions get an explicit test. Known today: `GET /api/videos/:id/chapters`, fixed in E17-3. Epic 14's `/audio` and `/downloads` routes are not on main; whoever adds them must use `videoReadAccess`.
 
-**Scheduling** `POST /api/videos/:id/premiere` `{ scheduledStartTime, title?, description?, eventType?, allowChat?, chatReplay?, slowModeSeconds?, subscribersOnly? }`. Needs `livePremieres`, `video.schedule` on the video and `live.manage` on its channel, and the tier. Refused when:
+**Scheduling** `POST /api/videos/:id/premiere` `{ scheduledStartTime, title?, description?, eventType?, allowChat?, chatReplay?, slowModeSeconds?, subscribersOnly?, aiHold? }`. Needs `livePremieres`, `video.schedule` on the video and `live.manage` on its channel, and the tier. Refused when:
 
 | Condition | Code |
 |---|---|
@@ -326,7 +327,7 @@ Order: the hold is written first (conditional write, all checks repeated inside 
 
 **While held**, these answer `409 premiere_scheduled`: schedule create and update, publish-now, and any visibility change by `PUT /api/videos/:id`, bulk edit (reported per video), the upload and import schedulers (`scheduleRefusal` gains the case) and the admin video edit. The check runs inside each conditional write. Even if one were missed, the hold still keeps the video closed, and `publishVideo` in the `scheduler` Worker returns `'cancelled'` for a held video. Title, description, thumbnail and captions stay editable.
 
-A hold whose stream no longer exists, or is cancelled or ended, is **stale**: the same checks clear it and go on, so a lost stream record can never lock a video.
+A hold whose stream no longer exists, or is canceled or ended, is **stale**: the same checks clear it and go on, so a lost stream record can never lock a video.
 
 **Where it runs.** In **api-videos**, in the every-minute cron, with `withSearchSync(rawEnv, ctx)`. That Worker has `SEARCH_DB`, `NOTIFICATIONS_DB`, `videos` and the media bindings, and its wrapped bucket is the only one that calls `syncStreamInline` and `onVideoWritten`. The `scheduler` Worker has none of these and takes no part.
 
@@ -345,8 +346,8 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 
 **Cancel, reschedule, swap.**
 
-- *Cancel* (`PATCH` with `status: 'cancelled'`): the stream is cancelled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. Taking the hold off writes that state (not public, a draft if it was one), so a write that slipped past a guard cannot open it. Undoing an older bulk edit leaves a held video's visibility alone. If the start claimed first, cancel answers `409 premiere_started`.
-- *Delete* (`DELETE`): a scheduled premiere is cancelled first, in the same way; a running one answers `409 premiere_started` (end it first); an ended or cancelled one is deleted, and its video is not touched.
+- *Cancel* (`PATCH` with `status: 'cancelled'`): the stream is canceled by a conditional write that only succeeds from `scheduled`, then the hold is cleared. The video is exactly as it was before: private, draft or not. Taking the hold off writes that state (not public, a draft if it was one), so a write that slipped past a guard cannot open it. Undoing an older bulk edit leaves a held video's visibility alone. If the start claimed first, cancel answers `409 premiere_started`.
+- *Delete* (`DELETE`): a scheduled premiere is canceled first, in the same way; a running one answers `409 premiere_started` (end it first); an ended or canceled one is deleted, and its video is not touched.
 - *Reschedule* (`PATCH` with `scheduledStartTime`): only the stream changes; same date rules; only while `scheduled`. The heads-up re-arms by itself (§5.5).
 - *Swap* (`PATCH /api/live-streams/:id/premiere` `{ videoId }`): only while `scheduled`. All scheduling checks run on the new video, then: hold the new video, conditional write on the stream (`premiereVideoId`, `durationSeconds`), clear the old hold. A failed stream write clears the new hold.
 - `PATCH` with `status: 'live'` or `'ended'` on a premiere is refused; `kind` never changes.
@@ -364,7 +365,7 @@ A crash after step 2 is repaired on the next minute: a live premiere whose video
 - **Live now.** `markStreamLive` and the premiere start already call `announceLiveStarted`. When its last page is done, the processor queues the same event for reminders. They run one after the other, never together, because they share the dedupe key `live:<streamId>` and two fan-outs in flight could push the same row twice. Reminders exist only for streams of a channel.
 - The processor's `NotificationFanoutPayload` gains `audience: 'subscribers' | 'reminders'` and kind `live_soon` (key `liveSoon`, dedupe `live-soon:<streamId>:<scheduledAtMs>`). Reminder pages read `live_reminders` by primary key, 1,000 a page. Social announcements are sent for subscribers only.
 - **Settings and quiet hours.** Category `live`: a person who turned it off gets nothing. Push goes through `enqueuePush` and `dispatchPush` only, so E22 quiet hours and prayer windows ([#1816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1816)) apply the moment that PR merges, with no E17 code: inside a quiet window the notification is in the inbox and makes no sound.
-- **Checked on every page.** Each fan-out page for reminders checks again, before it sends: `liveReminders` is on, `livePremieres` is on when the stream is a premiere, and the stream still qualifies: `visibility` is `public`, `made_for_kids` is 0, and `status` is `scheduled` with the same `scheduled_start_at` for the heads-up, or `live` for the start. So cancelled, moved, private, hidden and deleted streams send nothing, and neither does a switch turned off half way. It fails closed: when a switch or the row cannot be read, the page sends nothing and the queue tries it again.
+- **Checked on every page.** Each fan-out page for reminders checks again, before it sends: `liveReminders` is on, `livePremieres` is on when the stream is a premiere, and the stream still qualifies: `visibility` is `public`, `made_for_kids` is 0, and `status` is `scheduled` with the same `scheduled_start_at` for the heads-up, or `live` for the start. So canceled, moved, private, hidden and deleted streams send nothing, and neither does a switch turned off half way. It fails closed: when a switch or the row cannot be read, the page sends nothing and the queue tries it again.
 - **Calendar file:** `GET /api/live-streams/:id/calendar.ics`, using `buildEventsIcsFeed` from #1819. Story E17-3b, after #1819. There is no second iCalendar builder; the one in the first version of #1787 is removed.
 
 ### 5.6 Kids
@@ -427,7 +428,7 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-2** ([#1841](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1841), landed through #1842) | AlUmmahNow | Chat routes, limits, socket rules, moderation, replay, AI scan with its share | E17-1 |
 | **E17-2b** ([#1858](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1858)) | AlUmmahNow | Reports (`live_chat`) and admin decisions, the report fault on live streams, 30-day purge | E17-2 |
 | **E17-3** ([#1842](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1842)) | AlUmmahNow | Premieres, chapters fix | E17-2 |
-| **E17-3a** ([#1845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1845)) | AlUmmahNow | Reminders, and the owner's notice when a premiere is cancelled by the system | E17-3 |
+| **E17-3a** ([#1845](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1845)) | AlUmmahNow | Reminders, and the owner's notice when a premiere is canceled by the system | E17-3 |
 | **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3a and #1819 |
 | **E17-3c** ([#1863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1863)) | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
 | **E17-4** ([#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)) | AlUmmahNow | Admin | E17-2b, E17-3 |
@@ -446,7 +447,7 @@ Open PRs that touch the same ground, none of which E17 needs first: #1803 (ticke
 - **Projection:** an older version never overwrites; a deleted stream is never restored; a record with no owner, channel or dates still indexes; the seed keeps private private; an idle-ended stream turns `ended` in both tables.
 - **Filter:** the must-pass strings; zero-width and tatweel tricks; bare domains.
 - **Chat:** parallel posts against one cooldown give one message; same-millisecond paging; deleted anchor; blocked author sees only their own; `subscribersOnly`; 120 posts from one address by many users pass and the next does not; switch off is 404 and private is 404.
-- **Socket:** client publish refused; private, cancelled, kids and missing streams refused; eviction; unreadable switch refuses; a ban or a lost role removes open sockets; a close during a subscribe is not missed.
+- **Socket:** client publish refused; private, canceled, kids and missing streams refused; eviction; unreadable switch refuses; a ban or a lost role removes open sockets; a close during a subscribe is not missed.
 - **Premiere:** each refusal; draft and private sources; every write listed under "While held" refused; a held video is 404 for others on video, playback, public play, embed, captions and chapters, absent from search and sitemap, and under `priv/`; two crons start it once; crash after the claim is repaired; cancel against start; reschedule; swap; stale hold; deleted or rejected video; old schedule entry; no session rows created.
 - **Reminders:** one heads-up per time; reschedule sends again; bell and reminder together give one notification and one push; category off; quiet hours (once #1816 is on main).
 - Every test seeds and deletes its own rows. AI is mocked.
