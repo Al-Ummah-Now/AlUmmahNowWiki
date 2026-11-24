@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 110 epics and 655 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 110 epics and 681 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -12,7 +12,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AR-2](AR-2-api-roadmap-phase-2.md) | [AUN-13](https://linear.app/hamzalabs/issue/AUN-13/ar-2-api-videos-roadmap-phase-2-advanced-platform-features) | 0 | 4 | 0 | 0 | 0 | 4 |
 | [AR-3](AR-3-api-roadmap-phase-3.md) | [AUN-18](https://linear.app/hamzalabs/issue/AUN-18/ar-3-api-videos-roadmap-phase-3-enterprise-and-scale) | 0 | 0 | 0 | 4 | 0 | 4 |
 | [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) | [AUN-23](https://linear.app/hamzalabs/issue/AUN-23/aun-admin-native-native-admin-app-mobile-first-moderation) | 0 | 0 | 0 | 0 | 0 | 0 |
-| [AUN-APP-UPDATES](AUN-APP-UPDATES-app-updates.md) | [AUN-649](https://linear.app/hamzalabs/issue/AUN-649/aun-app-updates-app-updates-every-app-checks-for-a-new-version-tells) | 1 | 0 | 4 | 6 | 0 | 11 |
+| [AUN-APP-UPDATES](AUN-APP-UPDATES-app-updates.md) | [AUN-649](https://linear.app/hamzalabs/issue/AUN-649/aun-app-updates-app-updates-every-app-checks-for-a-new-version-tells) | 5 | 0 | 2 | 4 | 0 | 11 |
 | [AUN-CAPTIONS](AUN-CAPTIONS-transcription-translation.md) | [AUN-24](https://linear.app/hamzalabs/issue/AUN-24/aun-captions-transcription-translation-and-inline-translation-quran) | 2 | 0 | 1 | 0 | 0 | 3 |
 | [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) | [AUN-27](https://linear.app/hamzalabs/issue/AUN-27/aun-channel-claim-channel-claim-transfer-and-self-service-account-move) | 0 | 0 | 5 | 7 | 0 | 12 |
 | [AUN-CHANNEL-ROLES](AUN-CHANNEL-ROLES-channel-roles.md) | [AUN-28](https://linear.app/hamzalabs/issue/AUN-28/aun-channel-roles-per-channel-roles) | 1 | 0 | 0 | 0 | 0 | 1 |
@@ -22,7 +22,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUN-CREATOR-STUDIO](AUN-CREATOR-STUDIO-web-creator-studio.md) | [AUN-32](https://linear.app/hamzalabs/issue/AUN-32/aun-creator-studio-web-creator-studio) | 0 | 0 | 1 | 0 | 0 | 1 |
 | [AUN-DEV-SITE](AUN-DEV-SITE-developer-and-partner-site.md) | [AUN-34](https://linear.app/hamzalabs/issue/AUN-34/aun-dev-site-alummahnowdev-the-project-site-for-developers-and) | 1 | 0 | 1 | 0 | 0 | 2 |
 | [AUN-FEATURES](AUN-FEATURES-feature-switches.md) | [AUN-594](https://linear.app/hamzalabs/issue/AUN-594/aun-features-feature-switches-one-features-page-enforced-everywhere) | 4 | 1 | 1 | 11 | 0 | 17 |
-| [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) | [AUN-612](https://linear.app/hamzalabs/issue/AUN-612/aun-members-supporting-creators-one-time-and-monthly-support-0percent) | 0 | 1 | 8 | 14 | 0 | 23 |
+| [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) | [AUN-612](https://linear.app/hamzalabs/issue/AUN-612/aun-members-supporting-creators-one-time-and-monthly-support-0percent) | 1 | 1 | 7 | 12 | 2 | 23 |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | [AUN-37](https://linear.app/hamzalabs/issue/AUN-37/aun-multi-audio-multiple-audio-tracks) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-ORIGIN](AUN-ORIGIN-request-origin.md) | [AUN-38](https://linear.app/hamzalabs/issue/AUN-38/aun-origin-request-origin-where-a-request-came-from) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md) | [AUN-673](https://linear.app/hamzalabs/issue/AUN-673/aun-player-links-in-video-links-credits-info-cards-and-end-screens) | 2 | 1 | 0 | 21 | 0 | 24 |
@@ -38,9 +38,9 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUN-VIDEO-CATEGORIES](AUN-VIDEO-CATEGORIES-admin-managed-categories.md) | [AUN-56](https://linear.app/hamzalabs/issue/AUN-56/aun-video-categories-admin-managed-video-categories) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-VIDEO-PLAYER](AUN-VIDEO-PLAYER-production-video-player.md) | [AUN-57](https://linear.app/hamzalabs/issue/AUN-57/aun-video-player-production-video-player-themed-token-driven) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-VIDEO-REVIEW](AUN-VIDEO-REVIEW-pre-publication-review.md) | [AUN-58](https://linear.app/hamzalabs/issue/AUN-58/aun-video-review-pre-publication-video-review-in-review-nsfw-and) | 0 | 0 | 0 | 0 | 0 | 0 |
-| [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md) | [AUN-661](https://linear.app/hamzalabs/issue/AUN-661/aun-workflows-approval-workflows-one-system-for-sensitive-admin) | 1 | 0 | 4 | 6 | 0 | 11 |
+| [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md) | [AUN-661](https://linear.app/hamzalabs/issue/AUN-661/aun-workflows-approval-workflows-one-system-for-sensitive-admin) | 5 | 0 | 3 | 3 | 0 | 11 |
 | [AUN-YT-IMPORT](AUN-YT-IMPORT-move-from-youtube.md) | [AUN-59](https://linear.app/hamzalabs/issue/AUN-59/aun-yt-import-move-from-youtube-a-creator-brings-their-own-channel) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [AUTH-ACCOUNT-HUB](AUTH-ACCOUNT-HUB-account-hub.md) | [AUN-61](https://linear.app/hamzalabs/issue/AUN-61/auth-account-hub-account-hub-al-ummah-now-account) | 3 | 5 | 0 | 6 | 0 | 14 |
+| [AUTH-ACCOUNT-HUB](AUTH-ACCOUNT-HUB-account-hub.md) | [AUN-61](https://linear.app/hamzalabs/issue/AUN-61/auth-account-hub-account-hub-al-ummah-now-account) | 3 | 4 | 1 | 6 | 0 | 14 |
 | [AUTH-APP-PLANS](AUTH-APP-PLANS-auth-app-plans.md) | [AUN-76](https://linear.app/hamzalabs/issue/AUN-76/auth-app-plans-auth-app-plans-admin-enhancement-rbac-ui-refactor-m2m) | 6 | 1 | 0 | 0 | 0 | 7 |
 | [AUTH-ENTERPRISE](AUTH-ENTERPRISE-openauth-enterprise-features.md) | [AUN-84](https://linear.app/hamzalabs/issue/AUN-84/auth-enterprise-openauth-fork-enterprise-features) | 5 | 0 | 0 | 0 | 1 | 6 |
 | [AUTH-IDP](AUTH-IDP-identity-platform.md) | [AUN-91](https://linear.app/hamzalabs/issue/AUN-91/auth-idp-identity-platform-sso-provider-lanes-1-7) | 7 | 0 | 0 | 0 | 0 | 7 |
@@ -49,7 +49,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUTH-R1](AUTH-R1-auth-tokens.md) | [AUN-110](https://linear.app/hamzalabs/issue/AUN-110/auth-r1-auth-v10-roadmap-authentication-and-token-management) | 4 | 0 | 0 | 0 | 1 | 5 |
 | [AUTH-R2](AUTH-R2-auth-oauth.md) | [AUN-116](https://linear.app/hamzalabs/issue/AUN-116/auth-r2-auth-v10-roadmap-oauth-and-external-authentication) | 3 | 0 | 0 | 0 | 2 | 5 |
 | [AUTH-R3](AUTH-R3-auth-rbac.md) | [AUN-122](https://linear.app/hamzalabs/issue/AUN-122/auth-r3-auth-v10-roadmap-rbac-and-user-management) | 4 | 1 | 0 | 0 | 0 | 5 |
-| [AUTH-R4](AUTH-R4-auth-docs-dx.md) | [AUN-128](https://linear.app/hamzalabs/issue/AUN-128/auth-r4-auth-v10-roadmap-documentation-and-developer-experience) | 2 | 3 | 0 | 0 | 0 | 5 |
+| [AUTH-R4](AUTH-R4-auth-docs-dx.md) | [AUN-128](https://linear.app/hamzalabs/issue/AUN-128/auth-r4-auth-v10-roadmap-documentation-and-developer-experience) | 8 | 0 | 0 | 2 | 0 | 10 |
 | [AUTH-R5](AUTH-R5-auth-cicd.md) | [AUN-134](https://linear.app/hamzalabs/issue/AUN-134/auth-r5-auth-v10-roadmap-cicd-and-infrastructure) | 2 | 2 | 0 | 0 | 1 | 5 |
 | [AUTH-R6](AUTH-R6-auth-release.md) | [AUN-140](https://linear.app/hamzalabs/issue/AUN-140/auth-r6-auth-v10-roadmap-release-and-distribution) | 7 | 3 | 0 | 0 | 0 | 10 |
 | [CHAT-ADMIN-CONTENT](CHAT-ADMIN-CONTENT-admin-content-management.md) | [AUN-146](https://linear.app/hamzalabs/issue/AUN-146/chat-admin-content-videos-admin-platform-content-management) | 1 | 0 | 0 | 0 | 0 | 1 |
@@ -84,22 +84,22 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E11](E11-aun-core.md) | [AUN-279](https://linear.app/hamzalabs/issue/AUN-279/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 7 | 1 | 0 | 1 | 0 | 9 |
 | [E12](E12-viewer-mobile.md) | [AUN-289](https://linear.app/hamzalabs/issue/AUN-289/e12-viewer-mobile-apps-ios-ipados-android) | 2 | 4 | 0 | 8 | 0 | 14 |
 | [E13](E13-native-players.md) | [AUN-304](https://linear.app/hamzalabs/issue/AUN-304/e13-native-players) | 3 | 5 | 1 | 2 | 0 | 11 |
-| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 2 | 11 | 3 | 9 | 1 | 26 |
+| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 2 | 11 | 9 | 3 | 1 | 26 |
 | [E15](E15-tv-apps.md) | [AUN-322](https://linear.app/hamzalabs/issue/AUN-322/e15-tv-apps) | 0 | 5 | 0 | 4 | 0 | 9 |
 | [E16](E16-desktop-viewer.md) | [AUN-332](https://linear.app/hamzalabs/issue/AUN-332/e16-desktop-viewer-windows-macos-linux) | 1 | 2 | 0 | 1 | 0 | 4 |
-| [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 0 | 1 | 5 | 12 | 0 | 18 |
+| [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 5 | 2 | 4 | 7 | 0 | 18 |
 | [E18](E18-studio-mobile.md) | [AUN-343](https://linear.app/hamzalabs/issue/AUN-343/e18-studio-mobile-ios-ipados-android) | 2 | 3 | 1 | 4 | 0 | 10 |
 | [E19](E19-studio-desktop.md) | [AUN-354](https://linear.app/hamzalabs/issue/AUN-354/e19-studio-desktop-windows-macos-linux) | 3 | 5 | 0 | 1 | 1 | 10 |
-| [E20](E20-system-parental-controls.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-system-parental-controls-support) | 0 | 0 | 0 | 0 | 11 | 11 |
-| [E21](E21-islamic-experience.md) | [AUN-371](https://linear.app/hamzalabs/issue/AUN-371/e21-islamic-experience-layer) | 0 | 1 | 8 | 20 | 2 | 31 |
-| [E22](E22-notifications-sharing-circles.md) | [AUN-380](https://linear.app/hamzalabs/issue/AUN-380/e22-notifications-sharing-study-circles) | 0 | 2 | 0 | 1 | 1 | 4 |
+| [E20](E20-system-parental-controls.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-system-parental-controls-support) | 0 | 0 | 1 | 20 | 11 | 32 |
+| [E21](E21-islamic-experience.md) | [AUN-371](https://linear.app/hamzalabs/issue/AUN-371/e21-islamic-experience-layer) | 5 | 1 | 5 | 18 | 2 | 31 |
+| [E22](E22-notifications-sharing-circles.md) | [AUN-380](https://linear.app/hamzalabs/issue/AUN-380/e22-notifications-sharing-study-circles) | 0 | 0 | 3 | 0 | 1 | 4 |
 | [E23](E23-release-engineering.md) | [AUN-385](https://linear.app/hamzalabs/issue/AUN-385/e23-release-engineering-and-store-compliance) | 1 | 6 | 0 | 0 | 0 | 7 |
 | [E24](E24-creator-support-premium.md) | [AUN-393](https://linear.app/hamzalabs/issue/AUN-393/e24-creator-support-and-premium) | 0 | 1 | 0 | 2 | 0 | 3 |
 | [E25](E25-sharing-embeds.md) | [AUN-397](https://linear.app/hamzalabs/issue/AUN-397/e25-sharing-and-embeddable-player) | 3 | 3 | 0 | 3 | 0 | 9 |
 | [E26](E26-ummah-comments.md) | [AUN-407](https://linear.app/hamzalabs/issue/AUN-407/e26-embedded-discussions-ummah-comments) | 0 | 4 | 0 | 6 | 0 | 10 |
 | [E27](E27-plans-entitlements.md) | [AUN-418](https://linear.app/hamzalabs/issue/AUN-418/e27-plans-and-entitlements-framework) | 0 | 0 | 0 | 0 | 7 | 7 |
 | [E28](E28-ai-moderation.md) | [AUN-426](https://linear.app/hamzalabs/issue/AUN-426/e28-ai-assisted-moderation-and-flagging-cloudflare-workers-ai) | 3 | 3 | 0 | 8 | 0 | 14 |
-| [E29](E29-core-web-experience.md) | [AUN-441](https://linear.app/hamzalabs/issue/AUN-441/e29-core-web-experience-completion-p0) | 9 | 5 | 1 | 2 | 2 | 19 |
+| [E29](E29-core-web-experience.md) | [AUN-441](https://linear.app/hamzalabs/issue/AUN-441/e29-core-web-experience-completion-p0) | 9 | 4 | 2 | 2 | 2 | 19 |
 | [E30](E30-aun-media.md) | [AUN-461](https://linear.app/hamzalabs/issue/AUN-461/e30-studio-media-engine-aun-media-rust) | 7 | 0 | 0 | 0 | 0 | 7 |
 | [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md) | [AUN-469](https://linear.app/hamzalabs/issue/AUN-469/live-phases-live-streaming-plan-phases-1-3-phase-2-task-2n-issues) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [LR-1.1](LR-1.1-legacy-video-portal-ui.md) | [AUN-470](https://linear.app/hamzalabs/issue/AUN-470/lr-11-legacy-roadmap-11-video-portal-ui-completion) | 8 | 0 | 0 | 0 | 0 | 8 |
@@ -116,6 +116,6 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [OA-THEME](OA-THEME-openauth-theme-unification.md) | [AUN-549](https://linear.app/hamzalabs/issue/AUN-549/oa-theme-openauth-theme-unification-for-the-multi-tenant-issuer) | 4 | 1 | 0 | 0 | 0 | 5 |
 | [TOOLS-ADMIN](TOOLS-ADMIN-admin-import-tool.md) | [AUN-571](https://linear.app/hamzalabs/issue/AUN-571/tools-admin-al-ummah-now-tools-the-admin-import-app) | 16 | 0 | 0 | 5 | 0 | 21 |
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
-| [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 3 | 0 | 0 | 0 | 4 |
+| [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 0 | 0 | 1 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **110 epics** | **253** | **111** | **55** | **190** | **46** | **655** |
+| **All** | **110 epics** | **278** | **104** | **59** | **191** | **49** | **681** |
