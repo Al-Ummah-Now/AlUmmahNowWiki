@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-25: an erased account's stored media is removed
+
+- **AlUmmahNow:** after an account erasure a job removes the stored media of its videos, streams, channels and profile, from 24 hours after the records, with retries and an admin Jobs page entry ([#2001](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2001)). See [Media files](data-lifecycle.md#media-files).
+
 ## 2026-11-24: English and Arabic on the admin's channel, video, invite, category, status and theme forms
 
 - **AlUmmahNow:** these forms have English and Arabic side by side with Translate, and the admin APIs read and save both ([#1814](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1814)). Staff give both languages when they create something. Editing a user's text that has one language offers the other without requiring it. See [Localized fields](localized-fields.md#when-staff-work-on-user-content). An edit changes only the languages it names, so edits of different languages both stay, and translations in other languages are kept. Creating a channel over the API still takes a plain name, for the released Admin Tools app only ([#1982](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1982)). The theme builder's problems and its "Publishing is blocked" line are in plain English and Arabic, and file buttons are translated ([#1987](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1987), open).

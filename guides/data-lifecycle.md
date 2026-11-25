@@ -33,7 +33,7 @@ A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-a
 - The channel's **Bunny collections**, whenever a channel record is deleted ([#1086](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1086)), and the user's own collection.
 - **Channel subscriptions** an account made as itself (no channel), as well as those its channels made. The export marks each one `subscribedAs` member or channel ([#1152](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1152)).
 - On the Auth side, purging an account also removes its **email → subject** record and its **invite rows** ([Auth#326](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/326), [Auth#335](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/335)).
-- On 2026-11-13, found by the web and release suites' leftover checks ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)): the user's **upload rate counters**, **creator tier**, **bot-check pass** (`HUMAN_VERIFIED`, 180 days), **TUS upload sessions** and **bulk edit undo records**; for run accounts also their **Watch later and personal playlists** and privacy footprints. A video deleted for good (purge, cleanup or erasure) now also takes its **subtitles**, **upload marker**, **scheduler entry**, **playlist adds** and **file claim**. A deleted channel's hidden search row keeps only its id, and the admin list-count cache no longer stores the admin's search (an email) in its key.
+- On 2026-11-13, found by the web and release suites' leftover checks ([#1251](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1251)): the user's **upload rate counters**, **creator tier**, **bot-check pass** (`HUMAN_VERIFIED`, 180 days), **TUS upload sessions** and **bulk edit undo records**; for run accounts also their **Watch later and personal playlists** and privacy footprints. A video deleted for good (purge, cleanup or erasure) now also takes its **subtitles**, **upload marker**, **scheduler entry**, **playlist adds** and **file claim**; in an account erasure they go with the [media files](#media-files). A deleted channel's hidden search row keeps only its id, and the admin list-count cache no longer stores the admin's search (an email) in its key.
 - Also from those checks (owner decisions 2026-11-13, [#1288](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1288)), the three cases below: admin history, archive titles, dead letters and late writes.
 
 ### Admin history
@@ -143,7 +143,16 @@ What is true on `main` today.
 
 #### Media files
 
-The erase doesn't remove video files, originals and thumbnails on R2, or images in Bunny Storage, and no other job removes them today. Bunny's copy of a video is deleted during the erase, once: a failure is logged and not repeated. The server change that removes stored files is in progress; this page changes when it ships.
+Stored files are removed by their own job, `user.erase-media` (videos admin → Jobs: state, reason, Retry), not by the request that erases the records ([#2001](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2001)).
+
+- **Written down first.** Before a record is deleted, the job gets what its media is: ids and file paths, no text and no account. If that can't be stored, the record stays and the erase answers `503`; the client tries again later.
+- **From 24 hours on.** The first file goes 24 hours after the last record was deleted. What fails is tried again for about a day; then the job fails and shows on the Errors page with Retry. Six hours after the files are gone it looks once more, for an encode that was still running.
+- **What goes:** R2 renditions, downloads, thumbnails, kept originals and audio tracks of the person's videos, and their CDN copies; subtitles, review frames, audio and transcripts; Bunny's copy of each video; live recordings; caption work files; the post images, avatars and covers of their channels; their profile images.
+- **What stays:** what they uploaded to someone else's channel (the channel's, without their name); an image another person uploaded to a deleted channel while that person still shows it; images whose uploader can't be proven, until an admin has looked at them (listed in the job and on the Errors page); media under an open safety case, until the case is done; Bunny's edge copies of images until they expire, where no account key is set.
+- **A row for each deleted video, stream and channel** (its id, and when its media went) stays as long as the job's own record, 2 years. Rows that name the account go when its images are gone.
+- **E2E run accounts** (non-production, test library only) are cleaned at once and leave no rows.
+
+Text for people must not say that files are gone at once. Copies can remain for a short time after the content is deleted.
 
 ## Account actions across services
 
