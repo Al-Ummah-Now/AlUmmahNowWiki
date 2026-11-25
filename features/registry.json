@@ -2516,7 +2516,7 @@
         "videos-admin"
       ],
       "wiki": "epics/AUN-APP-UPDATES-app-updates.md",
-      "note": "Server and Core merged 2026-11-24 behind the appUpdates switch (default off): versions, signed release manifests and root-signed key lists, the release index, the update answer in GET /api/v1/app-config, the release tool, and Core's UpdateChecker (Core v0.4.0-rc.5). Next: the admin Releases tab and the app clients. Downloaded builds get no notice until each repo's signing keys exist.",
+      "note": "Server and Core merged 2026-11-24 behind the appUpdates switch (default off): versions, signed release manifests and root-signed key lists, the release index, the update answer in GET /api/v1/app-config, the release tool, and Core's UpdateChecker (Core v0.4.0-rc.5). Next: the admin Releases tab and the app clients. Until a repo's signing keys exist, its downloaded builds get a notice with one fixed link to the download page and install nothing themselves.",
       "prs": [
         "AlUmmahNow#1783",
         "AlUmmahNow#1797",
