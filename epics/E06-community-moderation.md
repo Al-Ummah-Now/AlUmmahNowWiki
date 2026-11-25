@@ -35,7 +35,7 @@ Safer, more engaged community: scholar verification, moderation tools, engagemen
 - **Signed-out reports** store nothing about the person. Every well-formed report is answered the same way. They are limited per network and per item.
 - **What a moderator can decide** depends on the item. An outcome that would do nothing is not offered and says why; a report never closes as acted on when nothing happened. Banning over an item that is gone needs its reports to name one person whose account is not erased.
 - **Child safety** comes first in the queue, raises an Errors page item, and keeps the item's records. A super admin opens a case from the report. Details: AlUmmahNow `docs/specs/CSAM-RESPONSE.md` §7a.
-- **Not decided:** how long guest reports and kept records stay; whether media is copied before a case opens; whether moderators may see items under a takedown (super admins only today); a response time for reports; whether signed-out people may leave contact details (none are asked for); the limits' final numbers.
+- **Decided (2026-11-25).** Guest reports are deleted a year after their decision. Kept child safety records stay at least a year and while a case is open, and are exempt from account erasure ([Data lifecycle](../guides/data-lifecycle.md)). Media is not copied before a case opens. Items under a takedown are shown to super admins only. Reports are answered within 24-48 hours, as the dialog says. The bot check is used when it is configured and never required of signed-in people. Guests leave no contact details. Alerts go to the Errors page and its alert email.
 
 ## Decisions and constraints
 
