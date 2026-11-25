@@ -6,8 +6,8 @@
 |---|---|
 | **ID** | `AUN-APP-UPDATES` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md), [AlUmmahNowTools](../repos/AlUmmahNowTools.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowWiki](https://github.com/Al-Ummah-Now/AlUmmahNowWiki) |
-| **Status** | **building**: server and Core merged behind the `appUpdates` switch (default **off**); admin page and app clients next |
-| **Last updated** | 2026-11-24 (routine decisions recorded; server and Core merged) |
+| **Status** | **building**: server and Core merged behind the `appUpdates` switch (default **off**); a notice that needs no signing keys ([§5.5](#55-before-a-repo-has-its-signing-keys)), the admin page, Tools and Desktop in progress |
+| **Last updated** | 2026-11-24 (the notice no longer waits for signing keys) |
 | **Origin** | Owner requirement 2026-11-23, relayed by the orchestrator: "every desktop and native app checks for updates and tells the user when a new version is out. Desktop apps also let the user update from inside the app, either automatically or manually." |
 | **Related** | [Epic 9](E09-native-platform-foundations.md) story 9.3/9.5 (`GET /api/v1/app-config`, built), issue [AlUmmahNow#413](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/413) (App config admin page, built), issue [AlUmmahNow#1434](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1434) (App config native client: this epic takes its forced-update part), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md), [Epic 23](E23-release-engineering.md) |
 
@@ -18,7 +18,7 @@ Every native and desktop app knows, without a store release of its own, when a n
 - **All apps** show a small, dismissible notice in English or Arabic when a new version is out, with an **Update** button that does the right thing for where the app came from (App Store, TestFlight, Play, Microsoft Store, a direct download).
 - **Builds below the minimum version** that an admin sets show a full-screen "Please update" screen instead of the app. This is the only forced update, and it is the escape hatch for a broken or unsafe build already in users' hands.
 - **Desktop apps installed from our own downloads** (the Desktop viewer and Studio on Windows, the Tools app on Windows, macOS and Linux, Studio for Mac) download, verify and install the update themselves, automatically or when the user clicks **Update**, then restart.
-- **Nothing unverified is ever installed or offered.** Every self-installed update is checked against an ed25519 signature made in CI, and against the platform code signature once the owner's certificates exist. HTTPS only. A release whose signature is missing or wrong is never advertised, never installed and never linked; it goes to the admin **Errors** page ([§3.2](#32-the-index-in-api-videos), [§5.3](#53-the-flow)).
+- **Nothing unverified is ever installed.** Until a repo has a signing key, a new version is only *announced*, with one fixed link to the official download page, and the app downloads nothing ([§5.5](#55-before-a-repo-has-its-signing-keys)). Every self-installed update is checked against an ed25519 signature made in CI, and against the platform code signature once the owner's certificates exist. HTTPS only. Once a repo has its keys, a release whose signature is missing or wrong is never advertised, never installed and never linked; it goes to the admin **Errors** page ([§3.2](#32-the-index-in-api-videos), [§5.3](#53-the-flow)).
 - **One source of truth** for the latest version per app, platform and channel: the signed release manifest each repo's release workflow publishes, indexed by api-videos and served through `GET /api/v1/app-config`. Admins see the current versions and set the minimum version on the existing **App config** page.
 
 ## Decisions and constraints
@@ -29,7 +29,7 @@ Every native and desktop app knows, without a store release of its own, when a n
 - **No browser-style prompts** ([No browser prompts](../guides/product-rules.md)): the notice is an in-app bar; the forced screen and "Restart now?" are in-app views, never `confirm`/`alert` or a system dialog we raise ourselves (store sheets the OS shows are fine).
 - **Hidden when off** ([Product rules](../guides/product-rules.md)): no "updates are disabled" text anywhere for users. The Settings **Updates** section on desktop shows only while the switch is on and the build can self-update.
 - **Arabic** uses ٠–٩ through each app's shared digit formatter ([Numbers and dates](../guides/numbers-and-dates.md)), Arabic commas «،», and «مرئي/مرئيات» where videos are named.
-- **Never store or ask for secrets in agents.** Every key and certificate below is an owner item; the orchestrator collects it. Every release workflow already builds unsigned when a secret is missing, with a `::notice::`; the update path follows the same rule, failing closed: until a repo has its signing keys, its downloaded builds get **no** update notice at all; store builds still get theirs, because the store is the channel ([§5.5](#55-before-a-repo-has-its-signing-keys)).
+- **Never store or ask for secrets in agents.** Every key and certificate below is an owner item; the orchestrator collects it. Every release workflow already builds unsigned when a secret is missing, with a `::notice::`; the update path does not wait for them either: until a repo has its signing keys, its downloaded builds get a notice with a fixed link and install nothing ([§5.5](#55-before-a-repo-has-its-signing-keys)); store builds use their store.
 - **Costs**: about $0 a month ([§10](#10-costs)).
 
 ## 1. What exists today
@@ -85,7 +85,7 @@ The client sends where it was installed from, because that decides what **Update
 | `amazon` | installer `com.amazon.venezia` | open the Amazon Appstore page |
 | `msstore` | Windows: the app runs with package identity and the Store installed it (`StoreContext` returns an app license) | `StoreContext.RequestDownloadAndInstallStorePackageUpdatesAsync` (the Store's own consent UI) |
 | `direct` | our own installer: Velopack on Windows/macOS, Sparkle on Studio for Mac | download, verify, install, restart ([§5](#5-desktop-self-update)) |
-| `managed` | MSI per-machine installs, sideloaded MSIX, `.deb`, Flatpak, `.tar.gz`, Admin MSIX from R2, the Android pre-release APK | open the download page (`url`) |
+| `managed` | MSI per-machine installs, sideloaded MSIX, `.deb`, Flatpak, `.tar.gz`, Admin MSIX from R2, the Android pre-release APK | open the download page (`url` for a signed release; the app's own fixed link while the repo has no keys, [§5.5](#55-before-a-repo-has-its-signing-keys)) |
 | `samsung` | Tizen | nothing (Samsung updates TV apps); only the minimum-version screen applies |
 
 ### 2.4 Apps
@@ -144,8 +144,9 @@ Every public release workflow (Desktop `release.yml`, Tools, Apple `release.yml`
 - `notes` come from the store release-notes files the repos already keep (§1). CI fails the release if either language is missing or over 1,500 characters.
 - `artifacts` lists every downloadable file with its SHA-256 (the same values as `SHA256SUMS.txt`). `kind` is one of `velopack-full`, `velopack-delta`, `sparkle-zip`, `msi`, `msix`, `zip`, `dmg`, `deb`, `flatpak`, `tar`, `apk`.
 - `stores` lists the store builds the tag uploaded (TestFlight, Play internal, Microsoft Store draft). They are **not** "available" until the store says so ([§3.3](#33-store-availability)).
-- Signing runs in a final CI step with the repo's `UPDATE_SIGNING_KEY` secret (an ed25519 private key, [§9](#9-owner-items-keys-and-certificates)). Without it, the manifest is still published, unsigned, with no `.sig`; it is only listed on the admin page ([§5.5](#55-before-a-repo-has-its-signing-keys)).
-- Draft GitHub releases (Desktop) are invisible until a person publishes them, so "published on GitHub" is what "released" means.
+- Signing runs in a final CI step with the repo's `UPDATE_SIGNING_KEY` secret (an ed25519 private key, [§9](#9-owner-items-keys-and-certificates)). Without it, the manifest is still published, unsigned, with no `.sig`; it is listed on the admin page and used for the notice's version and notes only ([§5.5](#55-before-a-repo-has-its-signing-keys)).
+- Draft GitHub releases (Desktop) are invisible until a person publishes them, so "published on GitHub" is what "released" means. The feed can list a tag whose release is still a draft: the indexer counts a tag only once a file of its release can be downloaded, and looks at it again on the next run until then.
+- **Releases made before a repo publishes manifests** (Tools, Desktop): while the repo has no root key, the indexer reads the release's `SHA256SUMS.txt` instead and takes the version from the tag and the app/platform pairs from the file names (`AlUmmahNow-Tools-Windows-…`, `alummahnow-studio_…_amd64.deb`). Such an entry has no notes and no files: it only feeds the notice.
 
 ### 3.2 The index in api-videos
 
@@ -159,11 +160,14 @@ The hourly cron (`47 * * * *`) and the admin's **Refresh now** button run the in
 
 | Repo state | Manifest | What happens |
 |---|---|---|
-| **No keys yet** (no trusted key for the repo: K1–K4 not provided) | no `.sig` | Listed on the admin page as "Unsigned: signing key not set up". **No app is told about it**: downloaded builds get no notice; store builds are told only through their store ([§5.5](#55-before-a-repo-has-its-signing-keys)). |
+| **No keys yet** (no root key configured for the repo) | none, or not signed | Listed on the admin page as "Not signed: notice only". Downloaded builds get `action: notice`: the version and notes, no URL; the app shows its own fixed link ([§5.5](#55-before-a-repo-has-its-signing-keys)). Store builds are told only through their store. |
+| **No keys yet** | bad JSON, bad schema, wrong `repo` or `tag` | **Quarantined**: nothing shown anywhere, one admin **Errors** item. It never falls back to the tag. |
+| **No keys yet** | the release was deleted or made a draft again | Dropped on the next run; the newest published release before it takes its place. |
+| **Root key configured, no key list accepted yet** | any | Nothing is indexed and nothing is offered (`action: none`). |
 | **Keys set up** | valid signature | Indexed and served. |
 | **Keys set up** | `.sig` missing, signature wrong, unknown or revoked key, `repo`/`tag` mismatch, bad schema | **Quarantined**: never indexed, never advertised, no download link anywhere; one admin **Errors** item per tag ([O26](decisions.md#o26-always-async-with-admin-visible-errors)) with what failed. |
 
-A repo moves from "no keys yet" to "keys set up" once, when its key list is first published ([§3.5](#35-keys-rotation-and-revocation)); it never goes back, so stripping a signature can't downgrade a repo to the unsigned path. Reads are a few small HTTPS requests per hour.
+A repo leaves "no keys yet" as soon as its root key is configured on the server, and is "keys set up" once its key list is accepted ([§3.5](#35-keys-rotation-and-revocation)). It never goes back, so stripping a signature can't downgrade a repo to the unsigned path, and its unsigned entries stop being offered at once. Reads are a few small HTTPS requests per hour.
 
 Why pull instead of CI pushing to an endpoint: pulling needs **no write credential in four repos**, and the signature means the server, not GitHub, decides what to trust. Apps that self-install also verify the manifest **themselves** with the public key compiled into the app, so a compromised API can point at a release but cannot make an app install anything that was not signed in CI.
 
@@ -181,7 +185,7 @@ The existing `versions` document keeps the **policy**, set by super admins: per 
 
 | Field | Meaning | Validation |
 |---|---|---|
-| `minimumVersion` | Builds below it must update ([§3.7](#37-the-minimum-version-gate)) | version format; **must not be above the newest version available to every install source of that pair** (signed manifest for `direct`/`managed`, App Store lookup for `appstore`, the admin's **Available** mark for `testflight`/`amazon`; Play and Microsoft Store are confirmed on the device); checked by the server and the editor |
+| `minimumVersion` | Builds below it must update ([§3.7](#37-the-minimum-version-gate)) | version format; **must not be above the newest version available to every install source of that pair** (signed manifest for `direct`/`managed`, or the newest published release while the repo has no keys; App Store lookup for `appstore`, the admin's **Available** mark for `testflight`/`amazon`; Play and Microsoft Store are confirmed on the device); checked by the server and the editor |
 | `latestVersion` | Kept for old documents; now read-only, filled from the index | — |
 | `storeUrl` | Store page when the index has none | `https://` |
 | `notesOverrides` | `{ "<version>": { en, ar } }`: replaces CI notes **for that version only**; ignored for any other version, and entries older than the latest release are dropped on the next save (at most 5) | version format; both languages required ([Localized fields](../guides/product-rules.md)), each ≤ 1,500 |
@@ -217,7 +221,7 @@ The admin apps never get a public GitHub release (AlUmmahNowApple `admin-release
 `required` never strands a user without an update they can get:
 
 - The editor and the server refuse a minimum above what every install source can obtain ([§3.4](#34-admin-set-policy)).
-- When `required` arrives, the app shows the **forced screen** only if its own source confirms an update: Play `UPDATE_AVAILABLE`, `StoreContext` finds one, a signed manifest verifies (`direct`), or the server says the store has it (App Store lookup, admin's Available mark). Otherwise it shows a bar that can't be closed, "This version will stop working soon. Update when your store offers it.", and the app keeps working.
+- When `required` arrives, the app shows the **forced screen** only if its own source confirms an update: Play `UPDATE_AVAILABLE`, `StoreContext` finds one, a signed manifest verifies (`direct`), a published release at or above the minimum exists and the repo has no keys (`action: notice`, with the fixed link), or the server says the store has it (App Store lookup, admin's Available mark). Otherwise it shows a bar that can't be closed, "This version will stop working soon. Update when your store offers it.", and the app keeps working.
 - Offline, an app uses its last known answer: a minimum it has already seen shows the bar that can't be closed (never the forced screen, since it can't confirm an update), and it never acts on a minimum it has not seen.
 
 The `config` document gains `updates.checkHours` (default 6, range 1–48) and `updates.autoInstallDefault` (default per [APPUPD-D5](#owner-decisions)).
@@ -253,23 +257,118 @@ New optional query: `channel` (`stable|beta`, default `stable`), `source` (§2.3
 ```
 
 - `enabled: false` (switch off) → `status: "ok"`, every new field null. Nothing is shown.
-- `action`: `store` (open the store), `install` (self-update from `manifestUrl`; only for `source=direct` and a signed release), `download` (open `url`; only for `managed` and a signed release, or the staff Apps page for `admin`), `none`. An unsigned or quarantined release always gives `none`.
+- `action`: `store` (open the store), `install` (self-update from `manifestUrl`; only for `source=direct` and a signed release), `download` (open `url`; only for `managed` and a signed release, or the staff Apps page for `admin`), `notice` (the repo has no signing keys: say a new version is out and open the app's **own compiled-in** page; `url`, `storeUrl`, `manifestUrl`, `tag` and `keys` are always null, [§4.1.1](#411-the-no-keys-answer-action-notice)), `none`. A quarantined release always gives `none`.
 - `available`: whether the server knows the client's source can get `latestVersion` now ([§3.3](#33-store-availability)); clients with a device API check for themselves.
 - `keys`: the repo's root-signed key list, verified by the app, never trusted because the API sent it.
 - New `POST /api/v1/app-config/update-failure` (public, rate-limited per IP, no user data): an app reports a failed verification (`repo`, `tag`, `reason`); the server turns it into one admin **Errors** item per repo, tag and reason.
 - `notes` returns **both** languages; the app shows the one matching its own UI language ([English default](../guides/product-rules.md)).
 - Still public, cacheable 300 s, no user data. `installId` stays optional and random per install.
 
+#### 4.1.1 The no-keys answer (`action: notice`)
+
+For `source=direct` or `managed` while the app's repo has **no root key configured on the server**. The same shape as above; caching and the other top-level fields (`api`, `flags`, `config`) are unchanged. Core's `UpdateChecker` (v0.4.0-rc.5 and later) already reads this answer: `kind` is `Notice` or `Forced`, `action` is `notice`, `url` is null. No Core release is needed; the two rows about root keys below are the app's own check.
+
+**A newer version is out** (`recommended`):
+
+```json
+{
+  "update": {
+    "enabled": true,
+    "status": "recommended",
+    "minimumVersion": "0.0.0",
+    "latestVersion": "2026.11.24",
+    "storeUrl": null,
+    "channel": "stable",
+    "publishedAt": "2026-11-24T20:29:30Z",
+    "notes": { "en": "Faster folder scans.", "ar": "فحص أسرع للمجلدات." },
+    "message": null,
+    "action": "notice",
+    "url": null,
+    "manifestUrl": null,
+    "tag": null,
+    "signed": false,
+    "available": true,
+    "checkHours": 6,
+    "keys": null
+  }
+}
+```
+
+**Below the minimum** (`required`, the forced screen):
+
+```json
+{
+  "update": {
+    "enabled": true,
+    "status": "required",
+    "minimumVersion": "2026.11.24",
+    "latestVersion": "2026.11.24",
+    "storeUrl": null,
+    "channel": "stable",
+    "publishedAt": "2026-11-24T20:29:30Z",
+    "notes": null,
+    "message": { "en": "This version can no longer sign in.", "ar": "لم يعد هذا الإصدار قادرًا على تسجيل الدخول." },
+    "action": "notice",
+    "url": null,
+    "manifestUrl": null,
+    "tag": null,
+    "signed": false,
+    "available": true,
+    "checkHours": 6,
+    "keys": null
+  }
+}
+```
+
+**Up to date** (`ok`): `"status": "ok"`, `"latestVersion"` the newest published version, `"action": "notice"`, every other field as in the first example with `"message": null`. The app shows nothing.
+
+**Nothing known, or the only release is quarantined**: `"latestVersion": null`, `"action": "none"`, `"available": false`, `"signed": null`, `"notes": null`. The app shows nothing. If `status` is then `required` (or the newest release is below the minimum: `action: none`, `available: false`), the app shows the bar that can't be closed, never the forced screen ([§3.7](#37-the-minimum-version-gate)).
+
+**Switch off**: `"enabled": false`, `"status": "ok"`, every other new field null. The app shows nothing.
+
+| Field | In a `notice` answer |
+|---|---|
+| `latestVersion` | From our index of published GitHub releases. Never a version typed by an admin. |
+| `notes` | `{ en, ar }` plain text from the release's manifest, or an admin's override for that version; **null** when there is none (hide **What's new**). Shown as text: no HTML, no Markdown, no links. |
+| `message` | Only with `required`; plain text. |
+| `publishedAt` | May be null. |
+| `available` | `true` when `latestVersion` is at or above the minimum. |
+| `url`, `storeUrl`, `manifestUrl`, `tag`, `keys` | **Always null.** An app that finds a value there ignores it. |
+
+**The fixed link.** One `https` page per app and platform, compiled into the app. It never comes from this answer, a manifest, `storeUrl` or any other network data:
+
+| App | Link |
+|---|---|
+| Tools (Windows, macOS, Linux) | `https://github.com/Al-Ummah-Now/AlUmmahNowTools/releases` |
+| Desktop viewer and Studio (Windows, Linux) | `https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/releases` |
+| Studio for Mac | `https://github.com/Al-Ummah-Now/AlUmmahNowApple/releases` |
+| Android pre-release APK | `https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/releases` |
+| Admin for Windows | the staff Apps page of the environment's videos admin; `notice` only while the server has `ADMIN_APPS_URL` set, otherwise `none` |
+
+The app opens it in the browser and does nothing else. It is the plain releases list, so a wrong or late version in our answer can't select a file.
+
+**What the client does**, by what is compiled in:
+
+| Build | Server says | App does |
+|---|---|---|
+| No root key | `notice` | Notice or forced screen with **Download** → the fixed link |
+| No root key | `install` or `download` (the repo got its keys after this build) | The same notice, with the fixed link. It ignores `url`, `manifestUrl` and `keys`, and fetches nothing: it can't verify them. |
+| Has a root key | `notice` | **Treated as `none`**: no notice; when `required`, the bar that can't be closed. Signed data only. |
+| Has a root key | `install`, `download` | [§5.3](#53-the-flow) |
+| Any | `store` | [§5.4](#54-microsoft-store-and-managed-installs), §6, §7 |
+
+A no-root-key build must also hide **Install updates automatically** and never construct its updater.
+
 ### 4.2 Admin
 
 admin-api (audited in `site_settings_log`):
 
-- `GET /api/app-config/releases` (`settings:manage`) → the `releases` index: per app, platform and channel, latest version, published time, signed / unsigned / quarantined, notes, store availability, and the minimum version in force.
+- `GET /api/app-config/releases` (`settings:manage`) → the `releases` index: per app, platform and channel, latest version, published time, signed / not signed (notice only) / quarantined, notes, store availability, and the minimum version in force.
 - `POST /api/app-config/releases/refresh` (`settings:manage`) → runs the indexer now (one at a time; 429 while one runs).
 - `PUT /api/app-config/releases/available` (**super admin**) → marks a TestFlight or Amazon upload available.
 - `PUT /api/app-config/versions` (now **super admin** only; was `settings:manage`): minimum version, notes overrides and message. `flags` and `config` keep `settings:manage` until #1434's remaining rows decide otherwise.
 
-The admin page **App config** gains a **Releases** tab (default tab): a table per app (viewer, studio, tools, admin, kids hidden until it exists) with rows per platform and channel: *Latest*, *Released*, *Signature* (signed, unsigned: key not set up, quarantined), *Available* per source, *Minimum*, and for super admins an **Edit** action that opens the existing version editor for that row, prefilled, and **Mark available** for TestFlight and Amazon uploads. A minimum above what every source can get is refused under the field, naming the source. **Refresh now** at the top. English and Arabic, ٠–٩ in Arabic.
+The admin page **App config** gains a **Releases** tab (default tab): a table per app (viewer, studio, tools, admin, kids hidden until it exists) with rows per platform and channel: *Latest*, *Released*, *Signature* (signed, not signed: notice only, quarantined), *Available* per source, *Minimum*, and for super admins an **Edit** action that opens the existing version editor for that row, prefilled, and **Mark available** for TestFlight and Amazon uploads. A minimum above what every source can get is refused under the field, naming the source. **Refresh now** at the top. English and Arabic, ٠–٩ in Arabic.
 
 ## 5. Desktop self-update
 
@@ -312,11 +411,22 @@ The admin page **App config** gains a **Releases** tab (default tab): a table pe
 
 ### 5.4 Microsoft Store and managed installs
 
-`msstore` builds use `StoreContext`: on launch and every `checkHours`, `GetAppAndOptionalStorePackageUpdatesAsync`; when it finds one, the same bar with **Update** → `RequestDownloadAndInstallStorePackageUpdatesAsync` (the Store's own UI). `managed` builds show the bar with **Download**, which opens `url` in the browser, only for a signed release of a repo whose keys are set up.
+`msstore` builds use `StoreContext`: on launch and every `checkHours`, `GetAppAndOptionalStorePackageUpdatesAsync`; when it finds one, the same bar with **Update** → `RequestDownloadAndInstallStorePackageUpdatesAsync` (the Store's own UI). `managed` builds show the bar with **Download**, which opens `url` in the browser for a signed release of a repo whose keys are set up; before that, the fixed link ([§5.5](#55-before-a-repo-has-its-signing-keys)).
 
 ### 5.5 Before a repo has its signing keys
 
-Until the owner provides a repo's root key and `UPDATE_SIGNING_KEY` (K-R, K1–K4), its manifests are unsigned and the API answers `action: none` for its `direct` and `managed` builds: **those builds show no update notice**, and the Settings **Updates** section shows only the current version. Store builds of the same repo are unaffected: their store is the trusted channel. Unsigned releases are listed on the admin page so staff can see what shipped. The first signed release turns notices and self-install on with no app change, because each build already carries the root public key from APPUPD-7/8/10 onward. (Builds released before the root key existed can't verify anything; they keep the notice off and are moved on by the minimum-version gate through their store or by a manual download.)
+The check does not wait for signing keys ([APPUPD-D13](#owner-decisions)). Until a repo's root key (K-R) exists, its `direct` and `managed` builds get a **notice with one link**:
+
+- **What the app says**: only that a new version X is available, plus the release notes from our own API as plain text. **Download** opens the app's fixed page ([§4.1.1](#411-the-no-keys-answer-action-notice)) in the browser.
+- **What the app never does**: download, verify, stage or install anything; open a URL from the answer, from a manifest or from any other network data; show **Install updates automatically**, **Restart now** or a progress line.
+- **Forced update** works the same way: below the minimum a super admin set, the forced screen shows with **Download** → the same fixed link (and **Quit** on desktop). The minimum can't be set above the newest published release.
+- **Settings → Updates** shows the version, the last check and **Check now**. There is no automatic-install switch.
+- **Quarantined releases show nothing.**
+- **Store builds are unaffected**: their store is the channel.
+
+**When the keys arrive.** The server stops offering a repo's unsigned releases the moment its root key is configured. A build with the root key compiled in takes only signed data and treats `notice` as nothing, so no answer can bring it back to the unsigned path. A build from before the root key keeps its notice with the fixed link, which leads people to a build that can verify. The first build with a root key turns self-install on with no server change beyond the key list.
+
+What an attacker could do with the API alone in this state: announce a version that doesn't exist, or hide one that does. The only place the app can send a person is our own releases page.
 
 ## 6. Android
 
@@ -327,7 +437,7 @@ Until the owner provides a repo's root key and `UPDATE_SIGNING_KEY` (K-R, K1–K
   - If our API says `required` but Play has no update for this device yet (review, processing, staged rollout), **no forced screen**: the bar that can't be closed ([§3.7](#37-the-minimum-version-gate)), and the app keeps working.
   - Tests use `FakeAppUpdateManager`.
 - **Fire TV (Amazon)**: no in-app update API. The bar (TV focusable) with **Update** opening `amzn://apps/android?p=net.alummahnow.tv`.
-- **Sideloaded pre-release APK** (`managed`): once the Android repo's keys are set up, the bar with **Download**, opening the GitHub release page of a **signed** release in the browser; before that, no notice ([§5.5](#55-before-a-repo-has-its-signing-keys)). No in-app APK install ([APPUPD-D8](#owner-decisions)), so no `REQUEST_INSTALL_PACKAGES` permission, which Play forbids in Play builds anyway.
+- **Sideloaded pre-release APK** (`managed`): the bar with **Download**, opening in the browser the GitHub release page of a **signed** release once the Android repo's keys are set up, and the app's fixed releases page before that ([§5.5](#55-before-a-repo-has-its-signing-keys)). No in-app APK install ([APPUPD-D8](#owner-decisions)), so no `REQUEST_INSTALL_PACKAGES` permission, which Play forbids in Play builds anyway.
 - **TV** (viewer-tv): the bar is a focusable row at the top of Home, reachable with the D-pad; Back dismisses it.
 
 ## 7. Apple
@@ -337,7 +447,7 @@ Until the owner provides a repo's root key and `UPDATE_SIGNING_KEY` (K-R, K1–K
   - `testflight`: `itms-beta://` (opens TestFlight).
 - On `required`: the forced screen with **Update** (same targets) when the server says the store has the update (`available`); otherwise the bar that can't be closed ([§3.7](#37-the-minimum-version-gate)). Apple allows a "this version is no longer supported" screen; the app downloads no code ([§8](#8-store-rules-and-safety)).
 - The App Store lookup confirms availability server-side (§3.3), so iOS users are never told about a version still in review.
-- **Studio for Mac** (Developer ID): Sparkle 2 with a custom `SPUUserDriver` that drives our bar and Settings → Updates (same flow as §5.3; Sparkle verifies the EdDSA signature and the Developer ID Team ID before installing). Before installing, our `SPUUpdaterDelegate` checks the item's `app-release.json` against the key list ([§3.5](#35-keys-rotation-and-revocation)). Until the Developer ID and notarization secrets exist (K6), Studio for Mac is ad hoc signed and Sparkle can't update it safely, so it shows no update notice ([§9](#9-owner-items-keys-and-certificates)).
+- **Studio for Mac** (Developer ID): Sparkle 2 with a custom `SPUUserDriver` that drives our bar and Settings → Updates (same flow as §5.3; Sparkle verifies the EdDSA signature and the Developer ID Team ID before installing). Before installing, our `SPUUpdaterDelegate` checks the item's `app-release.json` against the key list ([§3.5](#35-keys-rotation-and-revocation)). Until the Developer ID and notarization secrets exist (K6), Studio for Mac is ad hoc signed and Sparkle can't update it safely, so it shows the notice with the fixed link ([§5.5](#55-before-a-repo-has-its-signing-keys)) and Sparkle stays off.
 - **Admin (iOS, iPadOS, Mac)**: TestFlight internal → the TestFlight path above.
 
 ## 8. Store rules and safety
@@ -348,11 +458,11 @@ Until the owner provides a repo's root key and `UPDATE_SIGNING_KEY` (K-R, K1–K
 - **Integrity**: ed25519 over the manifest, SHA-256 per file, HTTPS only, host allowlist on every redirect hop, no downgrades, `yanked` versions refused, code-signature check when configured. Release keys live only in GitHub Actions secrets; root keys stay offline with the owner; public keys are in the builds and the API's variables. Rotation and revocation go through the root-signed key list ([§3.5](#35-keys-rotation-and-revocation)).
 - **Privacy**: the check sends app, platform, version, channel, source, arch, locale and the existing random `installId`; no account data. Desktop `store/microsoft/privacy.md`, Android `store/play/data-safety.md` and Apple privacy answers are updated in the same PRs.
 - **A user is never locked out by mistake** ([§3.7](#37-the-minimum-version-gate)): the minimum can't be set above what every install source can obtain, the forced screen needs the app's own source to confirm an update, and otherwise the app stays usable behind a bar. Offline, an app uses its last known answer (AUN-FEATURES `lastKnownElseHidden`): it never blocks on a minimum it has not seen.
-- **Fail closed**: a missing or wrong signature, a revoked key, a yanked version, a foreign host on any redirect hop or a hash mismatch means no install and no link; the admin sees it on the Errors page ([§3.2](#32-the-index-in-api-videos), [§5.3](#53-the-flow)).
+- **Fail closed**: for a repo with keys, a missing or wrong signature, a revoked key, a yanked version, a foreign host on any redirect hop or a hash mismatch means no install and no link; the admin sees it on the Errors page ([§3.2](#32-the-index-in-api-videos), [§5.3](#53-the-flow)).
 
 ## 9. Owner items: keys and certificates
 
-Nothing here is ever requested or stored by an agent. The orchestrator collects each value and puts it in the GitHub secret named. Every release keeps working without them (unsigned, download link only).
+Nothing here is ever requested or stored by an agent. The orchestrator collects each value and puts it in the GitHub secret named. Every release keeps working without them: people are told about a new version with a fixed link to the download page, and the app installs nothing itself ([§5.5](#55-before-a-repo-has-its-signing-keys)).
 
 | # | Item | Secret / variable | Repo | Unlocks |
 |---|---|---|---|---|
@@ -364,7 +474,7 @@ Nothing here is ever requested or stored by an agent. The orchestrator collects 
 | K6 | Apple Developer ID Application certificate + App Store Connect API key | `DEVELOPER_ID_P12`, `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | Apple, Tools (same names) | notarized Studio for Mac and Tools for Mac, Team ID pinning, Sparkle self-update |
 | K7 | Play upload key + service account (already listed in Android `docs/RELEASE.md`) | `AUN_UPLOAD_*`, `PLAY_SERVICE_ACCOUNT_JSON` | Android | Play builds, so In-App Updates has something to find |
 | K8 | App Store ids of each production app (not secret) | variables `APPSTORE_ID_VIEWER`, `APPSTORE_ID_STUDIO`, `APPSTORE_ID_VIEWER_MAC` | Apple | the in-app App Store sheet; lookup by bundle id works before that |
-| K-R | **Root key** per repo (Desktop, Tools, Apple, Android): generated with `scripts/update-keygen --root` on the owner's own machine, kept **offline** (never a GitHub secret). The owner signs each key list with `scripts/update-keys sign` and gives the orchestrator only the signed `update-keys.json` + `.sig` to publish | none (offline); public key committed | each app repo | key lists: rotation and revocation ([§3.5](#35-keys-rotation-and-revocation)); without it no repo leaves "no keys yet" |
+| K-R | **Root key** per repo (Desktop, Tools, Apple, Android): generated with `scripts/update-keygen --root` on the owner's own machine, kept **offline** (never a GitHub secret). The owner signs each key list with `scripts/update-keys sign` and gives the orchestrator only the signed `update-keys.json` + `.sig` to publish | none (offline); public key committed | each app repo | key lists: rotation and revocation ([§3.5](#35-keys-rotation-and-revocation)), and self-install; without it a repo stays on the notice with the fixed link |
 | K10 | Write access for AlUmmahNowApple's `admin-release.yml` to the private admin release bucket (an R2 API token limited to `app-releases/` in that bucket) | `ADMIN_RELEASES_R2_ACCESS_KEY_ID`, `ADMIN_RELEASES_R2_SECRET_ACCESS_KEY` | Apple | Admin for iPhone, iPad and Mac versions in the index ([§3.6](#36-staff-only-admin-releases)) |
 
 The root public keys (K-R) go in api-videos' `UPDATE_ROOT_KEYS` variable (not secret) and into each repo's build, in the same PR that commits them; release keys (K1–K4) reach the server and the apps only through the root-signed key list. api-videos also binds the private admin bucket read-only as `ADMIN_RELEASES` (a binding in its wrangler config, no secret).
@@ -392,6 +502,7 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 | APPUPD-8 | Desktop: the same for the Windows viewer and Studio; `StoreContext` path for Store builds; `managed` bar for MSI/Linux; forced-update screen (moved here from AUN-FEATURES FEAT-14); Admin for Windows staff link; manifests in both release workflows (the admin one to the private bucket) | AlUmmahNowDesktop |
 | APPUPD-9 | Android: notice bar + forced screen (phone and TV; moved here from FEAT-13); Play In-App Updates; Amazon and signed sideload links; `app-release.json` in `release.yml` | AlUmmahNowAndroid |
 | APPUPD-10 | Apple: notice bar + forced screen (iOS, iPadOS, tvOS, Mac; moved here from FEAT-12); App Store sheet / TestFlight links; Sparkle 2 in StudioMac with appcast and the key-list delegate, compiled out of Mac App Store targets; manifests in `release.yml` and (private) `admin-release.yml` | AlUmmahNowApple |
+| APPUPD-12 | api-videos: the no-keys answer ([§4.1.1](#411-the-no-keys-answer-action-notice)): `action: notice` for `direct`/`managed` builds of a repo with no root key; index a published release without a manifest from its `SHA256SUMS.txt`; drafts retried, deleted releases dropped; the minimum counts published releases of such a repo; admin "Not signed: notice only"; tests | AlUmmahNow |
 | APPUPD-11 | Wiki: per-app "How updates work" in each repo's release doc and the product rules; registry status; AUN-FEATURES FEAT-12–14 pointing here | AlUmmahNowWiki + repos |
 
 ## 12. The notice
@@ -416,7 +527,7 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 - **Version comparison** (shared-types, Core, each app's thin wrapper): 3 vs 4 parts, pre-release precedence, an Apple rebuild (`1.2.3.2` > `1.2.3.0`, same marketing version), `-qa` stripping, invalid strings. One shared table of cases (`spec/app-updates/versions.json` in Core) run by TypeScript, Rust, C#, Kotlin and Swift tests, so every platform agrees.
 - **Minimum-version gate**: server unit tests per source and channel (switch off → `ok`; below minimum → `required`; equal → `ok`/`recommended`; beta channel sees the newer of beta and stable; `available` per source); editor and server refuse a minimum above what any source can get (TestFlight not marked available, App Store lookup older); client tests: `required` without a confirmed update shows the bar, not the forced screen; offline, a last-known `required` shows the bar that can't be closed, a never-seen one shows nothing.
 - **Notes overrides**: an override for 1.4.0 shows on 1.4.0, not after the index moves to 1.4.1; old entries are dropped on save.
-- **Manifest signature** (server, Tools, Desktop, Apple Sparkle setup): valid signature; one flipped byte in the manifest (**tampered file**) → refused; one flipped byte in the downloaded package → SHA-256 mismatch, file deleted, nothing installed; wrong key; wrong repo, tag or channel; a missing `.sig` for a repo with keys → quarantined, no notice and no link; an older signed release that is still newer than the installed build but below the highest version the app has verified, or yanked → refused; a redirect hop to a non-allowlisted host or to HTTP → refused (`release-assets.githubusercontent.com` allowed). Test keys are generated per test run; no real key in any repo.
+- **Manifest signature** (server, Tools, Desktop, Apple Sparkle setup): valid signature; one flipped byte in the manifest (**tampered file**) → refused; one flipped byte in the downloaded package → SHA-256 mismatch, file deleted, nothing installed; wrong key; wrong repo, tag or channel; a missing `.sig` for a repo with keys → quarantined, no notice and no link; a repo with no root key → `notice` with every URL field null; a root key configured with no accepted key list → `none`; a bad manifest in a repo with no keys → quarantined, never the tag; a draft's tag → not indexed and looked at again; a deleted release → dropped; a client with no root key ignores every URL in any answer; a client with a root key shows nothing for `notice`; an older signed release that is still newer than the installed build but below the highest version the app has verified, or yanked → refused; a redirect hop to a non-allowlisted host or to HTTP → refused (`release-assets.githubusercontent.com` allowed). Test keys are generated per test run; no real key in any repo.
 - **Keys**: a key list with a lower or equal serial is ignored; a list not signed by the root key is ignored; a revoked key's manifest is refused even if a later list omits the revocation; an app built before a rotation updates straight to a release signed only with the new key (skip-safe rotation); after revoking key A, a manifest signed by A is refused and one dual-signed by A and B is accepted only through B.
 - **Indexer**: fixtures for the Atom feed, manifests, signatures and App Store lookup; no network in tests.
 - **Notice UI**: unit tests for the state machine (available → downloading → ready, dismissed per version, busy, failed); Android Compose tests with `FakeAppUpdateManager`; Apple view tests; desktop view-model tests.
@@ -428,10 +539,11 @@ One PR each, in this order (server, then admin, then clients). Each is behind `a
 
 Owner items (not decisions):
 
-- **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build; notices for downloaded builds and self-install switch on per repo when its keys arrive.
+- **APPUPD-D11: K1–K10 and K-R.** Provide the keys and certificates in [§9](#9-owner-items-keys-and-certificates) when ready. Nothing blocks the build or the notices; self-install switches on per repo when its keys arrive.
 
 Decided (all settled 2026-11-24):
 
+- **APPUPD-D13: don't wait for the signing keys.** **Decided by the owner (2026-11-24).** Until a repo's root key exists, a new version shows a notice with one fixed link to the official download page, and the app downloads and installs nothing. The forced update works the same way. The link is compiled into the app and never comes from the network; once a build knows a root key it takes only signed data ([§5.5](#55-before-a-repo-has-its-signing-keys), [§4.1.1](#411-the-no-keys-answer-action-notice)).
 - **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** **Decided (a) by the owner (2026-11-24): yes.** The switch goes on in QA and production as soon as the first app release with the update check is out; until then it stays off.
 - **APPUPD-D5: "Install updates automatically" default.** **Decided (a) by the owner (2026-11-24): on.** Desktop apps download updates in the background and install them when the app closes, never restarting on their own; the user's own choice in Settings → Updates always wins; admins change the default with `updates.autoInstallDefault`.
 - **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` (Windows) and `.pkg` (Tools on macOS) are the main downloads, and the MSI and `.dmg` stay for managed installs. All four are direct downloads on GitHub Releases, as the owner set on 2026-11-10; only the Velopack installers let the app update itself without admin rights.
@@ -439,7 +551,7 @@ Decided (all settled 2026-11-24):
 - **APPUPD-D4: signing keys.** **Decided (a)**, routine security design (2026-11-23): per repo, an offline root key (K-R) and a CI release key (K1–K4). Generating and holding the root keys is an owner item (K-R).
 - **APPUPD-D6: check interval.** **Decided: 6 hours**, routine (2026-11-23); admins change it with `updates.checkHours` (1–48).
 - **APPUPD-D7: beta channel.** **Decided (a)**, routine (2026-11-23): beta builds are told about the newest of beta and stable.
-- **APPUPD-D8: sideloaded Android APK.** **Decided (a)**, routine (2026-11-23): the sideloaded APK gets a bar with a link to a signed release page; no in-app installer and no `REQUEST_INSTALL_PACKAGES`.
+- **APPUPD-D8: sideloaded Android APK.** **Decided (a)**, routine (2026-11-23): the sideloaded APK gets a bar with a link to a release page (signed once the repo has keys); no in-app installer and no `REQUEST_INSTALL_PACKAGES`.
 - **APPUPD-D9: Linux.** **Decided (a)**, routine (2026-11-23): Linux builds get the notice and a download link; a self-updating AppImage only if Linux users ask.
 - **APPUPD-D10: release notes.** **Decided (a)**, routine (2026-11-23): CI takes English and Arabic notes from each repo's store notes files and fails the release without them; admins can override per version.
 - **APPUPD-D12: super-admin-only editing of the minimum version** **Decided (a)** by issue AlUmmahNow#1434, which lists super admins as the editors (2026-11-23).
@@ -454,7 +566,9 @@ Decided (all settled 2026-11-24):
 | APPUPD-3 update answer in `GET /api/v1/app-config` | AlUmmahNow#1806 | merged `78c0f80` |
 | APPUPD-4 release tool `scripts/app-release/app-release.mjs` | AlUmmahNow#1811 | merged `192d89f` |
 | APPUPD-5 Core `aun-updates` + `UpdateChecker` | AlUmmahNowCore#54 | merged `d37b920`, released in Core `v0.4.0-rc.5` |
-| APPUPD-6 admin Releases tab, super-admin editing | — | next |
-| APPUPD-7 Tools (Velopack, bar, forced screen, Settings → Updates) | — | in progress (on Core `v0.4.0-rc.5`) |
-| APPUPD-8 to -10 Desktop, Android, Apple | — | planned |
+| APPUPD-12 no-keys notice on the server: `action: notice`, releases without a manifest, the minimum counts published releases | AlUmmahNow (this change's server PR) | in progress (epic agent) |
+| APPUPD-6 admin Releases tab, super-admin editing | AlUmmahNow#1860 | open, being moved onto main (epic agent) |
+| APPUPD-7 Tools (notice, forced screen, Settings → Updates; self-install off until a root key is compiled in) | AlUmmahNowTools#76 (closes #57) | open, adding the no-keys notice (epic agent) |
+| APPUPD-8 Desktop | AlUmmahNowDesktop | in progress (Desktop agent, against §4.1.1) |
+| APPUPD-9, -10 Android, Apple | — | planned; the same §4.1.1 contract |
 | APPUPD-11 per-app docs | — | planned |
