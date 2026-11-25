@@ -97,6 +97,8 @@ IDs come from the source documents. Where two documents reuse an ID, the second 
 | [O42](decisions.md#o42-paygood-collects-only-creators-paid-through-a-separate-payout-rail) | PayGood only collects support into the organisation's merchant account; creators are paid through a separate payout rail (never Stripe); the organisation holds creators' money in trust, never the owner | **decided** | 2026-11-22 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) |
 | [O44](decisions.md#o44-one-approval-workflow-system-for-sensitive-admin-changes) | One generic, admin-configurable approval workflow system for sensitive admin changes (propose, approve or reject, effective; rules per action type; diff; append-only log; notices), used instead of one-off approval code; first for creator-support fee changes and payouts | **decided** | 2026-11-23 | [AUN-WORKFLOWS](AUN-WORKFLOWS-approval-workflows.md), [AUN-MEMBERS](AUN-MEMBERS-creator-support.md), [AUN-FEATURES](AUN-FEATURES-feature-switches.md), [AUN-CHANNEL-CLAIM](AUN-CHANNEL-CLAIM-channel-claim-transfer.md) |
 | [O45](decisions.md#o45-no-in-app-kids-mode-support-the-systems-parental-controls) | No in-app Kids Mode (no PIN, time limits, curated catalog or child profiles); support the parental controls of Apple, Android, Windows and browsers instead. Supersedes D5 and KIDS-D1 to KIDS-D17 | **decided** | 2026-11-24 | Epic 20, E14, E17 |
+| [RPT-1](decisions.md#rpt-1-a-ban-over-an-item-that-is-gone) | A ban over an item that is gone: a report with no recorded owner says nothing about who made it | **decided** (by the orchestrator) | 2026-11-25 | Content reports (Epic 6) |
+| [RPT-2](decisions.md#rpt-2-the-data-export-has-the-outcome-of-ones-own-reports) | The data export has the outcome of one's own reports and its date | **decided** (by the orchestrator) | 2026-11-25 | Content reports (Epic 6), data export |
 | [LIC](decisions.md#lic-repo-licence-for-core-and-the-app-repos) | Repo licence for Core and the app repos | **open** | 2026-11-08 | Core 1.0, app repos |
 | [GDPR](decisions.md#gdpr-gdpr-defaults-retention-consent) | GDPR defaults (retention, consent) | **open** | 2026-11-07 | Epic 1 story 1.3 |
 
@@ -1034,6 +1036,26 @@ There is no Kids Mode in our apps: no PIN, no time limits of our own, no curated
 **Blocks / affects:** [Epic 20](E20-system-parental-controls.md), [Epic 14](E14-offline-listen.md), [Epic 17](E17-live-in-apps.md), [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md)
 
 **Sources:** owner messages relayed by the orchestrator thread, 2026-11-24
+
+### RPT-1: A ban over an item that is gone
+
+**Status:** decided by the orchestrator, as the safe default · **Date:** 2026-11-25
+
+When a reported item is gone, its owner is known only from the copies its reports keep. A report with no recorded owner says nothing: it neither names anybody nor stands against what the others say. The ban is offered when every report that has an owner names the same account, and that account still exists. When no report has one, or two differ, nobody can be banned over the item and the report can only be dismissed.
+
+**Blocks / affects:** [Epic 6](E06-community-moderation.md#content-reports)
+
+**Sources:** orchestrator thread, 2026-11-25; AlUmmahNow `lib/moderation/reportDecision.ts` (`knownOwner`)
+
+### RPT-2: The data export has the outcome of one's own reports
+
+**Status:** decided by the orchestrator · **Date:** 2026-11-25
+
+The export of a person's data (Art. 15) says for each report they filed what became of it (kept, action taken, dismissed, or not decided yet) and the date of the decision. It never has the moderator, their notes or the other party's data. There is no switch for it.
+
+**Blocks / affects:** [Epic 6](E06-community-moderation.md#content-reports), [Data lifecycle](../guides/data-lifecycle.md)
+
+**Sources:** orchestrator thread, 2026-11-25; [AlUmmahNow#2068](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2068)
 
 ### LIC: Repo licence for Core and the app repos
 
