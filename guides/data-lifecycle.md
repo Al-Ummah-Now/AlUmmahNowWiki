@@ -96,7 +96,7 @@ The rules for every client that offers **Delete account**. They're the target, a
 |---|---|
 | Web page `https://profile.auth.alummahnow.net/delete-account` (add `?lang=ar` for Arabic; `account.alummahnow.net/delete-account` leads there) | Live ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)) |
 | Apple Studio | In review ([Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97)) |
-| Android Studio | In review ([Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68)) |
+| Android Studio | Merged ([Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68)); the receipt is in review ([Android#80](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/80)) |
 | Server ([#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933)) | Live on production since 2026-11-24 (`v2026.11.24.2`) |
 
 "In review" doesn't mean a client already meets every rule below; its PR lists what is open.
@@ -107,6 +107,22 @@ The rules for every client that offers **Delete account**. They're the target, a
 2. **Delete the sign-in account:** `DELETE /account` on Auth. Never before step 1 is complete: without the account, nobody can sign in to erase the rest.
 
 **Every attempt must start at step 1**, also a retry after step 2 failed and an attempt after a sign-in in the middle. The account was live in between and may hold something new; the erase is safe to repeat and quick when there is nothing left. No client may remember "step 1 is done" as a reason to skip it.
+
+### The receipt (what became of a deletion)
+
+An app can lose the answer of step 2. By then nobody can sign in to the account, api-videos refuses its erase with 401, and its session has ended, so a retry from step 1 could never finish. An app therefore asks Auth for a receipt ([Auth#538](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/538)) right after the recent sign-in and **before step 1** of every attempt, and saves it with the account's id in secure storage.
+
+| Answer of `POST /account/deletion-receipt` | What the app must do |
+|---|---|
+| `{receipt, expiresAt}` (milliseconds, 30 days) | Save both, then start step 1. If they can't be saved, call nothing. |
+| `404` with `error: "not_found"` | Auth's own answer for the verified token's account: it is deleted or purged. Start no erase, clean up, and say that it is already deleted. If this device's own erase hadn't finished, say that erasing all content could not be checked here. |
+| Any other `404` | An Auth without the route: go on without a receipt. |
+| Another refusal, or no answer | Stop. This attempt removes nothing. |
+
+- **The question** is `GET /account/status` with `Authorization: Deletion-Receipt <receipt>`, never an access token and nothing in the URL. It answers `{deleted}` and nothing else.
+- **When:** first on a retry, after a `401` of step 1 or 2, when step 2's answer stays lost, and by itself when the app comes back, a limited number of times.
+- **`deleted: true`** is proof: the cleanup below runs and it is said. `false`: the attempt goes on. No answer while step 2's answer is missing: nothing else is called, and nothing may say that the account is there or gone; the person can put that notice away.
+- **`401` (`receipt_invalid`) or past `expiresAt`:** drop the receipt, don't ask with it again, and go on as without one.
 
 ### A recent sign-in and one account
 
@@ -142,7 +158,7 @@ After **50 passes** in one go the client must stop and ask the person to confirm
 
 - **Before step 1 the client must save that a deletion started**, per account: the pinned id and the latest token. If it can't, it must call nothing. It updates the record after each pass and before step 2. The record has no expiry while the account exists: one from last week still means that content may be gone. The web page keeps it in the Auth database, and the token never reaches the browser; the apps keep it on the device. A lost record is safe, because an attempt without one starts step 1 from the beginning.
 - **An open record must show.** Coming back to the page or opening the app must say that a deletion started and that some content may be gone and, where the person can finish it, that anything added before then is deleted too. Nothing is erased until the person confirms again.
-- **Nothing local may be removed before both steps succeeded.** Then queued and staged uploads, the local session and the record must go, in that order, with a saved marker so an upload that was still running can't write back for the deleted account. If the app is killed in between, its next start must finish the cleanup, although the session no longer works.
+- **Nothing local may be removed before both steps succeeded.** Then queued and staged uploads, the local session and the record must go, in that order, with a saved marker so an upload that was still running can't write back for the deleted account. If the app is killed in between, its next start must finish the cleanup, although the session no longer works. It touches only that account's data: another account's queue, picked files and their permissions stay.
 - **A deletion that worked must never be shown as failed.** After a lost answer from step 2, ask again: Auth answers `deleted: true` for an account that's already deleted. `404` with `error: "not_found"` also means deleted, but only right after step 1 succeeded for the same account; any other `404` is an error. The web page reads Auth's own record instead, and keeps its own for a day to settle a lost answer. Cleanup that fails after step 2 must not turn success into an error.
 - The "deleted" message must be shown on proof only (the answer itself, or Auth's record), never from an address or a saved flag that could be faked.
 
