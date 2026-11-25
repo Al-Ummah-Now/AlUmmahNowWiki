@@ -92,7 +92,7 @@ Removing someone from the finance list, holding payouts, stopping a batch and th
 | Exclusions | proposer can't approve (always on); the person the change is about can't approve it; tech staff excluded; the owner excluded; **one step per person** on a request (on by default; off lets one person approve after commenting, never propose and approve) | proposer, subject and one-step on; tech staff and owner on for money |
 | Step-up | none, to approve, to propose and approve | to approve (money: to propose and approve) |
 | Expiry | 1 hour – 30 days | 7 days |
-| Notify | approvers (always), proposer (always), extra roles, lists or named people | — |
+| Notify | approvers (always), proposer (always); also super admins, admins, the finance list or up to 20 named people. A person added to the list must be an active admin or on the finance list | — |
 | Notify by email | yes / no (in-app is always on) | yes |
 
 A rule can also be scoped (for example one rule per feature switch). The rule used is the most specific one; each action type always has a default.
@@ -202,7 +202,7 @@ type WorkflowField = {
 };
 ```
 
-The admin page shows only fields that change by default, with "Show all fields". Money shows in the currency with the shared formatter; people show as name and avatar (never email); dates show local time with the zone and UTC on hover. Secrets never appear in a diff: a credential change shows "Value replaced" and the last four characters only when the provider already shows them.
+The admin page shows only fields that change by default, with "Show all fields". Money shows in the currency with the shared formatter; people show as name and avatar (never email); dates show local time with the zone and UTC on hover. Secrets never appear in a diff: a credential change shows "Value replaced" and the last four characters only when the provider already shows them. A rule change names its groups ("Finance list (Providers and fees)") and its people, approvers and recipients alike; someone whose account is gone shows as "Deleted account" / «حساب محذوف».
 
 ## 7. Data model (search D1)
 
@@ -228,6 +228,7 @@ Permissions (admin-api, not Auth): `workflows:read` (every admin role, sees requ
 |---|---|
 | `GET /api/workflows/actions` | Action types with labels, domains, floors, the rule in force per scope and its "nobody can approve" warning |
 | `GET /api/workflows/rules/:actionType/history?scope=` | Rule versions, newest first, 50 per page (`before=<version>` for the next page); the scope is a query value because the default scope is empty |
+| `GET /api/workflows/recipients?q=` | Who a rule can name for its emails: active admins and the finance list, by name, never an email. For whoever may change a rule |
 | `POST /api/workflows/rules/:actionType` | Proposes a rule change (`workflows.rule.set`); body `{ scope, config, reason }` |
 | `GET /api/workflows/requests` | Filters: `view=waiting\|mine\|open\|history`, `action`, `status`, `target`, `q`; cursor paged (50); each view uses one index |
 | `GET /api/workflows/requests/suggest?q=` | Live autocomplete over open and recent requests (title, target name, proposer name) |
@@ -267,7 +268,9 @@ proposeChange(ctx, { type, payload, reason }): Promise<{ status: 'applied', resu
 
 - **In-app:** a "Waiting for your approval" count on the sidebar's new **Approvals** item, and a toast for the signed-in approver when a request arrives. The count comes from `GET /api/workflows/counts`; a `workflow.changed` event on the existing admin live channel (`publishAdminLive`) tells open pages to refresh, with a 60-second fallback poll. Each approver also gets a bell notice through the same path review alerts use (`NotificationCreate`, `dedupeKey` `workflow:<request id>:<event>`).
 - **Email:** to each eligible approver when a request opens, to the proposer and approvers when it is approved, rejected, applied, failed, withdrawn or expired, and to approvers one day before expiry. One language per email (the recipient's saved preference, else English, as the other admin emails do), the shared branded layout (`lib/email/layout.ts`), sent through the existing mail queue (`CONTACT_MAIL_QUEUE`, a new `kind`). The email names the action, the proposer, the reason and a short diff, and has one button, **Review request**, that opens the request in the admin. It never approves from the email ([WF-D5](#11-owner-decisions)).
-- **Who** follows the rule's notify field; approvers and the proposer always.
+- **Who** follows the rule's notify field; approvers and the proposer always. Each recipient is checked again when the email goes out, with the rule the pages use: someone who may no longer read the request gets no email. Without the staff list the job retries.
+- **Arabic wording:** a person's name is never the subject of a gendered verb («هذا التغيير بطلب من …»، «… بواسطة …»).
+- **Text people typed** keeps no direction controls in any email: the shared layout (and its twin in AlUmmahNowAuth) drops them, and names and addresses in a row have their own direction.
 - **Native admin app:** later, through [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md): a push category `approval` with the same text, opening the request; approve with a passkey on the device. The API above is all it needs.
 
 ## 10. Admin pages (videos admin)
@@ -276,7 +279,7 @@ Sidebar group **Site**: **Approvals** / «الموافقات», with the waiting
 
 - **Approvals list.** Tabs: Waiting for me, My requests, All open, History. A live-autocomplete search over requests. Each row: the action ("Change the PayGood fee for USD cards"), proposer (name and avatar), when, approvals ("١ من ٢" in Arabic), status chip, and the expiry ("Expires in 3 days").
 - **Request page.** Title, status, reason, the diff (§6), the steps timeline, the rule that applies (with "Why can't I approve?" when the reason is known), and the actions **Approve**, **Reject**, **Withdraw**, **Comment**. Approve and Reject open an in-app dialog (frosted glass) that repeats the change in one line; Reject needs a reason; Approve runs the step-up when needed. No browser prompts.
-- **Approval rules page** (`workflows:rules`): one frosted-glass card per domain (Money, Platform, People, Governance), one row per action type and scope with its summary ("1 approver from the finance list with Payouts · passkey · expires in 7 days"). **Edit** opens a dialog with the fields of §4.1; approver people are picked with the shared live autocomplete; values below a floor are disabled with the floor's reason. Saving creates a `workflows.rule.set` request, shown as "Waiting for approval" on the row. **History** opens the rule's versions.
+- **Approval rules page** (`workflows:rules`): one frosted-glass card per domain (Money, Platform, People, Governance), one row per action type and scope with its summary ("1 approver from the finance list with Payouts · passkey · expires in 7 days"). **Edit** opens a dialog with the fields of §4.1; approver people and the people told by email are picked with the shared live autocomplete (the second opens with everyone who can be added); values below a floor are disabled with the floor's reason. Saving creates a `workflows.rule.set` request, shown as "Waiting for approval" on the row. **History** opens the rule's versions.
 - **Consumer pages** keep their own buttons. "Save" on a governed setting becomes "Send for approval" when the rule needs approvers, then shows "Waiting for approval · View request" in place of the form until the request closes.
 - English and Arabic, ٠–٩, «،», the shared time formatter, light and dark, phone and desktop. Screenshots go through the audit before merge.
 
@@ -369,10 +372,12 @@ A few rows per request in the search D1, one email per recipient per event throu
 | WF-10 follow-up: people lists in emails, the minimum's wording | [AlUmmahNow#1939](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1939) | merged (`ee88a3d`) |
 | WF-10 follow-up: tests of the tier controls in a DOM | [AlUmmahNow#1951](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1951) | merged (`556555a`), tests only |
 | Lists, counts, suggestions and waiting marks follow each request's stored domain | [AlUmmahNow#1961](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1961) | merged (`41e768c`) |
+| Values in emails keep their direction | [AlUmmahNow#1968](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1968) | merged (`99a43c5`) |
+| Who a rule tells by email: field, diff by name, checks; emails check their recipients when they go out; a request's changes fit a phone | [AlUmmahNow#1978](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1978) | merged (`ce2f929`) |
+| Direction controls dropped in every email | [AlUmmahNow#1981](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1981), [AlUmmahNowAuth#536](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/536) | merged (`02964f4`; Auth `3246235`) |
 | WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
-| Follow-up: a rule change request shows who gets the notices besides the approvers, and the approvers, in words (today it shows email on or off, and the approver sets by their codes); the rule editor too | — | next |
 | WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Production has everything up to AlUmmahNow#1939 (`v2026.11.24.3`); AlUmmahNow#1961 is not in a release yet (2026-11-24). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
+"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Production has everything up to AlUmmahNow#1968 (`v2026.11.24.8`); AlUmmahNow#1978 and AlUmmahNow#1981 are not in a release yet (2026-11-25). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
