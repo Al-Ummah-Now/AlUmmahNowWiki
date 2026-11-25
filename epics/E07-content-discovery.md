@@ -43,7 +43,7 @@ Owner brief 2026-11-21: correct at scale **and** good with no users today (one r
 
 **Honest labels.** A rail with fewer than 6 videos that have real signal does not pretend: Trending becomes *New today / this week / this month* (widening as needed), Popular becomes *Featured*. Each response carries `rail.mode` and `rail.label`; clients show the label (en + ar).
 
-**What never counts.** Views by the video's owner, staff, test and E2E accounts (`@e2e.alummahnow.net`, `@delivered.resend.dev`), bots and headless browsers, and autoplay (E21). Videos owned by test accounts and admin-excluded videos or channels never reach a rail. Anonymous viewers are keyed by a hash with a salt that lives one day; viewer rows are kept 91 days.
+**What never counts.** Views by the video's owner, staff, test and E2E accounts (`@e2e.alummahnow.net`, `@delivered.resend.dev`), bots and headless browsers, and autoplay (E21). Videos owned by test accounts and admin-excluded videos or channels never reach a rail. On QA and stage the seed's creator is the exception (`RANK_SEED_OWNERS`, exact addresses; empty and ignored in production): it owns the whole public library there. Anonymous viewers are keyed by a hash with a salt that lives one day; viewer rows are kept 91 days.
 
 **Diversity and language.** A per-channel penalty mixes channels; the viewer's language ranks higher without hiding the rest.
 
