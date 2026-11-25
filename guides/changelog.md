@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-25: Change photo answers at once; saving a channel never shows the error screen
+
+- **AlUmmahNow:** on profile edit and channel edit, Change photo and Change cover open the picker while a photo uploads (they were disabled until the upload was done) and before the page has hydrated. The new photo shows at once. Uploads and removals of one photo run one after the other, the last photo picked is the one kept, and a photo picked before the profile has loaded waits for it ([#2077](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2077), open). The session's channel list is refreshed by `POST /api/session/channels`, which does not render the page again. Saving a channel left while that render was still streaming, and Firefox showed the error screen ("Error in input stream"). An error boundary ignores a page stream cut off because the page is being left. Avatar and cover uploads wait for six steps instead of eight. The cover's buttons wear the theme's media chrome, so they read on any cover in light mode too ([#2085](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2085), open).
+
 ## 2026-11-25: the data export says what became of one's reports
 
 - **AlUmmahNow:** each report a person filed has its outcome and the date of the decision in their data export ([#2068](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2068)).
