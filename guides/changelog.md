@@ -6,7 +6,7 @@ What changed across the Al Ummah Now repos, grouped by feature. Newest first. Ea
 
 ## 2026-11-24: English and Arabic on the admin's channel, video, invite, category, status and theme forms
 
-- **AlUmmahNow:** these forms have English and Arabic side by side with Translate, and the admin APIs read and save both ([#1814](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1814), open). Staff give both languages when they create something. Editing a user's text that has one language offers the other without requiring it. See [Localized fields](localized-fields.md#when-staff-work-on-user-content).
+- **AlUmmahNow:** these forms have English and Arabic side by side with Translate, and the admin APIs read and save both ([#1814](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1814)). Staff give both languages when they create something. Editing a user's text that has one language offers the other without requiring it. See [Localized fields](localized-fields.md#when-staff-work-on-user-content). An edit changes only the languages it names, so edits of different languages both stay, and translations in other languages are kept. Creating a channel over the API still takes a plain name, for the released Admin Tools app only ([#1982](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1982)). The theme builder's problems and its "Publishing is blocked" line are in plain English and Arabic, and file buttons are translated ([#1987](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1987), open).
 
 ## 2026-11-24: account emails come from the sign-in account
 
