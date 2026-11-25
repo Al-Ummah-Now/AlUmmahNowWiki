@@ -85,7 +85,7 @@ The client sends where it was installed from, because that decides what **Update
 | `amazon` | installer `com.amazon.venezia` | open the Amazon Appstore page |
 | `msstore` | Windows: the app runs with package identity and the Store installed it (`StoreContext` returns an app license) | `StoreContext.RequestDownloadAndInstallStorePackageUpdatesAsync` (the Store's own consent UI) |
 | `direct` | our own installer: Velopack on Windows/macOS, Sparkle on Studio for Mac | download, verify, install, restart ([§5](#5-desktop-self-update)) |
-| `managed` | MSI per-machine installs, sideloaded MSIX, `.deb`, Flatpak, `.tar.gz`, Admin MSIX from R2, the Android pre-release APK | open the download page (`url` for a signed release; the app's own fixed link while the repo has no keys, [§5.5](#55-before-a-repo-has-its-signing-keys)) |
+| `managed` | MSI per-machine installs, sideloaded MSIX, `.deb`, Flatpak, `.tar.gz`, Admin MSIX from R2, the Android pre-release APK | open the app's own fixed page ([§4.1.1](#411-the-no-keys-answer-action-notice)) |
 | `samsung` | Tizen | nothing (Samsung updates TV apps); only the minimum-version screen applies |
 
 ### 2.4 Apps
@@ -387,7 +387,7 @@ The admin page **App config** gains a **Releases** tab (default tab): a table pe
 
 ### 5.2 Packaging changes
 
-- **Tools** (Windows, macOS): CI adds `vpk pack` for `win-x64`, `osx-arm64`, `osx-x64`, producing `Setup.exe` / `.pkg`, the full `.nupkg` and (from the second release) a delta `.nupkg`. These become the primary downloads; the MSI and `.dmg` stay for managed installs ([APPUPD-D2](#owner-decisions)). Uno's `Main` calls `VelopackApp.Build().Run()` first.
+- **Tools** (Windows, macOS): CI adds `vpk pack` for `win-x64`, `osx-arm64`, `osx-x64`, producing `Setup.exe` (Windows), the app bundle the `.dmg` holds (macOS) and the full `.nupkg`. These are the primary downloads; the MSI stays for managed installs ([APPUPD-D2](#owner-decisions)). Delta packages come later if update sizes call for them. Uno's `Main` calls `VelopackApp.Build().Run()` first.
 - **Desktop** (Windows, viewer and Studio): the same, next to the MSI, zip and MSIX. Velopack's per-user install and the MSIX are separate installs; the download page recommends one ([APPUPD-D2](#owner-decisions)).
 - **Studio for Mac**: CI runs Sparkle's `sign_update` on the notarized `.zip` and publishes `appcast-studio-mac.xml` as a release asset; `SUFeedURL` is `https://github.com/Al-Ummah-Now/AlUmmahNowApple/releases/latest/download/appcast-studio-mac.xml`; `SUPublicEDKey` is the committed public key.
 - **Linux** (Desktop `.deb`/Flatpak, Tools `.deb`/`.tar.gz`): notice and download link ([APPUPD-D9](#owner-decisions)).
@@ -439,7 +439,7 @@ All four repos have their keys since 2026-11-24 ([§9](#9-owner-items-keys-and-c
   - If our API says `required` but Play has no update for this device yet (review, processing, staged rollout), **no forced screen**: the bar that can't be closed ([§3.7](#37-the-minimum-version-gate)), and the app keeps working.
   - Tests use `FakeAppUpdateManager`.
 - **Fire TV (Amazon)**: no in-app update API. The bar (TV focusable) with **Update** opening `amzn://apps/android?p=net.alummahnow.tv`.
-- **Sideloaded pre-release APK** (`managed`): the bar with **Download**, opening in the browser the GitHub release page of a **signed** release once the Android repo's keys are set up, and the app's fixed releases page before that ([§5.5](#55-before-a-repo-has-its-signing-keys)). No in-app APK install ([APPUPD-D8](#owner-decisions)), so no `REQUEST_INSTALL_PACKAGES` permission, which Play forbids in Play builds anyway.
+- **Sideloaded pre-release APK** (`managed`): the bar with **Download**, opening the app's fixed releases page in the browser ([§4.1.1](#411-the-no-keys-answer-action-notice)); it only shows for a signed release once the Android repo's keys are set up. No in-app APK install ([APPUPD-D8](#owner-decisions)), so no `REQUEST_INSTALL_PACKAGES` permission, which Play forbids in Play builds anyway.
 - **TV** (viewer-tv): the bar is a focusable row at the top of Home, reachable with the D-pad; Back dismisses it.
 
 ## 7. Apple
@@ -491,7 +491,7 @@ All four repos have their keys since 2026-11-24 ([§9](#9-owner-items-keys-and-c
 | K3 | the same for Apple (also Sparkle's EdDSA key) | `UPDATE_SIGNING_KEY` | AlUmmahNowApple | signed manifest, Sparkle appcast |
 | K4 | the same for Android (manifest only; Play and the APK have their own signing) | `UPDATE_SIGNING_KEY` | AlUmmahNowAndroid | signed manifest |
 | K5 | Windows code-signing certificate (OV or EV exported to PFX, or Azure Trusted Signing) | `WINDOWS_CERT_PFX_BASE64`, `WINDOWS_CERT_PASSWORD` | Desktop, Tools (same names) | signed `Setup.exe`/MSI, publisher pinning, no SmartScreen "unknown publisher" |
-| K6 | Apple Developer ID Application certificate + App Store Connect API key | `DEVELOPER_ID_P12`, `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | Apple, Tools (same names) | notarized Studio for Mac and Tools for Mac, Team ID pinning, Sparkle self-update |
+| K6 | Apple Developer ID Application certificate + App Store Connect API key | `DEVELOPER_ID_P12`, `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | Apple, Tools (same names) | notarized Studio for Mac and Tools for Mac (no macOS warning on the first download), Team ID pinning, changing Sparkle's key. Self-update doesn't need it |
 | K7 | Play upload key + service account (already listed in Android `docs/RELEASE.md`) | `AUN_UPLOAD_*`, `PLAY_SERVICE_ACCOUNT_JSON` | Android | Play builds, so In-App Updates has something to find |
 | K8 | App Store ids of each production app (not secret) | variables `APPSTORE_ID_VIEWER`, `APPSTORE_ID_STUDIO`, `APPSTORE_ID_VIEWER_MAC` | Apple | the in-app App Store sheet; lookup by bundle id works before that |
 | K-R | **Root key** per repo (Desktop, Tools, Apple, Android): generated with `scripts/update-keygen --root` on the owner's own machine, kept **offline** (never a GitHub secret). The owner signs each key list with `scripts/update-keys sign` and gives the orchestrator only the signed `update-keys.json` + `.sig` to publish | none (offline); public key committed | each app repo | key lists: rotation and revocation ([§3.5](#35-keys-rotation-and-revocation)), and self-install; without it a repo stays on the notice with the fixed link |
@@ -567,12 +567,12 @@ Decided (all settled 2026-11-24):
 - **APPUPD-D13: don't wait for the signing keys.** **Decided by the owner (2026-11-24).** Until a repo's root key exists, a new version shows a notice with one fixed link to the official download page, and the app downloads and installs nothing. The forced update works the same way. The link is compiled into the app and never comes from the network; once a build knows a root key it takes only signed data ([§5.5](#55-before-a-repo-has-its-signing-keys), [§4.1.1](#411-the-no-keys-answer-action-notice)).
 - **APPUPD-D1: turn `appUpdates` on when the first app ships the check?** **Decided (a) by the owner (2026-11-24): yes.** The switch goes on in QA and production as soon as the first app release with the update check is out; until then it stays off.
 - **APPUPD-D5: "Install updates automatically" default.** **Decided (a) by the owner (2026-11-24): on.** Desktop apps download updates in the background and install them when the app closes, never restarting on their own; the user's own choice in Settings → Updates always wins; admins change the default with `updates.autoInstallDefault`.
-- **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23): Velopack `Setup.exe` (Windows) and `.pkg` (Tools on macOS) are the main downloads, and the MSI and `.dmg` stay for managed installs. All four are direct downloads on GitHub Releases, as the owner set on 2026-11-10; only the Velopack installers let the app update itself without admin rights.
+- **APPUPD-D2: primary Windows (and Tools macOS) download.** **Decided (a)**, routine (2026-11-23; macOS changed 2026-11-24): Velopack `Setup.exe` (Windows) is the main download and the MSI stays for managed installs. On macOS the `.dmg` holds the Velopack app, so dragging it to Applications is enough to update itself; there is no `.pkg`, because it installs as root and every update would then ask for an administrator. All are direct downloads on GitHub Releases, as the owner set on 2026-11-10; only the Velopack installers let the app update itself without admin rights.
 - **APPUPD-D3: where update files live.** **Decided (a)** by the owner's earlier answer (2026-11-10, native apps distribution): direct downloads live on GitHub Releases. Moving later takes one release that adds the new host to the apps' host list first.
 - **APPUPD-D4: signing keys.** **Decided (a)**, routine security design (2026-11-23): per repo, an offline root key (K-R) and a CI release key (K1–K4). Generating and holding the root keys is an owner item (K-R).
 - **APPUPD-D6: check interval.** **Decided: 6 hours**, routine (2026-11-23); admins change it with `updates.checkHours` (1–48).
 - **APPUPD-D7: beta channel.** **Decided (a)**, routine (2026-11-23): beta builds are told about the newest of beta and stable.
-- **APPUPD-D8: sideloaded Android APK.** **Decided (a)**, routine (2026-11-23): the sideloaded APK gets a bar with a link to a release page (signed once the repo has keys); no in-app installer and no `REQUEST_INSTALL_PACKAGES`.
+- **APPUPD-D8: sideloaded Android APK.** **Decided (a)**, routine (2026-11-23): the sideloaded APK gets a bar with a link to the fixed releases page (for a signed release once the repo has keys); no in-app installer and no `REQUEST_INSTALL_PACKAGES`.
 - **APPUPD-D9: Linux.** **Decided (a)**, routine (2026-11-23): Linux builds get the notice and a download link; a self-updating AppImage only if Linux users ask.
 - **APPUPD-D10: release notes.** **Decided (a)**, routine (2026-11-23): CI takes English and Arabic notes from each repo's store notes files and fails the release without them; admins can override per version.
 - **APPUPD-D12: super-admin-only editing of the minimum version** **Decided (a)** by issue AlUmmahNow#1434, which lists super admins as the editors (2026-11-23).
@@ -587,11 +587,12 @@ Decided (all settled 2026-11-24):
 | APPUPD-3 update answer in `GET /api/v1/app-config` | AlUmmahNow#1806 | merged `78c0f80` |
 | APPUPD-4 release tool `scripts/app-release/app-release.mjs` | AlUmmahNow#1811 | merged `192d89f` |
 | APPUPD-5 Core `aun-updates` + `UpdateChecker` | AlUmmahNowCore#54 | merged `d37b920`, released in Core `v0.4.0-rc.5` |
-| APPUPD-12 no-keys notice on the server: `action: notice`, no way back once a root key exists, drafts retried, the minimum counts published releases | AlUmmahNow | in progress (epic agent) |
-| APPUPD-13 root keys in api-videos (`UPDATE_ROOT_KEYS`, every environment) and the `update-keys` release of each repo | AlUmmahNow + app repos | prepared; key lists are published first, then the variable |
-| APPUPD-5b root-key gate in Core | AlUmmahNowCore | in progress (epic agent) |
+| APPUPD-12 no-keys notice on the server: `action: notice`, no way back once a root key exists, drafts retried, the minimum counts published releases | AlUmmahNow#1969 | merged `06bbd04`; follow-up AlUmmahNow#1975 |
+| APPUPD-13 root keys in api-videos (`UPDATE_ROOT_KEYS`, every environment) and the `update-keys` release of each repo | AlUmmahNow#1971 + app repos | open; key lists are published first, then the variable |
+| APPUPD-5b root-key gate in Core | AlUmmahNowCore#62 | merged `62c6174`, in Core `v0.4.0-rc.7` |
 | APPUPD-6 admin Releases tab, super-admin editing | AlUmmahNow#1860 | open, being moved onto main (epic agent). **Must merge before `appUpdates` goes on**: until then any `settings:manage` admin could set the minimum |
-| APPUPD-7 Tools (notice, forced screen, Settings → Updates; self-install off until a root key is compiled in) | AlUmmahNowTools#76 (closes #57) | open, adding the no-keys notice (epic agent) |
+| APPUPD-7 Tools (notice, forced screen, Settings → Updates, root key) | AlUmmahNowTools#76 (closes #57) | in review |
+| APPUPD-7b Tools packages, signing job, update test | AlUmmahNowTools#81 | open |
 | APPUPD-8 Desktop | AlUmmahNowDesktop | in progress (Desktop agent, against §4.1.1) |
 | APPUPD-9, -10 Android, Apple | — | planned; the same §4.1.1 contract |
 | APPUPD-11 per-app docs | — | planned |
