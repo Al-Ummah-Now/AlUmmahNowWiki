@@ -55,8 +55,17 @@ Applies to any app that **shows** content from users, not only apps where people
 - [ ] Filtering: comment holds, word lists and AI moderation run on the server for content shown in the apps.
 - [ ] Contact: Help and contact in the app's menu.
 - [ ] Terms accepted before a person first creates content from an app (Play): Studio's first upload or channel today, and the first comment, chat message or post when an app adds writing.
+  The server asks for it behind the super admins' switch `creatorTerms` (Features page, default **off**, [#1931](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1931)); it stays off until the native Studio apps can accept. See [Creator Terms](#creator-terms-creatorterms).
 - [ ] Before the first post from an app: date of birth asked (E20 §5.2), and the app's age rating answers changed in the same PR (Apple "Messaging and chat", Play "Users interact").
 - [ ] Content above the app's 13+ rating (age-restricted videos) plays only for a signed-in 18+ account (Apple 1.2.1(a), E20 §5.4). Made-for-kids videos have comments and chat off.
+
+#### Creator Terms (`creatorTerms`)
+
+- **Who:** each account accepts the Terms of Service («شروط الاستخدام») and Community Guidelines once per version, super admins included. Staff imports and system jobs are exempt. Table `creator_terms_acceptances` (one row per account, read by primary key; in the privacy export, erased with the account).
+- **What is refused** until then (`403 terms_required`; `503` when the switch or the table can't be read): uploading (single, batch, Move from YouTube), creating a channel, a new live stream, its encoder settings and going live, scheduling, starting or changing a premiere, opening a draft or private video (single, bulk and bulk undo), scheduling and publish now, adding an audio track. Closing a video and editing an open one are not refused. In a bulk request one video that can't be read fails alone.
+- **Stream keys** handed out before the switch, or before a new version, keep working until that stream ends.
+- **Accepting:** `POST /api/me/creator/terms` with the version shown. `409 terms_version_changed` is the only 409 of that route. A newer acceptance is never replaced by an older one.
+- **Web:** one prompt (`useCreatorTermsPrompt`) on every gated screen. Nothing typed is lost; accepting does the refused action again once; dismissed or refused again, the screen says so with **Review Terms** and does not ask in a loop. Batch upload rows and a Move from YouTube import wait and go on after accepting; a waiting import is never shown as finished.
 
 ### Accounts
 
