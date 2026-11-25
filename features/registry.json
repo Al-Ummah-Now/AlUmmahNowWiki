@@ -75,6 +75,8 @@
         "AlUmmahNow#1889",
         "AlUmmahNow#1893",
         "AlUmmahNow#1927",
+        "AlUmmahNow#1949",
+        "AlUmmahNow#1959",
         "AlUmmahNowApple#88",
         "AlUmmahNowApple#89",
         "AlUmmahNowApple#96",
@@ -82,7 +84,8 @@
         "AlUmmahNowAndroid#59",
         "AlUmmahNowAndroid#67",
         "AlUmmahNowDesktop#79",
-        "AlUmmahNowDesktop#81"
+        "AlUmmahNowDesktop#81",
+        "AlUmmahNowDesktop#87"
       ],
       "note": "Server, web viewer, Studio and the native viewers, behind the liveChat, livePremieres, liveReminders and liveEvents switches, all off. #1842 carries #1841 (chat). Still to build: the calendar file (waits for AlUmmahNow#1819), writing and reporting in the apps (AlUmmahNow#1912), and seek-back (E17-9)."
     },
