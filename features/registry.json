@@ -2538,7 +2538,7 @@
         "api"
       ],
       "wiki": "epics/AUN-WORKFLOWS-approval-workflows.md",
-      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; changes take effect at approval). In production as of v2026.11.24.3: the engine, emails, the Approvals and Approval rules pages, the finance list and tech-staff unmark, feature switches and tier changes (the last two direct until an admin adds approvers). Next: creator-support fees, payout batches, ledger, policy and emergency stop (WF-6), channel moves and claims, platform credentials, the native admin app.",
+      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; changes take effect at approval). In production as of v2026.11.24.8: the engine, emails, the Approvals and Approval rules pages, the finance list and tech-staff unmark, feature switches and tier changes (the last two direct until an admin adds approvers). Next: creator-support fees, payout batches, ledger, policy and emergency stop (WF-6), channel moves and claims, platform credentials, the native admin app.",
       "prs": [
         "AlUmmahNow#1821",
         "AlUmmahNow#1825",
@@ -2554,7 +2554,11 @@
         "AlUmmahNow#1936",
         "AlUmmahNow#1939",
         "AlUmmahNow#1951",
-        "AlUmmahNow#1961"
+        "AlUmmahNow#1961",
+        "AlUmmahNow#1968",
+        "AlUmmahNow#1978",
+        "AlUmmahNow#1981",
+        "AlUmmahNowAuth#536"
       ]
     },
     {
