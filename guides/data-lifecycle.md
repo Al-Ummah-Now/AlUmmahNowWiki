@@ -80,7 +80,7 @@ The rules for every client that offers **Delete account**. They're the target, a
 
 | Client | State |
 |---|---|
-| Web page `https://profile.auth.alummahnow.net/delete-account` (add `?lang=ar` for Arabic; `account.alummahnow.net/delete-account` leads there) | Merged ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)); Auth releases every merge to production |
+| Web page `https://profile.auth.alummahnow.net/delete-account` (add `?lang=ar` for Arabic; `account.alummahnow.net/delete-account` leads there) | Live ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)) |
 | Apple Studio | In review ([Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97)) |
 | Android Studio | In review ([Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68)) |
 | Server ([#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933)) | Live on production since 2026-11-24 (`v2026.11.24.2`) |
