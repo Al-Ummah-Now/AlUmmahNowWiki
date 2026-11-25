@@ -137,7 +137,7 @@ After **50 passes** in one go the client must stop and ask the person to confirm
 What is true on `main` today.
 
 - **At once, for good:** the Videos profile, owned channels with everything on them, the person's playlists, posts, watch history, subscriptions, likes and votes. There is no 30-day restore for these.
-- **Kept for a legal obligation:** the sealed records of items reported for child safety, for at least a year after the last report about the item is decided and while a case about it is open. They are exempt from account erasure for that time (in review: [#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934)).
+- **Kept for a legal obligation:** the sealed records of items reported for child safety, for at least a year after the last report about the item is decided and while a case about it is open. They are exempt from account erasure for that time ([#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934)).
 - **Kept without the person:** their comments elsewhere (the text is emptied), reports they filed, and what they added to someone else's channel.
 - **The sign-in account** is deleted at once and its record is purged after **30 days**: from then on the hourly cleanup removes it, and sooner only if an Auth admin asks for it. Text for people must say "after 30 days" / «بعد ٣٠ يومًا», never "within" / «خلال». Until then an Auth admin can restore it, without the Videos data. Refresh tokens stop at once; access tokens already issued are refused within the [revocation time](authentication.md).
 - The follow-up messages of an erase (search rows, moderation copies) are queued after it. If queueing fails they aren't sent again today.
@@ -168,7 +168,7 @@ Admins can also **warn** a user: the warning is recorded and audited, and the us
 | 30-day purge of soft-deleted items | Videos admin, Auth, CMS | Hourly |
 | Watch history older than 18 months; event archive older than 13 months | api-videos cron | Daily |
 | Profile email reports older than 30 days (an erased account's go at erasure) | api-videos cron | Daily ([#1871](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1871)) |
-| Reports sent without an account, a year after their decision; kept child safety records past their time | admin-api cron | Daily ([#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934), in review) |
+| Reports sent without an account, a year after their decision; kept child safety records past their time | admin-api cron | Daily ([#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934)) |
 | Admin history older than 2 years; dead letters, erase tombstones older than 30 days; archive title index past the archive's retention | processor cron | Daily |
 | Abandoned and orphan Bunny uploads (reaper; only removes what an upload made) | api-videos | Scheduled ([#613](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/613), [#634](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/634)) |
 | E2E leftovers on QA, stale run accounts, test-library sweeps, orphan collections | GitHub Actions | See [Testing and E2E](testing.md#cleanup-jobs-for-shared-environments) |
