@@ -24,6 +24,20 @@ Owner rule (2026-11-10): every delete an admin makes is restorable for **30 days
 
 Creators delete their own videos to a trash in Studio (web and the native Studio apps). They can restore or permanently delete them. **Admin removals stay the admin's**: a creator can't restore or purge a video an admin removed, and those don't appear in the creator's trash ([#764](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/764)). An owner's permanent delete also removes the Bunny video ([#680](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/680)).
 
+## Data export
+
+A person downloads their own data from the privacy page (`GET /api/privacy/export`). Reports they filed are in it as they sent them, each with its `outcome` and `decidedAt` ([#2068](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2068), [RPT-2](../epics/decisions.md#rpt-2-the-data-export-has-the-outcome-of-ones-own-reports)):
+
+| `outcome` | Meaning |
+|---|---|
+| `open` | Not decided yet |
+| `kept` | Decided, and the item stays as it was |
+| `action_taken` | The team acted on the item or its owner |
+| `dismissed` | Dismissed |
+| `unavailable` | Could not be read when the file was made; export again later |
+
+Decisions are in admin-api, which answers `POST /internal/report-outcomes` for the reporter's own reports only. The moderator, their notes and the other party's data are never in it.
+
 ## Account erasure
 
 A user's own `DELETE /api/privacy/data`, the admin erasure job and the E2E run-account erase all go through the same erasure steps. Between 2026-11-10 and 2026-11-12 they were extended to remove:
