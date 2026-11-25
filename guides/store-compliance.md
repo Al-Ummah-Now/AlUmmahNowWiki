@@ -39,7 +39,7 @@ Desktop ships through the Microsoft Store, Flatpak and Samsung, never the Mac Ap
 | Export compliance answer true for apps that link aun-core | To decide | — | [Apple#95](https://github.com/Al-Ummah-Now/AlUmmahNowApple/issues/95) |
 | Play declarations: foreground services, financial features | — | Steps written; the owner fills them in the Console | [Android#64](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/64) |
 | Switch-gated features visible to App Review | Process to adopt | Same | [#1930](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1930) |
-| Privacy labels and Data safety match the code | Yes (`store/apple/app-privacy.md`) | Yes (`store/play/data-safety.md`) | — |
+| Privacy labels and Data safety match the code | Yes (`store/apple/app-privacy.md`) | In review ([Android#76](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/76), `store/play/data-safety.md`): the viewer declares Device or other IDs, processed ephemerally (the live viewer ID). TV: nothing collected | — |
 | Age rating 13+, answers recorded | Yes (`store/apple/age-rating.md`) | Yes (`store/play/content-rating.md`) | [E20](../epics/E20-system-parental-controls.md) |
 | Target SDK / build SDK | Xcode 27.1 | targetSdk 37, 16 KB pages | — |
 | No payments in the apps | Yes | Yes | — |
