@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `AUN-CHANNEL-CLAIM` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, api-videos, admin-api, admin-web, web, processor), [AlUmmahNowCore](../repos/AlUmmahNowCore.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress**. The admin transfer exists ([§2](#2-what-exists-today-inventory-2026-11-23)). Phase A (complete the admin transfer, handle tools) is merged, apart from the approval of moves of channels with creator support ([CC-D10](#13-owner-decisions)) and native notices (CC-5); Phase B's owner moves are merged with the `channelMove` switch off ([§14](#14-stories)). The owner answered CC-D1 to CC-D12 on 2026-11-23 ([§13](#13-owner-decisions)); Phase B's approval step and Phase C's review run on the approval workflow system ([AUN-WORKFLOWS](README.md)), which is being built |
+| **Status** | **in progress**. The admin transfer exists ([§2](#2-what-exists-today-inventory-2026-11-23)). Phase A (complete the admin transfer, handle tools) is merged, apart from the approval of moves of channels with creator support ([CC-D10](#13-owner-decisions)) and native notices (CC-5); Phase B's owner moves on the API, the web and the videos admin are merged with the `channelMove` switch off; native offers (CC-8) aren't built ([§14](#14-stories)). The owner answered CC-D1 to CC-D12 on 2026-11-23 ([§13](#13-owner-decisions)); Phase B's approval step and Phase C's review run on the approval workflow system ([AUN-WORKFLOWS](README.md)), which is being built |
 | **Last updated** | 2026-11-25 |
 | **Replaces** | The draft spec in [AlUmmahNow#460](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/460) (2026-11-08). Most of its design is kept here; the parts that were built differently follow the code |
 
@@ -288,7 +288,6 @@ Channel R2 record gains optional `transferredAt`, `claimable` and `moveStopped` 
 
 | App | Method and path | Who | Purpose |
 |---|---|---|---|
-| admin-api | `POST /api/content/channels/:id/transfer/preview` | `channels:transfer` | Counts and warnings (official handle, live, old owner left with no channel); not built yet |
 | admin-api | `POST /api/content/channels/:id/transfer` (exists) | `channels:transfer` | Gains required `reason` (sent to the old owner), `keepPreviousOwnerAsAdmin`, `keepContactEmail` (built) |
 | admin-api | `POST /api/content/channels/:id/handle/take`, `/handle/release` | `channels:transfer` | Take an official handle back, release (built; setting any handle is the existing channel edit) |
 | admin-api | `GET /api/content/channels/:id/move-offers` | `channels:transfer` | The channel's open offer, or none |
@@ -376,9 +375,10 @@ All answered by the owner on 2026-11-23.
 | CC-3 | A | AlUmmahNow | **Merged.** Required reason (sent to the old owner), options (keep old owner as channel admin, keep contact email), channel-limit refusal; admin-web form and result — [#1795](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1795) |
 | CC-4 | A | AlUmmahNow | **Merged.** Admin handle tools: set, take back official, release (api-videos, admin-api, admin-web) — API [#1805](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1805), admin card [#1809](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1809) |
 | CC-5 | A | Apple, Android, Desktop, Core | Render the new `account` keys once the apps have a notification center; refetch channels at launch — nothing to build yet: the native viewer apps have no notification center (2026-11-23) |
-| CC-5b | A | AlUmmahNow | The second tick for an official handle ([§3.5](#35-badge-and-official-handles)) — [#2011](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2011) |
-| CC-5c | A | AlUmmahNow | E2E after a move: the new owner edits, the old owner can't, both were told ([§10](#10-tests)) — [#2009](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2009) |
+| CC-5b | A | AlUmmahNow | **Merged.** The second tick for an official handle ([§3.5](#35-badge-and-official-handles)) — [#2011](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2011) |
+| CC-5c | A | AlUmmahNow | **Merged.** E2E after a move: the new owner edits, the old owner can't, both were told ([§10](#10-tests)) — [#2009](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2009) |
 | CC-5d | A | AlUmmahNow | Moves of a channel with creator support wait for an approval ([CC-D10](#13-owner-decisions), [#1812](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1812), WF-10): not built; they are refused until then. Must be done before `creatorSupport` is turned on |
+| CC-5e | A | AlUmmahNow | Scholar articles posted on the channel answer to its owner of now ([#1955](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1955)) — [#2012](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2012) |
 | CC-6 | B | AlUmmahNow | **Merged**, switch off. `channelMove` switch, offers table, receiver autocomplete limited to channel admins, offer/accept/decline/cancel/stop API; payment channels refused until the workflow approval step lands, then routed to it — server side [#1833](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1833); payment channels are refused until the workflow approval exists |
 | CC-7 | B | AlUmmahNow | **Merged**, switch off. Two PRs. API ([#1960](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1960)): offers by name, one offer, the channel's open offer, notices open `/channel-moves/{offerId}`. Web ([#1964](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1964)): Move channel in settings, offer page (Accept, Decline), pending offers (Withdraw), every `move_*` text, 404 while the switch is off, local E2E |
 | CC-7b | B | AlUmmahNow | **Merged.** Admin: the channel's open offers on its admin page, with the Stop button, whatever the switch — [#1983](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1983) |
