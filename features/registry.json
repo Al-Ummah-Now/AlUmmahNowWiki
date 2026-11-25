@@ -960,9 +960,10 @@
       ],
       "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
       "prs": [
-        "AlUmmahNow#1795"
+        "AlUmmahNow#1795",
+        "AlUmmahNow#2011"
       ],
-      "note": "Required reason (sent to the previous owner); keep the previous owner as channel admin or the contact email. The badge stays with the channel."
+      "note": "Required reason (sent to the previous owner); keep the previous owner as channel admin or the contact email. The badge stays with the channel; an official handle goes to someone outside the site team only with a second tick."
     },
     {
       "id": "channel-handle-tools",
