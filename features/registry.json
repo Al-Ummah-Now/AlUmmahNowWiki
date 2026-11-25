@@ -943,9 +943,10 @@
         "AlUmmahNow#1784",
         "AlUmmahNow#1789",
         "AlUmmahNow#1792",
-        "AlUmmahNow#1808"
+        "AlUmmahNow#1808",
+        "AlUmmahNow#1985"
       ],
-      "note": "A move takes every record that names the owner (deleted videos, handle, posts, schedules, live keys, subscriptions), verifies itself and is checked again for 48 hours; both owners are told."
+      "note": "A move takes every record that names the owner (deleted videos, handle, posts, schedules, live keys, subscriptions), verifies itself and is checked again for 48 hours; both owners are told, with an email each."
     },
     {
       "id": "channel-transfer-options",
@@ -988,13 +989,19 @@
       },
       "status": "building",
       "apps": [
-        "api"
+        "api",
+        "videos",
+        "videos-admin"
       ],
       "wiki": "epics/AUN-CHANNEL-CLAIM-channel-claim-transfer.md",
       "prs": [
-        "AlUmmahNow#1833"
+        "AlUmmahNow#1833",
+        "AlUmmahNow#1960",
+        "AlUmmahNow#1964",
+        "AlUmmahNow#1983",
+        "AlUmmahNow#1985"
       ],
-      "note": "Server side so far, behind the channelMove switch: an owner offers the channel to one of its admins, who accepts; the move runs at once. The web screens follow (CC-7)."
+      "note": "Behind the channelMove switch (off): an owner offers the channel to one of its admins, who accepts; the move runs at once. Admins see an open offer on the channel page and can stop it."
     },
     {
       "id": "remote-config-editor",
