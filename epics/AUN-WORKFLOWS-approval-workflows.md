@@ -7,7 +7,7 @@
 | **ID** | `AUN-WORKFLOWS` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) (shared-types, admin-api, admin-web, api-videos search D1 migrations), later [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md) and [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) through [AUN-ADMIN-NATIVE](AUN-ADMIN-NATIVE-native-admin-app.md) |
 | **Status** | **building** (revision 2: owner decisions WF-D1 to WF-D10 recorded 2026-11-23; no effective dates) |
-| **Last updated** | 2026-11-24 |
+| **Last updated** | 2026-11-25 |
 | **Origin** | Owner, 2026-11-23, asked whether a change to a creator-support fee rate should need a second approver: "build a workflow system." Recorded as [O44](decisions.md#o44-one-approval-workflow-system-for-sensitive-admin-changes). |
 
 ## Goal
@@ -151,7 +151,7 @@ asks the rule of its scope:
 - **Admin pages:** the Users, user, Tiers and Tier requests pages show "Sent for approval" with the
   request's link instead of "Saved" and Undo, and "Waiting for approval" in place of the control while the
   request is open (`GET /api/workflows/pending?type=&target=`, up to 100 targets in one read of the
-  open-request index). Give no tier scope approvers on an environment until a release with AlUmmahNow#1936 is on it.
+  open-request index). In production since `v2026.11.24.3`, so a tier scope can be given approvers.
 - Declining a tier request stays a direct action: it only takes the request away.
 
 ## 5. Lifecycle
@@ -367,10 +367,12 @@ A few rows per request in the search D1, one email per recipient per event throu
 | WF-10 tier changes on the workflow ([§4.5](#45-tier-changes-wf-10)) | [AlUmmahNow#1914](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1914) | merged (`921a555`) |
 | WF-10 tiers: the admin pages | [AlUmmahNow#1936](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1936) | merged (`367a249`) |
 | WF-10 follow-up: people lists in emails, the minimum's wording | [AlUmmahNow#1939](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1939) | merged (`ee88a3d`) |
+| WF-10 follow-up: tests of the tier controls in a DOM | [AlUmmahNow#1951](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1951) | merged (`556555a`), tests only |
+| Lists, counts, suggestions and waiting marks follow each request's stored domain | [AlUmmahNow#1961](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1961) | merged (`41e768c`) |
 | WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
 | Follow-up: a rule change request shows who gets the notices besides the approvers, and the approvers, in words (today it shows email on or off, and the approver sets by their codes); the rule editor too | — | next |
 | WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Release `v2026.11.24.2` has everything up to AlUmmahNow#1914; AlUmmahNow#1936 and #1939 are not in a release yet (2026-11-24). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
+"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Production has everything up to AlUmmahNow#1939 (`v2026.11.24.3`); AlUmmahNow#1961 is not in a release yet (2026-11-24). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).

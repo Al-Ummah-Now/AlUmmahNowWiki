@@ -2520,13 +2520,23 @@
         "api"
       ],
       "wiki": "epics/AUN-WORKFLOWS-approval-workflows.md",
-      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; changes take effect at approval). Back end merged on main 2026-11-23 (engine, API, emails; the finance list and tech-staff unmark already use it); creator-support fee and payout approvals and the admin pages are next.",
+      "note": "Specified and decided 2026-11-23 (owner: \"build a workflow system\"; anything related to money needs approval; changes take effect at approval). In production as of v2026.11.24.3: the engine, emails, the Approvals and Approval rules pages, the finance list and tech-staff unmark, feature switches and tier changes (the last two direct until an admin adds approvers). Next: creator-support fees, payout batches, ledger, policy and emergency stop (WF-6), channel moves and claims, platform credentials, the native admin app.",
       "prs": [
         "AlUmmahNow#1821",
         "AlUmmahNow#1825",
         "AlUmmahNow#1827",
         "AlUmmahNow#1829",
-        "AlUmmahNow#1832"
+        "AlUmmahNow#1832",
+        "AlUmmahNow#1862",
+        "AlUmmahNow#1865",
+        "AlUmmahNow#1759",
+        "AlUmmahNow#1874",
+        "AlUmmahNow#1913",
+        "AlUmmahNow#1914",
+        "AlUmmahNow#1936",
+        "AlUmmahNow#1939",
+        "AlUmmahNow#1951",
+        "AlUmmahNow#1961"
       ]
     },
     {
