@@ -6,7 +6,7 @@
 |---|---|
 | **ID** | `E17` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md), [AlUmmahNowApple](../repos/AlUmmahNowApple.md), [AlUmmahNowAndroid](../repos/AlUmmahNowAndroid.md), [AlUmmahNowDesktop](../repos/AlUmmahNowDesktop.md) |
-| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server, the web viewer and Studio for chat, premieres, reminders and event tags are on main behind switches that default off; the native viewers are E17-6 to E17-8) |
+| **Status** | **in progress** (spec rewritten 2026-11-23 against AlUmmahNow main `4bd5e9180`; the web live page and recordings exist; the server, the web viewer, Studio and the native viewers are on main behind switches that default off; still to build: §9's E17-3b and E17-9, and writing in the apps, §6) |
 | **Last updated** | 2026-11-24 |
 | **Linear** | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337) (stories AUN-338 to AUN-342) |
 
@@ -29,16 +29,16 @@ Viewers on the web, Apple, Android and Desktop can:
 | Area | Files (AlUmmahNow unless named) | What it does |
 |---|---|---|
 | Providers and sessions ([D3](D3-live-provider.md)) | `packages/shared-types/src/live-providers.ts`, `apps/api-videos/src/lib/live/*` | Two providers (`bunny`, `selfhosted` HLS push to R2), round-robin, ingest, idle timeout, recording, QoE. |
-| Stream record | R2 `livestream:<id>` in the `videos` bucket; `lib/live/streams.ts` | The one stored copy of a stream. Written by `liveStreamCreate.ts`, `liveStreamUpdate.ts`, `lib/live/streams.ts`, `lib/review/live.ts`, `routers/admin.router.ts`, the suspension cascade in `lib/admin/service.ts` and account erasure in `lib/privacy/user-data.ts`. |
+| Stream record | R2 `livestream:<id>` in the `videos` bucket; `lib/live/streams.ts` | The one stored copy of a stream. `isInternalVideoKey` (`packages/shared-types/src/video-visibility.ts`) is the one check of which keys of that bucket are not videos; `R2Repository` does not read, write or list those, and `NonVideoRepository` is for the code that means them ([#1959](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1959)). Written by `liveStreamCreate.ts`, `liveStreamUpdate.ts`, `lib/live/streams.ts`, `lib/review/live.ts`, `routers/admin.router.ts`, the suspension cascade in `lib/admin/service.ts` and account erasure in `lib/privacy/user-data.ts`. |
 | Stream index | `SEARCH_DB.content_ownership`, `kind = 'stream'`; `syncStreamInline` in `lib/search/sync.ts`; `backfillOwnershipPage` in `lib/search/ownership.ts`; `lib/search/repairs.ts` | One row per stream, guarded by `source_version` and tombstones. Written only when the bucket is wrapped by `withSearchSync`. |
 | Routes | `routers/live.router.ts` | `GET/POST /api/live-streams`, `GET/PATCH/DELETE /:id`, `/:id/state`, `/:id/ingest`, `/:id/start`, `/:id/end`, `/:id/viewers`, `/:id/qoe`. |
 | Viewer count | `apps/websocket-server/src/live-viewers.ts` | 20 s heartbeat, 75 s expiry, memory only. |
 | Web | `apps/web/src/components/live/*`, `components/studio/live/*` | Browse, watch, recording, Studio Go live. |
 | Recording review (VR9) | `lib/review/live.ts`, `lib/live/vod-ready.ts` | The recording is withheld until review clears it. |
-| Comment moderation | `lib/comments.ts`, `lib/channelComments/blocks.ts`, `packages/shared-types/src/channel-roles.ts`, `lib/moderation-scan.ts`, `apps/processor/src/moderation/*` | Roles (`live.manage`, `live.moderate`, `comment.moderate`), silent channel blocks, AI scan that writes a signal. **The AI never hides anything today** (`decide(..., { autoHideAvailable: false })`). |
+| Comment moderation | `lib/comments.ts`, `lib/channelComments/blocks.ts`, `packages/shared-types/src/channel-roles.ts`, `lib/moderation-scan.ts`, `apps/processor/src/moderation/*` | Roles (`live.manage`, `live.moderate`, `comment.moderate`), silent channel blocks, AI scan that writes a signal. **For comments the AI never hides anything** (`decide(..., { autoHideAvailable: false })`); live chat can be held (§5.2). |
 | Notifications | `lib/notification-events.ts`, `apps/processor/src/lib/notifications-store.ts`, `apps/processor/src/push/dispatch.ts` | `announceLiveStarted` fans out to channel subscribers, dedupe key `live:<streamId>`, category `live`. |
 | Crons in api-videos | `scheduled()` in `apps/api-videos/src/index.ts` | `* * * * *` in production, every 5 minutes on QA and stage. |
-| Native apps | Apple, Android, Desktop | No live code before E17-6 to E17-8. |
+| Native apps | Apple, Android, Desktop | The live row, list, watch page, premieres, replay and the chat for reading (§6). |
 
 Faults found on main that this epic fixes, because it builds on them:
 
@@ -223,6 +223,20 @@ Success is `{ success: true, result }`. Errors use `apiError` (`apps/api-videos/
 }
 ```
 
+**Roles.** A person's role on a stream is their role on its channel's record (`roleOnRecord` in `lib/channelAccess.ts`, also for videos and playlists). The stream's own owner counts only where there is no channel record, and a channel that cannot be read gives nobody a role. "The owner" below means this.
+
+**Who may fetch its media** (self-hosted edge, `lib/live/access.ts`, [#1949](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1949)). The stream's record decides, for each request, before the edge's cache:
+
+| State of the stream | Who |
+|---|---|
+| open to everyone | anyone, with the same URLs and caching as ever |
+| private; or its recording held or rejected by review | the people who manage it, with a signed URL |
+| hidden, deleted or gone | nobody, the owner included (a review's own URLs aside, below) |
+
+- One read per session and isolate every 5 seconds. While the record cannot be read, what was just known holds for 30 seconds; then the edge answers `503`.
+- A signed URL carries its token as a path segment and stays the same for a 12-hour window, so polling does not restart a player. Every answer with one is `private, no-store`. A review of the recording has URLs of its own, bound to that review while it is open.
+- A change that lets fewer people watch also drops the CDN's copies. Every write and delete passes `lib/search/sync.ts`, so there is no other flag to keep.
+
 `chat.enabled` is false when the switch is off, the stream is `madeForKids`, `allowChat` is false, or the owner's tier has no chat. `eventType` is null when `liveEvents` is off.
 
 ### 5.2 Live chat
@@ -267,7 +281,7 @@ Must-pass test strings, among others: «وَلَا تَمُدَّنَّ عَيْ
 
 **AI scan.** `surface: 'live_chat'`, `subjectId` the message, `parentId` the stream, `event: 'create'`, through the existing `MODERATION_QUEUE`.
 
-- The consumer writes a `moderation_signals` row, as for comments, and **holds** the message as far as the stream's creator chose (`aiHold`, E17-D4, E17-2c [#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)): `none`; `basic` (default), when a score reaches its category's threshold; `strict`, also when it comes within 0.15 of it. This stays inside Epic 28's rules: only categories an admin enforces (nothing is held while all are in shadow mode), never `religious_authenticity`, never a message of the owner or a moderator, never one a person has decided on. A held message is `held` / `moderation`, leaves every screen (`live_chat_removed`) and is purged after 30 days. The setting is the team's business: it is not in public answers or events.
+- The consumer writes a `moderation_signals` row, as for comments, and **holds** the message as far as the stream's creator chose (`aiHold`, E17-D4, E17-2c): `none`; `basic` (default), when a score reaches its category's threshold; `strict`, also when it comes within 0.15 of it. This stays inside Epic 28's rules: only categories an admin enforces (nothing is held while all are in shadow mode), never `religious_authenticity`, never a message of the owner or a moderator, never one a person has decided on. A held message is `held` / `moderation`, leaves every screen (`live_chat_removed`) and is purged after 30 days. The setting is the team's business: it is not in public answers or events.
 - **`GET /:id/chat/held`**: at most 100, newest first, for those who moderate the chat; never while they are banned (or that cannot be read), and nothing of a deleted stream. `restore` shows one, `remove` removes it. Studio and the chat on the watch page show them.
 - `live_chat` takes at most a share of the daily neuron cap (admin setting, default 25 %, no share limit when there is no cap). The scan reserves `feature = 'live_chat'` first, then `moderation`; when the second fails the first is released with `settleBudget(estimate, 0)`. Past either limit: signal `skipped` / `budget`, message stays.
 - Consequence, stated plainly: at 22–62 neurons a message (§8) and the default cap of 10,000 neurons a day (`DEFAULT_DAILY_NEURON_CAP`), the share scans about 40 to 110 messages a day for the whole site. An admin can raise the cap or the share. Beyond that, chat relies on the fast filter, slow mode, blocks, reports and people. A creator with no moderator should use subscribers-only or slow mode.
@@ -403,10 +417,10 @@ The first native PRs (Apple #82, Android #56, Desktop #75) were written against 
 | Story | Status |
 |---|---|
 | **17.1** Live watch, viewer count, DVR | Web watch and viewer count on main. Seek-back is not: the self-hosted playlist lists only 4 to 6 segments (`lib/live/providers.ts`, `hls_list_size`), though every segment is kept in R2 and indexed in `live_segments`. E17-9 serves a longer playlist from that index. |
-| **17.2** Moderated chat | Server done (E17-2, E17-2b), then clients. |
-| **17.3** Premieres, scheduled streams, reminders | Server done (E17-3, E17-3a) except `calendar.ics` (E17-3b, waits for [#1819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1819)), then clients. Shares `live_stream_metadata` with E22. |
-| **17.4** Event streams | Server done (E17-1, E17-3c), then clients. |
-| **17.5** Recordings | Server recording and review on main. Chat replay is E17-2. |
+| **17.2** Moderated chat | Server, web and Studio done (E17-2, E17-2b, E17-2c, E17-5a, E17-5c); the apps read it (E17-6 to E17-8), and writing there waits for [#1912](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1912). |
+| **17.3** Premieres, scheduled streams, reminders | Server done (E17-3, E17-3a) except `calendar.ics` (E17-3b, waits for [#1819](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1819)). Clients done (E17-5b, E17-5c, E17-6 to E17-8). Shares `live_stream_metadata` with E22. |
+| **17.4** Event streams | Done (E17-1, E17-3c, E17-5b, E17-5c, E17-6 to E17-8). |
+| **17.5** Recordings | Server recording, review and chat replay on main (E17-2, E17-5a, E17-6 to E17-8). |
 
 ## 8. Cost
 
@@ -437,14 +451,14 @@ Prices: D1 $1.00 per million rows written, $0.001 per million read; Workers $0.3
 | **E17-3b** | AlUmmahNow | `calendar.ics` | E17-3a and #1819 |
 | **E17-3c** ([#1863](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1863)) | AlUmmahNow | Event tags and the `kind` / `eventType` filters | E17-3 |
 | **E17-4** ([#1869](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1869)) | AlUmmahNow | Admin | E17-2b, E17-3 |
-| **E17-2c** ([#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)) | AlUmmahNow | AI hold (E17-D4), held messages | E17-2 |
+| **E17-2c** ([#1885](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1885)) | AlUmmahNow | AI hold (E17-D4), held messages; chat roles from the channel's record (§5.1) | E17-2 |
 | **E17-5a** ([#1884](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1884)) | AlUmmahNow | Web: chat and replay | E17-2 |
 | **E17-5b** ([#1889](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1889)) | AlUmmahNow | Web: premieres, reminders (30 minutes), event tags and filter | E17-5a |
 | **E17-5c** ([#1893](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1893)) | AlUmmahNow | Web Studio | E17-5b, E17-2c |
-| **E17-6** ([AlUmmahNowApple#88](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/88), [#89](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/89), [#96](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/96), [#100](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/100)), **E17-7** ([AlUmmahNowAndroid#59](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/59), [#67](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/67)), **E17-8** ([AlUmmahNowDesktop#79](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/79), [#81](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/81)) | Apple / Android / Desktop | Native viewers; the server sets their pace ([#1927](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1927)) | E17-2, E17-3 |
+| **E17-6** ([AlUmmahNowApple#88](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/88), [#89](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/89), [#96](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/96), [#100](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/100)), **E17-7** ([AlUmmahNowAndroid#59](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/59), [#67](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/67)), **E17-8** ([AlUmmahNowDesktop#79](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/79), [#81](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/81), [#87](https://github.com/Al-Ummah-Now/AlUmmahNowDesktop/pull/87)) | Apple / Android / Desktop | Native viewers; the server sets their pace ([#1927](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1927)) | E17-2, E17-3 |
 | **E17-9** | AlUmmahNow | Seek-back on the self-hosted edge: an admin setting, 2 hours unless changed, at most 12 (E17-D8) | E17-8 |
 
-Open PRs that touch the same ground, none of which E17 needs first: #1803 (tickets), #1819 (E22 calendar), #1816 (quiet hours). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
+On main unless the row has no PR. Beside the stories: who may fetch a stream's media ([#1949](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1949)) and which keys of the videos bucket are videos ([#1959](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1959)). Open PRs that touch the same ground: #1803 (tickets) and #1819 (E22 calendar). Changes #1819 must make: `/live/<streamId>` for premieres, import `LIVE_EVENT_TYPES`, and expect `visibility` in SQL.
 
 ## 10. Tests
 
@@ -454,7 +468,7 @@ Open PRs that touch the same ground, none of which E17 needs first: #1803 (ticke
 - **Chat:** parallel posts against one cooldown give one message; same-millisecond paging; deleted anchor; blocked author sees only their own; `subscribersOnly`; 120 posts from one address by many users pass and the next does not; switch off is 404 and private is 404.
 - **Socket:** client publish refused; private, canceled, kids and missing streams refused; eviction; unreadable switch refuses; a ban or a lost role removes open sockets; a close during a subscribe is not missed.
 - **Premiere:** each refusal; draft and private sources; every write listed under "While held" refused; a held video is 404 for others on video, playback, public play, embed, captions and chapters, absent from search and sitemap, and under `priv/`; two crons start it once; crash after the claim is repaired; cancel against start; reschedule; swap; stale hold; deleted or rejected video; old schedule entry; no session rows created.
-- **Reminders:** one heads-up per time; reschedule sends again; bell and reminder together give one notification and one push; category off; quiet hours (once #1816 is on main).
+- **Reminders:** one heads-up per time; reschedule sends again; bell and reminder together give one notification and one push; category off; quiet hours ([#1816](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1816), on main).
 - Every test seeds and deletes its own rows. AI is mocked.
 - **Screens:** production build, English and Arabic, light and dark, desktop and phone, in `review-shots/E17/`.
 

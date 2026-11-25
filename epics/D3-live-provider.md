@@ -56,6 +56,8 @@ QA run 43655762702: live in about 4 s, VOD with 22 segments. The old `live-go-li
 - The 5-minute live sweep ends a session past its limit. It also ends, per owner, streams over the at-once cap and every stream once the month is used, because the self-hosted edge goes live on the first segment even without Go live.
 - Studio shows the month's usage, or why the owner can't go live with **Request access** → `/{lang}/upgrade`.
 
+**Who may fetch a self-hosted stream's media** ([#1949](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1949)): the stream's record decides at the edge, [E17 §5.1](E17-live-in-apps.md#51-streams).
+
 **Viewer count** ([#1387](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1387), AlUmmahNow#30)
 - The watch page beats every 20 s with a random per-tab id, through api-videos, to a memory-only `liveviewers:<streamId>` object in the realtime worker. No D1, KV or storage writes.
 - A viewer counts while beating (75 s time to live, for background tabs) and is counted out at once on `pagehide`.
