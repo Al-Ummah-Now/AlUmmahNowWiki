@@ -29,13 +29,15 @@ Safer, more engaged community: scholar verification, moderation tools, engagemen
 | 6.2 | Community moderation tools | Owned by Epic 28. |
 | 6.3 | Community engagement | Partial: community guidelines page (#346); study groups → 22.3; forums/Q&A → 26; reputation, similar users → queue issues. |
 
-## Content reports (2026-11-25, in review: [AlUmmahNow#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934) on [#1947](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1947))
+## Content reports
+
+Since 2026-11-25 ([AlUmmahNow#1947](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1947), [#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934)).
 
 - **Who reports.** Signed in: the report buttons (videos, channels, live streams, chat messages, posts, comments) and `/report`. Signed out: `/report`, which the apps open with `type`, `id`, `stream` and `message`. A signed-in person may raise an earlier report to child safety once.
 - **Signed-out reports** store nothing about the person. Every well-formed report is answered the same way. They are limited per network and per item.
 - **What a moderator can decide** depends on the item. An outcome that would do nothing is not offered and says why; a report never closes as acted on when nothing happened. Banning over an item that is gone needs its reports to name one person whose account is not erased.
 - **Child safety** comes first in the queue, raises an Errors page item, and keeps the item's records. A super admin opens a case from the report. Details: AlUmmahNow `docs/specs/CSAM-RESPONSE.md` §7a.
-- **Decided (2026-11-25).** Guest reports are deleted a year after their decision. Kept child safety records stay at least a year and while a case is open, and are exempt from account erasure ([Data lifecycle](../guides/data-lifecycle.md)). Media is not copied before a case opens. Items under a takedown are shown to super admins only. Reports are answered within 24-48 hours, as the dialog says. The bot check is used when it is configured and never required of signed-in people. Guests leave no contact details. Alerts go to the Errors page and its alert email.
+- **Decided (2026-11-25).** Guest reports are deleted a year after their decision. Kept child safety records stay at least a year and while a case is open, and are exempt from account erasure ([Data lifecycle](../guides/data-lifecycle.md)). Media is not copied before a case opens. Items under a takedown are shown to super admins only, also after the case closes; a channel (a case about one of its images) only while the case is open. Reports are answered within 24-48 hours, as the dialog says. The bot check is used when it is configured and never required of signed-in people. Guests leave no contact details. Alerts go to the Errors page, where only super admins see them, and by email to each super admin in their language, never to a shared address.
 
 ## Decisions and constraints
 

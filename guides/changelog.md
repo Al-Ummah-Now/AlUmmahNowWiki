@@ -4,6 +4,10 @@
 
 What changed across the Al Ummah Now repos, grouped by feature. Newest first. Each entry links the pull requests; the guides and repo pages describe how things work now.
 
+## 2026-11-25: content can be reported without an account, and child safety reports come first
+
+- **AlUmmahNow:** `/report` takes a report with or without an account, and channels, posts and post comments have a report button ([#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934), on [#1947](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1947)). Child safety reports come first for moderators and alert super admins. Items under a takedown are shown to super admins only. See [E06](../epics/E06-community-moderation.md#content-reports) and [Data lifecycle](data-lifecycle.md).
+
 ## 2026-11-25: an erased account's stored media is removed
 
 - **AlUmmahNow:** after an account erasure a job removes the stored media of its videos, streams, channels and profile, from 24 hours after the records, with retries and an admin Jobs page entry ([#2001](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2001)). See [Media files](data-lifecycle.md#media-files).
