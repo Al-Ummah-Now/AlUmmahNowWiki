@@ -95,7 +95,7 @@ Removing someone from the finance list, holding payouts, stopping a batch and th
 | Notify | approvers (always), proposer (always); also super admins, admins, the finance list or up to 20 named people. A person added to the list must be an active admin or on the finance list | — |
 | Notify by email | yes / no (in-app is always on) | yes |
 
-A rule can also be scoped (for example one rule per feature switch). The rule used is the most specific one; each action type always has a default.
+A rule can also be scoped (for example one rule per feature switch). The rule used is the most specific one; each action type always has a default. A rule can be proposed only for something that is there: a feature in the registry, or one of the action's own scopes. One already stored can still be changed.
 
 ### 4.2 Who counts as the owner and as tech staff
 
@@ -229,7 +229,7 @@ Permissions (admin-api, not Auth): `workflows:read` (every admin role, sees requ
 | `GET /api/workflows/actions` | Action types with labels, domains, floors, the rule in force per scope and its "nobody can approve" warning |
 | `GET /api/workflows/rules/:actionType/history?scope=` | Rule versions, newest first, 50 per page (`before=<version>` for the next page); the scope is a query value because the default scope is empty |
 | `GET /api/workflows/recipients?q=` | Who a rule can name for its emails: active admins and the finance list, by name, never an email. For whoever may change a rule |
-| `POST /api/workflows/rules/:actionType` | Proposes a rule change (`workflows.rule.set`); body `{ scope, config, reason }` |
+| `POST /api/workflows/rules/:actionType` | Proposes a rule change (`workflows.rule.set`); body `{ scope, config, reason }`; a scope that isn't there is refused (`rule_invalid`, `scope_unknown`) |
 | `GET /api/workflows/requests` | Filters: `view=waiting\|mine\|open\|history`, `action`, `status`, `target`, `q`; cursor paged (50); each view uses one index |
 | `GET /api/workflows/requests/suggest?q=` | Live autocomplete over open and recent requests (title, target name, proposer name) |
 | `GET /api/workflows/requests/:id` | The request, diff, steps, the rule snapshot, and `can: { approve, reject, withdraw }` with the reason when not (for example `excluded_tech_staff`) |
@@ -279,7 +279,7 @@ Sidebar group **Site**: **Approvals** / «الموافقات», with the waiting
 
 - **Approvals list.** Tabs: Waiting for me, My requests, All open, History. A live-autocomplete search over requests. Each row: the action ("Change the PayGood fee for USD cards"), proposer (name and avatar), when, approvals ("١ من ٢" in Arabic), status chip, and the expiry ("Expires in 3 days").
 - **Request page.** Title, status, reason, the diff (§6), the steps timeline, the rule that applies (with "Why can't I approve?" when the reason is known), and the actions **Approve**, **Reject**, **Withdraw**, **Comment**. Approve and Reject open an in-app dialog (frosted glass) that repeats the change in one line; Reject needs a reason; Approve runs the step-up when needed. No browser prompts.
-- **Approval rules page** (`workflows:rules`): one frosted-glass card per domain (Money, Platform, People, Governance), one row per action type and scope with its summary ("1 approver from the finance list with Payouts · passkey · expires in 7 days"). **Edit** opens a dialog with the fields of §4.1; approver people and the people told by email are picked with the shared live autocomplete (the second opens with everyone who can be added); values below a floor are disabled with the floor's reason. Saving creates a `workflows.rule.set` request, shown as "Waiting for approval" on the row. **History** opens the rule's versions.
+- **Approval rules page** (`workflows:rules`): one frosted-glass card per domain (Money, Platform, People, Governance), one row per action type and scope with its summary ("1 approver from the finance list with Payouts · passkey · expires in 7 days"). **Edit** opens a dialog with the fields of §4.1; approver people and the people told by email are picked with the shared live autocomplete (the second opens with everyone who can be added); values below a floor are disabled with the floor's reason. Saving creates a `workflows.rule.set` request, shown as "Waiting for approval" on the row. **History** opens the rule's versions. **Add a rule for one feature**, after the feature rules, opens the same dialog with a picker first: it opens with every feature that has no rule of its own and matches names in both languages. The rule starts as the rule for all features.
 - **Consumer pages** keep their own buttons. "Save" on a governed setting becomes "Send for approval" when the rule needs approvers, then shows "Waiting for approval · View request" in place of the form until the request closes.
 - English and Arabic, ٠–٩, «،», the shared time formatter, light and dark, phone and desktop. Screenshots go through the audit before merge.
 
@@ -375,9 +375,12 @@ A few rows per request in the search D1, one email per recipient per event throu
 | Values in emails keep their direction | [AlUmmahNow#1968](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1968) | merged (`99a43c5`) |
 | Who a rule tells by email: field, diff by name, checks; emails check their recipients when they go out; a request's changes fit a phone | [AlUmmahNow#1978](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1978) | merged (`ce2f929`) |
 | Direction controls dropped in every email | [AlUmmahNow#1981](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1981), [AlUmmahNowAuth#536](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/536) | merged (`02964f4`; Auth `3246235`) |
-| WF-10 channel moves and claims | — | after AUN-CHANNEL-CLAIM Phase A |
+| The recipients picker names everyone, past one batch of names | [AlUmmahNow#1991](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1991) | merged (`b9c188b`) |
+| Emails: the footer is true for the people a rule tells, the expiry is a long date; the passkey emails send the rendered subject | [AlUmmahNow#1995](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1995), [AlUmmahNowAuth#537](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/537) | merged (`9464111`; Auth `1320a85`) |
+| A rule for one feature on the rules page (AlUmmahNow#1897); pickers say when nothing matches | [AlUmmahNow#2007](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2007) | merged (`b0fd298`) |
+| WF-10 channel moves and claims | — | built with AUN-CHANNEL-CLAIM, after an owner answer |
 | WF-10 credentials | — | after AlUmmahNow#1547 |
 | WF-6 creator-support consumers (fees, payout batches, ledger, policy, emergency stop) | — | next (AlUmmahNow#1810 merged, `1699f9f`) |
 | WF-11 native admin apps | — | with AUN-ADMIN-NATIVE |
 
-"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Production has everything up to AlUmmahNow#1968 (`v2026.11.24.8`); AlUmmahNow#1978 and AlUmmahNow#1981 are not in a release yet (2026-11-25). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
+"Merged" means on `main`: it reaches QA with the next deploy of `main` and production with the next release. Production has everything up to AlUmmahNow#1981 (`v2026.11.25`); AlUmmahNow#1991, AlUmmahNow#1995 and AlUmmahNow#2007 are not in a release yet (2026-11-25). Every merged code PR has a cross-provider PASS (Gemini 4 Hydrogen or Gemini 4 Neon), as a comment on the PR. The search migration is `0085_approval_workflows.sql` (in production since `v2026.11.24`).
