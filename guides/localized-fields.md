@@ -34,6 +34,13 @@ That content stays in the language it was written in. Viewers can still use the 
 
 **User content needs one language only.** Where a user form has English and Arabic tabs (profile names and bio, channel name and description, upload templates, upload title), it saves when **either** language is filled, in the app and in the API. Nothing on those forms may require English (or Arabic) on its own. Both tabs stay mounted, so text typed in one tab survives a switch. The plain field (`name`, `firstName`, `title`…) carries the filled language, English first, so display falls back to the other language. The web helper is `apps/web/src/lib/localized-input.ts` (`hasAnyLanguage`, `primaryText`, `englishOf`). Background: 2026-11-19 prod report, profile create required the English first name (AlUmmahNow #1606).
 
+### When staff work on user content
+
+Decided 2026-11-24, with the bilingual admin forms ([AlUmmahNow#1814](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1814)):
+
+- **Creating:** when staff create something (a channel, an invite with a channel, a category, a status incident, a theme), the form needs English and Arabic. System content always needs both.
+- **Editing:** when staff edit a user's existing channel or video that has one language only, the missing language is offered, with Translate, but it isn't required. A small fix is never blocked, and nothing the user wrote is rewritten unless staff change it. Text that has both languages keeps both. An optional description can be cleared.
+
 ## Rules
 
 1. **Both languages are first-class fields.** The form has an English and an Arabic field side by side. No field says "leave empty to use the other one".
