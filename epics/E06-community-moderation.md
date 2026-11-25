@@ -7,7 +7,7 @@
 | **ID** | `E06` |
 | **Owning repos** | [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **in progress** |
-| **Last updated** | 2026-11-08 |
+| **Last updated** | 2026-11-25 |
 
 > 26 ACs: 2 done, 3 partial, 3 not done, 18 owned by Epics 21.3, 22.3, 26, 28 (Epic 21.3 is admin-granted only).
 
@@ -28,6 +28,14 @@ Safer, more engaged community: scholar verification, moderation tools, engagemen
 | 6.1 | Scholar verification | Partial: admin verification endpoint (#367) and verified badge (#382); Epic 21.3 adds a required reason and a scholar/institution kind; there is no application flow (E21-D4). |
 | 6.2 | Community moderation tools | Owned by Epic 28. |
 | 6.3 | Community engagement | Partial: community guidelines page (#346); study groups → 22.3; forums/Q&A → 26; reputation, similar users → queue issues. |
+
+## Content reports (2026-11-25, in review: [AlUmmahNow#1934](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1934) on [#1947](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1947))
+
+- **Who reports.** Signed in: the report buttons (videos, channels, live streams, chat messages, posts, comments) and `/report`. Signed out: `/report`, which the apps open with `type`, `id`, `stream` and `message`. A signed-in person may raise an earlier report to child safety once.
+- **Signed-out reports** store nothing about the person. Every well-formed report is answered the same way. They are limited per network and per item.
+- **What a moderator can decide** depends on the item. An outcome that would do nothing is not offered and says why; a report never closes as acted on when nothing happened. Banning over an item that is gone needs its reports to name one person whose account is not erased.
+- **Child safety** comes first in the queue, raises an Errors page item, and keeps the item's records. A super admin opens a case from the report. Details: AlUmmahNow `docs/specs/CSAM-RESPONSE.md` §7a.
+- **Not decided:** how long guest reports and kept records stay; whether media is copied before a case opens; whether moderators may see items under a takedown (super admins only today); a response time for reports; whether signed-out people may leave contact details (none are asked for); the limits' final numbers.
 
 ## Decisions and constraints
 
