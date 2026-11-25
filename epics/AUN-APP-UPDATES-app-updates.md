@@ -411,6 +411,10 @@ The admin page **App config** gains a **Releases** tab (default tab): a table pe
    - Studio and Tools never restart on their own while an upload, encode or import runs; **Restart now** is disabled with "Finish or pause your uploads first."
 8. **Settings → Updates** (shown while the switch is on): current version, last checked time, **Check now** with its result line, and **Install updates automatically** (on/off) where the build can install updates itself.
 
+**From staging to installing** (Tools as built, the rule for every desktop app). A verified update can wait hours, so it is proven again right before it installs, on each check, on **Restart now** and on exit: the manifest's signature under the keys trusted *now* (a key revoked or a version yanked since then cancels it), the offer still standing, and the staged file's size and SHA-256. Only a file this run wrote counts; whatever is in the updater's folder is cleared at start and before staging, and the updater's own install-at-start is off. The staging folder belongs to this user alone: no part of its path in the user's own root may be a link, belong to someone else or be writable by others. If it isn't private, the build shows the notice with the link. Linux never constructs an updater ([APPUPD-D9](#owner-decisions)). What stays possible is software running as the same user swapping the file in the seconds between our last check and the updater reading it; such software could replace the app itself.
+
+**An older installer run by hand** replaces a newer install, as any installer can; it is the user's own act. The app never goes back by itself, and offers the newest version again once it runs.
+
 ### 5.4 Microsoft Store and managed installs
 
 `msstore` builds use `StoreContext`: on launch and every `checkHours`, `GetAppAndOptionalStorePackageUpdatesAsync`; when it finds one, the same bar with **Update** → `RequestDownloadAndInstallStorePackageUpdatesAsync` (the Store's own UI). `managed` builds (MSI, Linux packages) show the bar with **Download**, which opens the app's fixed page in the browser ([§4.1.1](#411-the-no-keys-answer-action-notice)), and Settings → Updates without the automatic-install switch.
@@ -587,14 +591,15 @@ Decided (all settled 2026-11-24):
 | APPUPD-3 update answer in `GET /api/v1/app-config` | AlUmmahNow#1806 | merged `78c0f80` |
 | APPUPD-4 release tool `scripts/app-release/app-release.mjs` | AlUmmahNow#1811 | merged `192d89f` |
 | APPUPD-5 Core `aun-updates` + `UpdateChecker` | AlUmmahNowCore#54 | merged `d37b920`, released in Core `v0.4.0-rc.5` |
-| APPUPD-12 no-keys notice on the server: `action: notice`, no way back once a root key exists, drafts retried, the minimum counts published releases | AlUmmahNow#1969 | merged `06bbd04`; follow-up AlUmmahNow#1975 |
-| APPUPD-13 root keys in api-videos (`UPDATE_ROOT_KEYS`, every environment) and the `update-keys` release of each repo | AlUmmahNow#1971 + app repos | open; key lists are published first, then the variable |
-| APPUPD-5b root-key gate in Core | AlUmmahNowCore#62 | merged `62c6174`, in Core `v0.4.0-rc.7` |
+| APPUPD-12 no-keys notice on the server: `action: notice`, no way back once a root key exists, drafts retried, the minimum counts published releases | AlUmmahNow#1969, #1975 | merged |
+| APPUPD-13 root keys in api-videos (`UPDATE_ROOT_KEYS`, every environment) and the `update-keys` release of each repo | AlUmmahNow#1971 + app repos | merged; the four key lists (serial 1) are published |
+| APPUPD-5b root-key gate in Core | AlUmmahNowCore#62 | merged, released in Core `v0.4.0-rc.7` |
 | APPUPD-6 admin Releases tab, super-admin editing | AlUmmahNow#1860 | open, being moved onto main (epic agent). **Must merge before `appUpdates` goes on**: until then any `settings:manage` admin could set the minimum |
-| APPUPD-7 Tools (notice, forced screen, Settings → Updates, root key) | AlUmmahNowTools#76 (closes #57) | in review |
-| APPUPD-7b Tools packages, signing job, update test | AlUmmahNowTools#81 | open |
+| APPUPD-7 Tools (notice, forced screen, Settings → Updates, root key, staging rules) | AlUmmahNowTools#76 | merged `6d01bdc` |
+| APPUPD-7b Tools packages, signing job, N to N+1 update test | AlUmmahNowTools#81, #82 | merged; first signed release next |
 | APPUPD-8 Desktop | AlUmmahNowDesktop | in progress (Desktop agent, against §4.1.1) |
-| APPUPD-9, -10 Android, Apple | — | planned; the same §4.1.1 contract |
+| APPUPD-10 Apple: plan; A1 the check | AlUmmahNowApple#103, #104 | plan merged; A1 waits for CI. A2 the notice, A3 Sparkle, A4 release follow |
+| APPUPD-9 Android | — | planned; the same §4.1.1 contract |
 | APPUPD-11 per-app docs | — | planned |
 
 **Order before the switch goes on**: APPUPD-12 → the key lists published → APPUPD-13 → APPUPD-6 (super-admin gate) → the first signed release of an app with the check → `appUpdates` on in QA, then production.
