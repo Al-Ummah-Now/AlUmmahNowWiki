@@ -74,13 +74,13 @@ The local E2E stack's leftover check is what finds gaps like these: an admin spe
 
 ## Self-service account deletion (shared client rules)
 
-The rules for every client that offers **Delete account**. They're the target; no client is released yet, and each is reviewed against them. The web page's address isn't in Google Play's Data safety form yet.
+The rules for every client that offers **Delete account**. They're the target, and each client is reviewed against them. The web page's address isn't in Google Play's Data safety form yet.
 
 ### Status
 
 | Client | State |
 |---|---|
-| Web page `/delete-account` | In review ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)) |
+| Web page `https://profile.auth.alummahnow.net/delete-account` (add `?lang=ar` for Arabic; `account.alummahnow.net/delete-account` leads there) | Merged ([Auth#533](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/533)); Auth releases every merge to production |
 | Apple Studio | In review ([Apple#97](https://github.com/Al-Ummah-Now/AlUmmahNowApple/pull/97)) |
 | Android Studio | In review ([Android#68](https://github.com/Al-Ummah-Now/AlUmmahNowAndroid/pull/68)) |
 | Server ([#1937](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1937), [#1933](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1933)) | Live on production since 2026-11-24 (`v2026.11.24.2`) |
