@@ -1766,16 +1766,21 @@
         "en": "Sign in with no password or passkey yet",
         "ar": "تسجيل الدخول دون كلمة مرور أو مفتاح مرور بعد"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "auth",
         "auth-admin"
       ],
       "wiki": "epics/AUTH-PASSKEYS-passkeys-everywhere.md",
+      "release": {
+        "repo": "AlUmmahNowAuth",
+        "run": 45044679529,
+        "sha": "5f192e568217c5d4abd9b1ea7c60e68c694b7685"
+      },
       "prs": [
         "AlUmmahNowAuth#442"
       ],
-      "note": "An invited account with no password or passkey gets Email me a sign-in link or Add a password on the sign-in page instead of a password field. Passkey failures say what went wrong, never count as Not now, and are audited (reason, browser, OS) in auth admin. Held for the owner's screenshot review."
+      "note": "An invited account with no password or passkey gets Email me a sign-in link or Add a password on the sign-in page instead of a password field. Passkey failures say what went wrong, never count as Not now, and are audited (reason, browser, OS) in auth admin."
     },
     {
       "id": "account-hub",
