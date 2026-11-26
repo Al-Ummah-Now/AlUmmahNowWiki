@@ -109,7 +109,7 @@ Google returns to our API (`/api/youtube-import/oauth/callback`), which never fi
 
 Creators never see that the feature exists until it works (owner, 2026-11-15). While the admin switch is off, or the client ID or client secret is missing:
 
-- Studio shows no **Move from YouTube** tab, and `/studio/{channel}/content/youtube` is a plain 404. The Studio layout asks `GET /api/youtube-import/available?channelId=` on the server, and the tab appears only when it answers 200: the feature is on and configured **and** the caller may import into that channel (channel role and a creator tier).
+- Studio shows no **Move from YouTube** tab, and `/studio/{channel}/content/youtube` is a plain 404. On the server, the Studio layout uses `getStudioFeatures` (`apps/web/src/lib/studio/server.ts`) to read `youtubeImport` from `GET /api/me/features` for the channel. The tab appears when that flag is on for the account and channel.
 - Every `/api/youtube-import/*` route, and an upload initiate that names an import, answers **404 `feature_off`**, with no message about it. Google's callback sends the browser to the Studio dashboard, and a wizard left open when the switch goes off leaves for the dashboard silently.
 - Readiness messages ("client secret missing", setup steps) appear only on the admin page.
 
