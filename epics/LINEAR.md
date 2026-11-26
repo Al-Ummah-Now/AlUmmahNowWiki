@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 111 epics and 707 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 112 epics and 715 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -27,6 +27,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | [AUN-37](https://linear.app/hamzalabs/issue/AUN-37/aun-multi-audio-multiple-audio-tracks) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-ORIGIN](AUN-ORIGIN-request-origin.md) | [AUN-38](https://linear.app/hamzalabs/issue/AUN-38/aun-origin-request-origin-where-a-request-came-from) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md) | [AUN-673](https://linear.app/hamzalabs/issue/AUN-673/aun-player-links-in-video-links-credits-info-cards-and-end-screens) | 2 | 1 | 0 | 21 | 0 | 24 |
+| [AUN-PRIVATE-MODERATION](AUN-PRIVATE-MODERATION-private-moderation-models.md) | [AUN-819](https://linear.app/hamzalabs/issue/AUN-819/aun-private-moderation-private-self-hosted-content-moderation-models) | 0 | 0 | 0 | 8 | 0 | 8 |
 | [AUN-R2-MIGRATION](AUN-R2-MIGRATION-r2-video-migration.md) | [AUN-41](https://linear.app/hamzalabs/issue/AUN-41/aun-r2-migration-move-video-delivery-to-r2-cloudflare-cdn) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-RELEASE](AUN-RELEASE-release-pipeline-skew.md) | [AUN-42](https://linear.app/hamzalabs/issue/AUN-42/aun-release-release-pipeline-tagged-releases-and-skew-protection) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-SCALABILITY](AUN-SCALABILITY-scalability-audit.md) | [AUN-43](https://linear.app/hamzalabs/issue/AUN-43/aun-scalability-scalability-audit-and-index-backed-lists) | 1 | 1 | 0 | 0 | 0 | 2 |
@@ -85,13 +86,13 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E11](E11-aun-core.md) | [AUN-279](https://linear.app/hamzalabs/issue/AUN-279/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 7 | 1 | 0 | 1 | 0 | 9 |
 | [E12](E12-viewer-mobile.md) | [AUN-289](https://linear.app/hamzalabs/issue/AUN-289/e12-viewer-mobile-apps-ios-ipados-android) | 2 | 4 | 0 | 8 | 0 | 14 |
 | [E13](E13-native-players.md) | [AUN-304](https://linear.app/hamzalabs/issue/AUN-304/e13-native-players) | 3 | 5 | 1 | 2 | 0 | 11 |
-| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 5 | 11 | 6 | 3 | 1 | 26 |
+| [E14](E14-offline-listen.md) | [AUN-316](https://linear.app/hamzalabs/issue/AUN-316/e14-offline-and-listen-mode-incl-carplay-android-auto) | 11 | 11 | 0 | 3 | 1 | 26 |
 | [E15](E15-tv-apps.md) | [AUN-322](https://linear.app/hamzalabs/issue/AUN-322/e15-tv-apps) | 0 | 5 | 0 | 4 | 0 | 9 |
 | [E16](E16-desktop-viewer.md) | [AUN-332](https://linear.app/hamzalabs/issue/AUN-332/e16-desktop-viewer-windows-macos-linux) | 1 | 2 | 0 | 1 | 0 | 4 |
 | [E17](E17-live-in-apps.md) | [AUN-337](https://linear.app/hamzalabs/issue/AUN-337/e17-live-in-apps-watch-chat-premieres-reminders) | 17 | 3 | 0 | 2 | 0 | 22 |
-| [E18](E18-studio-mobile.md) | [AUN-343](https://linear.app/hamzalabs/issue/AUN-343/e18-studio-mobile-ios-ipados-android) | 2 | 3 | 1 | 4 | 0 | 10 |
+| [E18](E18-studio-mobile.md) | [AUN-343](https://linear.app/hamzalabs/issue/AUN-343/e18-studio-mobile-ios-ipados-android) | 2 | 4 | 1 | 3 | 0 | 10 |
 | [E19](E19-studio-desktop.md) | [AUN-354](https://linear.app/hamzalabs/issue/AUN-354/e19-studio-desktop-windows-macos-linux) | 3 | 5 | 0 | 1 | 1 | 10 |
-| [E20](E20-system-parental-controls.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-system-parental-controls-support) | 8 | 0 | 1 | 12 | 11 | 32 |
+| [E20](E20-system-parental-controls.md) | [AUN-365](https://linear.app/hamzalabs/issue/AUN-365/e20-system-parental-controls-support) | 9 | 0 | 0 | 12 | 11 | 32 |
 | [E21](E21-islamic-experience.md) | [AUN-371](https://linear.app/hamzalabs/issue/AUN-371/e21-islamic-experience-layer) | 9 | 2 | 0 | 18 | 2 | 31 |
 | [E22](E22-notifications-sharing-circles.md) | [AUN-380](https://linear.app/hamzalabs/issue/AUN-380/e22-notifications-sharing-study-circles) | 0 | 0 | 3 | 0 | 1 | 4 |
 | [E23](E23-release-engineering.md) | [AUN-385](https://linear.app/hamzalabs/issue/AUN-385/e23-release-engineering-and-store-compliance) | 1 | 6 | 0 | 0 | 0 | 7 |
@@ -119,4 +120,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 0 | 0 | 1 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **111 epics** | **341** | **110** | **29** | **177** | **50** | **707** |
+| **All** | **112 epics** | **348** | **111** | **22** | **184** | **50** | **715** |
