@@ -335,3 +335,7 @@ The code ships with `video_review.mode = off`. Once it is deployed to production
    - a community post with a flagged image is held as a whole post
    - an avatar, banner or profile picture has only its image withheld
 9. **Arabic text moderation:** Gemma 4 replaces m2m100 (#813).
+
+## Related epics
+
+- [AUN-PRIVATE-MODERATION](AUN-PRIVATE-MODERATION-private-moderation-models.md) — self-hosted Colab-trained ONNX text & vision safety models behind `ModerationProvider` for zero external inference egress.

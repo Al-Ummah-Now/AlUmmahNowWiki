@@ -115,3 +115,4 @@ GitHub issues and PRs that name this epic (org-wide sweep, 2026-11-10):
 - [docs/epics.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/epics.md)
 - [docs/specs/AI-MODERATION.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/AI-MODERATION.md)
 - [docs/specs/EPIC-28-PLAN.md](https://github.com/Al-Ummah-Now/AlUmmahNow/blob/56811623fceb866a556aabaef1bb6bc8bf6a1362/docs/specs/EPIC-28-PLAN.md)
+- Follow-on private self-hosted models epic: [AUN-PRIVATE-MODERATION](AUN-PRIVATE-MODERATION-private-moderation-models.md)
