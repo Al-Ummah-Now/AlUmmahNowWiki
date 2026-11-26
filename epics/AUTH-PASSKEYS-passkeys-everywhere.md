@@ -160,7 +160,7 @@ New **Passkeys** section on `profile.auth.…`: each passkey with its name, "Syn
 
 **High-risk admin-api actions (step-up):** suspending, unsuspending or deleting a user (moderation requests to Auth), permanent deletes, granting or removing staff roles, revealing a minor item and approving an escalated item (AUN-VIDEO-REVIEW).
 
-### Accounts with no sign-in method yet ([AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442), in review)
+### Accounts with no sign-in method yet ([AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442), merged)
 
 An invited account whose passkey was skipped or failed has no password and no passkey. It is never asked for a password it doesn't have:
 
@@ -345,7 +345,7 @@ Two to three D1 reads and one write per passkey sign-in, no external service. Un
 | Fix: hub Passkeys card error on sessions from before 15-minute tokens, card spacing, accurate copy (device, password manager, phone, security key), card E2E | [AlUmmahNowAuth#370](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/370) | in review |
 | Copy: admin passkey screens and help guide | [AlUmmahNow#1316](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1316) | in review |
 | Copy: CMS passkey-needed page | [AlUmmahNowCMS#127](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/127) | in review |
-| Auth: clearer passkey failures; accounts with no sign-in method get a sign-in link or Add a password; failures audited and shown in auth admin | [AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442) | in review (held for the owner's screenshot review) |
+| Auth: clearer passkey failures; accounts with no sign-in method get a sign-in link or Add a password; failures audited and shown in auth admin | [AlUmmahNowAuth#442](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/pull/442) | Shipped 2026-11-22 |
 | Enforcement on QA/stage | — | off; waits on [AlUmmahNowAuth#367](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/367) |
 | Enforcement on production | — | off; **waiting for the owner** to register a passkey on `auth.alummahnow.net` (account hub → Passkeys → Add a passkey), then switch it on in the auth admin → Security |
 
