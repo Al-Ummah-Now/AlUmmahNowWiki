@@ -20,7 +20,7 @@ Links to repo files point at a fixed commit, so they show what the page was writ
 
 ## Linear roadmap
 
-The [Linear roadmap](LINEAR.md) links every epic to its Linear issue and summarizes its stories by status.
+The [Linear roadmap](LINEAR.md) links tracked epics to their Linear issues and summarizes their stories by status (newly added planned epics are synced on the next Linear roadmap update).
 
 ## Totals
 
