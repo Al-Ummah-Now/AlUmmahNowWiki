@@ -26,7 +26,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [AUN-MEMBERS](AUN-MEMBERS-creator-support.md) | [AUN-612](https://linear.app/hamzalabs/issue/AUN-612/aun-members-supporting-creators-one-time-and-monthly-support-0percent) | 6 | 3 | 0 | 12 | 2 | 23 |
 | [AUN-MULTI-AUDIO](AUN-MULTI-AUDIO-multiple-audio-tracks.md) | [AUN-37](https://linear.app/hamzalabs/issue/AUN-37/aun-multi-audio-multiple-audio-tracks) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-ORIGIN](AUN-ORIGIN-request-origin.md) | [AUN-38](https://linear.app/hamzalabs/issue/AUN-38/aun-origin-request-origin-where-a-request-came-from) | 2 | 0 | 0 | 0 | 0 | 2 |
-| [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md) | [AUN-673](https://linear.app/hamzalabs/issue/AUN-673/aun-player-links-in-video-links-credits-info-cards-and-end-screens) | 2 | 1 | 0 | 21 | 0 | 24 |
+| [AUN-PLAYER-LINKS](AUN-PLAYER-LINKS-in-video-links.md) | [AUN-673](https://linear.app/hamzalabs/issue/AUN-673/aun-player-links-in-video-links-credits-info-cards-and-end-screens) | 4 | 3 | 0 | 17 | 0 | 24 |
 | [AUN-PRIVATE-MODERATION](AUN-PRIVATE-MODERATION-private-moderation-models.md) | [AUN-819](https://linear.app/hamzalabs/issue/AUN-819/aun-private-moderation-private-self-hosted-content-moderation-models) | 0 | 0 | 0 | 8 | 0 | 8 |
 | [AUN-R2-MIGRATION](AUN-R2-MIGRATION-r2-video-migration.md) | [AUN-41](https://linear.app/hamzalabs/issue/AUN-41/aun-r2-migration-move-video-delivery-to-r2-cloudflare-cdn) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [AUN-RELEASE](AUN-RELEASE-release-pipeline-skew.md) | [AUN-42](https://linear.app/hamzalabs/issue/AUN-42/aun-release-release-pipeline-tagged-releases-and-skew-protection) | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -120,4 +120,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 0 | 0 | 1 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **112 epics** | **348** | **111** | **22** | **184** | **50** | **715** |
+| **All** | **112 epics** | **350** | **113** | **22** | **180** | **50** | **715** |
