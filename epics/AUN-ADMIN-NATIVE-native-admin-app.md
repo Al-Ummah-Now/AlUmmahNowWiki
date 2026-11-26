@@ -35,7 +35,7 @@ Admin is web only (admin-web + admin-api). The pre-publication review (AUN-VIDEO
 | Shared Core | Rust core with `aun-api`, `aun-auth`, `aun-i18n`, `aun-sync`, `aun-telemetry` and others; v0.3.0-rc.1 | AlUmmahNowCore |
 | Viewer and Studio are separate apps | Separate targets and bundle ids | Apple `Apps/*`; Android `viewer-mobile`, `studio-mobile` |
 | Push device registry | `PUT/DELETE /api/v1/devices/:installId`; table `push_devices` with an `app` column; at most 20 devices per user; platforms include `macos` (apns) and `windows` (wns) | api-videos `lib/push-devices.ts`; processor `migrations-notifications/0003` |
-| Push senders | One interface for APNs, FCM, WNS and Web Push. APNs, FCM and WNS send once their Secrets Store values are set (#1286). Web Push (VAPID + RFC 8291) is built ([#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371)) and waits for the VAPID key pair ([#1376](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1376)). Transient failures retry through the queue (60 s, 5 min, 30 min), then the DLQ flags the Errors page with Replay | processor `src/push/provider.ts`; [#414](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/414), [#1287](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1287) |
+| Push senders | One interface for APNs, FCM, WNS and Web Push. APNs, FCM and WNS send once their Secrets Store values are set (#1286). Web Push (VAPID + RFC 8291) merged in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371). The VAPID Secrets Store bindings merged on 2026-11-15 in [#1376](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1376). Delivery requires a configured key pair. Transient failures retry through the queue (60 s, 5 min, 30 min), then the DLQ flags the Errors page with Replay | processor `src/push/provider.ts`; [#414](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/414), [#1287](https://github.com/Al-Ummah-Now/AlUmmahNow/issues/1287) |
 | Push latency | Review alerts use the dedicated `al-ummah-now-review-alerts` queue with batch size 1 and a 1 s timeout | processor `wrangler.jsonc` |
 | Admin roles | `super_admin`, `admin`, `moderator`; permissions per role in one table; `permissionsFor(roles)` | admin-api `lib/roles.ts` |
 | Admin queues | Reports (Action needed / History), AI moderation, Errors, Status, Users, Channels, Abuse | admin-web `(protected)/*`; admin-api routers |
@@ -309,7 +309,7 @@ A placeholder keeps that sender log-only.
 Example `APNS_BUNDLE_IDS`: `{"admin":{"ios":"<Admin iOS id>","ipados":"<Admin iOS id>","macos":"<Admin macOS id>"},"studio":"<Studio id>","viewer":"<Viewer id>"}`.
 
 **Still open**
-- **Hold hook:** the processor's review consumer (AlUmmahNow #1273) has to call `queueReviewAlert` on a hold. The consumer merged in #1273; wiring the hold event to the alert queue is a follow-up.
+- **Hold hook:** wiring the processor's review hold event to `queueReviewAlert` remains a follow-up. [AlUmmahNow#1273](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1273) closed without merging.
 - **Reviewer events:** the admin-api review routes (claim, open, decide) have to POST `/internal/review-alerts/events` on the processor. They are added when those routes land.
 **Later follow-ups:** "Sign out this device" removes the push registration and queues revocation of that install's Auth tokens ([AlUmmahNowAuth#363](https://github.com/Al-Ummah-Now/AlUmmahNowAuth/issues/363)). Web Push merged in [#1371](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/1371) and requires the VAPID key pair.
 
