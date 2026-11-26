@@ -2454,7 +2454,7 @@
         "native"
       ],
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
-      "note": "Build: the registry, the error envelope and switch storage with the Features page API are merged (AlUmmahNow#1753, #1754, #1755); the server gate is in review (#1756); the Features page design is with the auditors.",
+      "note": "The registry, error envelope and switch storage with the Features page API merged (AlUmmahNow#1753, #1754, #1755). The server gate (#1756) and admin Features page (6b379820a) shipped in v2026.11.24. The epic continues with client integration and rollout.",
       "prs": [
         "AlUmmahNow#1753",
         "AlUmmahNow#1754",
@@ -2468,7 +2468,7 @@
         "en": "Server-written error messages",
         "ar": "رسائل أخطاء يكتبها الخادم"
       },
-      "status": "building",
+      "status": "live",
       "apps": [
         "videos",
         "videos-admin",
@@ -2477,7 +2477,11 @@
         "native"
       ],
       "wiki": "epics/AUN-FEATURES-feature-switches.md",
-      "note": "One error envelope with en/ar messages in the language the user chose in the app (X-App-Locale, never the browser's), merged on the servers (AlUmmahNow#1754); apiError() and the check that blocks hand-written bodies in review (#1760). Clients show messages for codes they don't know yet.",
+      "release": {
+        "repo": "AlUmmahNow",
+        "tag": "v2026.11.24"
+      },
+      "note": "One error envelope with en/ar messages in the language the user chose in the app (X-App-Locale, never the browser's), merged on the servers (AlUmmahNow#1754). The apiError() helper and the check that blocks hand-written bodies (#1760) shipped in v2026.11.24. Clients show messages for codes they don't know yet.",
       "prs": [
         "AlUmmahNow#1754",
         "AlUmmahNow#1760"
