@@ -81,7 +81,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E06](E06-community-moderation.md) | [AUN-243](https://linear.app/hamzalabs/issue/AUN-243/e06-community-and-moderation-platform) | 0 | 2 | 0 | 0 | 1 | 3 |
 | [E07](E07-content-discovery.md) | [AUN-247](https://linear.app/hamzalabs/issue/AUN-247/e07-content-discovery-enhancement) | 4 | 0 | 1 | 0 | 1 | 6 |
 | [E08](E08-video-content-features.md) | [AUN-254](https://linear.app/hamzalabs/issue/AUN-254/e08-video-content-features-chapters-navigation) | 0 | 2 | 0 | 0 | 0 | 2 |
-| [E09](E09-native-platform-foundations.md) | [AUN-257](https://linear.app/hamzalabs/issue/AUN-257/e09-platform-foundations-for-native-clients-backend) | 4 | 3 | 3 | 0 | 0 | 10 |
+| [E09](E09-native-platform-foundations.md) | [AUN-257](https://linear.app/hamzalabs/issue/AUN-257/e09-platform-foundations-for-native-clients-backend) | 5 | 3 | 2 | 0 | 0 | 10 |
 | [E10](E10-fanous-design-system.md) | [AUN-268](https://linear.app/hamzalabs/issue/AUN-268/e10-fanous-design-system) | 3 | 5 | 1 | 1 | 0 | 10 |
 | [E11](E11-aun-core.md) | [AUN-279](https://linear.app/hamzalabs/issue/AUN-279/e11-shared-core-in-rust-aun-core-per-platform-app-layers) | 7 | 1 | 0 | 1 | 0 | 9 |
 | [E12](E12-viewer-mobile.md) | [AUN-289](https://linear.app/hamzalabs/issue/AUN-289/e12-viewer-mobile-apps-ios-ipados-android) | 2 | 4 | 0 | 8 | 0 | 14 |
@@ -120,4 +120,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 0 | 0 | 1 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **112 epics** | **350** | **113** | **22** | **180** | **50** | **715** |
+| **All** | **112 epics** | **351** | **113** | **21** | **180** | **50** | **715** |
