@@ -2743,6 +2743,21 @@
         "AlUmmahNowAuth#484"
       ],
       "note": "Every Auth admin page in Arabic on ?lang=ar: right-to-left, Eastern Arabic (Hindi) numerals, compact counts. Linear AUN-634."
+    },
+    {
+      "id": "community-image-cards",
+      "name": {
+        "en": "Community image cards",
+        "ar": "بطاقات منشورات المجتمع"
+      },
+      "status": "planned",
+      "apps": [
+        "videos",
+        "api",
+        "videos-admin",
+        "cms"
+      ],
+      "wiki": "epics/CARDS-community-image-cards.md"
     }
   ]
 }
