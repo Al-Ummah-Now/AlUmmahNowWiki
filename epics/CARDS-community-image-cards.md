@@ -6,7 +6,7 @@ Creators can publish a designed card from one Quran verse, a قاف passage, or 
 
 ## Layout
 
-Quran.com shows how to give a verse a strong visual focus while keeping its original reading order. Canva’s quote cards and size guide inform the 1080 × 1080 and 1080 × 1350 canvases. [Quran.com](https://quran.com/product-updates) · [Canva quote templates](https://www.canva.com/templates/s/quote/) · [Canva size guide](https://www.canva.com/sizes/instagram/)
+Quran.com shows how to give a verse a strong visual focus while keeping its original reading order. Canva’s quote cards and size guide inform the 1080 × 1080 and 1080 × 1350 canvases. [Quran.com](https://quran.com/product-updates)
 
 - **Fawanees:** Night blue, warm gold, a pointed arch enclosing the text, and a lantern-inspired ornament above a separate citation band.
 - **Folio:** A warm manuscript surface, a vertical marginal rule aligned to the reading direction, and a contrasting colophon below the text.
