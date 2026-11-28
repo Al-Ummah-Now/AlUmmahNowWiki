@@ -25,3 +25,11 @@ Persist Quran keys and layout selections. Fetch whole ayat byte-for-byte from th
 Use queue retries with backoff, a dead-letter queue, and a stable card ID for image storage and post publication. Show failed render jobs, reasons, and logs in Videos Admin Errors and let operators retry them. Verify the complete flow in local or QA environments.
 
 Use existing Workers, Queues and R2 without a paid AI or rendering API. Incremental costs depend on render CPU, image sizes, retention, queue operations and read volume. Measure those on QA before recording a monthly estimate.
+
+## QA setup and cost
+
+Track delivery in [AUN-830](https://linear.app/hamzalabs/issue/AUN-830/cards-community-image-cards). Videos uses its existing admin job queue, with the same retry budget, dead-letter routing and operator retry as other Videos jobs. Card PNGs and bundled font assets use private R2. The browser capture adapter uses Browser Run's Chromium screenshot endpoint, which supports shaping and mixed-direction text without any AI service.
+
+Before enabling in QA, configure `CARD_RENDER_ACCOUNT`, a secret `CARD_RENDER_TOKEN` scoped to Browser Rendering, and `CARD_PUBLIC_ORIGIN` for the QA Videos API. Put the two licensed WOFF2 assets from Videos Web in the QA private media bucket under `cards/fonts/`, and set R2 lifecycle expiry on `cards/quran/` to six days. Verify deletion on QA before serving Quran card images. Include the OFL notices already linked above when copying the fonts. Leave production bindings untouched.
+
+At 10,000 captures per month, including previews that are actually published and sync-version refreshes, two seconds per capture is 5.6 Browser Run hours. If the account has already used its included browser hours, those captures cost about $0.50. With 250 KiB per image, a month's new images add about 2.6 GB, or $0.04 per month at R2 Standard storage rates. Retained original and Qaf images accumulate month to month. One million image reads and 10,000 image writes add about $0.41 before free allowances, with Workers, D1 and queue overhead on the existing plan. Budget roughly $1 per month at this volume and measure actual capture duration, stored bytes, and traffic on QA. [Browser Run pricing](https://developers.cloudflare.com/browser-run/pricing/) · [R2 pricing](https://developers.cloudflare.com/r2/pricing/)

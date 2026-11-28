@@ -2750,14 +2750,22 @@
         "en": "Community image cards",
         "ar": "بطاقات منشورات المجتمع"
       },
-      "status": "planned",
+      "status": "building",
       "apps": [
         "videos",
         "api",
         "videos-admin",
         "cms"
       ],
-      "wiki": "epics/CARDS-community-image-cards.md"
+      "wiki": "epics/CARDS-community-image-cards.md",
+      "prs": [
+        "AlUmmahNow#2129",
+        "AlUmmahNow#2130",
+        "AlUmmahNow#2131",
+        "AlUmmahNow#2132",
+        "AlUmmahNowCMS#166",
+        "AlUmmahNowUI#165"
+      ]
     }
   ]
 }
