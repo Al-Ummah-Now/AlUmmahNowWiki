@@ -2477,7 +2477,7 @@
         "AlUmmahNowCMS#148",
         "AlUmmahNowUI#133"
       ],
-      "note": "Every error screen (404, 410, 500 and crash) is one frosted-glass Fanous card in every app and theme, in Arabic and English, with the same actions. Spec: guides/error-pages.md (wiki PR 144). All four PRs and the spec are held for the owner's screenshot review."
+      "note": "Every error screen (404, 410, 500, 503 and crash) is one solid Fanous card in every app and theme, in Arabic and English, with the same buttons, words, actions, ERR-XXXX-XXXX reference and tab title. Spec: guides/error-pages.md (wiki PR 144). The four PRs merge when the design audit passes and CI is green."
     },
     {
       "id": "feature-switches",
