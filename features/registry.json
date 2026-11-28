@@ -1206,6 +1206,21 @@
       ]
     },
     {
+      "id": "cms-qaf-sources",
+      "name": {
+        "en": "Find a source in the CMS",
+        "ar": "البحث في المصادر في نظام إدارة المحتوى"
+      },
+      "status": "building",
+      "apps": [
+        "cms"
+      ],
+      "wiki": "epics/CMS-AI-ASSIST-cms-ai-writing-assist.md",
+      "prs": [
+        "AlUmmahNowCMS#164"
+      ]
+    },
+    {
       "id": "about-pages",
       "name": {
         "en": "About pages managed in the CMS",
