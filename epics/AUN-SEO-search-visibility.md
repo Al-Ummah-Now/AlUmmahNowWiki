@@ -520,6 +520,7 @@ It ships in the copy PRs ([AlUmmahNow#1168](https://github.com/Al-Ummah-Now/AlUm
 **As built (AlUmmahNow#1181, #1201, #1243):**
 - **URL:** `https://media[.<env>].alummahnow.net/pub/{id}/{rev}/video.mp4` (not `/v/…/480p.mp4` as first proposed). `Cache-Control: public, max-age=86400` like every other rendition object (a video that turns private is moved out of the public bucket, so the edge TTL is a day). Range requests answer 206.
 - Every transcode makes it, private and unlisted ones too (under `priv/`, never exposed); `contentUrl` is given only for public videos.
+- Watch pages (`/{locale}/video/{id}` and `/{locale}/shorts/{id}`) also emit this same unsigned public MP4 URL as `twitter:player:stream` with `twitter:player:stream:content_type=video/mp4` so X's mobile apps play videos inline natively; videos without a public MP4 omit both stream tags and keep the `twitter:player` card.
 - **Backfill (#1182, 2026-11-13):** renditions made before #1181 got it from a remux-only job (no encode, no new rev): `scripts/release/mp4-backfill.ts`, dry run first, candidates from `media_jobs` checked against each video record.
 
   | Env | Ready R2 renditions | MP4 made | Public (contentUrl) | Skipped |
