@@ -7,15 +7,15 @@
 | **ID** | `CMS-AI-ASSIST` |
 | **Owning repos** | [AlUmmahNowCMS](../repos/AlUmmahNowCMS.md), [AlUmmahNow](../repos/AlUmmahNow.md) |
 | **Status** | **shipped** |
-| **Last updated** | 2026-11-12 |
+| **Last updated** | 2026-11-28 |
 
 > Merged as CMS #47 (2026-11-10), then moved to Cloudflare Workers AI the same day (CMS #55), so it works with no key. Admins can add other providers as configuration, with a fallback and a monthly budget stop (CMS #65). Translation flags and a glossary followed (CMS #93).
 
 ## Goal
 
-Editor helpers that only suggest: translate en↔ar, SEO and sharing copy, and a pre-publish check. Nothing is saved or published by the AI.
+Editor helpers for translation en↔ar, SEO and sharing copy, a pre-publish check, and finding sources. Nothing is saved or published by the AI.
 
-All three run on Cloudflare Workers AI by default, through the Worker's AI binding, so the text stays in Cloudflare and no key is needed. The default model ids are in [`src/lib/ai/prompts.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/src/lib/ai/prompts.ts). An admin can add any other AI service with an HTTP API on the AI assist screen (`/ai-settings`), with no code, and pick a provider and model per feature ([`docs/AI_PROVIDERS.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/AI_PROVIDERS.md)).
+Translation, SEO and the pre-publish check run on Cloudflare Workers AI by default, through the Worker's AI binding, so the text stays in Cloudflare and no key is needed. The default model ids are in [`src/lib/ai/prompts.ts`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/src/lib/ai/prompts.ts). An admin can add any other AI service with an HTTP API on the AI assist screen (`/ai-settings`), with no code, and pick a provider and model per feature ([`docs/AI_PROVIDERS.md`](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/blob/main/docs/AI_PROVIDERS.md)).
 
 ## Scope
 
@@ -37,6 +37,7 @@ All three run on Cloudflare Workers AI by default, through the Worker's AI bindi
 | A8 | Local E2E harness |  |
 | A9 | QA E2E |  |
 | A10 | Docs |  |
+| A11 | Find a source in classical Islamic books with Qaf | In development ([AlUmmahNowCMS#164](https://github.com/Al-Ummah-Now/AlUmmahNowCMS/pull/164)). Admins add a sealed Qaf key. Editors can filter passages, open context and insert the original Arabic with its printed citation. Workers AI can suggest a search query. |
 
 ## Decisions and constraints
 
