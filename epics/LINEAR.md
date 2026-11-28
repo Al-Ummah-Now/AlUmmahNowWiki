@@ -2,7 +2,7 @@
 
 Linear project: [Al Ummah Now](https://linear.app/hamzalabs/project/al-ummah-now-ad9238f0edf1) in team Al Ummah Now (key AUN).
 
-The project contains 112 epics and 715 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
+The project contains 112 epics and 717 stories. Each epic below links to its Linear issue; the remaining columns count that epic's stories by Linear status.
 
 Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They moved to team AUN with their history, and Linear redirects the old HLB links to the new AUN ids.
 
@@ -71,7 +71,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [CMS-AI-ASSIST](CMS-AI-ASSIST-cms-ai-writing-assist.md) | [AUN-171](https://linear.app/hamzalabs/issue/AUN-171/cms-ai-assist-cms-ai-writing-assist) | 9 | 0 | 0 | 0 | 1 | 10 |
 | [CMS-HOME-TIMELINE](CMS-HOME-TIMELINE-www-home-timeline.md) | [AUN-182](https://linear.app/hamzalabs/issue/AUN-182/cms-home-timeline-www-home-timeline-cms-managed-feed) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [CMS-PAGE-BLOCKS](CMS-PAGE-BLOCKS-cms-page-blocks.md) | [AUN-183](https://linear.app/hamzalabs/issue/AUN-183/cms-page-blocks-cms-page-builder-blocks-and-card-posts) | 0 | 0 | 0 | 0 | 0 | 0 |
-| [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) | [AUN-184](https://linear.app/hamzalabs/issue/AUN-184/cms-queue-cms-and-www-post-v1-queue) | 6 | 1 | 3 | 2 | 0 | 12 |
+| [CMS-QUEUE](CMS-QUEUE-cms-www-queue.md) | [AUN-184](https://linear.app/hamzalabs/issue/AUN-184/cms-queue-cms-and-www-post-v1-queue) | 7 | 1 | 3 | 2 | 0 | 13 |
 | [CMS-WWW-V1](CMS-WWW-V1-cms-www-v1.md) | [AUN-197](https://linear.app/hamzalabs/issue/AUN-197/cms-www-v1-www-astro-cms-bknd-v1) | 20 | 0 | 0 | 0 | 0 | 20 |
 | [E01](E01-accessibility-security.md) | [AUN-218](https://linear.app/hamzalabs/issue/AUN-218/e01-critical-accessibility-and-security-compliance) | 5 | 0 | 0 | 0 | 0 | 5 |
 | [E02](E02-player-analytics.md) | [AUN-224](https://linear.app/hamzalabs/issue/AUN-224/e02-advanced-video-player-analytics-phase-3) | 1 | 1 | 0 | 0 | 1 | 3 |
@@ -101,7 +101,7 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [E26](E26-ummah-comments.md) | [AUN-407](https://linear.app/hamzalabs/issue/AUN-407/e26-embedded-discussions-ummah-comments) | 0 | 4 | 0 | 6 | 0 | 10 |
 | [E27](E27-plans-entitlements.md) | [AUN-418](https://linear.app/hamzalabs/issue/AUN-418/e27-plans-and-entitlements-framework) | 0 | 0 | 0 | 0 | 7 | 7 |
 | [E28](E28-ai-moderation.md) | [AUN-426](https://linear.app/hamzalabs/issue/AUN-426/e28-ai-assisted-moderation-and-flagging-cloudflare-workers-ai) | 4 | 2 | 0 | 8 | 0 | 14 |
-| [E29](E29-core-web-experience.md) | [AUN-441](https://linear.app/hamzalabs/issue/AUN-441/e29-core-web-experience-completion-p0) | 9 | 4 | 2 | 2 | 2 | 19 |
+| [E29](E29-core-web-experience.md) | [AUN-441](https://linear.app/hamzalabs/issue/AUN-441/e29-core-web-experience-completion-p0) | 10 | 4 | 2 | 2 | 2 | 20 |
 | [E30](E30-aun-media.md) | [AUN-461](https://linear.app/hamzalabs/issue/AUN-461/e30-studio-media-engine-aun-media-rust) | 7 | 0 | 0 | 0 | 0 | 7 |
 | [LIVE-PHASES](LIVE-PHASES-live-streaming-phases.md) | [AUN-469](https://linear.app/hamzalabs/issue/AUN-469/live-phases-live-streaming-plan-phases-1-3-phase-2-task-2n-issues) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [LR-1.1](LR-1.1-legacy-video-portal-ui.md) | [AUN-470](https://linear.app/hamzalabs/issue/AUN-470/lr-11-legacy-roadmap-11-video-portal-ui-completion) | 8 | 0 | 0 | 0 | 0 | 8 |
@@ -120,4 +120,4 @@ Until 2026-11-22 these issues lived in team HamzaLabs with HLB-### ids. They mov
 | [TOOLS-IMPORTER](TOOLS-IMPORTER-tools-visual-importer-roadmap.md) | [AUN-555](https://linear.app/hamzalabs/issue/AUN-555/tools-importer-visual-importer-roadmap-6-sprints-milestones) | 0 | 0 | 0 | 0 | 6 | 6 |
 | [TOOLS-PLANS](TOOLS-PLANS-tools-consolidation-testing-research.md) | [AUN-562](https://linear.app/hamzalabs/issue/AUN-562/tools-plans-tools-filescan-consolidation-testing-plan-encoding-and) | 1 | 2 | 0 | 0 | 1 | 4 |
 | [VP-PHASES](VP-PHASES-video-player-enhancement-phases.md) | [AUN-567](https://linear.app/hamzalabs/issue/AUN-567/vp-phases-video-player-enhancement-plan-phases-1-5-phase-nm-issues) | 1 | 0 | 0 | 0 | 2 | 3 |
-| **All** | **112 epics** | **352** | **114** | **19** | **180** | **50** | **715** |
+| **All** | **112 epics** | **354** | **114** | **19** | **180** | **50** | **717** |
