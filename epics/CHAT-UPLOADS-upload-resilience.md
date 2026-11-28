@@ -44,3 +44,5 @@ Platform-wide constraints that apply to every epic:
 ## Sources
 
 - [AlUmmahNow#578](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/578), [AlUmmahNow#592](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/592), [AlUmmahNow#522](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/522)
+
+An upload initiation with no TUS transfer expires quietly after 24 hours. An upload that actually started and needs a re-upload still appears in the admin Errors page with Retry.
