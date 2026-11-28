@@ -45,6 +45,7 @@ Channels, posting, commenting, profiles, reactions, subscriptions, search and br
 | 29.16 | Account settings consolidation | Not built (#376). |
 | 29.17 | Live watch page `/live/{id}` | Done — both audits agree: AlUmmahNow#872 (merged): /live watch implementation; AlUmmahNow#1387 (merged): live viewer count; AlUmmahNow issue #377 (closed); AlUmmahNow#377; apps/web/src/app/[locale]/live/[id]/page.tsx; AlUmmahNow#1373 |
 | 29.18 | Channel extras | Partial (#378). |
+| 29.19 | Find a source in community posts | Building. The Studio text and article composer searches Qaf with genre, author, book and Hijri death-year filters. Creators can read context and insert verbatim quotations with a linked print citation. The videos admin super admin sets a write-only key and request limits in Platform settings. Quotations render on the videos site, scholar sites and www. [Videos and API PR](https://github.com/Al-Ummah-Now/AlUmmahNow/pull/2113), [scholar sites and www PR](https://github.com/Al-Ummah-Now/AlUmmahNowUI/pull/163). |
 
 ## Decisions and constraints
 
